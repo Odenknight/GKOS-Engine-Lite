@@ -23,8 +23,9 @@
  * should keep exposing only validate/assess/graph/export, not those.
  */
 import { createRequire } from "node:module";
+import { realpathSync } from "node:fs";
 import { dirname, join } from "node:path";
-import { pathToFileURL } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 const require = createRequire(import.meta.url);
 
@@ -61,8 +62,26 @@ export async function main(argv = process.argv.slice(2)) {
   return engine.main(argv);
 }
 
-const invokedDirectly =
-  process.argv[1] && pathToFileURL(process.argv[1]).href === import.meta.url;
+// Determine whether this module was invoked directly as a CLI (as opposed to
+// being imported). We compare the *realpath* of process.argv[1] against this
+// module's own realpath, because Node resolves import.meta.url to the module's
+// REAL path while argv[1] keeps the AS-INVOKED path. Under `npm link`, global
+// bin shims, or pnpm/npm workspaces (symlinked package dirs), those raw strings
+// differ — the naive comparison then fails, main() never runs, and the CLI
+// exits 0 with zero output. Realpath resolution makes both sides canonical.
+// If realpath throws (e.g. argv[1] no longer on disk), fall back to the raw
+// URL comparison rather than crashing.
+function isInvokedDirectly() {
+  const invokedPath = process.argv[1];
+  if (!invokedPath) return false;
+  try {
+    return realpathSync(invokedPath) === realpathSync(fileURLToPath(import.meta.url));
+  } catch {
+    return pathToFileURL(invokedPath).href === import.meta.url;
+  }
+}
+
+const invokedDirectly = isInvokedDirectly();
 if (invokedDirectly) {
   const code = await main();
   if (typeof code === "number" && code !== 0) process.exit(code);

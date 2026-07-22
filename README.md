@@ -32,7 +32,7 @@ workflow — OKF+ Notes (2.2) and Agent-Ready (flat 2.3) — and don't document
 Machine-Dialect-specific workflows, sidecar governance, or proposal/decision
 records. If you need those, use gkos-engine directly. If gkos-engine later
 grows write-capable commands (migrate, proposals, decisions, mv, serve — none
-exist yet as of gkos-engine v1.0.0), GKOS-Engine-Lite's CLI surface will stay
+exist yet as of the pinned gkos-engine release), GKOS-Engine-Lite's CLI surface will stay
 limited to the four read-only diagnostic commands below.
 
 ## Install
@@ -44,7 +44,7 @@ npm install gkos-engine-lite
 ```
 
 `gkos-engine` has no npm registry publish; it's installed as a pinned git
-dependency (`github:Odenknight/GKOS-Engine#v1.0.0`). Its own package doesn't
+dependency (`github:Odenknight/GKOS-Engine#v1.0.5`). Its own package doesn't
 ship a prebuilt bundle for git installs, so a `postinstall` script
 (`scripts/build-engine.mjs`) bundles it locally with esbuild the first time
 you install — this is transparent and only runs once.

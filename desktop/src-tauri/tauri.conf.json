@@ -20,7 +20,7 @@
       "menuOnLeftClick": false
     },
     "security": {
-      "csp": "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:"
+      "csp": "default-src 'self'; connect-src 'self' http://127.0.0.1:* http://localhost:* ws://127.0.0.1:* ws://localhost:*; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; worker-src 'self' blob:; font-src 'self' data:"
     }
   },
   "bundle": {
@@ -34,6 +34,7 @@
       "icons/icon.ico"
     ],
     "externalBin": ["binaries/kosmos-agent"],
+    "resources": ["resources/vault-kosmos.html"],
     "category": "Productivity",
     "shortDescription": "Loopback-only local knowledge engine for AI assistants.",
     "longDescription": "GKOS Engine Desktop watches a notes folder, builds a live projection (OKF+ 2.3 + Graphiti), and serves a loopback-only, read-only, token-gated agent API for local AI assistants. No cloud, no remote access.",

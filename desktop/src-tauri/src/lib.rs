@@ -27,6 +27,8 @@ use tauri_plugin_shell::ShellExt;
 
 const MAX_RESTARTS: u32 = 3;
 const DEFAULT_PORT: u16 = 4814;
+/// Loopback host the viewer's `?api=` points at (matches the sidecar's hardcoded bind).
+const LOOPBACK_HOST: &str = "127.0.0.1";
 const MCP_SERVER_NAME: &str = "kosmos-oden";
 const SENSITIVITY_LEVELS: [&str; 7] = [
     "public",
@@ -420,6 +422,16 @@ fn open_settings_window(app: AppHandle) -> Result<(), String> {
     show_settings(&app)
 }
 
+#[tauri::command]
+fn open_3d_view(app: AppHandle) -> Result<(), String> {
+    show_3d_view(&app)
+}
+
+#[tauri::command]
+fn open_3d_view_browser(app: AppHandle) -> Result<(), String> {
+    open_3d_view_in_browser(&app)
+}
+
 // ------------------------------- windows ------------------------------------
 
 fn show_wizard(app: &AppHandle) -> Result<(), String> {
@@ -454,6 +466,118 @@ fn show_settings(app: &AppHandle) -> Result<(), String> {
     Ok(())
 }
 
+// ------------------------------ 3D view -------------------------------------
+//
+// The standalone 3D viewer (built in Odenknight/Kosmos-Oden, bundled here as
+// `vault-kosmos.html`) reads `?api=<loopback base>&token=<bearer>` from
+// `location.search` and auto-connects to the sidecar's read-only loopback API.
+//
+// Origin / CORS: the viewer must fetch the sidecar cross-origin, so it needs an
+// origin the engine's CORS allowlist reflects. Serving it over the Tauri app
+// protocol (WebviewUrl::App -> frontend root) gives it `tauri://localhost` /
+// `https://tauri.localhost` — exactly the allowlisted origins. The browser
+// fallback below loads it from a temp file (`file://`, origin `null`, also
+// allowlisted). The asset protocol was deliberately NOT chosen: its origin
+// (`asset://localhost`) is not in the allowlist, so its fetches would be
+// CORS-blocked.
+
+/// RFC-3986 percent-encode a query VALUE (encode everything that is not an
+/// unreserved character). Keeps the sidecar URL's `:` and `/` intact through
+/// the query and mirrors the frontend `viewerQuery` (snippets.ts) exactly.
+fn encode_query_value(s: &str) -> String {
+    let mut out = String::with_capacity(s.len());
+    for b in s.bytes() {
+        match b {
+            b'A'..=b'Z' | b'a'..=b'z' | b'0'..=b'9' | b'-' | b'_' | b'.' | b'~' => {
+                out.push(b as char);
+            }
+            _ => out.push_str(&format!("%{:02X}", b)),
+        }
+    }
+    out
+}
+
+/// `api=<enc base>&token=<enc token>` — the query the viewer parses. Token may
+/// be empty (API never enabled); the viewer then shows its manual connect form.
+fn viewer_query(app: &AppHandle) -> String {
+    let port = app.state::<AppState>().settings.lock().unwrap().port;
+    let api = format!("http://{LOOPBACK_HOST}:{port}");
+    let token = read_token(app).unwrap_or_default();
+    format!(
+        "api={}&token={}",
+        encode_query_value(&api),
+        encode_query_value(&token)
+    )
+}
+
+/// Primary "Open 3D View": in-app window over the Tauri app protocol.
+fn show_3d_view(app: &AppHandle) -> Result<(), String> {
+    let url = format!("vault-kosmos.html?{}", viewer_query(app));
+    if let Some(win) = app.get_webview_window("kosmos-3d") {
+        // Re-navigate so a freshly-read token/port take effect, then focus.
+        let _ = win.eval(&format!(
+            "window.location.replace('{}')",
+            url.replace('\'', "\\'")
+        ));
+        let _ = win.show();
+        let _ = win.set_focus();
+        return Ok(());
+    }
+    WebviewWindowBuilder::new(app, "kosmos-3d", WebviewUrl::App(url.into()))
+        .title("GKOS Engine Desktop — 3D View")
+        .inner_size(1100.0, 820.0)
+        .resizable(true)
+        .center()
+        .build()
+        .map_err(|e| e.to_string())?;
+    Ok(())
+}
+
+/// Fallback "Open 3D View (browser)": copy the bundled viewer to a temp file
+/// and open it in the system browser with the query. The page then runs as a
+/// `file://` document (origin `null`, allowlisted) with no app CSP applied —
+/// this path works regardless of any Tauri asset-protocol / CSP quirks.
+fn open_3d_view_in_browser(app: &AppHandle) -> Result<(), String> {
+    let src = app
+        .path()
+        .resolve("resources/vault-kosmos.html", tauri::path::BaseDirectory::Resource)
+        .map_err(|e| format!("cannot locate bundled viewer: {e}"))?;
+    let bytes = fs::read(&src).map_err(|e| format!("read bundled viewer: {e}"))?;
+
+    let mut tmp = std::env::temp_dir();
+    tmp.push("gkos-engine-desktop-3d-view.html");
+    fs::write(&tmp, &bytes).map_err(|e| format!("write temp viewer: {e}"))?;
+
+    // Build a file:// URL with forward slashes and the query appended.
+    let path_str = tmp.to_string_lossy().replace('\\', "/");
+    let file_url = if path_str.starts_with('/') {
+        format!("file://{path_str}")
+    } else {
+        // Windows absolute path like C:/Users/... needs the extra slash.
+        format!("file:///{path_str}")
+    };
+    let full = format!("{file_url}?{}", viewer_query(app));
+
+    open_url_in_default_browser(&full)
+}
+
+/// Hand a URL to the OS default handler (the browser, for a file:// URL). Uses
+/// the platform launcher directly rather than the shell plugin's `open`, whose
+/// default URL validator rejects `file://`. The URL is fully app-constructed
+/// (our temp file + our query), so there is no untrusted input here.
+fn open_url_in_default_browser(url: &str) -> Result<(), String> {
+    #[cfg(target_os = "windows")]
+    let result = std::process::Command::new("cmd")
+        .args(["/C", "start", "", url])
+        .spawn();
+    #[cfg(target_os = "macos")]
+    let result = std::process::Command::new("open").arg(url).spawn();
+    #[cfg(all(unix, not(target_os = "macos")))]
+    let result = std::process::Command::new("xdg-open").arg(url).spawn();
+
+    result.map(|_| ()).map_err(|e| format!("open browser: {e}"))
+}
+
 // -------------------------------- tray --------------------------------------
 
 fn copy_snippet(app: &AppHandle) {
@@ -479,9 +603,17 @@ fn build_tray(app: &AppHandle) -> Result<(), String> {
     let copy_snippet_item =
         MenuItem::with_id(app, "copy_snippet", "Copy MCP connect snippet", true, None::<&str>)
             .map_err(|e| e.to_string())?;
-    let quit = MenuItem::with_id(app, "quit", "Quit", true, None::<&str>).map_err(|e| e.to_string())?;
-    let menu = Menu::with_items(app, &[&open_settings, &copy_snippet_item, &quit])
+    let open_3d = MenuItem::with_id(app, "open_3d", "Open 3D View", true, None::<&str>)
         .map_err(|e| e.to_string())?;
+    let open_3d_browser =
+        MenuItem::with_id(app, "open_3d_browser", "Open 3D View (browser)", true, None::<&str>)
+            .map_err(|e| e.to_string())?;
+    let quit = MenuItem::with_id(app, "quit", "Quit", true, None::<&str>).map_err(|e| e.to_string())?;
+    let menu = Menu::with_items(
+        app,
+        &[&open_settings, &copy_snippet_item, &open_3d, &open_3d_browser, &quit],
+    )
+    .map_err(|e| e.to_string())?;
 
     TrayIconBuilder::with_id("main")
         .icon(app.default_window_icon().unwrap().clone())
@@ -493,6 +625,16 @@ fn build_tray(app: &AppHandle) -> Result<(), String> {
                 let _ = show_settings(app);
             }
             "copy_snippet" => copy_snippet(app),
+            "open_3d" => {
+                if let Err(e) = show_3d_view(app) {
+                    eprintln!("open 3D view failed: {e}");
+                }
+            }
+            "open_3d_browser" => {
+                if let Err(e) = open_3d_view_in_browser(app) {
+                    eprintln!("open 3D view (browser) failed: {e}");
+                }
+            }
             "quit" => {
                 kill_sidecar(app);
                 app.exit(0);
@@ -536,6 +678,8 @@ pub fn run() {
             connect_info,
             complete_wizard,
             open_settings_window,
+            open_3d_view,
+            open_3d_view_browser,
         ])
         .setup(|app| {
             let handle = app.handle().clone();

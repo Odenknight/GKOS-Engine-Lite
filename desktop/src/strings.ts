@@ -52,6 +52,8 @@ export const STRINGS = {
   tray: {
     openSettings: "Open Settings",
     copySnippet: "Copy MCP connect snippet",
+    open3d: "Open 3D View",
+    open3dBrowser: "Open 3D View (browser)",
     quit: "Quit",
     tooltipStopped: `${APP_NAME} — stopped`,
     tooltipIndexing: `${APP_NAME} — indexing…`,
@@ -141,6 +143,18 @@ export const STRINGS = {
     tomlDesc: "Vendor-neutral MCP Streamable HTTP configuration.",
     copy: "Copy",
     copied: "Copied.",
+  },
+
+  view3d: {
+    // Copy for the 3D view feature (tray items + docs share this register).
+    heading: "The 3D view",
+    intro:
+      "A read-only 3D map of your notes and their connections, opened from the tray. It talks to the same loopback engine your assistants use — nothing leaves this computer, and it never edits your notes.",
+    openInApp: "Open 3D View opens the map in its own app window.",
+    openInBrowser:
+      "Open 3D View (browser) opens the same map in your default web browser instead — use this if the in-app window comes up blank.",
+    needsRunning:
+      "If the local Agent API is off, the view still opens and shows a connect form; turn the API on in Settings to populate the map.",
   },
 
   state: {

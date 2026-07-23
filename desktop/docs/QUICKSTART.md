@@ -64,4 +64,4 @@ claude mcp add kosmos-oden http://127.0.0.1:4814/mcp
 
 ## You're done
 
-GKOS Engine Desktop now lives quietly in your tray (menu bar on Mac, system tray on Windows). Click the icon any time to open Settings, see status, or copy the connect snippet again.
+GKOS Engine Desktop now lives quietly in your tray (menu bar on Mac, system tray on Windows). Click the icon any time to open Settings, see status, copy the connect snippet again, or choose **Open 3D View** for a read-only 3D map of your notes and their connections.

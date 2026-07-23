@@ -74,6 +74,28 @@ export function curlHealth(info: ConnectInfo): string {
   return `curl -H "Authorization: Bearer ${info.token}" "${baseUrl(info.port)}/health"`;
 }
 
+/**
+ * Query string the standalone 3D viewer reads from `location.search` to
+ * auto-connect to the loopback sidecar: `?api=<base>&token=<bearer>`. Values
+ * are percent-encoded so the sidecar URL's `:` and `/` survive intact through
+ * the query. An empty token is still emitted (the viewer then falls back to its
+ * manual connect form rather than erroring). Mirrored byte-for-byte by the Rust
+ * side that builds the window URL; kept here as the single tested definition.
+ */
+export function viewerQuery(info: ConnectInfo): string {
+  return `api=${encodeURIComponent(baseUrl(info.port))}&token=${encodeURIComponent(info.token)}`;
+}
+
+/**
+ * App-relative URL for the viewer served over the Tauri protocol (the in-app
+ * "Open 3D View" window). The bundled HTML lives at the frontend root, so its
+ * origin is `tauri://localhost` / `https://tauri.localhost` — the origins the
+ * engine sidecar's CORS allowlist reflects.
+ */
+export function viewerAppUrl(info: ConnectInfo): string {
+  return `vault-kosmos.html?${viewerQuery(info)}`;
+}
+
 /** All snippets keyed by client, for the quick-connect panel. */
 export function allSnippets(info: ConnectInfo): Record<string, string> {
   return {

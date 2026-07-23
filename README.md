@@ -44,7 +44,7 @@ npm install gkos-engine-lite
 ```
 
 `gkos-engine` has no npm registry publish; it's installed as a pinned git
-dependency (`github:Odenknight/GKOS-Engine#v1.0.7`). Its own package doesn't
+dependency (`github:Odenknight/GKOS-Engine#v1.0.8`). Its own package doesn't
 ship a prebuilt bundle for git installs, so a `postinstall` script
 (`scripts/build-engine.mjs`) bundles it locally with esbuild the first time
 you install — this is transparent and only runs once.
@@ -82,6 +82,30 @@ Exports Graphiti episodes for the corpus.
 Every command embeds a deterministic `build:` block
 (`engine_version`, `policy_hash`, `corpus_hash`, `generated_at`) so output is
 reproducible and auditable.
+
+## Desktop app — GKOS Engine Desktop
+
+`desktop/` contains **GKOS Engine Desktop**, a Tauri 2 tray app for macOS and
+Windows that wraps the engine's headless sidecar (`kosmos-agent`, from
+[gkos-engine v1.0.8](https://github.com/Odenknight/GKOS-Engine/releases/tag/v1.0.8)).
+Point it at a notes folder; it watches and projects (OKF+ 2.3 + Graphiti) and
+serves a **loopback-only, read-only, token-gated** agent API for local AI
+assistants (Claude Desktop, Cursor, …). No cloud, no remote access, no tunnel.
+
+A mandatory first-run wizard makes you choose a default sensitivity **before**
+the API can ever be enabled (fail-closed to `secret`). Installers are built
+**unsigned** by CI (`.github/workflows/desktop-build.yml`) — your OS will warn
+on first open; the guides below cover the safe open-anyway steps.
+
+- **[Quickstart](desktop/docs/QUICKSTART.md)** — download, install (unsigned),
+  first-run setup, and connecting Claude Desktop.
+- **[User Guide](desktop/docs/USER-GUIDE.md)** — full walkthrough: concepts,
+  the wizard, settings, quick-connect snippets, privacy/safety FAQ, and
+  troubleshooting.
+
+The desktop frontend logic (snippet generation, settings validation) is
+type-checked and unit-tested (`node --test`) in CI; Rust/Tauri compilation and
+the `.dmg`/`.exe` bundles are produced exclusively on the CI matrix.
 
 ## Relationship to the rest of the GKOS family
 

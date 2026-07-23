@@ -1,0 +1,122 @@
+name: desktop-build
+
+# Builds the unsigned GKOS Engine Desktop installers (.dmg / .exe NSIS) on the
+# CI matrix. Rust/Tauri compilation happens ONLY here — there is no local Rust
+# toolchain. Trigger manually, or on a `desktop-v*` tag to cut a Release.
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "desktop-v*"
+
+# Sidecar binaries come from the GKOS-Engine v1.0.8 release (public repo, no
+# auth needed for the download). If those assets are missing, fall back to
+# building the SEA in-run from the engine at v1.0.8.
+env:
+  ENGINE_REPO: Odenknight/GKOS-Engine
+  ENGINE_TAG: v1.0.8
+
+jobs:
+  build:
+    permissions:
+      contents: write
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: macos-latest
+            target: aarch64-apple-darwin
+            asset: kosmos-agent-aarch64-apple-darwin
+            binext: ""
+          - platform: macos-latest
+            target: x86_64-apple-darwin
+            asset: kosmos-agent-x86_64-apple-darwin
+            binext: ""
+          - platform: windows-latest
+            target: x86_64-pc-windows-msvc
+            asset: kosmos-agent-x86_64-pc-windows-msvc.exe
+            binext: ".exe"
+
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+
+      - name: Rust cache
+        uses: swatinem/rust-cache@v2
+        with:
+          workspaces: desktop/src-tauri -> target
+
+      - name: Install frontend deps
+        working-directory: desktop
+        run: npm ci
+
+      - name: Generate app icons (unsigned; deterministic from app-icon.png)
+        working-directory: desktop
+        run: npx --yes @tauri-apps/cli@^2 icon src-tauri/app-icon.png
+
+      - name: Acquire kosmos-agent sidecar
+        shell: bash
+        working-directory: desktop
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          mkdir -p src-tauri/binaries
+          dest="src-tauri/binaries/kosmos-agent-${{ matrix.target }}${{ matrix.binext }}"
+          echo "Trying to download ${{ matrix.asset }} from ${ENGINE_REPO}@${ENGINE_TAG}…"
+          if gh release download "${ENGINE_TAG}" \
+               --repo "${ENGINE_REPO}" \
+               --pattern "${{ matrix.asset }}" \
+               --output "${dest}" ; then
+            echo "Downloaded sidecar from release assets."
+          else
+            echo "Release asset missing — falling back to building the SEA in-run."
+            git clone --depth 1 --branch "${ENGINE_TAG}" "https://github.com/${ENGINE_REPO}.git" ../engine-src
+            pushd ../engine-src
+            npm ci
+            npm run build
+            node scripts/build-sea.mjs
+            # build-sea.mjs emits kosmos-agent-<target>[.exe]; copy it into place.
+            cp "kosmos-agent-${{ matrix.target }}${{ matrix.binext }}" "../desktop/${dest}"
+            popd
+          fi
+          chmod +x "${dest}" || true
+          ls -la src-tauri/binaries
+
+      - name: Build unsigned bundle
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # No signing config: unsigned build (owner decision 1). macOS
+          # notarization is intentionally skipped.
+        with:
+          projectPath: desktop
+          args: --target ${{ matrix.target }}
+          # On a desktop-v* tag, publish a GitHub Release with the artifacts and
+          # the standard unsigned disclaimer. On workflow_dispatch, artifacts
+          # stay attached to the run only.
+          tagName: ${{ startsWith(github.ref, 'refs/tags/desktop-v') && github.ref_name || '' }}
+          releaseName: ${{ startsWith(github.ref, 'refs/tags/desktop-v') && 'GKOS Engine Desktop __VERSION__' || '' }}
+          releaseBody: ${{ startsWith(github.ref, 'refs/tags/desktop-v') && 'Unsigned pre-release build. Your OS will warn you when you first open it — this is expected for an unsigned app. See the install guide (desktop/docs/QUICKSTART.md and USER-GUIDE.md) for the macOS right-click → Open / xattr fallback and the Windows SmartScreen More info → Run anyway steps. Loopback-only, read-only, no cloud access.' || '' }}
+          releaseDraft: false
+          prerelease: true
+
+      - name: Upload run artifacts
+        if: ${{ !startsWith(github.ref, 'refs/tags/desktop-v') }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: gkos-engine-desktop-${{ matrix.target }}
+          path: |
+            desktop/src-tauri/target/${{ matrix.target }}/release/bundle/dmg/*.dmg
+            desktop/src-tauri/target/${{ matrix.target }}/release/bundle/nsis/*.exe
+          if-no-files-found: ignore

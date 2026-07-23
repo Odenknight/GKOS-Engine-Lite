@@ -15,3 +15,23 @@ jobs:
           node-version: "22"
       - run: npm install
       - run: npm test
+
+  desktop:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install desktop deps
+        working-directory: desktop
+        run: npm install
+      - name: Typecheck frontend
+        working-directory: desktop
+        run: npm run typecheck
+      - name: Frontend logic tests
+        working-directory: desktop
+        run: npm test
+      - name: Frontend build
+        working-directory: desktop
+        run: npm run build

@@ -276,7 +276,11 @@ fn handle_termination(app: &AppHandle, generation: u64) {
             // Only restart if still enabled and nobody stopped us meanwhile.
             let enabled = {
                 let state = app_handle.state::<AppState>();
-                state.settings.lock().unwrap().enabled
+                // Bind the Copy value out so the MutexGuard temporary is
+                // dropped before `state` (block-local) — otherwise the guard
+                // borrow of `state` outlives `state` at the block's end (E0597).
+                let is_enabled = state.settings.lock().unwrap().enabled;
+                is_enabled
             };
             if enabled {
                 if let Err(e) = spawn_sidecar(&app_handle) {

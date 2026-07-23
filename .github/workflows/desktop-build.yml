@@ -28,7 +28,11 @@ jobs:
             target: aarch64-apple-darwin
             asset: kosmos-agent-aarch64-apple-darwin
             binext: ""
-          - platform: macos-latest
+          # Intel runner: host arch matches the x86_64 target, so the SEA
+          # fallback (build-sea.mjs names output by host arch) produces the
+          # correct binary and tauri builds a native x86_64 .dmg. macos-latest
+          # is Apple Silicon and cannot produce an x86_64 mac sidecar this way.
+          - platform: macos-13
             target: x86_64-apple-darwin
             asset: kosmos-agent-x86_64-apple-darwin
             binext: ""
@@ -86,8 +90,10 @@ jobs:
             npm ci
             npm run build
             node scripts/build-sea.mjs
-            # build-sea.mjs emits kosmos-agent-<target>[.exe]; copy it into place.
-            cp "kosmos-agent-${{ matrix.target }}${{ matrix.binext }}" "../desktop/${dest}"
+            # build-sea.mjs emits dist/kosmos-agent-<host-arch-triple>[.exe].
+            # The runner's host arch is chosen (via the matrix platform) to
+            # match matrix.target, so this name is exactly what we need.
+            cp "dist/kosmos-agent-${{ matrix.target }}${{ matrix.binext }}" "../desktop/${dest}"
             popd
           fi
           chmod +x "${dest}" || true

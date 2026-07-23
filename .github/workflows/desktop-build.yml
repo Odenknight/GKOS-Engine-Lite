@@ -9,12 +9,13 @@ on:
     tags:
       - "desktop-v*"
 
-# Sidecar binaries come from the GKOS-Engine v1.0.8 release (public repo, no
-# auth needed for the download). If those assets are missing, fall back to
-# building the SEA in-run from the engine at v1.0.8.
+# Sidecar binaries come from the GKOS-Engine v1.0.9 release (public repo, no
+# auth needed for the download). v1.0.9 adds the loopback CORS allowlist the 3D
+# viewer's cross-origin fetches require. If those assets are missing, fall back
+# to building the SEA in-run from the engine at v1.0.9.
 env:
   ENGINE_REPO: Odenknight/GKOS-Engine
-  ENGINE_TAG: v1.0.8
+  ENGINE_TAG: v1.0.9
 
 jobs:
   build:
@@ -98,6 +99,31 @@ jobs:
           fi
           chmod +x "${dest}" || true
           ls -la src-tauri/binaries
+
+      - name: Acquire standalone 3D viewer (vault-kosmos.html)
+        shell: bash
+        working-directory: desktop
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          # Pinned to the viewer release known-good at authoring time. For a
+          # future bump, change VIEWER_TAG (or switch to the newest viewer-v*
+          # via `gh release list --repo Odenknight/Kosmos-Oden`).
+          VIEWER_REPO=Odenknight/Kosmos-Oden
+          VIEWER_TAG=viewer-v0.6.9-rc1
+          mkdir -p public src-tauri/resources
+          echo "Downloading vault-kosmos.html from ${VIEWER_REPO}@${VIEWER_TAG}…"
+          gh release download "${VIEWER_TAG}" \
+            --repo "${VIEWER_REPO}" \
+            --pattern vault-kosmos.html \
+            --output src-tauri/resources/vault-kosmos.html --clobber
+          test -s src-tauri/resources/vault-kosmos.html
+          # Frontend copy: vite copies public/ into the build (frontendDist), so
+          # the in-app window can load it over the Tauri protocol. The resources/
+          # copy is read at runtime for the browser fallback.
+          cp src-tauri/resources/vault-kosmos.html public/vault-kosmos.html
+          ls -la public/vault-kosmos.html src-tauri/resources/vault-kosmos.html
 
       - name: Build unsigned bundle
         uses: tauri-apps/tauri-action@v0

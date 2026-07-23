@@ -108,6 +108,17 @@ The tray menu's connect panel also offers a Cursor-formatted snippet — copy it
 
 A generic TOML snippet is also available from the same panel, for any other MCP-compatible tool that accepts a local server address and token.
 
+## The 3D view
+
+The tray menu can open a **3D view** of your notes: a read-only, rotatable map of your notes and the connections between them, the same Graphiti projection an assistant would follow. It reads from the same local engine your assistants use — nothing leaves this computer, and, like everything else in the app, it can only look at your notes, never change them.
+
+There are two ways to open it from the tray:
+
+- **Open 3D View** shows the map in its own app window.
+- **Open 3D View (browser)** opens the same map in your default web browser instead. Use this if the in-app window comes up blank.
+
+Either way, if the local Agent API is switched off, the view still opens — it just shows a small connect form instead of a map. Turn the API on in Settings (and pick a notes folder) to populate it. The view connects to the loopback address automatically and carries the access token for you, exactly like the connect snippets do.
+
 ## Privacy & safety FAQ
 
 **Is anything uploaded anywhere?**

@@ -44,7 +44,7 @@ npm install gkos-engine-lite
 ```
 
 `gkos-engine` has no npm registry publish; it's installed as a pinned git
-dependency (`github:Odenknight/GKOS-Engine#v1.0.6`). Its own package doesn't
+dependency (`github:Odenknight/GKOS-Engine#v1.0.7`). Its own package doesn't
 ship a prebuilt bundle for git installs, so a `postinstall` script
 (`scripts/build-engine.mjs`) bundles it locally with esbuild the first time
 you install — this is transparent and only runs once.

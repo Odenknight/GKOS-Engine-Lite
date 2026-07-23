@@ -1,0 +1,50 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "GKOS Engine Desktop",
+  "version": "0.1.0",
+  "identifier": "org.gkos.engine.desktop",
+  "build": {
+    "beforeDevCommand": "npm run dev",
+    "devUrl": "http://localhost:5174",
+    "beforeBuildCommand": "npm run build",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "withGlobalTauri": false,
+    "windows": [],
+    "trayIcon": {
+      "id": "main",
+      "iconPath": "icons/32x32.png",
+      "iconAsTemplate": true,
+      "tooltip": "GKOS Engine Desktop",
+      "menuOnLeftClick": false
+    },
+    "security": {
+      "csp": "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:"
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": ["nsis", "dmg"],
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "externalBin": ["binaries/kosmos-agent"],
+    "category": "Productivity",
+    "shortDescription": "Loopback-only local knowledge engine for AI assistants.",
+    "longDescription": "GKOS Engine Desktop watches a notes folder, builds a live projection (OKF+ 2.3 + Graphiti), and serves a loopback-only, read-only, token-gated agent API for local AI assistants. No cloud, no remote access.",
+    "windows": {
+      "nsis": {
+        "installMode": "currentUser"
+      }
+    },
+    "macOS": {
+      "minimumSystemVersion": "10.15"
+    }
+  },
+  "plugins": {}
+}

@@ -37,8 +37,9 @@ const enginePkgRoot = dirname(dirname(engineMainPath));
 const engineBinUrl = pathToFileURL(join(enginePkgRoot, "bin/okf.mjs")).href;
 
 const engine = await import(engineBinUrl);
+const LITE_VERSION = "1.1.0";
 
-const BANNER = `okf-lite (GKOS-Engine-Lite) v1.0.0
+const BANNER = `okf-lite (GKOS-Engine-Lite) v${LITE_VERSION}
 GKOS-Engine-Lite — OKF+ Notes (2.2) + Agent-Ready (flat 2.3) tooling
 
 A thin command-line wrapper around gkos-engine for individuals and small,
@@ -49,6 +50,14 @@ Usage:
   okf-lite assess   <dir> [--json]                         per-note documentation-quality scores/labels
   okf-lite graph    <dir> -o <graph.json> [--watch]        canonical Kosmos graph (stable serialization)
   okf-lite export graphiti <dir> --episodes <out.json> [--group-id <ns>]
+  okf-lite assist explain <note.md>                        explain an issue in plain language
+  okf-lite assist improve <note.md>                        suggest the most useful improvements
+  okf-lite assist repair <note.md>                         suggest missing or corrected details
+  okf-lite assist find-links <note.md>                     suggest related-note connections
+  okf-lite assist check-privacy <note.md>                  check whether privacy should be raised
+
+AI help is optional. It must be enabled locally, every suggestion is checked
+by GKOS, and your note is never changed automatically.
 
 See https://github.com/Odenknight/GKOS-Engine-Lite for docs, and
 https://github.com/Odenknight/GKOS-Engine for the full engine this depends on.`;
@@ -58,6 +67,22 @@ export async function main(argv = process.argv.slice(2)) {
   if (!first || first === "--help" || first === "-h") {
     console.log(BANNER);
     return first ? 0 : 1;
+  }
+  if (first === "assist") {
+    try {
+      const { assistMain } = await import("./intelligence-client.mjs");
+      const result = await assistMain(argv.slice(1));
+      console.log(JSON.stringify({
+        contractVersion: "gkos.intelligence.v1",
+        authoritative: false,
+        proposals: result.proposals,
+        ...(result.warnings ? { warnings: result.warnings } : {}),
+      }, null, 2));
+      return 0;
+    } catch (error) {
+      console.error(error.message);
+      return 2;
+    }
   }
   return engine.main(argv);
 }

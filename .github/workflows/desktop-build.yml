@@ -9,13 +9,12 @@ on:
     tags:
       - "desktop-v*"
 
-# Sidecar binaries come from the GKOS-Engine v1.0.9 release (public repo, no
-# auth needed for the download). v1.0.9 adds the loopback CORS allowlist the 3D
-# viewer's cross-origin fetches require. If those assets are missing, fall back
-# to building the SEA in-run from the engine at v1.0.9.
+# Sidecar binaries come from the matching GKOS-Engine release (public repo, no
+# auth needed for the download). If those assets are missing, fall back to
+# building the SEA from that same tag.
 env:
   ENGINE_REPO: Odenknight/GKOS-Engine
-  ENGINE_TAG: v1.0.9
+  ENGINE_TAG: v1.1.0
 
 jobs:
   build:
@@ -33,7 +32,7 @@ jobs:
           # fallback (build-sea.mjs names output by host arch) produces the
           # correct binary and tauri builds a native x86_64 .dmg. macos-latest
           # is Apple Silicon and cannot produce an x86_64 mac sidecar this way.
-          - platform: macos-13
+          - platform: macos-15-intel
             target: x86_64-apple-darwin
             asset: kosmos-agent-x86_64-apple-darwin
             binext: ""
@@ -98,6 +97,7 @@ jobs:
             popd
           fi
           chmod +x "${dest}" || true
+          "${dest}" --help | grep -q "protected, read-only note map"
           ls -la src-tauri/binaries
 
       - name: Acquire standalone 3D viewer (vault-kosmos.html)

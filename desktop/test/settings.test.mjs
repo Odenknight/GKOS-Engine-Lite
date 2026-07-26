@@ -10,7 +10,7 @@ import {
   enableBlockedReason,
   canEnable,
 } from "../dist-test/settings-schema.js";
-import { SENSITIVITY_LEVELS, DEFAULT_SENSITIVITY, DEFAULT_PORT } from "../dist-test/strings.js";
+import { SENSITIVITY_LEVELS, DEFAULT_SENSITIVITY, DEFAULT_PORT, STRINGS } from "../dist-test/strings.js";
 
 test("seven-level vocabulary, in most-open → most-private order", () => {
   assert.deepEqual([...SENSITIVITY_LEVELS], [
@@ -64,4 +64,12 @@ test("enable is gated on folder + sensitivity (decision 3)", () => {
   // secret is a valid sensitivity, so folder is the only remaining gate
   assert.equal(canEnable(withFolder), true);
   assert.equal(enableBlockedReason(withFolder), null);
+});
+
+test("everyday UI copy avoids internal connection jargon", () => {
+  assert.match(STRINGS.settings.enableLabel, /local AI apps/i);
+  assert.doesNotMatch(STRINGS.settings.enableLabel, /API|MCP|loopback/i);
+  assert.match(STRINGS.settings.advancedHeading, /advanced/i);
+  assert.match(STRINGS.connect.copy, /copy setup/i);
+  assert.match(STRINGS.connect.copied, /paste it into your AI app/i);
 });

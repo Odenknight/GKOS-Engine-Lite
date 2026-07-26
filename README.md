@@ -17,6 +17,12 @@ canonical, deterministic engine that also powers Kosmos-Oden and
 Kosmos-Oden-Lite — and re-exports its CLI commands unchanged. Same parser,
 same validation, same assessment scoring, same output, byte for byte.
 
+Version 1.1 also offers an optional `assist` command backed by a separately
+configured local intelligence sidecar. It never modifies a note and prints
+only engine-validated candidate proposals. Python, DSPy, a model, and provider
+credentials are optional; `validate`, `assess`, `graph`, and `export` work
+unchanged without them.
+
 ## Why "Lite"
 
 The full [gkos-engine](https://github.com/Odenknight/GKOS-Engine) can read
@@ -33,7 +39,8 @@ Machine-Dialect-specific workflows, sidecar governance, or proposal/decision
 records. If you need those, use gkos-engine directly. If gkos-engine later
 grows write-capable commands (migrate, proposals, decisions, mv, serve — none
 exist yet as of the pinned gkos-engine release), GKOS-Engine-Lite's CLI surface will stay
-limited to the four read-only diagnostic commands below.
+limited to the four deterministic read-only commands below plus the separate,
+proposal-only `assist` surface.
 
 ## Install
 
@@ -44,10 +51,8 @@ npm install gkos-engine-lite
 ```
 
 `gkos-engine` has no npm registry publish; it's installed as a pinned git
-dependency (`github:Odenknight/GKOS-Engine#v1.0.8`). Its own package doesn't
-ship a prebuilt bundle for git installs, so a `postinstall` script
-(`scripts/build-engine.mjs`) bundles it locally with esbuild the first time
-you install — this is transparent and only runs once.
+dependency (`github:Odenknight/GKOS-Engine#v1.1.0`). Git installation runs the
+engine package's standard `prepare` build.
 
 ## CLI: `okf-lite`
 
@@ -57,6 +62,28 @@ node bin/okf-lite.mjs assess   ./my-notes --json
 node bin/okf-lite.mjs graph    ./my-notes -o graph.json
 node bin/okf-lite.mjs export graphiti ./my-notes --episodes episodes.json
 ```
+
+Optional assistance, when the loopback sidecar is running:
+
+```sh
+node bin/okf-lite.mjs assist explain ./my-notes/example.md
+node bin/okf-lite.mjs assist improve ./my-notes/example.md
+node bin/okf-lite.mjs assist repair ./my-notes/example.md
+node bin/okf-lite.mjs assist find-links ./my-notes/example.md
+node bin/okf-lite.mjs assist check-privacy ./my-notes/example.md
+```
+
+`GKOS_INTELLIGENCE_URL` may only name a loopback URL (default
+`http://127.0.0.1:8765`). `GKOS_INTELLIGENCE_TOKEN` supplies an optional bearer
+token. Every response is validated by the canonical engine and output is
+labeled `authoritative: false`; there is no automatic write path.
+
+The short action names let users choose what they want help with without
+learning DSPy or internal contract vocabulary. Running `okf-lite assist` with
+no other arguments prints friendly examples.
+
+See [ROADMAP.md](ROADMAP.md) for completed work and the next usability,
+evaluation, installer, and signing milestones.
 
 ### `okf-lite validate <dir>`
 
@@ -87,7 +114,7 @@ reproducible and auditable.
 
 `desktop/` contains **GKOS Engine Desktop**, a Tauri 2 tray app for macOS and
 Windows that wraps the engine's headless sidecar (`kosmos-agent`, from
-[gkos-engine v1.0.8](https://github.com/Odenknight/GKOS-Engine/releases/tag/v1.0.8)).
+[gkos-engine v1.1.0](https://github.com/Odenknight/GKOS-Engine/releases/tag/v1.1.0)).
 Point it at a notes folder; it watches and projects (OKF+ 2.3 + Graphiti) and
 serves a **loopback-only, read-only, token-gated** agent API for local AI
 assistants (Claude Desktop, Cursor, …). No cloud, no remote access, no tunnel.

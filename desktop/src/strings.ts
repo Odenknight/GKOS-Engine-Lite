@@ -87,11 +87,11 @@ export const STRINGS = {
     sensitivityBack: "Back",
 
     // Step 4 — Enable toggle + network notice
-    enableTitle: "Enable the local Agent API",
-    enableToggle: "Enable local Agent API",
+    enableTitle: "Connect local AI apps",
+    enableToggle: "Allow AI apps on this computer to read the protected note map",
     // Verbatim network-notice pattern mirrored from the Kosmos plugin.
     enableNotice:
-      "When enabled, your notes become reachable by other programs running on this same computer (never the internet, another device, or your phone — the server binds 127.0.0.1 only). Notes are exposed only through the read-only projection. Unlabeled notes are classified at the default sensitivity you just set; only notes at or below that level are readable. Leave this off if you're not ready to connect an assistant yet — you can turn it on anytime from Settings.",
+      "This is optional and starts off. When enabled, approved AI apps on this computer can read the protected note map—not edit your notes. It cannot connect from the internet, another device, or your phone. Leave it off until you want to connect an AI app.",
     enableBack: "Back",
     enableNext: "Continue",
 
@@ -106,14 +106,16 @@ export const STRINGS = {
     title: "Settings",
     folderLabel: "Notes folder",
     folderChange: "Change…",
-    sensitivityLabel: "Default sensitivity",
+    sensitivityLabel: "Default privacy level",
     sensitivityHelp:
-      "Governs unlabeled notes. Changing it re-scans your notes and restarts the local connection, because the new default is applied from scratch. Raise-only: the engine may make a note more private than this, never less.",
-    enableLabel: "Enable local Agent API",
-    enableHelp: "Start the read-only loopback server now and on every launch.",
+      "Used only when a note has no privacy level of its own. GKOS may make a note more private, never less.",
+    enableLabel: "Share with local AI apps",
+    enableHelp: "Optional. AI apps on this computer can read the protected map, but cannot edit your notes.",
+    advancedHeading: "Advanced connection settings",
+    advancedHelp: "Most people can leave these settings unchanged.",
     portLabel: "Port",
     portHelp: `Loopback port (default ${DEFAULT_PORT}). Change only if another app conflicts; the server restarts automatically.`,
-    statusHeading: "Status",
+    statusHeading: "Your note map",
     statusState: "State",
     statusNotesIndexed: "Notes indexed",
     statusLastScan: "Last scan",
@@ -125,24 +127,25 @@ export const STRINGS = {
     tokenCopied: "Token copied.",
     tokenHidden: "•••••••• (hidden)",
     errorRestartsExhausted:
-      "The local engine crashed repeatedly and was stopped after 3 restart attempts. Check the notes folder path and port, then toggle Enable off and on again.",
+      "GKOS could not start. Check that your notes folder still exists, then turn sharing off and on. Advanced users can also check the connection settings below.",
   },
 
   connect: {
-    heading: "Quick connect",
+    heading: "Connect an AI app",
     intro:
-      "Copy a connection block for your MCP client. All connect to the loopback endpoint below and carry the access token automatically. The server name is kosmos-oden for ecosystem consistency.",
-    disabled: "Enable the local Agent API to see connection snippets.",
-    claudeCode: "Anthropic · Claude Desktop / Claude Code",
-    claudeCodeDesc: "Native MCP Streamable HTTP command with bearer-token authentication.",
-    claudeJson: "Claude Code project (.mcp.json)",
-    claudeJsonDesc: "Streamable HTTP block to save next to where you run claude.",
+      "Choose your AI app and copy its ready-to-paste setup. Your private access key is included automatically.",
+    disabled: "Turn on “Share with local AI apps” first.",
+    claudeCode: "Claude Desktop or Claude Code",
+    claudeCodeDesc: "Copy the ready-to-paste setup command.",
+    claudeJson: "Claude project",
+    claudeJsonDesc: "Copy setup for a single Claude project.",
     cursor: "Cursor",
-    cursorDesc: "HTTP MCP server block for Cursor's MCP settings.",
-    toml: "Generic TOML (Codex / universal)",
-    tomlDesc: "Vendor-neutral MCP Streamable HTTP configuration.",
-    copy: "Copy",
-    copied: "Copied.",
+    cursorDesc: "Copy setup for Cursor.",
+    toml: "Other AI apps",
+    tomlDesc: "Advanced setup for compatible local AI apps.",
+    copy: "Copy setup",
+    copied: "Setup copied. Paste it into your AI app.",
+    technicalDetails: "Show technical details",
   },
 
   view3d: {

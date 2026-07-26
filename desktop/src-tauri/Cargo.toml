@@ -1,6 +1,6 @@
 [package]
 name = "gkos-engine-desktop"
-version = "0.1.0"
+version = "0.2.0"
 description = "GKOS Engine Desktop — Tauri 2 tray shell"
 authors = ["OdenKnight"]
 edition = "2021"

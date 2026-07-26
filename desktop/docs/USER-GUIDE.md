@@ -8,6 +8,22 @@ This app runs quietly on your own computer. It watches a notes folder you choose
 
 The key difference is privacy. Before any assistant can see anything, you choose a default privacy level for your notes, and any note without an explicit label is treated as your most private setting by default — not the most open. The app also physically cannot accept a connection from anywhere except your own computer: there is no cloud feature, no remote access, and no tunnel of any kind. Your notes never leave the machine they're on.
 
+## Optional intelligence assistance
+
+A separately installed local helper can suggest plain-language explanations,
+metadata repairs, or possible relationships. It is off unless configured,
+never treats a suggestion as an approved fact, cannot make a note less private,
+and cannot edit files automatically. The desktop app works without it.
+
+The everyday controls use plain language:
+
+- **Share with local AI apps** turns the protected, read-only connection on or
+  off.
+- **Copy setup** gives you ready-to-paste setup for the AI app you choose.
+- Ports, endpoints, and access keys are hidden under **Advanced connection
+  settings** and **Show technical details**. Leave them unchanged unless an
+  app specifically asks for them.
+
 ## Key concepts
 
 **Notes folder** — the folder on your computer that holds your notes (for example, an Obsidian vault, or any folder of markdown files). You pick this folder during setup; the app only ever looks inside it.

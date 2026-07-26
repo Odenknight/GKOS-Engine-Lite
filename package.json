@@ -1,7 +1,7 @@
 {
   "name": "gkos-engine-lite",
-  "version": "1.0.8",
-  "description": "GKOS-Engine-Lite — command-line OKF+ Notes (2.2) + Agent-Ready (flat 2.3) tooling for any folder of Markdown notes. A thin, faithful wrapper over gkos-engine.",
+  "version": "1.1.0",
+  "description": "GKOS-Engine-Lite — deterministic OKF+ tooling with optional, locally configured proposal-only AI assistance.",
   "type": "module",
   "bin": {
     "okf-lite": "./bin/okf-lite.mjs"
@@ -17,7 +17,7 @@
     "test": "node --test \"test/*.test.mjs\""
   },
   "dependencies": {
-    "gkos-engine": "github:Odenknight/GKOS-Engine#v1.0.8"
+    "gkos-engine": "github:Odenknight/GKOS-Engine#v1.1.0"
   },
   "license": "MIT",
   "author": "OdenKnight",

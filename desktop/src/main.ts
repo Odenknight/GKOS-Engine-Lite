@@ -235,6 +235,11 @@ async function renderSettings(root: HTMLElement): Promise<void> {
     if (blocked) enable.appendChild(el("p", "help", blocked));
     card.appendChild(enable);
 
+    // Advanced connection settings stay out of the normal flow.
+    const advanced = el("details", "advanced");
+    advanced.appendChild(el("summary", undefined, STRINGS.settings.advancedHeading));
+    advanced.appendChild(el("p", "help", STRINGS.settings.advancedHelp));
+
     // Port
     const port = section(STRINGS.settings.portLabel);
     port.appendChild(el("p", "help", STRINGS.settings.portHelp));
@@ -249,7 +254,8 @@ async function renderSettings(root: HTMLElement): Promise<void> {
       await render();
     };
     port.appendChild(portInput);
-    card.appendChild(port);
+    advanced.appendChild(port);
+    card.appendChild(advanced);
 
     // Status (read-only)
     const st = section(STRINGS.settings.statusHeading);
@@ -257,7 +263,9 @@ async function renderSettings(root: HTMLElement): Promise<void> {
     st.appendChild(kv(STRINGS.settings.statusState, STRINGS.state[supervisor] ?? supervisor));
     st.appendChild(kv(STRINGS.settings.statusNotesIndexed, status ? String(status.notes_indexed) : "—"));
     st.appendChild(kv(STRINGS.settings.statusLastScan, status?.last_scan_iso ?? "—"));
-    st.appendChild(kv(STRINGS.settings.statusEndpoint, status?.url ?? "—"));
+    const connectionDetails = el("details", "technical");
+    connectionDetails.appendChild(el("summary", undefined, STRINGS.connect.technicalDetails));
+    connectionDetails.appendChild(kv(STRINGS.settings.statusEndpoint, status?.url ?? "—"));
 
     // Token reveal/copy
     if (connect) {
@@ -276,8 +284,9 @@ async function renderSettings(root: HTMLElement): Promise<void> {
       tokRow.appendChild(val);
       tokRow.appendChild(reveal);
       tokRow.appendChild(copyTok);
-      st.appendChild(tokRow);
+      connectionDetails.appendChild(tokRow);
     }
+    st.appendChild(connectionDetails);
     card.appendChild(st);
 
     // Quick connect
@@ -317,9 +326,12 @@ async function renderSettings(root: HTMLElement): Promise<void> {
     head.appendChild(btn);
     b.appendChild(head);
     b.appendChild(el("p", "help", desc));
+    const technical = el("details", "technical");
+    technical.appendChild(el("summary", undefined, STRINGS.connect.technicalDetails));
     const pre = el("pre") as HTMLPreElement;
     pre.textContent = code;
-    b.appendChild(pre);
+    technical.appendChild(pre);
+    b.appendChild(technical);
     return b;
   };
 

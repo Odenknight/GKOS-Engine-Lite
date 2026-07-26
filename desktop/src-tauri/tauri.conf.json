@@ -1,7 +1,7 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
   "productName": "GKOS Engine Desktop",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "identifier": "org.gkos.engine.desktop",
   "build": {
     "beforeDevCommand": "npm run dev",
@@ -36,8 +36,8 @@
     "externalBin": ["binaries/kosmos-agent"],
     "resources": ["resources/vault-kosmos.html"],
     "category": "Productivity",
-    "shortDescription": "Loopback-only local knowledge engine for AI assistants.",
-    "longDescription": "GKOS Engine Desktop watches a notes folder, builds a live projection (OKF+ 2.3 + Graphiti), and serves a loopback-only, read-only, token-gated agent API for local AI assistants. No cloud, no remote access.",
+    "shortDescription": "Deterministic local knowledge engine with optional proposal-only AI assistance.",
+    "longDescription": "GKOS Engine Desktop watches a notes folder, builds a deterministic OKF+ 2.3 and Graphiti projection, and serves a loopback-only, read-only, token-gated agent API. An optional separately configured DSPy sidecar may suggest explanations or repairs, but it cannot write notes, approve changes, lower sensitivity, or replace engine validation.",
     "windows": {
       "nsis": {
         "installMode": "currentUser"

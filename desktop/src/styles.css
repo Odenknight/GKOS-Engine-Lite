@@ -77,5 +77,12 @@ select, input[type="number"] { font: inherit; background: var(--panel-2); color:
 .snippet-head { display: flex; align-items: center; justify-content: space-between; }
 pre { background: var(--panel-2); padding: 12px; border-radius: 6px; overflow-x: auto; font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: 12.5px; margin: 8px 0 0; white-space: pre-wrap; word-break: break-all; }
 
+.advanced,
+.technical { margin-top: 12px; }
+.advanced { border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; background: var(--panel-2); }
+.advanced > summary,
+.technical > summary { cursor: pointer; font-weight: 600; color: var(--muted); }
+.technical pre { margin-top: 10px; }
+
 .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--panel-2); border: 1px solid var(--border); color: var(--text); padding: 10px 16px; border-radius: 8px; opacity: 0; pointer-events: none; transition: opacity 0.2s, transform 0.2s; }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }

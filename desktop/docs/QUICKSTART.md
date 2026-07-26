@@ -4,6 +4,15 @@
 
 Your notes are yours, and they stay on your computer. GKOS Engine Desktop lets AI assistants you already use — like Claude — read and understand your notes without uploading anything anywhere. It watches your notes folder, builds a live map of what's in it (including a connections view called Graphiti), and applies privacy rules you choose before any assistant can see a single word. It only talks to programs on your own machine — it cannot accept a connection from the internet.
 
+Optional AI suggestions require a separately installed local helper. It is not
+required for setup, never writes notes, and cannot override engine privacy or
+validation rules.
+
+The normal settings screen uses one **Share with local AI apps** switch.
+Ports, access keys, and configuration text stay under **Advanced connection
+settings** or **Show technical details**. Most people never need to change
+them.
+
 ## 1. Download
 
 Get the installer from the project's GitHub Releases page.

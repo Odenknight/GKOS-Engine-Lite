@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.1.3
+
+- Engine-verbatim catch-up to `GKOS-Engine#v1.1.3`: bumped the `gkos-engine`
+  pin, the root `package.json` version, and the release tag all to `1.1.3`.
+- Re-resolved `package-lock.json` to the engine's v1.1.3 commit SHA (not a bare
+  tag string), so the installed engine can no longer silently stay stale.
+- Hardened `.github/workflows/pin-bump.yml`: the commit-and-tag step now runs
+  `git pull --rebase origin <branch>` before pushing, so a merge that lands
+  mid-run can no longer reject the push with `! [rejected] (fetch first)`.
+
 ## 1.1.2
 
 - Adopted the engine-verbatim CLI versioning rule: the `okf-lite` CLI now

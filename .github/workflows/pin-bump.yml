@@ -70,6 +70,10 @@ jobs:
           else
             git add package.json package-lock.json
             git commit -m "Adopt gkos-engine $TAG (CLI $VERSION)"
+            # Rebase onto any commits that landed on the branch after checkout,
+            # so a merge that arrives mid-run can't reject the push with
+            # "! [rejected] (fetch first)". Root-cause fix for the stale-ref push.
+            git pull --rebase origin "${GITHUB_REF_NAME}"
             git push origin HEAD:${GITHUB_REF_NAME}
           fi
           if [ "${{ inputs.push_tag }}" = "true" ]; then

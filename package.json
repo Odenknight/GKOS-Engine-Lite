@@ -1,6 +1,6 @@
 {
   "name": "gkos-engine-lite",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "description": "GKOS-Engine-Lite — deterministic OKF+ tooling with optional, locally configured proposal-only AI assistance.",
   "type": "module",
   "bin": {
@@ -17,7 +17,7 @@
     "test": "node --test \"test/*.test.mjs\""
   },
   "dependencies": {
-    "gkos-engine": "github:Odenknight/GKOS-Engine#v1.1.2"
+    "gkos-engine": "github:Odenknight/GKOS-Engine#v1.1.3"
   },
   "license": "MIT",
   "author": "OdenKnight",

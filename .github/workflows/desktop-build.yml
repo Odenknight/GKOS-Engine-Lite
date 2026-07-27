@@ -14,7 +14,11 @@ on:
 # building the SEA from that same tag.
 env:
   ENGINE_REPO: Odenknight/GKOS-Engine
-  ENGINE_TAG: v1.1.0
+  # v1.1.3 is the first engine release whose sidecar-release publishes
+  # kosmos-agent-x86_64-apple-darwin correctly signed on every leg (cross-arch
+  # SEA, GKOS-Engine#9; codesign fix, GKOS-Engine#12). Must be
+  # tagged upstream before this workflow is run for the Intel target.
+  ENGINE_TAG: v1.1.3
 
 jobs:
   build:
@@ -28,18 +32,25 @@ jobs:
             target: aarch64-apple-darwin
             asset: kosmos-agent-aarch64-apple-darwin
             binext: ""
-          # Intel runner: host arch matches the x86_64 target, so the SEA
-          # fallback (build-sea.mjs names output by host arch) produces the
-          # correct binary and tauri builds a native x86_64 .dmg. macos-latest
-          # is Apple Silicon and cannot produce an x86_64 mac sidecar this way.
-          - platform: macos-15-intel
+            sea_args: ""
+          # Intel macOS, built on the arm64 runner. Two halves make this work:
+          # Tauri/cargo cross-compiles to x86_64-apple-darwin on an Apple
+          # Silicon host given the rustup target, and GKOS-Engine's
+          # build-sea.mjs cross-builds the x86_64 sidecar via --target-arch x64. v1.1.1
+          # and v1.1.2 both shipped this broken (arm64 leg failed its own codesign
+          # verify); v1.1.3 fixes it — see GKOS-Engine#12.
+          # Previously this leg needed a dedicated Intel runner, whose pool
+          # queued for ~24h and left the x64 .dmg unpublished in rc3/rc4.
+          - platform: macos-latest
             target: x86_64-apple-darwin
             asset: kosmos-agent-x86_64-apple-darwin
             binext: ""
+            sea_args: "--target-arch x64"
           - platform: windows-latest
             target: x86_64-pc-windows-msvc
             asset: kosmos-agent-x86_64-pc-windows-msvc.exe
             binext: ".exe"
+            sea_args: ""
 
     runs-on: ${{ matrix.platform }}
     steps:
@@ -54,6 +65,18 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
         with:
           targets: ${{ matrix.target }}
+
+      # dtolnay/rust-toolchain's `targets:` input already runs the equivalent
+      # of `rustup target add`. Assert it took effect: on the arm64 runner the
+      # x86_64-apple-darwin std must be present or `tauri build --target` will
+      # fail deep inside cargo with a much noisier error.
+      - name: Verify Rust target is installed
+        shell: bash
+        run: |
+          set -euo pipefail
+          rustup target add "${{ matrix.target }}"
+          rustup target list --installed
+          rustup target list --installed | grep -qx "${{ matrix.target }}"
 
       - name: Rust cache
         uses: swatinem/rust-cache@v2
@@ -89,15 +112,37 @@ jobs:
             pushd ../engine-src
             npm ci
             npm run build
-            node scripts/build-sea.mjs
-            # build-sea.mjs emits dist/kosmos-agent-<host-arch-triple>[.exe].
-            # The runner's host arch is chosen (via the matrix platform) to
-            # match matrix.target, so this name is exactly what we need.
+            # Matches the engine's cross-arch script (GKOS-Engine#9): the Intel
+            # leg passes --target-arch x64 so the SEA is injected into a
+            # checksum-verified darwin-x64 node rather than the arm64 host's.
+            node scripts/build-sea.mjs ${{ matrix.sea_args }}
+            # build-sea.mjs emits dist/kosmos-agent-<target-triple>[.exe] for
+            # exactly the target selected above.
             cp "dist/kosmos-agent-${{ matrix.target }}${{ matrix.binext }}" "../desktop/${dest}"
             popd
           fi
           chmod +x "${dest}" || true
-          "${dest}" --help | grep -q "protected, read-only note map"
+          test -s "${dest}"
+
+          if [ "$RUNNER_OS" = "macOS" ]; then
+            file "${dest}"
+            expect_macho='${{ matrix.target == 'x86_64-apple-darwin' && 'x86_64' || 'arm64' }}'
+            # Hard gate: a wrong-arch sidecar would be bundled silently and only
+            # fail on the end user's machine.
+            file "${dest}" | grep -q "Mach-O 64-bit executable $expect_macho"
+            codesign --verify --verbose=2 "${dest}"
+          fi
+
+          # Functional gate. An x86_64 sidecar on the arm64 runner needs
+          # Rosetta 2; probe for it and report the outcome explicitly rather
+          # than skipping quietly.
+          if [ "${{ matrix.target }}" = "x86_64-apple-darwin" ] && [ "$(uname -m)" = "arm64" ] \
+             && ! arch -x86_64 /usr/bin/true >/dev/null 2>&1; then
+            echo "::warning::Rosetta 2 unavailable; the x86_64 sidecar passed its Mach-O arch and signature gates but could not be executed on this runner. Its functional coverage is the GKOS-Engine sidecar-release smoke test for the same asset."
+          else
+            "${dest}" --help | grep -q "protected, read-only note map"
+            echo "sidecar functional smoke test passed"
+          fi
           ls -la src-tauri/binaries
 
       - name: Acquire standalone 3D viewer (vault-kosmos.html)

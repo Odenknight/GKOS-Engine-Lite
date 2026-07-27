@@ -19,11 +19,12 @@
  * and report on honestly — GKOS-Engine-Lite just doesn't advertise it).
  *
  * If/when gkos-engine grows write-capable commands (migrate, proposals,
- * decisions, mv, serve — none exist as of gkos-engine v1.0.0), this wrapper
+ * decisions, mv, serve — none exist in the pinned engine; see the
+ * "gkos-engine" pin in package.json for the exact version), this wrapper
  * should keep exposing only validate/assess/graph/export, not those.
  */
 import { createRequire } from "node:module";
-import { realpathSync } from "node:fs";
+import { readFileSync, realpathSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
@@ -37,7 +38,13 @@ const enginePkgRoot = dirname(dirname(engineMainPath));
 const engineBinUrl = pathToFileURL(join(enginePkgRoot, "bin/okf.mjs")).href;
 
 const engine = await import(engineBinUrl);
-const LITE_VERSION = "1.1.0";
+
+// The CLI adopts the engine version verbatim (see VERSIONING.md), so the single
+// source of truth is this package's own package.json "version" — never a
+// hardcoded literal that can drift from the release tag.
+const LITE_VERSION = JSON.parse(
+  readFileSync(new URL("../package.json", import.meta.url), "utf8"),
+).version;
 
 const BANNER = `okf-lite (GKOS-Engine-Lite) v${LITE_VERSION}
 GKOS-Engine-Lite — OKF+ Notes (2.2) + Agent-Ready (flat 2.3) tooling

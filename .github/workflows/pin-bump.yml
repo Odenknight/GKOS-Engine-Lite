@@ -1,0 +1,82 @@
+name: Pin bump
+
+# Manually adopt a new GKOS-Engine release. Per VERSIONING.md the CLI takes the
+# engine version verbatim: the pin, the package version, and the tag all become
+# the engine tag. No cross-repo auto-trigger — an operator dispatches this.
+
+on:
+  workflow_dispatch:
+    inputs:
+      engine_tag:
+        description: "GKOS-Engine tag to adopt, e.g. v1.1.2"
+        required: true
+        type: string
+      push_tag:
+        description: "Also create and push the matching vX.Y.Z tag"
+        required: false
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+
+jobs:
+  bump:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate input
+        id: v
+        run: |
+          tag="${{ inputs.engine_tag }}"
+          case "$tag" in
+            v[0-9]*.[0-9]*.[0-9]*) ;;
+            *) echo "::error::engine_tag must look like v1.2.3 (got '$tag')"; exit 1 ;;
+          esac
+          echo "tag=$tag"            >> "$GITHUB_OUTPUT"
+          echo "version=${tag#v}"    >> "$GITHUB_OUTPUT"
+
+      - name: Update pin and version
+        env:
+          TAG: ${{ steps.v.outputs.tag }}
+          VERSION: ${{ steps.v.outputs.version }}
+        run: |
+          node -e '
+            const fs = require("node:fs");
+            const p = JSON.parse(fs.readFileSync("package.json", "utf8"));
+            p.version = process.env.VERSION;
+            p.dependencies["gkos-engine"] =
+              `github:Odenknight/GKOS-Engine#${process.env.TAG}`;
+            fs.writeFileSync("package.json", JSON.stringify(p, null, 2) + "\n");
+          '
+          git diff --stat
+
+      - name: Verify install and test against the new pin
+        run: |
+          npm install --package-lock-only
+          npm ci
+          npm test
+
+      - name: Commit and tag
+        env:
+          TAG: ${{ steps.v.outputs.tag }}
+          VERSION: ${{ steps.v.outputs.version }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet; then
+            echo "Already pinned to $TAG; nothing to commit."
+          else
+            git add package.json package-lock.json
+            git commit -m "Adopt gkos-engine $TAG (CLI $VERSION)"
+            git push origin HEAD:${GITHUB_REF_NAME}
+          fi
+          if [ "${{ inputs.push_tag }}" = "true" ]; then
+            if git rev-parse -q --verify "refs/tags/$TAG" >/dev/null; then
+              echo "::warning::tag $TAG already exists; not re-tagging."
+            else
+              git tag -a "$TAG" -m "GKOS-Engine-Lite $TAG (engine-verbatim)"
+              git push origin "$TAG"
+            fi
+          fi

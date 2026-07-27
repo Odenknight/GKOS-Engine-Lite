@@ -13,6 +13,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
+      - name: Lockfile SHA guard (git deps must pin to a commit SHA)
+        run: node scripts/check-lockfile-sha.mjs
       - run: npm ci
       - run: npm test
       - name: Package contents smoke test

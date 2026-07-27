@@ -37,7 +37,7 @@ const enginePkgRoot = dirname(dirname(engineMainPath));
 const engineBinUrl = pathToFileURL(join(enginePkgRoot, "bin/okf.mjs")).href;
 
 const engine = await import(engineBinUrl);
-const LITE_VERSION = "1.1.0";
+const LITE_VERSION = "1.1.1";
 
 const BANNER = `okf-lite (GKOS-Engine-Lite) v${LITE_VERSION}
 GKOS-Engine-Lite — OKF+ Notes (2.2) + Agent-Ready (flat 2.3) tooling

@@ -53,6 +53,8 @@ jobs:
           git diff --stat
 
       - name: Verify install and test against the new pin
+        env:
+          VERSION: ${{ steps.v.outputs.version }}
         run: |
           npm install --package-lock-only
           node - <<'NODE'

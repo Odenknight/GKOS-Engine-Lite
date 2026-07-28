@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
     inputs:
       engine_tag:
-        description: "GKOS-Engine tag to adopt, e.g. v1.1.2"
+        description: "GKOS-Engine tag to adopt, e.g. v1.1.3"
         required: true
         type: string
       push_tag:
@@ -55,6 +55,19 @@ jobs:
       - name: Verify install and test against the new pin
         run: |
           npm install --package-lock-only
+          node - <<'NODE'
+          const fs = require("node:fs");
+          const lock = JSON.parse(fs.readFileSync("package-lock.json", "utf8"));
+          const engine = lock.packages?.["node_modules/gkos-engine"];
+          const expected = process.env.VERSION;
+          const resolvedSha = engine?.resolved?.split("#").pop() ?? "";
+          if (engine?.version !== expected) {
+            throw new Error(`resolved engine version ${engine?.version} does not match ${expected}`);
+          }
+          if (!/^[0-9a-f]{40}$/i.test(resolvedSha)) {
+            throw new Error(`engine is not resolved to an immutable commit SHA: ${engine?.resolved}`);
+          }
+          NODE
           npm ci
           npm test
 

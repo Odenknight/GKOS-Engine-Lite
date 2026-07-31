@@ -19,7 +19,7 @@
   "dependencies": {
     "gkos-engine": "github:Odenknight/GKOS-Engine#v1.1.3"
   },
-  "license": "MIT",
+  "license": "Apache-2.0",
   "author": "OdenKnight",
   "repository": {
     "type": "git",

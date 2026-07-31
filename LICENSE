@@ -1,21 +1,26 @@
-MIT License
+GKOS Project Licensing Structure
 
-Copyright (c) 2026 Odenknight
+Copyright © 2026 Shaun “Oden” Marshall.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+Unless a file states otherwise, project-authored materials are licensed by
+artifact type as follows:
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+1. Documentation, explanatory material, and original graphics are licensed
+   under the Creative Commons Attribution 4.0 International License
+   (CC BY 4.0):
+   https://creativecommons.org/licenses/by/4.0/legalcode
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+2. Schemas, fixtures, workflows, scripts, source code, compiled reference
+   code, and other software-oriented materials are licensed under the Apache
+   License, Version 2.0:
+   https://www.apache.org/licenses/LICENSE-2.0
+
+Third-party and inherited materials remain governed by their original licenses
+and notices. See THIRD-PARTY-NOTICES.md and any file-specific provenance or
+license records.
+
+The licenses do not grant trademark, certification, endorsement,
+accreditation, or regulatory-approval rights.
+
+Materials are provided on an “AS IS” basis, without warranties or conditions,
+except as required by applicable law or expressly agreed in writing.

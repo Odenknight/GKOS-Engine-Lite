@@ -1,11 +1,16 @@
 # GKOS-Engine-Lite
 
-**Command-line OKF+ Notes (2.2) + Agent-Ready (flat 2.3) tooling for any
+**Command-line GKX Notes (2.2) + Agent-Ready (flat 2.3) tooling for any
 folder of Markdown notes.**
 
+GKX (Governed Knowledge Exchange) is the current name for the model formerly
+published as OKF+. Existing OKF+ notes and the stable `okf-lite` command remain
+fully supported compatibility surfaces; the naming change alone requires no
+document migration.
+
 GKOS-Engine-Lite is the standalone, non-Obsidian counterpart to
-[Kosmos-Oden-Lite](https://github.com/Odenknight/Kosmos-Oden-Lite): it gives
-individuals and small vaults the same GKOS-Engine-Lite schema — OKF+ Notes
+[Kosmos Research Studio Lite (KRS-Lite)](https://github.com/Odenknight/Kosmos-Oden-Lite): it gives
+individuals and small vaults the same GKOS-Engine-Lite schema — GKX Notes
 (2.2) with the optional Agent-Ready flat 2.3 profile — as a command-line tool
 you can point at any folder of Markdown notes. No Obsidian, no plugin, no
 GUI: just `okf-lite validate`, `assess`, `graph`, and `export` over a
@@ -13,8 +18,8 @@ directory.
 
 It is a thin wrapper, not a reimplementation. Under the hood it depends
 directly on [gkos-engine](https://github.com/Odenknight/GKOS-Engine) — the
-canonical, deterministic engine that also powers Kosmos-Oden and
-Kosmos-Oden-Lite — and re-exports its CLI commands unchanged. Same parser,
+canonical, deterministic engine that also powers KRS and KRS-Lite — and
+re-exports its CLI commands unchanged. Same parser,
 same validation, same assessment scoring, same output, byte for byte.
 
 Version 1.1 also offers an optional `assist` command backed by a separately

@@ -1,0 +1,13 @@
+GKOS Engine Lite
+Copyright 2026 Shaun “Oden” Marshall
+
+GKOS-Engine-Lite first-party software is licensed under the Apache License,
+Version 2.0. Documentation and original graphics are licensed under CC BY 4.0
+where the repository licensing structure identifies them as such.
+
+This distribution depends on GKOS-Engine and includes third-party packages that
+retain their own copyright and license notices. See THIRD-PARTY-NOTICES.md,
+package lockfiles, and bundled-asset provenance for their terms.
+
+GKOS, GKX, Kosmos-Oden, and KRS names and marks are not licensed under the
+Apache License. See TRADEMARKS.md.

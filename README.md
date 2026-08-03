@@ -12,15 +12,16 @@ GKOS-Engine-Lite is the standalone, non-Obsidian counterpart to
 [Kosmos Research Studio Lite (KRS-Lite)](https://github.com/Odenknight/Kosmos-Oden-Lite): it gives
 individuals and small vaults the same GKOS-Engine-Lite schema — GKX Notes
 (2.2) with the optional Agent-Ready flat 2.3 profile — as a command-line tool
-you can point at any folder of Markdown notes. No Obsidian, no plugin, no
-GUI: just `okf-lite validate`, `assess`, `graph`, and `export` over a
+you can point at any folder of Markdown notes. The CLI package has no Obsidian dependency, plugin, or GUI: just `okf-lite validate`, `assess`, `graph`, and `export` over a
 directory.
 
 It is a thin wrapper, not a reimplementation. Under the hood it depends
 directly on [gkos-engine](https://github.com/Odenknight/GKOS-Engine) — the
 canonical, deterministic engine that also powers KRS and KRS-Lite — and
 re-exports its CLI commands unchanged. Same parser,
-same validation, same assessment scoring, same output, byte for byte.
+same validation and assessment behavior, through the same upstream execution
+path. CI verifies the restricted command boundary and compatibility fixtures;
+Lite does not independently implement deterministic semantics.
 
 Version 1.1 also offers an optional `assist` command backed by a separately
 configured local intelligence sidecar. It never modifies a note and prints
@@ -56,7 +57,8 @@ npm install gkos-engine-lite
 ```
 
 `gkos-engine` has no npm registry publish; it's installed as a pinned git
-dependency (`github:Odenknight/GKOS-Engine#v1.1.0`). Git installation runs the
+dependency (`github:Odenknight/GKOS-Engine#v1.1.3`, resolved to commit
+`72c4a3268c9db132f2f9dd5aaa7eb7075e6bab2a`). Git installation runs the
 engine package's standard `prepare` build.
 
 ## CLI: `okf-lite`
@@ -117,16 +119,17 @@ reproducible and auditable.
 
 ## Desktop app — GKOS Engine Desktop
 
-`desktop/` contains **GKOS Engine Desktop**, a Tauri 2 tray app for macOS and
+`desktop/` contains the separate **GKOS Engine Desktop** presentation package, a Tauri 2 tray app for macOS and
 Windows that wraps the engine's headless sidecar (`kosmos-agent`, from
-[gkos-engine v1.1.0](https://github.com/Odenknight/GKOS-Engine/releases/tag/v1.1.0)).
+[gkos-engine v1.1.3](https://github.com/Odenknight/GKOS-Engine/releases/tag/v1.1.0)).
 Point it at a notes folder; it watches and projects (OKF+ 2.3 + Graphiti) and
 serves a **loopback-only, read-only, token-gated** agent API for local AI
 assistants (Claude Desktop, Cursor, …). No cloud, no remote access, no tunnel.
 
 A mandatory first-run wizard makes you choose a default sensitivity **before**
-the API can ever be enabled (fail-closed to `secret`). Installers are built
-**unsigned** by CI (`.github/workflows/desktop-build.yml`) — your OS will warn
+the API can ever be enabled (fail-closed to `secret`). Installer workflows are implemented and build **unsigned** artifacts. The
+current Engine v1.1.3 configuration requires a fresh installer-matrix and
+clean-machine verification before availability is claimed (`.github/workflows/desktop-build.yml`) — your OS will warn
 on first open; the guides below cover the safe open-anyway steps.
 
 - **[Quickstart](desktop/docs/QUICKSTART.md)** — download, install (unsigned),
@@ -141,7 +144,7 @@ the `.dmg`/`.exe` bundles are produced exclusively on the CI matrix.
 
 ## Relationship to the rest of the GKOS family
 
-| | GKOS-Engine-Lite (this repo) | GKOS-Engine (full) | Kosmos-Oden-Lite |
+| | GKOS-Engine-Lite (this repo) | GKOS-Engine (full) | Kosmos-Oden-Lite (frozen) |
 |---|---|---|---|
 | Interface | Command-line, any folder of notes | Command-line, any folder of notes | Obsidian plugin |
 | Audience | Everyday vaults, individuals | Governed knowledge work, agentic systems | Everyday Obsidian vaults |
@@ -155,7 +158,10 @@ differ.
 
 - Engine: [gkos-engine](https://github.com/Odenknight/GKOS-Engine) by
   **Shaun "Oden" Marshall** ([Odenknight](https://github.com/Odenknight)).
-- Note-format profiles: **OKF+** (Open Knowledge Format Plus) under the
+- Note-format profiles: **GKX** (Governed Knowledge Exchange; formerly OKF+) under the
   **GKOS** (Governed Knowledge Operations Standard) governance model — see
   [gkos-standard](https://github.com/Odenknight/gkos-standard).
-- License: [MIT](LICENSE).
+- First-party software license: Apache-2.0. Documentation and original graphics
+  use CC BY 4.0 as described in [LICENSE](LICENSE). See [NOTICE](NOTICE),
+  [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md), and
+  [TRADEMARKS.md](TRADEMARKS.md).

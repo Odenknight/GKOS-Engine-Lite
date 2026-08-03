@@ -14,7 +14,8 @@
     "npm": ">=10"
   },
   "scripts": {
-    "test": "node --test \"test/*.test.mjs\""
+    "test": "node --test \"test/*.test.mjs\"",
+    "check:metadata": "node scripts/check-metadata.mjs"
   },
   "dependencies": {
     "gkos-engine": "github:Odenknight/GKOS-Engine#v1.1.3"

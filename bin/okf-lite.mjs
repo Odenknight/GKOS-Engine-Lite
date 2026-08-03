@@ -69,6 +69,16 @@ by GKOS, and your note is never changed automatically.
 See https://github.com/Odenknight/GKOS-Engine-Lite for docs, and
 https://github.com/Odenknight/GKOS-Engine for the full engine this depends on.`;
 
+export function validateLiteCommand(argv) {
+  const first = argv[0];
+  if (["validate", "assess", "graph"].includes(first)) return { allowed: true };
+  if (first === "export" && argv[1] === "graphiti") return { allowed: true };
+  return {
+    allowed: false,
+    message: "Unsupported command in GKOS-Engine-Lite. Lite exposes only: validate, assess, graph, export graphiti.",
+  };
+}
+
 export async function main(argv = process.argv.slice(2)) {
   const first = argv[0];
   if (!first || first === "--help" || first === "-h") {
@@ -90,6 +100,11 @@ export async function main(argv = process.argv.slice(2)) {
       console.error(error.message);
       return 2;
     }
+  }
+  const boundary = validateLiteCommand(argv);
+  if (!boundary.allowed) {
+    console.error(boundary.message);
+    return 1;
   }
   return engine.main(argv);
 }

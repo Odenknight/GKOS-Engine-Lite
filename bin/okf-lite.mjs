@@ -13,7 +13,7 @@
  *
  * GKOS-Engine-Lite does not reimplement the engine — it re-exports it. This
  * file only overrides the --help / no-args banner, so that GKOS-Engine-Lite
- * presents itself as OKF+ Notes (2.2) + Agent-Ready (flat 2.3) tooling for
+ * presents itself as GKX Notes (2.2) + Agent-Ready (flat 2.3) tooling for
  * everyday vaults, rather than describing the full engine's Machine Dialect
  * / governance-sidecar surface (which the underlying engine can still read
  * and report on honestly — GKOS-Engine-Lite just doesn't advertise it).
@@ -47,7 +47,7 @@ const LITE_VERSION = JSON.parse(
 ).version;
 
 const BANNER = `okf-lite (GKOS-Engine-Lite) v${LITE_VERSION}
-GKOS-Engine-Lite — OKF+ Notes (2.2) + Agent-Ready (flat 2.3) tooling
+GKOS-Engine-Lite — GKX Notes (2.2) + Agent-Ready (flat 2.3) tooling
 
 A thin command-line wrapper around gkos-engine for individuals and small,
 everyday vaults of Markdown notes — no Obsidian required.

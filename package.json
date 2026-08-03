@@ -1,7 +1,7 @@
 {
   "name": "gkos-engine-lite",
   "version": "1.1.3",
-  "description": "GKOS-Engine-Lite — deterministic OKF+ tooling with optional, locally configured proposal-only AI assistance.",
+  "description": "GKOS-Engine-Lite — deterministic GKX tooling with optional, locally configured proposal-only AI assistance.",
   "type": "module",
   "bin": {
     "okf-lite": "./bin/okf-lite.mjs"
@@ -15,7 +15,8 @@
   },
   "scripts": {
     "test": "node --test \"test/*.test.mjs\"",
-    "check:metadata": "node scripts/check-metadata.mjs"
+    "check:metadata": "node scripts/check-metadata.mjs",
+    "check:branding": "node scripts/check-branding.mjs"
   },
   "dependencies": {
     "gkos-engine": "github:Odenknight/GKOS-Engine#v1.1.3"

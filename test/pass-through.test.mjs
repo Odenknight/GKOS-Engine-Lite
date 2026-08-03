@@ -42,7 +42,7 @@ test("okf-lite --help banner reflects the Lite scope framing", async () => {
   const { stdout, code } = await run(okfLiteBin, ["--help"]);
   assert.equal(code, 0);
   assert.match(stdout, /GKOS-Engine-Lite/);
-  assert.match(stdout, /OKF\+ Notes \(2\.2\) \+ Agent-Ready \(flat 2\.3\)/);
+  assert.match(stdout, /GKX Notes \(2\.2\) \+ Agent-Ready \(flat 2\.3\)/);
   assert.doesNotMatch(stdout, /Machine Dialect/);
 });
 

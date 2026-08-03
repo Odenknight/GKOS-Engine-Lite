@@ -37,7 +37,7 @@
     "resources": ["resources/vault-kosmos.html"],
     "category": "Productivity",
     "shortDescription": "Deterministic local knowledge engine with optional proposal-only AI assistance.",
-    "longDescription": "GKOS Engine Desktop watches a notes folder, builds a deterministic OKF+ 2.3 and Graphiti projection, and serves a loopback-only, read-only, token-gated agent API. An optional separately configured DSPy sidecar may suggest explanations or repairs, but it cannot write notes, approve changes, lower sensitivity, or replace engine validation.",
+    "longDescription": "GKOS Engine Desktop watches a notes folder, builds a deterministic GKX 2.3 and Graphiti projection, and serves a loopback-only, read-only, token-gated agent API. An optional separately configured DSPy sidecar may suggest explanations or repairs, but it cannot write notes, approve changes, lower sensitivity, or replace engine validation.",
     "windows": {
       "nsis": {
         "installMode": "currentUser"

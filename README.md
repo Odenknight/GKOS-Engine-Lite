@@ -9,7 +9,7 @@ fully supported compatibility surfaces; the naming change alone requires no
 document migration.
 
 GKOS-Engine-Lite is the standalone, non-Obsidian counterpart to
-[Kosmos Research Studio Lite (KRS-Lite)](https://github.com/Odenknight/Kosmos-Oden-Lite): it gives
+[`Kosmos-Oden-Lite`](https://github.com/Odenknight/Kosmos-Oden-Lite): it gives
 individuals and small vaults the same GKOS-Engine-Lite schema — GKX Notes
 (2.2) with the optional Agent-Ready flat 2.3 profile — as a command-line tool
 you can point at any folder of Markdown notes. The CLI package has no Obsidian dependency, plugin, or GUI: just `okf-lite validate`, `assess`, `graph`, and `export` over a
@@ -17,7 +17,8 @@ directory.
 
 It is a thin wrapper, not a reimplementation. Under the hood it depends
 directly on [gkos-engine](https://github.com/Odenknight/GKOS-Engine) — the
-canonical, deterministic engine that also powers KRS and KRS-Lite — and
+canonical, deterministic engine also consumed by `Kosmos-Oden` and its frozen
+`Kosmos-Oden-Lite` line — and
 re-exports its CLI commands unchanged. Same parser,
 same validation and assessment behavior, through the same upstream execution
 path. CI verifies the restricted command boundary and compatibility fixtures;
@@ -32,7 +33,7 @@ unchanged without them.
 ## Why "Lite"
 
 The full [gkos-engine](https://github.com/Odenknight/GKOS-Engine) can read
-and report on both OKF+ 2.3 dialects (the human/agent-editable **Agent-Ready
+and report on both GKX 2.3 dialects (the human/agent-editable **Agent-Ready
 flat** profile, and the nested **Machine Dialect** used by heavier
 governance workflows), and diagnostic commands are always honest about what
 they find in a vault regardless of dialect — GKOS-Engine-Lite never hides or
@@ -40,7 +41,7 @@ misreports a note just because it's outside its intended audience.
 
 What "Lite" narrows is documentation and positioning, not behavior: this
 README and this package describe and support the everyday, individual-vault
-workflow — OKF+ Notes (2.2) and Agent-Ready (flat 2.3) — and don't document
+workflow — GKX Notes (formerly OKF+ 2.2) and Agent-Ready (flat 2.3) — and don't document
 Machine-Dialect-specific workflows, sidecar governance, or proposal/decision
 records. If you need those, use gkos-engine directly. If gkos-engine later
 grows write-capable commands (migrate, proposals, decisions, mv, serve — none
@@ -122,7 +123,7 @@ reproducible and auditable.
 `desktop/` contains the separate **GKOS Engine Desktop** presentation package, a Tauri 2 tray app for macOS and
 Windows that wraps the engine's headless sidecar (`kosmos-agent`, from
 [gkos-engine v1.1.3](https://github.com/Odenknight/GKOS-Engine/releases/tag/v1.1.0)).
-Point it at a notes folder; it watches and projects (OKF+ 2.3 + Graphiti) and
+Point it at a notes folder; it watches and projects (GKX 2.3 + Graphiti) and
 serves a **loopback-only, read-only, token-gated** agent API for local AI
 assistants (Claude Desktop, Cursor, …). No cloud, no remote access, no tunnel.
 
@@ -148,7 +149,7 @@ the `.dmg`/`.exe` bundles are produced exclusively on the CI matrix.
 |---|---|---|---|
 | Interface | Command-line, any folder of notes | Command-line, any folder of notes | Obsidian plugin |
 | Audience | Everyday vaults, individuals | Governed knowledge work, agentic systems | Everyday Obsidian vaults |
-| Note formats documented | OKF+ Notes (2.2) + Agent-Ready flat 2.3 | Same, plus Machine Dialect and governance sidecars | OKF+ Notes (2.2) + Agent-Ready flat 2.3 |
+| Note formats documented | GKX Notes (formerly OKF+ 2.2) + Agent-Ready flat 2.3 | Same, plus Machine Dialect and governance sidecars | GKX Notes (formerly OKF+ 2.2) + Agent-Ready flat 2.3 |
 
 Notes formatted by any of these are fully readable by the others — the
 schema is shared, only the audience-facing documentation and surface area

@@ -6,9 +6,15 @@ use crate::{RetrievalError, RetrievalResult};
 
 pub const RETRIEVAL_CONTRACT: &str = "gkos-retrieval/1.0.0-draft.1";
 pub const RETRIEVAL_RESULT_SCHEMA: &str = "gkos-retrieval-result/1.0.0-draft.1";
+pub const RETRIEVAL_LINEAGE_CONTRACT: &str = "gkos-retrieval/1.0.0-draft.2";
+pub const RETRIEVAL_LINEAGE_RESULT_SCHEMA: &str = "gkos-retrieval-result/1.0.0-draft.2";
+pub const RETRIEVAL_PROVENANCE_CONTRACT: &str = "gkos-retrieval-provenance/1.0.0-draft.1";
+pub const GKX_STANDARD_COMMIT: &str = "a2a2a6ca5c4dac32c6d9dc985ed7460f5f4350c6";
+pub const GKX_PROJECTION_PROFILE: &str = "gkx-2.3-validating-projection";
 pub const CHUNKER_VERSION: &str = "gkos-heading-chunker/1";
 pub const TOKENIZER_VERSION: &str = "gkos-ascii-whitespace/1";
 pub const PROJECTION_SCHEMA_VERSION: u32 = 2;
+pub const LINEAGE_PROJECTION_SCHEMA_VERSION: u32 = 3;
 pub const RRF_DEFAULT_K: u64 = 60;
 pub const MMR_DEFAULT_LAMBDA: f64 = 0.7;
 pub const MAX_CHUNK_BYTES: usize = 16_384;
@@ -100,8 +106,62 @@ pub struct RetrievalSource {
     pub metadata: RetrievalChunkMetadata,
 }
 
+/// Trusted-host schema-3 source binding.
+///
+/// Unlike the Phase-1 `RetrievalSource`, this internal envelope deliberately
+/// has no transient discoverability decision. Schema-3 publication binds the
+/// complete canonical corpus; the manifest-bound embedding-eligible set and
+/// runtime source/chunk policies are the only authorization gates.
+#[derive(Clone, Debug, Deserialize, PartialEq, Serialize)]
+#[serde(deny_unknown_fields)]
+#[allow(dead_code)] // sealed schema-3 trusted-host ingestion, exercised in conformance tests
+pub(crate) struct GkxRetrievalSource {
+    pub(crate) contract_version: String,
+    pub(crate) vault_id: String,
+    pub(crate) source_id: String,
+    pub(crate) source_path: String,
+    pub(crate) source_digest: String,
+    pub(crate) text: String,
+    pub(crate) lineage: CanonicalLineageEnvelope,
+    pub(crate) temporal: CanonicalTemporalEnvelope,
+    pub(crate) metadata: RetrievalChunkMetadata,
+}
+
+#[allow(dead_code)] // see GkxRetrievalSource; not a public authority surface
+impl GkxRetrievalSource {
+    pub(crate) fn validate_binding(&self) -> RetrievalResult<()> {
+        self.as_phase1_binding().validate_lineage_binding()
+    }
+
+    pub(crate) fn as_phase1_binding(&self) -> RetrievalSource {
+        RetrievalSource {
+            contract_version: self.contract_version.clone(),
+            vault_id: self.vault_id.clone(),
+            source_id: self.source_id.clone(),
+            source_path: self.source_path.clone(),
+            source_digest: self.source_digest.clone(),
+            text: self.text.clone(),
+            // This synthetic value exists only to reuse Phase-1 deterministic
+            // chunk/binding logic. Schema-3 never persists or reads it as an
+            // authorization decision.
+            discoverability: DiscoverabilityDecision::Allow,
+            lineage: self.lineage.clone(),
+            temporal: self.temporal.clone(),
+            metadata: self.metadata.clone(),
+        }
+    }
+}
+
 impl RetrievalSource {
     pub fn validate_binding(&self) -> RetrievalResult<()> {
+        self.validate_binding_mode(false)
+    }
+
+    pub(crate) fn validate_lineage_binding(&self) -> RetrievalResult<()> {
+        self.validate_binding_mode(true)
+    }
+
+    fn validate_binding_mode(&self, allow_empty_interval: bool) -> RetrievalResult<()> {
         if self.contract_version != RETRIEVAL_CONTRACT {
             return Err(RetrievalError::ContractMismatch {
                 expected: RETRIEVAL_CONTRACT.to_owned(),
@@ -141,21 +201,51 @@ impl RetrievalSource {
                 "source_digest does not bind the exact UTF-8 source bytes".to_owned(),
             ));
         }
-        if let Some(quality) = self.metadata.quality {
-            if !quality.is_finite() || !(0.0..=1.0).contains(&quality) {
-                return Err(RetrievalError::InvalidEnvelope(
-                    "quality must be finite and between zero and one".to_owned(),
-                ));
-            }
-        }
+        self.metadata.validate_semantics()?;
         if let (Some(valid_from), Some(valid_to)) = (
             self.temporal.valid_from_unix_ms,
             self.temporal.valid_to_unix_ms,
         ) {
-            if valid_from >= valid_to {
+            if valid_from > valid_to || (!allow_empty_interval && valid_from == valid_to) {
                 return Err(RetrievalError::InvalidEnvelope(
-                    "canonical validity interval must be non-empty and half-open".to_owned(),
+                    if allow_empty_interval {
+                        "canonical validity interval must be ordered and half-open"
+                    } else {
+                        "canonical validity interval must be non-empty and half-open"
+                    }
+                    .to_owned(),
                 ));
+            }
+        }
+        if allow_empty_interval {
+            if self.temporal.valid_from.is_none() && self.temporal.valid_to.is_some() {
+                return Err(RetrievalError::InvalidEnvelope(
+                    "canonical valid_to cannot exist without valid_from".to_owned(),
+                ));
+            }
+            for (timestamp, milliseconds, field) in [
+                (
+                    self.temporal.valid_from.as_deref(),
+                    self.temporal.valid_from_unix_ms,
+                    "valid_from",
+                ),
+                (
+                    self.temporal.valid_to.as_deref(),
+                    self.temporal.valid_to_unix_ms,
+                    "valid_to",
+                ),
+            ] {
+                match (timestamp, milliseconds) {
+                    (None, None) => {}
+                    (Some(timestamp), Some(milliseconds))
+                        if crate::provenance::normalized_timestamp_millis(timestamp)?
+                            == milliseconds => {}
+                    _ => {
+                        return Err(RetrievalError::InvalidEnvelope(format!(
+                        "canonical {field} string and Unix milliseconds must be present and equal"
+                    )))
+                    }
+                }
             }
         }
         Ok(())
@@ -208,6 +298,20 @@ pub struct RetrievalChunkMetadata {
     pub extra: BTreeMap<String, serde_json::Value>,
 }
 
+impl RetrievalChunkMetadata {
+    pub(crate) fn validate_semantics(&self) -> RetrievalResult<()> {
+        if self
+            .quality
+            .is_some_and(|quality| !quality.is_finite() || !(0.0..=1.0).contains(&quality))
+        {
+            return Err(RetrievalError::InvalidEnvelope(
+                "quality must be finite and between zero and one".to_owned(),
+            ));
+        }
+        Ok(())
+    }
+}
+
 #[derive(Clone, Debug, Deserialize, PartialEq, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct RetrievalChunk {
@@ -239,7 +343,23 @@ pub struct RetrievalChunk {
 
 impl RetrievalChunk {
     pub fn validate_against(&self, source: &RetrievalSource) -> RetrievalResult<()> {
-        source.validate_for_retrieval()?;
+        self.validate_against_mode(source, false)
+    }
+
+    pub(crate) fn validate_against_lineage(&self, source: &RetrievalSource) -> RetrievalResult<()> {
+        self.validate_against_mode(source, true)
+    }
+
+    fn validate_against_mode(
+        &self,
+        source: &RetrievalSource,
+        allow_empty_interval: bool,
+    ) -> RetrievalResult<()> {
+        if allow_empty_interval {
+            source.validate_lineage_binding()?;
+        } else {
+            source.validate_for_retrieval()?;
+        }
         if self.source_id != source.source_id
             || self.source_path != source.source_path
             || self.source_digest != source.source_digest
@@ -511,6 +631,51 @@ pub struct RetrievalSearchRequest {
     pub parent_expansion_max_child_tokens: Option<u32>,
 }
 
+/// Additive Phase-2 request. Keeping this type distinct prevents an absent
+/// `as_of` key from changing the frozen Phase-1 request serialization.
+#[derive(Clone, Debug, Deserialize, PartialEq, Serialize)]
+#[serde(deny_unknown_fields)]
+pub struct GkxRetrievalSearchRequest {
+    pub query: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub as_of: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub limit: Option<u32>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub lexical_top_k: Option<u32>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub semantic_top_k: Option<u32>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub filters: Option<RetrievalFilters>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub rrf_k: Option<u64>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub mmr: Option<bool>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub mmr_lambda: Option<f64>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub parent_expansion: Option<bool>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub parent_expansion_max_child_tokens: Option<u32>,
+}
+
+impl From<&GkxRetrievalSearchRequest> for RetrievalSearchRequest {
+    fn from(value: &GkxRetrievalSearchRequest) -> Self {
+        Self {
+            query: value.query.clone(),
+            limit: value.limit,
+            lexical_top_k: value.lexical_top_k,
+            semantic_top_k: value.semantic_top_k,
+            filters: value.filters.clone(),
+            rrf_k: value.rrf_k,
+            mmr: value.mmr,
+            mmr_lambda: value.mmr_lambda,
+            parent_expansion: value.parent_expansion,
+            parent_expansion_max_child_tokens: value.parent_expansion_max_child_tokens,
+        }
+    }
+}
+
 #[derive(Clone, Debug, Deserialize, PartialEq, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct RetrievalSearchStages {
@@ -626,6 +791,88 @@ impl RetrievalProjectionManifest {
                 return Err(RetrievalError::ProjectionMismatch(
                     "embedding manifest fields must be all absent or all valid".to_owned(),
                 ));
+            }
+        }
+        Ok(())
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(deny_unknown_fields)]
+pub struct GkxRetrievalProjectionManifest {
+    pub contract_version: String,
+    pub projection_schema_version: u32,
+    pub provenance_contract_version: String,
+    pub gkx_standard_commit: String,
+    pub gkx_projection_profile: String,
+    pub projection_id: String,
+    pub engine_version: String,
+    pub vault_id: String,
+    pub source_snapshot_digest: String,
+    pub configuration_digest: String,
+    pub policy_digest: String,
+    pub chunker_version: String,
+    pub tokenizer_version: String,
+    pub lexical_backend: SqliteLexicalBackend,
+    pub embedding_provider_id: Option<String>,
+    pub embedding_model_id: Option<String>,
+    pub embedding_dimensions: Option<u32>,
+    pub candidate_source_count: u32,
+    pub candidate_declaration_count: u32,
+    pub represented_candidate_source_count: u32,
+    pub candidate_chunk_count: u32,
+    pub embedding_eligible_candidate_chunk_count: u32,
+    pub projection_digest: String,
+}
+
+impl GkxRetrievalProjectionManifest {
+    pub fn validate(&self) -> RetrievalResult<()> {
+        if self.contract_version != RETRIEVAL_LINEAGE_CONTRACT
+            || self.projection_schema_version != LINEAGE_PROJECTION_SCHEMA_VERSION
+            || self.provenance_contract_version != RETRIEVAL_PROVENANCE_CONTRACT
+            || self.gkx_standard_commit != GKX_STANDARD_COMMIT
+            || self.gkx_projection_profile != GKX_PROJECTION_PROFILE
+            || self.chunker_version != CHUNKER_VERSION
+            || self.tokenizer_version != TOKENIZER_VERSION
+        {
+            return Err(RetrievalError::ProjectionMismatch(
+                "schema-3 contract or Standard/profile coordinates are incompatible".to_owned(),
+            ));
+        }
+        for digest in [
+            &self.source_snapshot_digest,
+            &self.configuration_digest,
+            &self.policy_digest,
+            &self.projection_digest,
+        ] {
+            if !is_sha256_digest(digest) {
+                return Err(RetrievalError::ProjectionMismatch(
+                    "schema-3 manifest digest is invalid".to_owned(),
+                ));
+            }
+        }
+        if self.engine_version.is_empty()
+            || self.vault_id.is_empty()
+            || self.projection_id != format!("retrieval:{}", &self.projection_digest[7..31])
+            || self.represented_candidate_source_count > self.candidate_source_count
+            || self.embedding_eligible_candidate_chunk_count > self.candidate_chunk_count
+        {
+            return Err(RetrievalError::ProjectionMismatch(
+                "schema-3 manifest identity/count binding is invalid".to_owned(),
+            ));
+        }
+        match (
+            self.embedding_provider_id.as_deref(),
+            self.embedding_model_id.as_deref(),
+            self.embedding_dimensions,
+        ) {
+            (None, None, None) => {}
+            (Some(provider), Some(model), Some(dimensions))
+                if !provider.is_empty() && !model.is_empty() && dimensions > 0 => {}
+            _ => {
+                return Err(RetrievalError::ProjectionMismatch(
+                    "schema-3 vector identity must be complete or absent".to_owned(),
+                ))
             }
         }
         Ok(())

@@ -1,0 +1,716 @@
+{
+  "contract_version": "gkos-retrieval/1.0.0-draft.2",
+  "provenance_contract_version": "gkos-retrieval-provenance/1.0.0-draft.1",
+  "uids": {
+    "predecessor": "018f0000-0000-7000-8000-000000000201",
+    "successor_a": "018f0000-0000-7000-8000-000000000202",
+    "successor_b": "018f0000-0000-7000-8000-000000000203",
+    "unknown": "018f0000-0000-7000-8000-000000000204"
+  },
+  "as_of_grammar": [
+    { "value": "2026-08-01T12:34Z", "accepted": true, "normalized": "2026-08-01T12:34:00.000Z" },
+    { "value": "2026-08-01T08:34-04:00", "accepted": true, "normalized": "2026-08-01T12:34:00.000Z" },
+    { "value": "2026-08-01T12:34:56.123Z", "accepted": true, "normalized": "2026-08-01T12:34:56.123Z" },
+    { "value": "2026-08-01T12:34:56.123456Z", "accepted": true, "normalized": "2026-08-01T12:34:56.123Z" },
+    { "value": "2026-02-30T12:34Z", "accepted": true, "normalized": "2026-03-02T12:34:00.000Z" },
+    { "value": "2025-02-29T12:34Z", "accepted": true, "normalized": "2025-03-01T12:34:00.000Z" },
+    { "value": "2024-02-29T12:34Z", "accepted": true, "normalized": "2024-02-29T12:34:00.000Z" },
+    { "value": "2026-08-01T24:00Z", "accepted": true, "normalized": "2026-08-02T00:00:00.000Z" },
+    { "value": "2026-08-01T12:34+14:00", "accepted": true, "normalized": "2026-07-31T22:34:00.000Z" },
+    { "value": "0001-01-01T14:00+14:00", "accepted": true, "normalized": "0001-01-01T00:00:00.000Z" },
+    { "value": "9999-12-31T09:59-14:00", "accepted": true, "normalized": "9999-12-31T23:59:00.000Z" },
+    { "value": "0000-01-01T00:00+14:00", "accepted": false },
+    { "value": "9999-12-31T23:59-14:00", "accepted": false },
+    { "value": "2026-08-01T12:34", "accepted": false },
+    { "value": "2026-08-01T24:01Z", "accepted": false },
+    { "value": "2026-08-01T12:34+24:00", "accepted": false },
+    { "value": "2026-08-01T12:34+00:60", "accepted": false },
+    { "value": "2026-08-01 12:34Z", "accepted": false },
+    { "value": "\t2026-08-01T12:34Z", "accepted": false },
+    { "value": "2026-08-01T12:34Z\u0000", "accepted": false }
+  ],
+  "intervals": [
+    { "source_id": "018f0000-0000-7000-8000-000000000201", "valid_from": "2026-07-01T00:00:00.000Z", "valid_to": "2026-08-01T00:00:00.000Z" },
+    { "source_id": "018f0000-0000-7000-8000-000000000202", "valid_from": "2026-08-01T00:00:00.000Z", "valid_to": null },
+    { "source_id": "018f0000-0000-7000-8000-000000000204", "valid_from": null, "valid_to": null },
+    { "source_id": "018f0000-0000-7000-8000-000000000203", "valid_from": "2026-09-01T00:00:00.000Z", "valid_to": "2026-09-01T00:00:00.000Z" }
+  ],
+  "point_in_time": [
+    { "as_of": "2026-07-31T23:59:59Z", "expected_valid": ["018f0000-0000-7000-8000-000000000201"], "expected_historical": [], "expected_future": ["018f0000-0000-7000-8000-000000000202", "018f0000-0000-7000-8000-000000000203"], "expected_unknown": ["018f0000-0000-7000-8000-000000000204"] },
+    { "as_of": "2026-08-01T00:00Z", "expected_valid": ["018f0000-0000-7000-8000-000000000202"], "expected_historical": ["018f0000-0000-7000-8000-000000000201"], "expected_future": ["018f0000-0000-7000-8000-000000000203"], "expected_unknown": ["018f0000-0000-7000-8000-000000000204"] },
+    { "as_of": "2026-09-01T00:00Z", "expected_valid": ["018f0000-0000-7000-8000-000000000202"], "expected_historical": ["018f0000-0000-7000-8000-000000000201", "018f0000-0000-7000-8000-000000000203"], "expected_future": [], "expected_unknown": ["018f0000-0000-7000-8000-000000000204"] }
+  ],
+  "coverage": {
+    "authorized_filtered_empty": { "coverage": "not_evaluated", "confidence_reason": "NO_ELIGIBLE_RESULTS" },
+    "authorized_filtered_nonempty_no_valid_interval": { "coverage": "insufficient", "confidence_reason": "TEMPORAL_COVERAGE_INSUFFICIENT", "hits": [], "eligible_result_count": 0 }
+  },
+  "stored_provenance_assertion_validity": {
+    "accepted": [
+      { "assertion_time": "2026-07-01T00:00:00.000Z", "valid_from": "2026-07-01T00:00:00.000Z", "validity_origin": "gkx_authored_timestamp" },
+      { "assertion_time": "2026-07-01T00:00:00.000Z", "valid_from": null, "validity_origin": "unknown" }
+    ],
+    "rejected": [
+      { "assertion_time": "2026-07-01T00:00:00.000Z", "valid_from": "2026-07-02T00:00:00.000Z", "validity_origin": "gkx_authored_timestamp", "schema_expressible": false },
+      { "assertion_time": "2026-07-01T00:00:00.000Z", "valid_from": "2026-07-01T00:00:00.000Z", "validity_origin": "source_created_time", "schema_expressible": true },
+      { "assertion_time": null, "valid_from": "2026-07-01T00:00:00.000Z", "validity_origin": "gkx_authored_timestamp", "schema_expressible": true }
+    ]
+  },
+  "branched_lineage": {
+    "status": "ratified_decision_a",
+    "frozen": true,
+    "rule": "Branch, cycle, and temporal-order diagnostics are recomputed only over the authorized known-created candidate view; hidden or future participants equal physical absence, while an all-authorized conflict returns RETRIEVAL_AUTHORIZED_VIEW_CONFLICT before query work."
+  },
+  "authorization_dependent_diagnostics": {
+    "status": "ratified_decision_a",
+    "frozen": true,
+    "rule": "Decision A evaluates canonical identity, resolver receipts, declarations/inverses, branches, cycles, and temporal order only over candidates surviving source policy, typed filters, whole-source chunk policy, and explicit-as_of future/unknown removal. Hidden or future candidates equal physical absence; all-authorized conflicts return one non-content-leaking RETRIEVAL_AUTHORIZED_VIEW_CONFLICT before query work.",
+    "matrix": [
+      {
+        "id": "canonical_identity_collision",
+        "scope": "authorized_view_ratified_a",
+        "canonical_signals": ["GKX-IDENTITY-003", "GKX-IDENTITY-004", "SOURCE_PATH_AMBIGUOUS"],
+        "hidden_presence_can_change_visible_record": true,
+        "required_owner_decision": false,
+        "frozen": true
+      },
+      {
+        "id": "title_wikilink_or_uid_endpoint_resolution",
+        "scope": "authorized_view_ratified_a",
+        "canonical_signals": ["GKX-LINEAGE-003", "GKX-LINEAGE-007", "GKX-RELATIONSHIP-001", "GKX-RELATIONSHIP-002"],
+        "hidden_presence_can_change_visible_record": true,
+        "required_owner_decision": false,
+        "frozen": true
+      },
+      {
+        "id": "forward_inverse_or_conflicting_declarations",
+        "scope": "authorized_view_ratified_a",
+        "canonical_signals": ["canonical forward/inverse edge derivation", "GKX-LINEAGE-006"],
+        "hidden_presence_can_change_visible_record": true,
+        "required_owner_decision": false,
+        "frozen": true
+      },
+      {
+        "id": "multiple_successors_cycles_and_temporal_order",
+        "scope": "authorized_view_ratified_a",
+        "canonical_signals": ["GKX-LINEAGE-002", "GKX-LINEAGE-004", "GKX-LINEAGE-005"],
+        "hidden_presence_can_change_visible_record": true,
+        "required_owner_decision": false,
+        "frozen": true
+      },
+      {
+        "id": "source_intrinsic_validation",
+        "scope": "source_intrinsic_existing_fail_closed",
+        "canonical_signals": ["source syntax/schema", "source-local timestamp", "GKX-LINEAGE-001", "GKX-RELATIONSHIP-003"],
+        "hidden_presence_can_change_visible_record": false,
+        "required_owner_decision": false,
+        "frozen": true
+      }
+    ],
+    "differential_cases": [
+      {
+        "id": "visible_uid_unique_vs_hidden_duplicate_uid",
+        "executable": true,
+        "observed_canonical_difference_required": true,
+        "normative_retrieval_outcome": {
+          "hidden_variant": "byte_identical_to_physical_absence",
+          "all_authorized_variant": "RETRIEVAL_AUTHORIZED_VIEW_CONFLICT_BEFORE_QUERY_WORK"
+        },
+        "frozen": true
+      },
+      {
+        "id": "visible_unique_title_resolution_vs_hidden_ambiguous_title",
+        "executable": true,
+        "observed_canonical_difference_required": true,
+        "normative_retrieval_outcome": {
+          "hidden_variant": "byte_identical_to_physical_absence",
+          "all_authorized_variant": "RETRIEVAL_AUTHORIZED_VIEW_CONFLICT_BEFORE_QUERY_WORK"
+        },
+        "frozen": true
+      },
+      {
+        "id": "visible_single_successor_vs_hidden_second_successor",
+        "executable": true,
+        "observed_canonical_difference_required": true,
+        "normative_retrieval_outcome": {
+          "hidden_variant": "byte_identical_to_physical_absence",
+          "all_authorized_variant": "RETRIEVAL_AUTHORIZED_VIEW_CONFLICT_BEFORE_QUERY_WORK"
+        },
+        "frozen": true
+      },
+      {
+        "id": "visible_declaration_set_vs_hidden_conflicting_declaration",
+        "executable": true,
+        "observed_canonical_difference_required": true,
+        "normative_retrieval_outcome": {
+          "hidden_variant": "byte_identical_to_physical_absence",
+          "all_authorized_variant": "RETRIEVAL_AUTHORIZED_VIEW_CONFLICT_BEFORE_QUERY_WORK"
+        },
+        "frozen": true
+      }
+    ]
+  },
+  "public_provenance": {
+    "required_flat_fields": ["source_id", "assertion_time", "valid_from", "valid_to", "lineage_id", "supersedes", "superseded_by", "temporal_state", "source_digest", "ledger_binding_verified", "lineage_neutral", "reason_codes"],
+    "raw_authored_refs_present": false,
+    "ledger_binding_verified": false,
+    "ledger_entry_sha256_present": false,
+    "invariant_reason": "LINEAGE_VIEW_AUTHORIZED_ONLY"
+  },
+  "unicode_citation": {
+    "source_text": "# Histórico\r\nCafé 😀 policy.\r\n",
+    "query": "cafe",
+    "expected_span": { "start_byte": 14, "end_byte": 19, "text": "Café" },
+    "line_semantics": "one-based CRLF"
+  },
+  "executable_projection": {
+    "authority": {
+      "gkx_standard_commit": "a2a2a6ca5c4dac32c6d9dc985ed7460f5f4350c6",
+      "gkx_projection_profile": "gkx-2.3-validating-projection"
+    },
+    "input_files": [
+      {
+        "relative_path": "old.md",
+        "created_time_ms": 1782864000000,
+        "content": "---\ngkx_version: \"2.3\"\nuid: \"018f0000-0000-7000-8000-000000000201\"\ntitle: \"Old\"\ntype: \"policy\"\ncreated_at: \"2026-07-01T00:00:00Z\"\nepistemic_state: \"reported\"\nsensitivity: \"public\"\n---\n# Old\nPolicy Café 😀\n"
+      },
+      {
+        "relative_path": "new.md",
+        "created_time_ms": 1785542400000,
+        "content": "---\ngkx_version: \"2.3\"\nuid: \"018f0000-0000-7000-8000-000000000202\"\ntitle: \"New\"\ntype: \"policy\"\ncreated_at: \"2026-08-01T00:00:00Z\"\nepistemic_state: \"reported\"\nsensitivity: \"public\"\nsupersedes:\n  - \"018f0000-0000-7000-8000-000000000201\"\n---\n# New\nPolicy Café 😀\n"
+      }
+    ],
+    "expected_parse_count": 2,
+    "expected_rejections": [],
+    "expected_candidate_sources": [
+      {
+        "contract_version": "gkos-retrieval-candidate-source/1.0.0-draft.1",
+        "assertion_origin": "gkx_created_at",
+        "assertion_time": "2026-07-01T00:00:00.000Z",
+        "lineage_id": null,
+        "parser_content_fingerprint": "gni2el:5p",
+        "reason_codes": [
+          "LEDGER_BINDING_UNAVAILABLE",
+          "LINEAGE_ID_UNAVAILABLE",
+          "VALIDITY_FROM_GKX_AUTHORED_TIMESTAMP"
+        ],
+        "record_key": "gkx-record:052d5075c2ea5bbb822d16a3e52e5a8b8932727d505fbe2410a1f64770358748:0",
+        "source_digest": "sha256:2322d330cbe23d166d1cceb173010832c20a5606dc75b7e96b4c3698409f4e6a",
+        "source_id": "018f0000-0000-7000-8000-000000000201",
+        "source_metadata": {
+          "authored_at": "2026-07-01T00:00:00.000Z",
+          "authoritative": true,
+          "epistemic_state": "reported",
+          "gkx_type": "policy",
+          "sensitivity": "public",
+          "tags": [],
+          "title": "Old"
+        },
+        "source_path": "old.md",
+        "valid_from": "2026-07-01T00:00:00.000Z",
+        "validity_origin": "gkx_authored_timestamp",
+        "candidate_digest": "sha256:8687a2dc313556eca8e1d44d1fb704c9b2967a79ec614b56fa45535cb03f5b32"
+      },
+      {
+        "contract_version": "gkos-retrieval-candidate-source/1.0.0-draft.1",
+        "assertion_origin": "gkx_created_at",
+        "assertion_time": "2026-08-01T00:00:00.000Z",
+        "lineage_id": null,
+        "parser_content_fingerprint": "urbj7y:78",
+        "reason_codes": [
+          "LEDGER_BINDING_UNAVAILABLE",
+          "LINEAGE_ID_UNAVAILABLE",
+          "VALIDITY_FROM_GKX_AUTHORED_TIMESTAMP"
+        ],
+        "record_key": "gkx-record:77947eaf9f1534a845adc7a35d5d1c391676ef035054858ccbe428869083eb46:0",
+        "source_digest": "sha256:d0b2ecaad1ef9f789ed2e919abbad7a32658513f7e9d26b0429dfd3c3ce0b221",
+        "source_id": "018f0000-0000-7000-8000-000000000202",
+        "source_metadata": {
+          "authored_at": "2026-08-01T00:00:00.000Z",
+          "authoritative": true,
+          "epistemic_state": "reported",
+          "gkx_type": "policy",
+          "sensitivity": "public",
+          "tags": [],
+          "title": "New"
+        },
+        "source_path": "new.md",
+        "valid_from": "2026-08-01T00:00:00.000Z",
+        "validity_origin": "gkx_authored_timestamp",
+        "candidate_digest": "sha256:b54ef585c510fa5728df259a5b30917de507d28c1606d7f1cf491ca8eabb42a0"
+      }
+    ],
+    "expected_candidate_declarations": [
+      {
+        "source_record_key": "gkx-record:77947eaf9f1534a845adc7a35d5d1c391676ef035054858ccbe428869083eb46:0",
+        "category": "lineage",
+        "field": "supersedes",
+        "origin": "authored",
+        "declaration_index": 0,
+        "raw_reference": "018f0000-0000-7000-8000-000000000201",
+        "resolution_tiers": [
+          {
+            "basis": "uid_exact",
+            "candidate_record_keys": [
+              "gkx-record:052d5075c2ea5bbb822d16a3e52e5a8b8932727d505fbe2410a1f64770358748:0"
+            ]
+          },
+          { "basis": "path_exact", "candidate_record_keys": [] },
+          { "basis": "path_without_extension_exact", "candidate_record_keys": [] },
+          { "basis": "basename_title", "candidate_record_keys": [] },
+          { "basis": "alias", "candidate_record_keys": [] }
+        ]
+      }
+    ],
+    "expected_stored_provenance": [
+      {
+        "contract_version": "gkos-retrieval-provenance/1.0.0-draft.1",
+        "assertion_origin": "gkx_created_at",
+        "assertion_time": "2026-07-01T00:00:00.000Z",
+        "authored_superseded_by": [],
+        "authored_supersedes": [],
+        "ledger_binding_verified": false,
+        "lineage_id": null,
+        "lineage_neutral": false,
+        "reason_codes": ["LEDGER_BINDING_UNAVAILABLE", "LINEAGE_ID_UNAVAILABLE", "LINEAGE_PARTICIPANT", "VALIDITY_FROM_GKX_AUTHORED_TIMESTAMP"],
+        "resolved_superseded_by": ["018f0000-0000-7000-8000-000000000202"],
+        "resolved_supersedes": [],
+        "source_digest": "sha256:2322d330cbe23d166d1cceb173010832c20a5606dc75b7e96b4c3698409f4e6a",
+        "source_id": "018f0000-0000-7000-8000-000000000201",
+        "source_metadata": {
+          "authored_at": "2026-07-01T00:00:00.000Z",
+          "authoritative": true,
+          "epistemic_state": "reported",
+          "gkx_type": "policy",
+          "sensitivity": "public",
+          "tags": [],
+          "title": "Old"
+        },
+        "source_path": "old.md",
+        "temporal_state": "historical",
+        "valid_from": "2026-07-01T00:00:00.000Z",
+        "valid_to": "2026-08-01T00:00:00.000Z",
+        "validity_origin": "gkx_authored_timestamp",
+        "provenance_digest": "sha256:257b963ff21053d13b9bd48b231d05f9a480284869ee3b712c31046e15c91ee6"
+      },
+      {
+        "contract_version": "gkos-retrieval-provenance/1.0.0-draft.1",
+        "assertion_origin": "gkx_created_at",
+        "assertion_time": "2026-08-01T00:00:00.000Z",
+        "authored_superseded_by": [],
+        "authored_supersedes": ["018f0000-0000-7000-8000-000000000201"],
+        "ledger_binding_verified": false,
+        "lineage_id": null,
+        "lineage_neutral": false,
+        "reason_codes": ["LEDGER_BINDING_UNAVAILABLE", "LINEAGE_ID_UNAVAILABLE", "LINEAGE_PARTICIPANT", "VALIDITY_FROM_GKX_AUTHORED_TIMESTAMP"],
+        "resolved_superseded_by": [],
+        "resolved_supersedes": ["018f0000-0000-7000-8000-000000000201"],
+        "source_digest": "sha256:d0b2ecaad1ef9f789ed2e919abbad7a32658513f7e9d26b0429dfd3c3ce0b221",
+        "source_id": "018f0000-0000-7000-8000-000000000202",
+        "source_metadata": {
+          "authored_at": "2026-08-01T00:00:00.000Z",
+          "authoritative": true,
+          "epistemic_state": "reported",
+          "gkx_type": "policy",
+          "sensitivity": "public",
+          "tags": [],
+          "title": "New"
+        },
+        "source_path": "new.md",
+        "temporal_state": "current",
+        "valid_from": "2026-08-01T00:00:00.000Z",
+        "valid_to": null,
+        "validity_origin": "gkx_authored_timestamp",
+        "provenance_digest": "sha256:c496eb17ee2a3e9b2a9e5e9fcc3858c6e5fc5f3bd606e5a73459c2d174c9e6e0"
+      }
+    ],
+    "generation_input": {
+      "vault_id": "fixture-vault",
+      "source_snapshot_digest": "sha256:a1e02c16db04327002d90ce4ea86db87f8c6a9c6b3e3879c90e8d366fe76d222",
+      "configuration_digest": "sha256:9f3f708c03af5ce6cb72b8a5dba0e0cb2b39a3e2610b2ed2ebe007f5bfa0d521",
+      "policy_digest": "sha256:673996abca39e5ab63138113c9b0923be5c1a2bccc46aac1970e88002f5fda5c",
+      "embedding_eligible_candidate_chunk_keys": [
+        "gkx-candidate-chunk:b8e0449631d2dcd2d42ad0d902031b5ec9f9ed20432099b5f404588cf7e17e7e",
+        "gkx-candidate-chunk:97aa6217699d859708275c62e1ae6d64900ebe55abd273e80dce1973fb2ec7c5"
+      ],
+      "lexical_backend": "sqlite_lexical_scan"
+    },
+    "expected_manifest": {
+      "contract_version": "gkos-retrieval/1.0.0-draft.2",
+      "projection_schema_version": 3,
+      "provenance_contract_version": "gkos-retrieval-provenance/1.0.0-draft.1",
+      "gkx_standard_commit": "a2a2a6ca5c4dac32c6d9dc985ed7460f5f4350c6",
+      "gkx_projection_profile": "gkx-2.3-validating-projection",
+      "engine_version": "2.1.2",
+      "vault_id": "fixture-vault",
+      "source_snapshot_digest": "sha256:a1e02c16db04327002d90ce4ea86db87f8c6a9c6b3e3879c90e8d366fe76d222",
+      "configuration_digest": "sha256:9f3f708c03af5ce6cb72b8a5dba0e0cb2b39a3e2610b2ed2ebe007f5bfa0d521",
+      "policy_digest": "sha256:673996abca39e5ab63138113c9b0923be5c1a2bccc46aac1970e88002f5fda5c",
+      "chunker_version": "gkos-heading-chunker/1",
+      "tokenizer_version": "gkos-ascii-whitespace/1",
+      "lexical_backend": "sqlite_lexical_scan",
+      "embedding_provider_id": null,
+      "embedding_model_id": null,
+      "embedding_dimensions": null,
+      "candidate_source_count": 2,
+      "candidate_declaration_count": 1,
+      "represented_candidate_source_count": 2,
+      "candidate_chunk_count": 2,
+      "embedding_eligible_candidate_chunk_count": 2,
+      "projection_id": "retrieval:8d166d918de819ef14bf775e",
+      "projection_digest": "sha256:8d166d918de819ef14bf775ef61983d7c476c28397429c85d1650eba71c469da"
+    },
+    "expected_fts5_manifest": {
+      "contract_version": "gkos-retrieval/1.0.0-draft.2",
+      "projection_schema_version": 3,
+      "provenance_contract_version": "gkos-retrieval-provenance/1.0.0-draft.1",
+      "gkx_standard_commit": "a2a2a6ca5c4dac32c6d9dc985ed7460f5f4350c6",
+      "gkx_projection_profile": "gkx-2.3-validating-projection",
+      "engine_version": "2.1.2",
+      "vault_id": "fixture-vault",
+      "source_snapshot_digest": "sha256:a1e02c16db04327002d90ce4ea86db87f8c6a9c6b3e3879c90e8d366fe76d222",
+      "configuration_digest": "sha256:9f3f708c03af5ce6cb72b8a5dba0e0cb2b39a3e2610b2ed2ebe007f5bfa0d521",
+      "policy_digest": "sha256:673996abca39e5ab63138113c9b0923be5c1a2bccc46aac1970e88002f5fda5c",
+      "chunker_version": "gkos-heading-chunker/1",
+      "tokenizer_version": "gkos-ascii-whitespace/1",
+      "lexical_backend": "sqlite_fts5",
+      "embedding_provider_id": null,
+      "embedding_model_id": null,
+      "embedding_dimensions": null,
+      "candidate_source_count": 2,
+      "candidate_declaration_count": 1,
+      "represented_candidate_source_count": 2,
+      "candidate_chunk_count": 2,
+      "embedding_eligible_candidate_chunk_count": 2,
+      "projection_id": "retrieval:ff56e22e9c82f7ee7be2b899",
+      "projection_digest": "sha256:ff56e22e9c82f7ee7be2b899c3611f7cfaf9257d981288c3fc1aa26fed72566f"
+    },
+    "search_request": { "query": "cafe", "as_of": "2026-08-01T00:00Z", "limit": 5 },
+    "expected_result": {
+      "contract_version": "gkos-retrieval/1.0.0-draft.2",
+      "query_digest": "sha256:025d5452ac20932d77ac04fde0527d1a408ab963e8c93ed2804ae3778cc3f7b0",
+      "projection_id": "retrieval:8f05c63dcdd217901d482dd6",
+      "projection_digest": "sha256:8f05c63dcdd217901d482dd6f7bf77d7b5fabd1ef56ece05481a90943199b641",
+      "projection_freshness": "fresh",
+      "hits": [
+        {
+          "chunk": {
+            "chunk_id": "sha256:0fb84b35dd225fd3b45f2ba3b62d2793a2489748bf9094287e8a56214904e13d",
+            "source_id": "018f0000-0000-7000-8000-000000000202",
+            "source_path": "new.md",
+            "source_digest": "sha256:d0b2ecaad1ef9f789ed2e919abbad7a32658513f7e9d26b0429dfd3c3ce0b221",
+            "heading_path": ["New"],
+            "heading_depth": 1,
+            "ordinal_within_source": 1,
+            "structural_position": "1-1",
+            "part_ordinal": 1,
+            "start_byte": 239,
+            "end_byte": 263,
+            "start_line": 12,
+            "end_line": 13,
+            "content_digest": "sha256:0d434bfe0a8f273990ca89445ef223d797dc54b0c3dce96b662aa54c86c437cf",
+            "text": "# New\nPolicy Café 😀\n",
+            "token_count": 5,
+            "lineage_id": null,
+            "valid_from": "2026-08-01T00:00:00.000Z",
+            "valid_to": null,
+            "supersedes": ["018f0000-0000-7000-8000-000000000201"],
+            "superseded_by": [],
+            "metadata": {
+              "authored_at": "2026-08-01T00:00:00.000Z",
+              "authoritative": true,
+              "epistemic_state": "reported",
+              "gkx_type": "policy",
+              "sensitivity": "public",
+              "tags": [],
+              "title": "New"
+            }
+          },
+          "citation": {
+            "source_id": "018f0000-0000-7000-8000-000000000202",
+            "path": "new.md",
+            "source_digest": "sha256:d0b2ecaad1ef9f789ed2e919abbad7a32658513f7e9d26b0429dfd3c3ce0b221",
+            "heading_path": ["New"],
+            "start_byte": 239,
+            "end_byte": 263,
+            "start_line": 12,
+            "end_line": 13,
+            "verified": true,
+            "stale": false,
+            "matched_spans": [{ "start_byte": 252, "end_byte": 257, "text": "Café" }]
+          },
+          "provenance": {
+            "contract_version": "gkos-retrieval-provenance/1.0.0-draft.1",
+            "source_id": "018f0000-0000-7000-8000-000000000202",
+            "source_path": "new.md",
+            "source_digest": "sha256:d0b2ecaad1ef9f789ed2e919abbad7a32658513f7e9d26b0429dfd3c3ce0b221",
+            "assertion_time": "2026-08-01T00:00:00.000Z",
+            "assertion_origin": "gkx_created_at",
+            "valid_from": "2026-08-01T00:00:00.000Z",
+            "valid_to": null,
+            "validity_origin": "gkx_authored_timestamp",
+            "lineage_id": null,
+            "supersedes": ["018f0000-0000-7000-8000-000000000201"],
+            "superseded_by": [],
+            "temporal_state": "current",
+            "ledger_binding_verified": false,
+            "lineage_neutral": false,
+            "reason_codes": ["LEDGER_BINDING_UNAVAILABLE", "LINEAGE_ID_UNAVAILABLE", "LINEAGE_PARTICIPANT", "LINEAGE_VIEW_AUTHORIZED_ONLY", "TEMPORAL_SELECTION_AS_OF", "VALIDITY_FROM_GKX_AUTHORED_TIMESTAMP"],
+            "assertion": {
+              "chunk_id": "sha256:0fb84b35dd225fd3b45f2ba3b62d2793a2489748bf9094287e8a56214904e13d",
+              "content_digest": "sha256:0d434bfe0a8f273990ca89445ef223d797dc54b0c3dce96b662aa54c86c437cf"
+            },
+            "interval_semantics": "[valid_from,valid_to)",
+            "provenance_digest": "sha256:a0d3c1a982bf9b89431c99b4f11c88ab8669105deab5939c441baa3272c1935d"
+          },
+          "stage_scores": {
+            "lexical_score": 0.4082482904638631,
+            "semantic_score": null,
+            "fusion_score": 0.01639344262295082,
+            "reranker_score": null,
+            "mmr_score": null,
+            "lexical_rank": 1,
+            "semantic_rank": null,
+            "fused_rank": 1,
+            "reranker_rank": null,
+            "final_rank": 1
+          }
+        }
+      ],
+      "confidence": {
+        "level": "high",
+        "low_confidence": false,
+        "reason_codes": [],
+        "lexical_signal": 0.4082482904638631,
+        "semantic_signal": null,
+        "reranker_signal": null,
+        "coverage_signal": 1
+      },
+      "temporal": { "as_of": "2026-08-01T00:00:00.000Z", "coverage": "sufficient", "reason_codes": [] },
+      "applied_filters": [],
+      "eligible_result_count": 1,
+      "stages": {
+        "lexical": { "kind": "sqlite_lexical_scan", "state": "degraded", "reason_codes": ["SQLITE_LEXICAL_SCAN_ACTIVE", "SQLITE_LEXICAL_SCAN_APPROXIMATION"] },
+        "vector": { "kind": "none", "state": "disabled", "reason_codes": ["VECTOR_DISABLED"] },
+        "reranker": { "kind": "none", "state": "skipped", "reason_codes": ["RERANKER_NOT_CONFIGURED"] }
+      }
+    },
+    "expected_scan_without_fts5_result": {
+      "contract_version": "gkos-retrieval/1.0.0-draft.2",
+      "query_digest": "sha256:025d5452ac20932d77ac04fde0527d1a408ab963e8c93ed2804ae3778cc3f7b0",
+      "projection_id": "retrieval:8f05c63dcdd217901d482dd6",
+      "projection_digest": "sha256:8f05c63dcdd217901d482dd6f7bf77d7b5fabd1ef56ece05481a90943199b641",
+      "projection_freshness": "fresh",
+      "hits": [
+        {
+          "chunk": {
+            "chunk_id": "sha256:0fb84b35dd225fd3b45f2ba3b62d2793a2489748bf9094287e8a56214904e13d",
+            "source_id": "018f0000-0000-7000-8000-000000000202",
+            "source_path": "new.md",
+            "source_digest": "sha256:d0b2ecaad1ef9f789ed2e919abbad7a32658513f7e9d26b0429dfd3c3ce0b221",
+            "heading_path": ["New"],
+            "heading_depth": 1,
+            "ordinal_within_source": 1,
+            "structural_position": "1-1",
+            "part_ordinal": 1,
+            "start_byte": 239,
+            "end_byte": 263,
+            "start_line": 12,
+            "end_line": 13,
+            "content_digest": "sha256:0d434bfe0a8f273990ca89445ef223d797dc54b0c3dce96b662aa54c86c437cf",
+            "text": "# New\nPolicy Café 😀\n",
+            "token_count": 5,
+            "lineage_id": null,
+            "valid_from": "2026-08-01T00:00:00.000Z",
+            "valid_to": null,
+            "supersedes": ["018f0000-0000-7000-8000-000000000201"],
+            "superseded_by": [],
+            "metadata": {
+              "authored_at": "2026-08-01T00:00:00.000Z",
+              "authoritative": true,
+              "epistemic_state": "reported",
+              "gkx_type": "policy",
+              "sensitivity": "public",
+              "tags": [],
+              "title": "New"
+            }
+          },
+          "citation": {
+            "source_id": "018f0000-0000-7000-8000-000000000202",
+            "path": "new.md",
+            "source_digest": "sha256:d0b2ecaad1ef9f789ed2e919abbad7a32658513f7e9d26b0429dfd3c3ce0b221",
+            "heading_path": ["New"],
+            "start_byte": 239,
+            "end_byte": 263,
+            "start_line": 12,
+            "end_line": 13,
+            "verified": true,
+            "stale": false,
+            "matched_spans": [{ "start_byte": 252, "end_byte": 257, "text": "Café" }]
+          },
+          "provenance": {
+            "contract_version": "gkos-retrieval-provenance/1.0.0-draft.1",
+            "source_id": "018f0000-0000-7000-8000-000000000202",
+            "source_path": "new.md",
+            "source_digest": "sha256:d0b2ecaad1ef9f789ed2e919abbad7a32658513f7e9d26b0429dfd3c3ce0b221",
+            "assertion_time": "2026-08-01T00:00:00.000Z",
+            "assertion_origin": "gkx_created_at",
+            "valid_from": "2026-08-01T00:00:00.000Z",
+            "valid_to": null,
+            "validity_origin": "gkx_authored_timestamp",
+            "lineage_id": null,
+            "supersedes": ["018f0000-0000-7000-8000-000000000201"],
+            "superseded_by": [],
+            "temporal_state": "current",
+            "ledger_binding_verified": false,
+            "lineage_neutral": false,
+            "reason_codes": ["LEDGER_BINDING_UNAVAILABLE", "LINEAGE_ID_UNAVAILABLE", "LINEAGE_PARTICIPANT", "LINEAGE_VIEW_AUTHORIZED_ONLY", "TEMPORAL_SELECTION_AS_OF", "VALIDITY_FROM_GKX_AUTHORED_TIMESTAMP"],
+            "assertion": {
+              "chunk_id": "sha256:0fb84b35dd225fd3b45f2ba3b62d2793a2489748bf9094287e8a56214904e13d",
+              "content_digest": "sha256:0d434bfe0a8f273990ca89445ef223d797dc54b0c3dce96b662aa54c86c437cf"
+            },
+            "interval_semantics": "[valid_from,valid_to)",
+            "provenance_digest": "sha256:a0d3c1a982bf9b89431c99b4f11c88ab8669105deab5939c441baa3272c1935d"
+          },
+          "stage_scores": {
+            "lexical_score": 0.4082482904638631,
+            "semantic_score": null,
+            "fusion_score": 0.01639344262295082,
+            "reranker_score": null,
+            "mmr_score": null,
+            "lexical_rank": 1,
+            "semantic_rank": null,
+            "fused_rank": 1,
+            "reranker_rank": null,
+            "final_rank": 1
+          }
+        }
+      ],
+      "confidence": {
+        "level": "high",
+        "low_confidence": false,
+        "reason_codes": [],
+        "lexical_signal": 0.4082482904638631,
+        "semantic_signal": null,
+        "reranker_signal": null,
+        "coverage_signal": 1
+      },
+      "temporal": { "as_of": "2026-08-01T00:00:00.000Z", "coverage": "sufficient", "reason_codes": [] },
+      "applied_filters": [],
+      "eligible_result_count": 1,
+      "stages": {
+        "lexical": { "kind": "sqlite_lexical_scan", "state": "degraded", "reason_codes": ["SQLITE_FTS5_UNAVAILABLE", "SQLITE_LEXICAL_SCAN_ACTIVE", "SQLITE_LEXICAL_SCAN_APPROXIMATION"] },
+        "vector": { "kind": "none", "state": "disabled", "reason_codes": ["VECTOR_DISABLED"] },
+        "reranker": { "kind": "none", "state": "skipped", "reason_codes": ["RERANKER_NOT_CONFIGURED"] }
+      }
+    },
+    "expected_fts5_result": {
+      "contract_version": "gkos-retrieval/1.0.0-draft.2",
+      "query_digest": "sha256:025d5452ac20932d77ac04fde0527d1a408ab963e8c93ed2804ae3778cc3f7b0",
+      "projection_id": "retrieval:56a09c7fefbbcdcdf4fe63b0",
+      "projection_digest": "sha256:56a09c7fefbbcdcdf4fe63b09c004381e171bea5cd70385490e27d6639d9c439",
+      "projection_freshness": "fresh",
+      "hits": [
+        {
+          "chunk": {
+            "chunk_id": "sha256:0fb84b35dd225fd3b45f2ba3b62d2793a2489748bf9094287e8a56214904e13d",
+            "source_id": "018f0000-0000-7000-8000-000000000202",
+            "source_path": "new.md",
+            "source_digest": "sha256:d0b2ecaad1ef9f789ed2e919abbad7a32658513f7e9d26b0429dfd3c3ce0b221",
+            "heading_path": ["New"],
+            "heading_depth": 1,
+            "ordinal_within_source": 1,
+            "structural_position": "1-1",
+            "part_ordinal": 1,
+            "start_byte": 239,
+            "end_byte": 263,
+            "start_line": 12,
+            "end_line": 13,
+            "content_digest": "sha256:0d434bfe0a8f273990ca89445ef223d797dc54b0c3dce96b662aa54c86c437cf",
+            "text": "# New\nPolicy Café 😀\n",
+            "token_count": 5,
+            "lineage_id": null,
+            "valid_from": "2026-08-01T00:00:00.000Z",
+            "valid_to": null,
+            "supersedes": ["018f0000-0000-7000-8000-000000000201"],
+            "superseded_by": [],
+            "metadata": {
+              "authored_at": "2026-08-01T00:00:00.000Z",
+              "authoritative": true,
+              "epistemic_state": "reported",
+              "gkx_type": "policy",
+              "sensitivity": "public",
+              "tags": [],
+              "title": "New"
+            }
+          },
+          "citation": {
+            "source_id": "018f0000-0000-7000-8000-000000000202",
+            "path": "new.md",
+            "source_digest": "sha256:d0b2ecaad1ef9f789ed2e919abbad7a32658513f7e9d26b0429dfd3c3ce0b221",
+            "heading_path": ["New"],
+            "start_byte": 239,
+            "end_byte": 263,
+            "start_line": 12,
+            "end_line": 13,
+            "verified": true,
+            "stale": false,
+            "matched_spans": [{ "start_byte": 252, "end_byte": 257, "text": "Café" }]
+          },
+          "provenance": {
+            "contract_version": "gkos-retrieval-provenance/1.0.0-draft.1",
+            "source_id": "018f0000-0000-7000-8000-000000000202",
+            "source_path": "new.md",
+            "source_digest": "sha256:d0b2ecaad1ef9f789ed2e919abbad7a32658513f7e9d26b0429dfd3c3ce0b221",
+            "assertion_time": "2026-08-01T00:00:00.000Z",
+            "assertion_origin": "gkx_created_at",
+            "valid_from": "2026-08-01T00:00:00.000Z",
+            "valid_to": null,
+            "validity_origin": "gkx_authored_timestamp",
+            "lineage_id": null,
+            "supersedes": ["018f0000-0000-7000-8000-000000000201"],
+            "superseded_by": [],
+            "temporal_state": "current",
+            "ledger_binding_verified": false,
+            "lineage_neutral": false,
+            "reason_codes": ["LEDGER_BINDING_UNAVAILABLE", "LINEAGE_ID_UNAVAILABLE", "LINEAGE_PARTICIPANT", "LINEAGE_VIEW_AUTHORIZED_ONLY", "TEMPORAL_SELECTION_AS_OF", "VALIDITY_FROM_GKX_AUTHORED_TIMESTAMP"],
+            "assertion": {
+              "chunk_id": "sha256:0fb84b35dd225fd3b45f2ba3b62d2793a2489748bf9094287e8a56214904e13d",
+              "content_digest": "sha256:0d434bfe0a8f273990ca89445ef223d797dc54b0c3dce96b662aa54c86c437cf"
+            },
+            "interval_semantics": "[valid_from,valid_to)",
+            "provenance_digest": "sha256:a0d3c1a982bf9b89431c99b4f11c88ab8669105deab5939c441baa3272c1935d"
+          },
+          "stage_scores": {
+            "lexical_score": 0.4082482904638631,
+            "semantic_score": null,
+            "fusion_score": 0.01639344262295082,
+            "reranker_score": null,
+            "mmr_score": null,
+            "lexical_rank": 1,
+            "semantic_rank": null,
+            "fused_rank": 1,
+            "reranker_rank": null,
+            "final_rank": 1
+          }
+        }
+      ],
+      "confidence": {
+        "level": "high",
+        "low_confidence": false,
+        "reason_codes": [],
+        "lexical_signal": 0.4082482904638631,
+        "semantic_signal": null,
+        "reranker_signal": null,
+        "coverage_signal": 1
+      },
+      "temporal": { "as_of": "2026-08-01T00:00:00.000Z", "coverage": "sufficient", "reason_codes": [] },
+      "applied_filters": [],
+      "eligible_result_count": 1,
+      "stages": {
+        "lexical": { "kind": "sqlite_fts5", "state": "active", "reason_codes": [] },
+        "vector": { "kind": "none", "state": "disabled", "reason_codes": ["VECTOR_DISABLED"] },
+        "reranker": { "kind": "none", "state": "skipped", "reason_codes": ["RERANKER_NOT_CONFIGURED"] }
+      }
+    }
+  }
+}

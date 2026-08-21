@@ -84,9 +84,46 @@ test("okf-lite search returns byte-identical contract output through the Engine 
     assert.equal(lite.stdout, engine.stdout);
     assertEquivalentStderr(lite.stderr, engine.stderr);
     const result = JSON.parse(lite.stdout);
-    assert.equal(result.contract_version, "gkos-retrieval/1.0.0-draft.1");
+    assert.equal(result.contract_version, "gkos-retrieval/1.0.0-draft.2");
     assert.equal(result.hits.length, 1);
     assert.equal(result.hits[0].citation.verified, true);
+    assert.equal(await readFile(join(kb, "policy.md"), "utf8"), SEARCH_NOTE);
+  } finally {
+    await rm(kb, { recursive: true, force: true });
+  }
+});
+
+test("okf-lite search --as-of is byte-identical to the exact pinned Full CLI", async () => {
+  const kb = await mkdtemp(join(tmpdir(), "gkos-lite-search-as-of-"));
+  const config = join(kb, "operator.toml");
+  const asOf = "2026-08-20T08:00:00-04:00";
+  try {
+    await writeFile(join(kb, "policy.md"), SEARCH_NOTE, "utf8");
+    await writeFile(config, "config_version = 1\n[retrieval]\nmode = \"fts\"\n", "utf8");
+    const argv = [
+      "search",
+      "canonical policy",
+      "--kb-path",
+      kb,
+      "--config",
+      config,
+      "--as-of",
+      asOf,
+      "--limit",
+      "5",
+    ];
+    const lite = await run(okfLiteBin, argv);
+    const engine = await run(okfEngineBin, argv);
+    assert.equal(lite.code, engine.code);
+    assert.equal(lite.stdout, engine.stdout);
+    assertEquivalentStderr(lite.stderr, engine.stderr);
+    const result = JSON.parse(lite.stdout);
+    assert.equal(result.contract_version, "gkos-retrieval/1.0.0-draft.2");
+    assert.equal(result.temporal.as_of, "2026-08-20T12:00:00.000Z");
+    assert.equal(result.hits.length, 1);
+    assert.equal(result.hits[0].citation.verified, true);
+    assert.equal(result.hits[0].provenance.ledger_binding_verified, false);
+    assert.equal(Object.hasOwn(result.hits[0].provenance, "ledger_hash"), false);
     assert.equal(await readFile(join(kb, "policy.md"), "utf8"), SEARCH_NOTE);
   } finally {
     await rm(kb, { recursive: true, force: true });

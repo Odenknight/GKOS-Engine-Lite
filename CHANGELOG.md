@@ -1,5 +1,15 @@
 # Changelog
 
+## Unreleased — Phase 2 integration
+
+- Pinned the five-command JavaScript delegate and the static Rust retrieval
+  contract mirror to signed, hosted-green GKOS-Engine commit
+  `6e2df27d33ede62ee0d2e3cb7610df478a7d66ce`; no tag or release is claimed.
+- Added point-in-time `search --as-of` delegation with byte-equivalent
+  Full/Lite exit status, stdout, stderr, and unchanged source-note bytes.
+- Added Decision-A authorization-scoped lineage, temporal provenance, and
+  exact citation conformance without creating a second GKX authority.
+
 ## Unreleased — Phase 1 integration
 
 - Pinned the delegated CLI to exact reviewed GKOS-Engine commit

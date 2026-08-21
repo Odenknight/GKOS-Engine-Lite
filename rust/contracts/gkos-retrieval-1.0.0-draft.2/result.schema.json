@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gkos.example/contracts/retrieval/gkos-retrieval-1.0.0-draft.2/result.schema.json",
+  "title": "GKOS retrieval result draft 2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["contract_version", "query_digest", "projection_id", "projection_digest", "projection_freshness", "hits", "confidence", "temporal", "applied_filters", "eligible_result_count", "stages"],
+  "properties": {
+    "contract_version": { "const": "gkos-retrieval/1.0.0-draft.2" },
+    "query_digest": { "$ref": "#/$defs/sha256" },
+    "projection_id": { "type": "string", "pattern": "^retrieval:[0-9a-f]{24}$" },
+    "projection_digest": { "$ref": "#/$defs/sha256" },
+    "projection_freshness": { "enum": ["fresh", "stale", "unverified"] },
+    "hits": { "type": "array", "items": { "$ref": "#/$defs/hit" } },
+    "confidence": { "$ref": "#/$defs/confidence" },
+    "temporal": {
+      "type": "object", "additionalProperties": false,
+      "required": ["as_of", "coverage", "reason_codes"],
+      "properties": {
+        "as_of": { "oneOf": [{ "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$" }, { "type": "null" }] },
+        "coverage": { "enum": ["not_requested", "not_evaluated", "sufficient", "insufficient"] },
+        "reason_codes": { "type": "array", "maxItems": 1, "items": { "const": "TEMPORAL_COVERAGE_INSUFFICIENT" }, "uniqueItems": true }
+      }
+    },
+    "applied_filters": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "eligible_result_count": { "type": "integer", "minimum": 0 },
+    "stages": {
+      "type": "object", "additionalProperties": false,
+      "required": ["lexical", "vector", "reranker"],
+      "properties": { "lexical": { "$ref": "#/$defs/stage" }, "vector": { "$ref": "#/$defs/stage" }, "reranker": { "$ref": "#/$defs/stage" } }
+    }
+  },
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "reasons": { "type": "array", "items": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]{0,127}$" }, "uniqueItems": true },
+    "nullableNumber": { "type": ["number", "null"] },
+    "span": { "type": "object", "additionalProperties": false, "required": ["start_byte", "end_byte", "text"], "properties": { "start_byte": { "type": "integer", "minimum": 0 }, "end_byte": { "type": "integer", "minimum": 1 }, "text": { "type": "string" } } },
+    "citation": {
+      "type": "object", "additionalProperties": false,
+      "required": ["source_id", "path", "source_digest", "heading_path", "start_byte", "end_byte", "start_line", "end_line", "verified", "stale", "matched_spans"],
+      "properties": {
+        "source_id": { "type": "string", "format": "uuid" }, "path": { "type": "string", "minLength": 1 }, "source_digest": { "$ref": "#/$defs/sha256" },
+        "heading_path": { "type": "array", "items": { "type": "string" } }, "start_byte": { "type": "integer", "minimum": 0 }, "end_byte": { "type": "integer", "minimum": 1 },
+        "start_line": { "type": "integer", "minimum": 1 }, "end_line": { "type": "integer", "minimum": 1 }, "verified": { "const": true }, "stale": { "const": false },
+        "matched_spans": { "type": "array", "maxItems": 8, "items": { "$ref": "#/$defs/span" } }
+      }
+    },
+    "scores": {
+      "type": "object", "additionalProperties": false,
+      "required": ["lexical_score", "semantic_score", "fusion_score", "reranker_score", "mmr_score", "lexical_rank", "semantic_rank", "fused_rank", "reranker_rank", "final_rank"],
+      "properties": {
+        "lexical_score": { "$ref": "#/$defs/nullableNumber" }, "semantic_score": { "$ref": "#/$defs/nullableNumber" }, "fusion_score": { "type": "number", "minimum": 0 },
+        "reranker_score": { "$ref": "#/$defs/nullableNumber" }, "mmr_score": { "$ref": "#/$defs/nullableNumber" }, "lexical_rank": { "type": ["integer", "null"], "minimum": 1 },
+        "semantic_rank": { "type": ["integer", "null"], "minimum": 1 }, "fused_rank": { "type": "integer", "minimum": 1 }, "reranker_rank": { "type": ["integer", "null"], "minimum": 1 }, "final_rank": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "parent": { "type": "object", "additionalProperties": false, "required": ["chunk_id", "text", "citation", "provenance"], "properties": { "chunk_id": { "$ref": "#/$defs/sha256" }, "text": { "type": "string" }, "citation": { "$ref": "#/$defs/citation" }, "provenance": { "$ref": "provenance.schema.json" } } },
+    "hit": { "type": "object", "additionalProperties": false, "required": ["chunk", "citation", "provenance", "stage_scores"], "properties": { "chunk": { "$ref": "chunk.schema.json" }, "citation": { "$ref": "#/$defs/citation" }, "provenance": { "$ref": "provenance.schema.json" }, "stage_scores": { "$ref": "#/$defs/scores" }, "parent_context": { "$ref": "#/$defs/parent" } } },
+    "confidence": { "type": "object", "additionalProperties": false, "required": ["level", "low_confidence", "reason_codes", "lexical_signal", "semantic_signal", "reranker_signal", "coverage_signal"], "properties": { "level": { "enum": ["high", "medium", "low", "insufficient"] }, "low_confidence": { "type": "boolean" }, "reason_codes": { "$ref": "#/$defs/reasons" }, "lexical_signal": { "$ref": "#/$defs/nullableNumber" }, "semantic_signal": { "$ref": "#/$defs/nullableNumber" }, "reranker_signal": { "$ref": "#/$defs/nullableNumber" }, "coverage_signal": { "$ref": "#/$defs/nullableNumber" } } },
+    "stage": { "type": "object", "additionalProperties": false, "required": ["kind", "state", "reason_codes"], "properties": { "kind": { "enum": ["none", "sqlite_fts5", "sqlite_lexical_scan", "openai_compatible", "local_onnx", "mcp"] }, "state": { "enum": ["active", "disabled", "skipped", "degraded"] }, "provider_id": { "type": "string", "minLength": 1 }, "model_id": { "type": "string", "minLength": 1 }, "reason_codes": { "$ref": "#/$defs/reasons" } } }
+  }
+}

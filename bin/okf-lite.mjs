@@ -8,7 +8,7 @@
  *
  *   okf-lite validate <dir>
  *   okf-lite assess   <dir> [--json]
- *   okf-lite search   <query> --kb-path <dir> [--limit <n>]
+ *   okf-lite search   <query> --kb-path <dir> [--limit <n>] [--as-of <GKX timestamp>]
  *   okf-lite graph    <dir> -o graph.json [--watch]
  *   okf-lite export graphiti <dir> --episodes episodes.json [--group-id <ns>]
  *
@@ -56,7 +56,8 @@ everyday vaults of Markdown notes — no Obsidian required.
 Usage:
   okf-lite validate <dir>                                  schema/identity/lineage diagnostics; non-zero exit on error
   okf-lite assess   <dir> [--json]                         per-note documentation-quality scores/labels
-  okf-lite search   <query> --kb-path <dir> [--limit <n>]  public-only lexical retrieval with exact citations
+  okf-lite search   <query> --kb-path <dir> [--limit <n>] [--as-of <GKX timestamp>]
+                                                             public-only retrieval with exact citations
   okf-lite graph    <dir> -o <graph.json> [--watch]        canonical Kosmos graph (stable serialization)
   okf-lite export graphiti <dir> --episodes <out.json> [--group-id <ns>]
   okf-lite assist explain <note.md>                        explain an issue in plain language
@@ -81,6 +82,11 @@ export function validateLiteCommand(argv) {
   };
 }
 
+export function prepareDelegatedCommand(argv) {
+  const boundary = validateLiteCommand(argv);
+  return boundary.allowed ? { allowed: true, argv } : boundary;
+}
+
 export async function main(argv = process.argv.slice(2)) {
   const first = argv[0];
   if (!first || first === "--help" || first === "-h") {
@@ -103,12 +109,12 @@ export async function main(argv = process.argv.slice(2)) {
       return 2;
     }
   }
-  const boundary = validateLiteCommand(argv);
+  const boundary = prepareDelegatedCommand(argv);
   if (!boundary.allowed) {
     console.error(boundary.message);
     return 1;
   }
-  return engine.main(argv);
+  return engine.main(boundary.argv);
 }
 
 // Determine whether this module was invoked directly as a CLI (as opposed to

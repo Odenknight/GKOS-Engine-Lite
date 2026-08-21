@@ -18,7 +18,7 @@
     "check:metadata": "node scripts/check-metadata.mjs"
   },
   "dependencies": {
-    "gkos-engine": "github:Odenknight/GKOS-Engine#bbc2ea874f4dde37e6376e46c080cb1c69ab1bb3"
+    "gkos-engine": "github:Odenknight/GKOS-Engine#6e2df27d33ede62ee0d2e3cb7610df478a7d66ce"
   },
   "license": "Apache-2.0",
   "author": "OdenKnight",

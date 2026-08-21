@@ -9,7 +9,7 @@ use futures_util::future::{select, Either};
 use serde::{Deserialize, Serialize};
 
 use crate::contract::{
-    RetrievalProviderStageKind, RetrievalProviderStageStatus, RetrievalStageState,
+    is_sha256_digest, RetrievalProviderStageKind, RetrievalProviderStageStatus, RetrievalStageState,
 };
 use crate::digest::canonical_digest;
 use crate::{RetrievalError, RetrievalResult};
@@ -367,6 +367,69 @@ pub fn validate_provider_timeout(timeout_ms: u32) -> RetrievalResult<()> {
             "provider timeout_ms must be within [1, 300000]".to_owned(),
         ))
     }
+}
+
+fn validate_runtime_provider_identity_fields(
+    kind: RetrievalProviderStageKind,
+    provider_id: &str,
+    model_id: &str,
+    timeout_ms: u32,
+    configuration_digest: &str,
+) -> RetrievalResult<()> {
+    if !matches!(
+        kind,
+        RetrievalProviderStageKind::OpenaiCompatible
+            | RetrievalProviderStageKind::LocalOnnx
+            | RetrievalProviderStageKind::Mcp
+    ) {
+        return Err(RetrievalError::InvalidConfig(
+            "runtime provider identity must use a provider-capable family".to_owned(),
+        ));
+    }
+    require_bounded_nonempty(provider_id, "provider_id", MAX_PROVIDER_IDENTITY_BYTES)?;
+    require_bounded_nonempty(model_id, "model_id", MAX_PROVIDER_IDENTITY_BYTES)?;
+    validate_provider_timeout(timeout_ms)?;
+    if !is_sha256_digest(configuration_digest) {
+        return Err(RetrievalError::InvalidConfig(
+            "provider configuration_digest must be a lowercase sha256 digest".to_owned(),
+        ));
+    }
+    Ok(())
+}
+
+/// Validate the complete provider-neutral vector identity before any cache,
+/// source-text, or provider work. This checks contract shape only and does not
+/// privilege or allowlist any host, vendor, route, model, or provider ID.
+pub(crate) fn validate_vector_provider_identity(
+    identity: &VectorProviderIdentity,
+) -> RetrievalResult<()> {
+    validate_runtime_provider_identity_fields(
+        identity.kind,
+        &identity.provider_id,
+        &identity.model_id,
+        identity.timeout_ms,
+        &identity.configuration_digest,
+    )?;
+    if !(1..=MAX_VECTOR_DIMENSIONS).contains(&identity.dimensions) {
+        return Err(RetrievalError::InvalidConfig(
+            "provider dimensions must be within [1, 1000000]".to_owned(),
+        ));
+    }
+    Ok(())
+}
+
+/// Validate the complete dimensionless reranker identity before any query or
+/// candidate text crosses the configured provider boundary.
+pub(crate) fn validate_rerank_provider_identity(
+    identity: &RerankProviderIdentity,
+) -> RetrievalResult<()> {
+    validate_runtime_provider_identity_fields(
+        identity.kind,
+        &identity.provider_id,
+        &identity.model_id,
+        identity.timeout_ms,
+        &identity.configuration_digest,
+    )
 }
 
 /// Race one provider operation against its trusted-config deadline. Dropping
@@ -1616,6 +1679,83 @@ mod tests {
                 DEFAULT_PROVIDER_TIMEOUT_MS
             ]
         );
+    }
+
+    #[test]
+    fn runtime_provider_identity_preflight_is_complete_and_provider_neutral() {
+        let valid = configs()[0].identity().unwrap();
+        validate_vector_provider_identity(&valid).unwrap();
+        for invalid in [
+            VectorProviderIdentity {
+                kind: RetrievalProviderStageKind::SqliteFts5,
+                ..valid.clone()
+            },
+            VectorProviderIdentity {
+                provider_id: String::new(),
+                ..valid.clone()
+            },
+            VectorProviderIdentity {
+                model_id: String::new(),
+                ..valid.clone()
+            },
+            VectorProviderIdentity {
+                dimensions: 0,
+                ..valid.clone()
+            },
+            VectorProviderIdentity {
+                dimensions: 1_000_001,
+                ..valid.clone()
+            },
+            VectorProviderIdentity {
+                timeout_ms: 0,
+                ..valid.clone()
+            },
+            VectorProviderIdentity {
+                configuration_digest: "sha256:INVALID".to_owned(),
+                ..valid.clone()
+            },
+        ] {
+            assert!(matches!(
+                validate_vector_provider_identity(&invalid),
+                Err(RetrievalError::InvalidConfig(_))
+            ));
+        }
+
+        let valid_reranker = RerankProviderIdentity {
+            kind: RetrievalProviderStageKind::Mcp,
+            provider_id: "operator-selected-reranker".to_owned(),
+            model_id: "arbitrary-reviewed-model".to_owned(),
+            timeout_ms: 1_000,
+            configuration_digest: crate::digest::sha256(b"arbitrary-rerank-config"),
+        };
+        validate_rerank_provider_identity(&valid_reranker).unwrap();
+        for invalid in [
+            RerankProviderIdentity {
+                kind: RetrievalProviderStageKind::SqliteLexicalScan,
+                ..valid_reranker.clone()
+            },
+            RerankProviderIdentity {
+                provider_id: String::new(),
+                ..valid_reranker.clone()
+            },
+            RerankProviderIdentity {
+                model_id: String::new(),
+                ..valid_reranker.clone()
+            },
+            RerankProviderIdentity {
+                timeout_ms: 300_001,
+                ..valid_reranker.clone()
+            },
+            RerankProviderIdentity {
+                configuration_digest: String::new(),
+                ..valid_reranker.clone()
+            },
+        ] {
+            assert!(matches!(
+                validate_rerank_provider_identity(&invalid),
+                Err(RetrievalError::InvalidConfig(_))
+            ));
+        }
     }
 
     #[test]

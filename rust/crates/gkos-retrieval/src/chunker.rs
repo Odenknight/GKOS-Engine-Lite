@@ -3,7 +3,8 @@ use std::collections::{BTreeMap, BTreeSet, HashMap};
 use serde::Serialize;
 
 use crate::contract::{
-    RetrievalChunk, RetrievalSource, CHUNKER_VERSION, MAX_CHUNK_BYTES, RETRIEVAL_CONTRACT,
+    GkxRetrievalSource, RetrievalChunk, RetrievalSource, CHUNKER_VERSION, MAX_CHUNK_BYTES,
+    RETRIEVAL_CONTRACT,
 };
 use crate::digest::{canonical_digest, sha256};
 use crate::{RetrievalError, RetrievalResult};
@@ -138,7 +139,28 @@ pub fn chunk_source(
     source: &RetrievalSource,
     options: ChunkingOptions,
 ) -> RetrievalResult<Vec<RetrievalChunk>> {
-    source.validate_for_retrieval()?;
+    chunk_source_mode(source, options, false)
+}
+
+#[allow(dead_code)] // sealed draft.2 trusted-host path, exercised by unit conformance
+pub(crate) fn chunk_lineage_source(
+    source: &GkxRetrievalSource,
+    options: ChunkingOptions,
+) -> RetrievalResult<Vec<RetrievalChunk>> {
+    let binding = source.as_phase1_binding();
+    chunk_source_mode(&binding, options, true)
+}
+
+fn chunk_source_mode(
+    source: &RetrievalSource,
+    options: ChunkingOptions,
+    allow_empty_interval: bool,
+) -> RetrievalResult<Vec<RetrievalChunk>> {
+    if allow_empty_interval {
+        source.validate_lineage_binding()?;
+    } else {
+        source.validate_for_retrieval()?;
+    }
     let options = options.validate()?;
     let computed_source_digest = sha256(source.text.as_bytes());
     if source.source_digest.to_ascii_lowercase() != computed_source_digest {
@@ -234,7 +256,7 @@ pub fn chunk_source(
         .into_iter()
         .map(|(chunk, _)| chunk)
         .collect::<Vec<_>>();
-    validate_chunk_set(source, &chunks)?;
+    validate_chunk_set_mode(source, &chunks, allow_empty_interval)?;
     Ok(chunks)
 }
 
@@ -242,13 +264,38 @@ pub fn validate_chunk_set(
     source: &RetrievalSource,
     chunks: &[RetrievalChunk],
 ) -> RetrievalResult<()> {
-    source.validate_for_retrieval()?;
+    validate_chunk_set_mode(source, chunks, false)
+}
+
+#[allow(dead_code)] // sealed draft.2 trusted-host path, exercised by unit conformance
+pub(crate) fn validate_lineage_chunk_set(
+    source: &GkxRetrievalSource,
+    chunks: &[RetrievalChunk],
+) -> RetrievalResult<()> {
+    let binding = source.as_phase1_binding();
+    validate_chunk_set_mode(&binding, chunks, true)
+}
+
+fn validate_chunk_set_mode(
+    source: &RetrievalSource,
+    chunks: &[RetrievalChunk],
+    allow_empty_interval: bool,
+) -> RetrievalResult<()> {
+    if allow_empty_interval {
+        source.validate_lineage_binding()?;
+    } else {
+        source.validate_for_retrieval()?;
+    }
     let mut ids = BTreeSet::new();
     let mut by_id = BTreeMap::new();
     let mut first_by_position = BTreeMap::<&str, &RetrievalChunk>::new();
     let mut next_part_by_position = BTreeMap::<&str, u32>::new();
     for (index, chunk) in chunks.iter().enumerate() {
-        chunk.validate_against(source)?;
+        if allow_empty_interval {
+            chunk.validate_against_lineage(source)?;
+        } else {
+            chunk.validate_against(source)?;
+        }
         if !ids.insert(chunk.chunk_id.as_str()) {
             return Err(RetrievalError::InvalidEnvelope(
                 "duplicate chunk_id in source generation".to_owned(),

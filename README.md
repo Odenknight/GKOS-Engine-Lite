@@ -61,7 +61,7 @@ npm install gkos-engine-lite
 
 `gkos-engine` has no npm registry publish; this integration branch installs
 Engine package 2.1.2 from the exact reviewed commit
-`bbc2ea874f4dde37e6376e46c080cb1c69ab1bb3`. This commit pin is not a claim
+`6e2df27d33ede62ee0d2e3cb7610df478a7d66ce`. This commit pin is not a claim
 that a matching Engine or Lite release tag exists. Git installation runs the
 engine package's standard `prepare` build.
 
@@ -76,6 +76,7 @@ goldens document that migration explicitly.
 node bin/okf-lite.mjs validate ./my-notes
 node bin/okf-lite.mjs assess   ./my-notes --json
 node bin/okf-lite.mjs search   "canonical policy" --kb-path ./my-notes --limit 5
+node bin/okf-lite.mjs search   "historical policy" --kb-path ./my-notes --as-of 2026-07-15T00:00-04:00 --limit 5
 node bin/okf-lite.mjs graph    ./my-notes -o graph.json
 node bin/okf-lite.mjs export graphiti ./my-notes --episodes episodes.json
 ```
@@ -114,12 +115,19 @@ Runs the assessment engine over every note and prints per-note
 documentation-quality scores and labels. `--json` emits a
 stable-key-ordered JSON array instead of the human-readable table.
 
-### `okf-lite search <query> --kb-path <dir> [--limit <n>]`
+### `okf-lite search <query> --kb-path <dir> [--limit <n>] [--as-of <GKX timestamp>]`
 
 Delegates to the pinned Engine retrieval CLI and returns the versioned
 retrieval result contract with explicit provider stages, confidence, and exact
 verified citations. The mandatory path is local lexical retrieval; optional
-provider configuration does not change GKX identity or authority.
+provider configuration does not change GKX identity or authority. On this
+Phase 2 branch, Lite preserves the optional `--as-of` flag and its value
+unchanged at the delegation boundary. The wrapper and pinned Full CLI execute
+the same corpus and trusted configuration with byte-equivalent exit status,
+stdout, and stderr; only the process-specific PID on the exact Node SQLite
+experimental-warning line is normalized by the test. See
+[Citation and temporal provenance](docs/citations.md) for the pin-bound result
+semantics and authority boundary.
 
 ### `okf-lite graph <dir> -o <graph.json> [--watch]`
 
@@ -139,7 +147,7 @@ reproducible and auditable.
 `desktop/` contains the separate **GKOS Engine Desktop** presentation package, a Tauri 2 tray app for macOS and
 Windows that wraps the engine's headless sidecar (`kosmos-agent`). The CLI
 integration is bound to [Engine package 2.1.2 at exact commit
-`bbc2ea8`](https://github.com/Odenknight/GKOS-Engine/commit/bbc2ea874f4dde37e6376e46c080cb1c69ab1bb3);
+`6e2df27`](https://github.com/Odenknight/GKOS-Engine/commit/6e2df27d33ede62ee0d2e3cb7610df478a7d66ce);
 desktop sidecar artifacts remain separately qualified and are not implied by
 that source pin.
 Point it at a notes folder; it watches and projects (OKF+ 2.3 + Graphiti) and

@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { validateLiteCommand } from "../bin/okf-lite.mjs";
+import { prepareDelegatedCommand, validateLiteCommand } from "../bin/okf-lite.mjs";
 
 test("allows the five delegated Lite command paths", () => {
   for (const argv of [
@@ -18,4 +18,17 @@ test("rejects unsupported and future upstream commands before delegation", () =>
     assert.equal(result.allowed, false);
     assert.match(result.message, /Lite exposes only/);
   }
+});
+
+test("preserves the pinned search as-of flag and value byte-for-byte at the delegation boundary", () => {
+  const asOf = "2026-07-15T00:00-04:00";
+  const argv = ["search", "historical policy", "--kb-path", ".", "--as-of", asOf, "--limit", "5"];
+  const prepared = prepareDelegatedCommand(argv);
+
+  assert.equal(prepared.allowed, true);
+  assert.strictEqual(prepared.argv, argv, "the Lite boundary must pass the original argv object");
+  assert.deepEqual(prepared.argv, [
+    "search", "historical policy", "--kb-path", ".", "--as-of", asOf, "--limit", "5",
+  ]);
+  assert.equal(prepared.argv[prepared.argv.indexOf("--as-of") + 1], asOf);
 });

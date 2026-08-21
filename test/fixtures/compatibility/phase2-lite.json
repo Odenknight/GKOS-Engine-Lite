@@ -1,0 +1,38 @@
+{
+  "fixture_version": 1,
+  "phase": "phase-2-pin-migration",
+  "historical_fixture": "phase1-lite.json",
+  "full_reference": {
+    "repository": "Odenknight/GKOS-Engine",
+    "commit": "6e2df27d33ede62ee0d2e3cb7610df478a7d66ce",
+    "package_version": "2.1.2",
+    "retrieval_contract": "gkos-retrieval/1.0.0-draft.2",
+    "projection_schema": 3
+  },
+  "runtime_migration": {
+    "expected_changed_paths": [
+      "$.lite_package.engine_dependency",
+      "$.lite_package.engine_resolved_sha"
+    ],
+    "engine_dependency": "github:Odenknight/GKOS-Engine#6e2df27d33ede62ee0d2e3cb7610df478a7d66ce",
+    "engine_resolved_sha": "6e2df27d33ede62ee0d2e3cb7610df478a7d66ce"
+  },
+  "cli": {
+    "search_result_contract": "gkos-retrieval/1.0.0-draft.2",
+    "phase1_help_line": "  okf-lite search   <query> --kb-path <dir> [--limit <n>]  public-only lexical retrieval with exact citations\n",
+    "phase2_help_lines": "  okf-lite search   <query> --kb-path <dir> [--limit <n>] [--as-of <GKX timestamp>]\n                                                             public-only retrieval with exact citations\n",
+    "delegated_as_of_argv": [
+      "search",
+      "historical policy",
+      "--kb-path",
+      ".",
+      "--as-of",
+      "2026-07-15T00:00-04:00",
+      "--limit",
+      "5"
+    ]
+  },
+  "deterministic": {
+    "source_fixture_change": "none; Phase 0 note bytes and Phase 1 derived graph/Graphiti goldens remain exact"
+  }
+}

@@ -1,0 +1,133 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "contract_version": "gkos-retrieval/1.0.0-draft.2",
+  "status": "draft",
+  "authority": "integration-contract-only",
+  "reference_implementation": "GKOS-Engine TypeScript",
+  "conformant_adapter": "GKOS-Engine-Lite Rust, pin-bound and not a GKX authority",
+  "coordinates": {
+    "phase_1_base": "gkos-retrieval/1.0.0-draft.1",
+    "result_schema": "gkos-retrieval-result/1.0.0-draft.2",
+    "provenance_contract": "gkos-retrieval-provenance/1.0.0-draft.1",
+    "projection_schema_version": 3,
+    "gkx_standard_commit": "a2a2a6ca5c4dac32c6d9dc985ed7460f5f4350c6",
+    "gkx_projection_profile": "gkx-2.3-validating-projection",
+    "chunker": "gkos-heading-chunker/1",
+    "tokenizer": "gkos-ascii-whitespace/1"
+  },
+  "canonical_mapping": {
+    "source_id": "canonical authored GkxNode.gkx.projection.authored.uid",
+    "valid_from": "resolved canonical GkxNode.validAt",
+    "valid_to": "accepted canonical projection invalidAt; public results recompute it over the authorization-scoped canonical edge view",
+    "lineage_id": "null for the pinned current Standard profile; derived hosts cannot mint it",
+    "interval": "[valid_from,valid_to)",
+    "authored_temporal_aliases": false
+  },
+  "projection": {
+    "gkx_index_instances": 1,
+    "set_files_calls": 1,
+    "manifest_authority_coordinates": ["gkx_standard_commit", "gkx_projection_profile"],
+    "authority_coordinates_in_projection_digest": true,
+    "unrecorded_wall_clock_fallback": false,
+    "missing_time": "when both source created/modified stats are absent, manifest-bound projection_reference_time is required even if authored created_at exists; without it that intrinsic candidate is rejected before the single GkxIndex projection while unrelated candidates remain unchanged",
+    "unknown_or_incomplete_lineage": "unknown and as_of-ineligible"
+  },
+  "as_of": {
+    "grammar": "existing GKX_TIMESTAMP_RE with optional seconds/fraction and mandatory explicit zone",
+    "normalization": "UTC ISO string",
+    "selection_authority": "existing projectAtTime()",
+    "ordering": ["runtime_policy_digest", "source_discoverability", "typed_filters", "whole_source_chunk_discoverability", "explicit_as_of_known_created_prefilter", "authorized_view_identity_resolution_declaration_topology", "temporal_eligibility", "live_verification", "lexical_and_vector", "fusion_rerank_mmr", "counts_confidence_parent"],
+    "future_candidate_rule": "future candidates are removed silently before identity, endpoint, declaration, topology, or order checks and are indistinguishable from physical absence",
+    "unknown_candidate_rule": "unknown candidates are removed before identity, endpoint, declaration, topology, or order checks and contribute only the authorization-scoped coverage-insufficient bit",
+    "conflict_precedence": "RETRIEVAL_AUTHORIZED_VIEW_CONFLICT wins over TEMPORAL_COVERAGE_INSUFFICIENT when a known-created authorized conflict coexists with unknown coverage",
+    "insufficient_rule": "nonempty authorized and typed-filtered corpus with any unknown canonical interval or zero temporally valid sources",
+    "empty_authorized_rule": "ordinary NO_ELIGIBLE_RESULTS; temporal coverage not_evaluated"
+  },
+  "temporal_state": {
+    "current": "known canonical validity and invalidAt is null",
+    "historical": "known canonical validity and invalidAt is non-null",
+    "future": "excluded diagnostic relative to explicit as_of only; never a hit",
+    "unknown": "canonical temporal classification unavailable",
+    "wall_clock_dependency": false
+  },
+  "provenance": {
+    "raw_authored_refs_external": false,
+    "relationship_endpoints": "authorized resolved canonical UIDs that are not future at as_of; historical predecessors may remain visible from an eligible successor and future successors are suppressed",
+    "endpoint_suppression": "silent; LINEAGE_VIEW_AUTHORIZED_ONLY is invariant and external lineage_neutral/participant state derives only from visible endpoint arrays",
+    "public_digest": "redacted external envelope only",
+    "ledger_binding_verified": false,
+    "ledger_entry_sha256_present": false
+  },
+  "stored_provenance_invariants": {
+    "source_metadata_required": ["title", "sensitivity", "authoritative:true"],
+    "title_bound": "nonempty and at most 512 ECMAScript UTF-16 code units",
+    "assertion_metadata_binding": "assertion_time is non-null iff assertion_origin is gkx_created_at and source_metadata.authored_at is present; authored_at must equal assertion_time exactly; null assertion requires authored_at absent",
+    "assertion_validity_binding": "when assertion_time and valid_from are both non-null, validity_origin is gkx_authored_timestamp and valid_from equals assertion_time; gkx_authored_timestamp origin requires both values non-null and equal; assertion_time may remain non-null with null valid_from only when validity_origin and temporal_state are unknown",
+    "canonical_timestamp": "stored assertion_time, authored_at, valid_from, and valid_to are exact normalized four-digit-year UTC YYYY-MM-DDTHH:mm:ss.sssZ values"
+  },
+  "physical_candidate_projection": {
+    "identity": "internal SHA-256 descriptor record_key plus multiplicity slot; never a public source or chunk identity",
+    "candidate_source_claims": ["source_id", "source_path", "parser_content_fingerprint", "source_digest", "source_metadata", "assertion_time", "assertion_origin", "valid_from", "validity_origin", "lineage_id:null", "intrinsic_reason_codes"],
+    "candidate_source_forbidden_claims": ["valid_to", "resolved endpoints", "temporal_state", "lineage_neutral"],
+    "declaration_receipts": "parser-owned raw declaration plus exact ordered canonical resolver-basis candidate record-key sets; trusted-host-only",
+    "duplicates_retained": ["source_id", "source_path", "public_chunk_id", "parser_content_fingerprint"],
+    "candidate_keyed_tables": ["candidate_sources", "candidate_declarations", "candidate_chunks", "chunk_fts", "vectors", "embedding_eligible_candidate_chunks"],
+    "public_exposure": false,
+    "projection_digest_binding": "complete canonical candidate/declaration/chunk/vector/eligibility multiset, exact backend schema/tokenizer, Standard/profile/policy coordinates, and candidate-named counts"
+  },
+  "source_policy_input": {
+    "deep_frozen_copy": true,
+    "global_valid_to_present": false,
+    "relationship_endpoints_present": false,
+    "hidden_agent_moc_or_extension_metadata_present": false,
+    "zero_chunk_sources_included": true
+  },
+  "chunk_policy_input": {
+    "deep_frozen_copy": true,
+    "whole_source_all_chunks_must_allow": true,
+    "global_valid_to_present": false,
+    "relationship_endpoints_present": false,
+    "hidden_agent_moc_or_extension_metadata_present": false
+  },
+  "runtime_policy_digest": "required and exactly equal to the schema-3 manifest policy_digest before callbacks or source/provider work",
+  "embedding_policy_boundary": {
+    "eligible_ids_input": "embedding_eligible_candidate_chunk_keys",
+    "bound_to_policy_digest": true,
+    "bound_to_projection_digest": true,
+    "provider_receives_only_eligible_chunks": true,
+    "denied_chunks_remain_local_lexical_rows": true,
+    "runtime_authorization_outside_bound_set": "RETRIEVAL_RUNTIME_VECTOR_ELIGIBILITY_MISMATCH"
+  },
+  "lexical_backend_conformance": {
+    "physical_backend_is_manifest_and_result_coordinate_bound": true,
+    "executable_fixture_variants": ["sqlite_fts5", "sqlite_lexical_scan"],
+    "scan_capability_result_variants": ["fts5_available", "fts5_unavailable"],
+    "complete_manifest_and_result_equality_required": true,
+    "backend_misreporting_allowed": false
+  },
+  "cross_record_topology_authority": {
+    "status": "ratified_decision_a",
+    "frozen": true,
+    "scope": "authorization-hidden canonical identity collisions, endpoint resolution, forward/inverse/conflicting declarations, and multiple-successor/cycle/temporal-order diagnostics",
+    "authorized_view_rule": "evaluate only after source policy, typed filters, whole-source chunk policy, and explicit-as_of future/unknown removal using parser-owned canonical candidate receipts and existing resolver precedence",
+    "hidden_or_future_rule": "authorization-hidden candidates are indistinguishable from physical absence; future candidates are silently suppressed",
+    "all_visible_conflict": "RETRIEVAL_AUTHORIZED_VIEW_CONFLICT",
+    "conflict_disclosure": "one code and message with no class, count, path, UID, reference, internal record key, or physical projection coordinate",
+    "conflict_work_boundary": "before live source reads, lexical/vector SQL, query embedding, reranking, ranking, result counts, confidence, citations, or parent expansion",
+    "ordinary_link_rule": "ordinary unresolved or ambiguous Markdown/wiki links retain existing non-conflicting link behavior; only lineage and governed typed-relationship declarations participate",
+    "matrix_ids": [
+      "canonical_identity_collision",
+      "title_wikilink_or_uid_endpoint_resolution",
+      "forward_inverse_or_conflicting_declarations",
+      "multiple_successors_cycles_and_temporal_order"
+    ]
+  },
+  "compatibility": {
+    "phase_1_builder": "buildRetrievalGeneration -> draft.1/schema-2 unchanged",
+    "phase_2_builder": "buildGkxRetrievalGeneration -> draft.2/schema-3",
+    "synthesized_provenance": false
+  },
+  "result_budget": "complete canonical UTF-8 serialized result envelope, winner-first; parent context is omitted before its winning child when the parent would exceed the budget",
+  "source_content_writes": false,
+  "provider_routing": "provider-neutral Phase 1 contract unchanged"
+}

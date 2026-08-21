@@ -348,7 +348,7 @@ pub(crate) fn open_active_retrieval_generation(
     Ok(store)
 }
 
-fn validate_state_directory(path: &Path) -> RetrievalResult<PathBuf> {
+pub(crate) fn validate_state_directory(path: &Path) -> RetrievalResult<PathBuf> {
     if path.as_os_str().is_empty() {
         return Err(RetrievalError::InvalidConfig(
             "state_directory must not be empty".to_owned(),
@@ -386,7 +386,7 @@ fn validate_state_directory(path: &Path) -> RetrievalResult<PathBuf> {
     Ok(absolute)
 }
 
-fn validate_existing_state_directory(path: &Path) -> RetrievalResult<PathBuf> {
+pub(crate) fn validate_existing_state_directory(path: &Path) -> RetrievalResult<PathBuf> {
     let path = validate_state_directory(path)?;
     reject_symlink_directory(&path)?;
     let canonical = fs::canonicalize(&path)?;
@@ -408,7 +408,7 @@ fn reject_symlink_directory(path: &Path) -> RetrievalResult<()> {
     Ok(())
 }
 
-fn reject_file_alias(path: &Path, label: &str) -> RetrievalResult<()> {
+pub(crate) fn reject_file_alias(path: &Path, label: &str) -> RetrievalResult<()> {
     let metadata = fs::symlink_metadata(path)?;
     if !metadata.is_file()
         || metadata.file_type().is_symlink()
@@ -480,7 +480,7 @@ fn sidecar_path(path: &Path, suffix: &str) -> PathBuf {
     PathBuf::from(value)
 }
 
-fn path_entry_exists(path: &Path) -> RetrievalResult<bool> {
+pub(crate) fn path_entry_exists(path: &Path) -> RetrievalResult<bool> {
     match fs::symlink_metadata(path) {
         Ok(_) => Ok(true),
         Err(error) if error.kind() == std::io::ErrorKind::NotFound => Ok(false),
@@ -488,7 +488,7 @@ fn path_entry_exists(path: &Path) -> RetrievalResult<bool> {
     }
 }
 
-fn quarantine_generation_files(path: &Path) -> RetrievalResult<()> {
+pub(crate) fn quarantine_generation_files(path: &Path) -> RetrievalResult<()> {
     for candidate in [
         path.to_path_buf(),
         sidecar_path(path, "-wal"),
@@ -501,7 +501,7 @@ fn quarantine_generation_files(path: &Path) -> RetrievalResult<()> {
     Ok(())
 }
 
-fn quarantine_orphan_sidecars(path: &Path) -> RetrievalResult<()> {
+pub(crate) fn quarantine_orphan_sidecars(path: &Path) -> RetrievalResult<()> {
     for candidate in [sidecar_path(path, "-wal"), sidecar_path(path, "-shm")] {
         if path_entry_exists(&candidate)? {
             quarantine_file(&candidate)?;
@@ -510,7 +510,7 @@ fn quarantine_orphan_sidecars(path: &Path) -> RetrievalResult<()> {
     Ok(())
 }
 
-fn reject_generation_sidecars(path: &Path) -> RetrievalResult<()> {
+pub(crate) fn reject_generation_sidecars(path: &Path) -> RetrievalResult<()> {
     if [sidecar_path(path, "-wal"), sidecar_path(path, "-shm")]
         .iter()
         .try_fold(false, |found, candidate| {
@@ -549,7 +549,7 @@ fn quarantine_file(path: &Path) -> RetrievalResult<PathBuf> {
     ))
 }
 
-fn write_owner_file(path: &Path, bytes: &[u8]) -> RetrievalResult<()> {
+pub(crate) fn write_owner_file(path: &Path, bytes: &[u8]) -> RetrievalResult<()> {
     let mut options = OpenOptions::new();
     options.write(true).create_new(true);
     #[cfg(unix)]
@@ -564,31 +564,31 @@ fn write_owner_file(path: &Path, bytes: &[u8]) -> RetrievalResult<()> {
 }
 
 #[cfg(unix)]
-fn harden_directory_permissions(path: &Path) -> RetrievalResult<()> {
+pub(crate) fn harden_directory_permissions(path: &Path) -> RetrievalResult<()> {
     use std::os::unix::fs::PermissionsExt;
     fs::set_permissions(path, fs::Permissions::from_mode(0o700))?;
     Ok(())
 }
 
 #[cfg(not(unix))]
-fn harden_directory_permissions(_path: &Path) -> RetrievalResult<()> {
+pub(crate) fn harden_directory_permissions(_path: &Path) -> RetrievalResult<()> {
     Ok(())
 }
 
 #[cfg(unix)]
-fn harden_file_permissions(path: &Path) -> RetrievalResult<()> {
+pub(crate) fn harden_file_permissions(path: &Path) -> RetrievalResult<()> {
     use std::os::unix::fs::PermissionsExt;
     fs::set_permissions(path, fs::Permissions::from_mode(0o600))?;
     Ok(())
 }
 
 #[cfg(not(unix))]
-fn harden_file_permissions(_path: &Path) -> RetrievalResult<()> {
+pub(crate) fn harden_file_permissions(_path: &Path) -> RetrievalResult<()> {
     Ok(())
 }
 
 #[cfg(windows)]
-fn atomic_replace(source: &Path, destination: &Path) -> RetrievalResult<()> {
+pub(crate) fn atomic_replace(source: &Path, destination: &Path) -> RetrievalResult<()> {
     use std::os::windows::ffi::OsStrExt;
     use windows_sys::Win32::Storage::FileSystem::{
         MoveFileExW, MOVEFILE_REPLACE_EXISTING, MOVEFILE_WRITE_THROUGH,
@@ -619,19 +619,19 @@ fn atomic_replace(source: &Path, destination: &Path) -> RetrievalResult<()> {
 }
 
 #[cfg(not(windows))]
-fn atomic_replace(source: &Path, destination: &Path) -> RetrievalResult<()> {
+pub(crate) fn atomic_replace(source: &Path, destination: &Path) -> RetrievalResult<()> {
     fs::rename(source, destination)?;
     Ok(())
 }
 
 #[cfg(unix)]
-fn sync_directory(path: &Path) -> RetrievalResult<()> {
+pub(crate) fn sync_directory(path: &Path) -> RetrievalResult<()> {
     fs::File::open(path)?.sync_all()?;
     Ok(())
 }
 
 #[cfg(not(unix))]
-fn sync_directory(_path: &Path) -> RetrievalResult<()> {
+pub(crate) fn sync_directory(_path: &Path) -> RetrievalResult<()> {
     Ok(())
 }
 
@@ -1326,7 +1326,7 @@ impl SqliteRetrievalStore {
     }
 }
 
-fn sqlite_integer(value: u64, field: &str) -> RetrievalResult<i64> {
+pub(crate) fn sqlite_integer(value: u64, field: &str) -> RetrievalResult<i64> {
     i64::try_from(value).map_err(|_| {
         RetrievalError::InvalidEnvelope(format!("{field} exceeds SQLite's signed integer range"))
     })
@@ -1344,7 +1344,7 @@ struct SourceInvariant<'a> {
     metadata: &'a RetrievalChunkMetadata,
 }
 
-fn validate_persisted_chunks(
+pub(crate) fn validate_persisted_chunks(
     chunks: &[RetrievalChunk],
 ) -> RetrievalResult<BTreeMap<String, (String, String)>> {
     let mut ids = BTreeSet::new();
@@ -1383,6 +1383,7 @@ fn validate_persisted_chunks(
             ));
         }
         canonical_digest(&chunk.metadata)?;
+        chunk.metadata.validate_semantics()?;
         let invariant = canonical_json(&SourceInvariant {
             source_path: &chunk.source_path,
             source_digest: &chunk.source_digest,
@@ -1484,7 +1485,7 @@ fn validate_persisted_chunks(
     Ok(source_bindings)
 }
 
-fn fts_expression(query: &str) -> RetrievalResult<String> {
+pub(crate) fn fts_expression(query: &str) -> RetrievalResult<String> {
     Ok(lexical_query_clauses(query)?
         .into_iter()
         .map(|clause| format!("\"{}\"", clause.value))
@@ -1629,7 +1630,7 @@ pub fn normalized_lexical_terms(query: &str) -> Vec<String> {
     query_terms(query)
 }
 
-fn weighted_lexical_score(query: &str, fields: &[(String, f64)]) -> f64 {
+pub(crate) fn weighted_lexical_score(query: &str, fields: &[(String, f64)]) -> f64 {
     query_terms(query)
         .iter()
         .map(|term| {

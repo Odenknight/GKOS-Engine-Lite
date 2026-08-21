@@ -15,13 +15,15 @@ use crate::contract::{
     MMR_DEFAULT_LAMBDA, PARENT_EXPANSION_MAX_CHILD_TOKENS, RETRIEVAL_CONTRACT, RRF_DEFAULT_K,
 };
 use crate::digest::sha256;
+use crate::error::cache_value_or_miss;
 use crate::filters::{applied_filter_names, matches_retrieval_filters, validate_retrieval_filters};
 use crate::fusion::{
     code_unit_compare, maximal_marginal_relevance_with_relevance, reciprocal_rank_fusion,
 };
 use crate::path_security::{absolute_lexical_path, contained_path, equivalent_paths};
 use crate::providers::{
-    bounded_provider_call, validate_provider_timeout, RerankProvider, VectorProvider,
+    bounded_provider_call, validate_rerank_provider_identity, validate_vector_provider_identity,
+    RerankProvider, VectorProvider,
 };
 use crate::redaction::{authorize_search_result, AuthorizedRetrievalSearchResult};
 use crate::sqlite_store::{
@@ -153,10 +155,10 @@ impl<'a> RetrievalCoordinatorOptions<'a> {
             ));
         }
         if let Some(provider) = self.vector_provider {
-            validate_provider_timeout(provider.identity().timeout_ms)?;
+            validate_vector_provider_identity(provider.identity())?;
         }
         if let Some(provider) = self.rerank_provider {
-            validate_provider_timeout(provider.identity().timeout_ms)?;
+            validate_rerank_provider_identity(provider.identity())?;
         }
         Ok(())
     }
@@ -200,11 +202,6 @@ pub async fn index_retrieval_generation(
             "index coordinator accepts only an unembedded base generation".to_owned(),
         ));
     }
-    let mut chunks = Vec::new();
-    for source in &input.sources {
-        chunks.extend(chunk_source(source, input.chunking)?);
-    }
-    chunks.sort_by(|left, right| code_unit_compare(&left.chunk_id, &right.chunk_id));
     let Some(provider) = vector_provider else {
         return Ok(IndexRetrievalResult {
             generation: build_retrieval_generation(input)?,
@@ -217,22 +214,24 @@ pub async fn index_retrieval_generation(
         });
     };
     let identity = provider.identity().clone();
-    validate_provider_timeout(identity.timeout_ms)?;
-    let cache = try_open_active_retrieval_generation(&input.state_directory)
-        .ok()
-        .flatten()
-        .and_then(|store| {
-            (store.manifest.vault_id == input.vault_id)
-                .then(|| {
-                    store.cached_vectors_by_content(
-                        &identity.provider_id,
-                        &identity.model_id,
-                        identity.dimensions,
-                    )
-                })
-                .and_then(Result::ok)
-        })
-        .unwrap_or_default();
+    validate_vector_provider_identity(&identity)?;
+    let mut chunks = Vec::new();
+    for source in &input.sources {
+        chunks.extend(chunk_source(source, input.chunking)?);
+    }
+    chunks.sort_by(|left, right| code_unit_compare(&left.chunk_id, &right.chunk_id));
+    let cache =
+        match cache_value_or_miss(try_open_active_retrieval_generation(&input.state_directory))? {
+            Some(Some(store)) if store.manifest.vault_id == input.vault_id => {
+                cache_value_or_miss(store.cached_vectors_by_content(
+                    &identity.provider_id,
+                    &identity.model_id,
+                    identity.dimensions,
+                ))?
+                .unwrap_or_default()
+            }
+            _ => BTreeMap::new(),
+        };
     let embedding_result = embed_chunks(provider, &chunks, &cache).await;
     match embedding_result {
         Ok(vectors) => {
@@ -262,7 +261,7 @@ pub async fn index_retrieval_generation(
     }
 }
 
-async fn embed_chunks(
+pub(crate) async fn embed_chunks(
     provider: &dyn VectorProvider,
     chunks: &[RetrievalChunk],
     cached_by_digest: &BTreeMap<String, Vec<f64>>,
@@ -825,7 +824,7 @@ fn degraded_rerank(
     )
 }
 
-fn stage(
+pub(crate) fn stage(
     kind: RetrievalProviderStageKind,
     state: RetrievalStageState,
     reasons: &[&str],
@@ -845,7 +844,7 @@ fn stage(
     }
 }
 
-fn lexical_stage(
+pub(crate) fn lexical_stage(
     backend: SqliteLexicalBackend,
     fts5_available: bool,
 ) -> RetrievalProviderStageStatus {
@@ -886,7 +885,10 @@ fn policy_allows(policy: &DiscoverabilityPolicy, chunk: &RetrievalChunk) -> bool
         == Some(DiscoverabilityDecision::Allow)
 }
 
-fn validate_search_request(query: &str, request: &RetrievalSearchRequest) -> RetrievalResult<()> {
+pub(crate) fn validate_search_request(
+    query: &str,
+    request: &RetrievalSearchRequest,
+) -> RetrievalResult<()> {
     if trim_ecmascript_whitespace(query).is_empty() || query.len() > 4_096 {
         return Err(RetrievalError::InvalidConfig(
             "query must contain from 1 through 4096 UTF-8 bytes".to_owned(),
@@ -991,7 +993,7 @@ fn chunk_round_trips(chunk: &RetrievalChunk, bytes: &[u8]) -> bool {
     chunk.start_line == expected_start_line && chunk.end_line == expected_end_line
 }
 
-fn verified_citation(
+pub(crate) fn verified_citation(
     chunk: &RetrievalChunk,
     query: &str,
     live_bytes: &[u8],
@@ -1001,6 +1003,11 @@ fn verified_citation(
             "STALE_CITATION".to_owned(),
         ));
     }
+    let matched_spans = if query.is_empty() {
+        Vec::new()
+    } else {
+        exact_matched_spans(query, chunk, live_bytes)?
+    };
     Ok(SourceCitation {
         source_id: chunk.source_id.clone(),
         path: chunk.source_path.clone(),
@@ -1012,7 +1019,7 @@ fn verified_citation(
         end_line: chunk.end_line,
         verified: true,
         stale: false,
-        matched_spans: exact_matched_spans(query, chunk, live_bytes)?,
+        matched_spans,
     })
 }
 
@@ -1290,6 +1297,11 @@ mod tests {
         requests: Mutex<Vec<Vec<String>>>,
     }
 
+    struct CountingRerankProvider {
+        identity: RerankProviderIdentity,
+        calls: AtomicUsize,
+    }
+
     impl VectorProvider for RecordingVectorProvider {
         fn identity(&self) -> &VectorProviderIdentity {
             &self.identity
@@ -1318,6 +1330,22 @@ mod tests {
             self.calls.fetch_add(1, Ordering::SeqCst);
             self.items.fetch_add(texts.len(), Ordering::SeqCst);
             Box::pin(ready(Ok(texts.iter().map(|_| vec![1.0, 0.0]).collect())))
+        }
+    }
+
+    impl RerankProvider for CountingRerankProvider {
+        fn identity(&self) -> &RerankProviderIdentity {
+            &self.identity
+        }
+
+        fn rerank<'a>(
+            &'a self,
+            _request_id: &'a str,
+            _query: &'a str,
+            _inputs: &'a [crate::providers::RerankInput],
+        ) -> ProviderFuture<'a, Vec<RerankScore>> {
+            self.calls.fetch_add(1, Ordering::SeqCst);
+            Box::pin(ready(Ok(Vec::new())))
         }
     }
 
@@ -1470,6 +1498,93 @@ mod tests {
             parent_expansion: Some(true),
             parent_expansion_max_child_tokens: None,
         }
+    }
+
+    #[test]
+    fn malformed_runtime_provider_identities_fail_before_index_or_query_provider_work() {
+        let root = tempdir().unwrap();
+        let state = root.path().join("state");
+        let malformed_vector = CountingVectorProvider {
+            identity: VectorProviderIdentity {
+                kind: RetrievalProviderStageKind::SqliteFts5,
+                provider_id: "custom-provider".to_owned(),
+                model_id: "custom-model".to_owned(),
+                dimensions: 2,
+                timeout_ms: 15_000,
+                configuration_digest: sha256(b"custom-config"),
+            },
+            calls: AtomicUsize::new(0),
+            items: AtomicUsize::new(0),
+        };
+        assert!(matches!(
+            block_on(index_retrieval_generation(
+                generation(state.clone()),
+                Some(&malformed_vector),
+            )),
+            Err(RetrievalError::InvalidConfig(message))
+                if message.contains("provider-capable family")
+        ));
+        assert_eq!(malformed_vector.calls.load(Ordering::SeqCst), 0);
+        assert_eq!(malformed_vector.items.load(Ordering::SeqCst), 0);
+        assert!(!state.exists());
+
+        let input = generation(state.clone());
+        let reader = CountingReader {
+            values: BTreeMap::from([(
+                input.sources[0].source_path.clone(),
+                input.sources[0].text.as_bytes().to_vec(),
+            )]),
+            reads: AtomicUsize::new(0),
+        };
+        let built = build_retrieval_generation(input).unwrap();
+        activate_retrieval_generation(&state, &built).unwrap();
+        let policy = |_chunk: &RetrievalChunk| Ok(DiscoverabilityDecision::Allow);
+        assert!(matches!(
+            RetrievalCoordinator::open_active(
+                &state,
+                RetrievalCoordinatorOptions {
+                    discoverability_policy: &policy,
+                    vector_provider: Some(&malformed_vector),
+                    rerank_provider: None,
+                    source_reader: &reader,
+                    stale: false,
+                    max_parent_bytes: 8_192,
+                    max_result_bytes: MAX_RESULT_BYTES,
+                },
+            ),
+            Err(RetrievalError::InvalidConfig(message))
+                if message.contains("provider-capable family")
+        ));
+
+        let malformed_reranker = CountingRerankProvider {
+            identity: RerankProviderIdentity {
+                kind: RetrievalProviderStageKind::None,
+                provider_id: "custom-reranker".to_owned(),
+                model_id: "custom-rerank-model".to_owned(),
+                timeout_ms: 15_000,
+                configuration_digest: sha256(b"custom-rerank-config"),
+            },
+            calls: AtomicUsize::new(0),
+        };
+        assert!(matches!(
+            RetrievalCoordinator::open_active(
+                &state,
+                RetrievalCoordinatorOptions {
+                    discoverability_policy: &policy,
+                    vector_provider: None,
+                    rerank_provider: Some(&malformed_reranker),
+                    source_reader: &reader,
+                    stale: false,
+                    max_parent_bytes: 8_192,
+                    max_result_bytes: MAX_RESULT_BYTES,
+                },
+            ),
+            Err(RetrievalError::InvalidConfig(message))
+                if message.contains("provider-capable family")
+        ));
+        assert_eq!(malformed_vector.calls.load(Ordering::SeqCst), 0);
+        assert_eq!(malformed_reranker.calls.load(Ordering::SeqCst), 0);
+        assert_eq!(reader.reads.load(Ordering::SeqCst), 0);
     }
 
     #[test]
@@ -2066,6 +2181,46 @@ mod tests {
         assert!(result.generation.manifest.embedding_provider_id.is_none());
         assert!(result.generation.manifest.embedding_model_id.is_none());
         assert!(result.generation.manifest.embedding_dimensions.is_none());
+    }
+
+    #[test]
+    fn aliased_active_cache_fails_before_provider_or_state_write() {
+        let directory = tempdir().unwrap();
+        let input = generation(directory.path().to_path_buf());
+        let built = build_retrieval_generation(input.clone()).unwrap();
+        activate_retrieval_generation(directory.path(), &built).unwrap();
+        fs::hard_link(
+            directory.path().join("active-retrieval.json"),
+            directory.path().join("active-pointer-alias.json"),
+        )
+        .unwrap();
+        let before = fs::read_dir(directory.path())
+            .unwrap()
+            .map(|entry| entry.unwrap().file_name())
+            .collect::<BTreeSet<_>>();
+        let provider = CountingVectorProvider {
+            identity: VectorProviderIdentity {
+                kind: RetrievalProviderStageKind::Mcp,
+                provider_id: "provider-a".to_owned(),
+                model_id: "model-a".to_owned(),
+                dimensions: 2,
+                timeout_ms: 15_000,
+                configuration_digest: sha256(b"provider-config"),
+            },
+            calls: AtomicUsize::new(0),
+            items: AtomicUsize::new(0),
+        };
+        assert!(matches!(
+            block_on(index_retrieval_generation(input, Some(&provider))),
+            Err(RetrievalError::InvalidConfig(message)) if message.contains("non-aliased")
+        ));
+        assert_eq!(provider.calls.load(Ordering::SeqCst), 0);
+        assert_eq!(provider.items.load(Ordering::SeqCst), 0);
+        let after = fs::read_dir(directory.path())
+            .unwrap()
+            .map(|entry| entry.unwrap().file_name())
+            .collect::<BTreeSet<_>>();
+        assert_eq!(before, after);
     }
 
     #[test]

@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gkos.example/contracts/retrieval/gkos-retrieval-1.0.0-draft.2/stored-provenance.schema.json",
+  "title": "GKOS retrieval internal source provenance draft 1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["contract_version", "source_id", "source_path", "source_digest", "source_metadata", "assertion_time", "assertion_origin", "valid_from", "valid_to", "validity_origin", "lineage_id", "authored_supersedes", "authored_superseded_by", "resolved_supersedes", "resolved_superseded_by", "lineage_neutral", "temporal_state", "ledger_binding_verified", "reason_codes", "provenance_digest"],
+  "properties": {
+    "contract_version": { "const": "gkos-retrieval-provenance/1.0.0-draft.1" },
+    "source_id": { "$ref": "#/$defs/uid" },
+    "source_path": { "type": "string", "minLength": 1, "maxLength": 4096 },
+    "source_digest": { "$ref": "#/$defs/sha256" },
+    "source_metadata": { "$ref": "#/$defs/sourceMetadata" },
+    "assertion_time": { "$ref": "#/$defs/nullableTimestamp" },
+    "assertion_origin": { "enum": ["gkx_created_at", null] },
+    "valid_from": { "$ref": "#/$defs/nullableTimestamp" },
+    "valid_to": { "$ref": "#/$defs/nullableTimestamp" },
+    "validity_origin": { "enum": ["gkx_authored_timestamp", "source_created_time", "source_modified_time", "projection_reference_time", "unknown"] },
+    "lineage_id": { "const": null },
+    "authored_supersedes": { "$ref": "#/$defs/refs" },
+    "authored_superseded_by": { "$ref": "#/$defs/refs" },
+    "resolved_supersedes": { "$ref": "#/$defs/uids" },
+    "resolved_superseded_by": { "$ref": "#/$defs/uids" },
+    "lineage_neutral": { "type": "boolean" },
+    "temporal_state": { "enum": ["current", "historical", "unknown"] },
+    "ledger_binding_verified": { "const": false },
+    "reason_codes": { "$ref": "#/$defs/reasons" },
+    "provenance_digest": { "$ref": "#/$defs/sha256" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "assertion_time": { "type": "null" } }, "required": ["assertion_time"] },
+      "then": {
+        "properties": {
+          "assertion_origin": { "type": "null" },
+          "source_metadata": {
+            "not": {
+              "type": "object",
+              "properties": { "authored_at": true },
+              "required": ["authored_at"]
+            }
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "assertion_origin": { "const": "gkx_created_at" },
+          "source_metadata": {
+            "type": "object",
+            "properties": { "authored_at": true },
+            "required": ["authored_at"]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "assertion_time": { "type": "string" },
+          "valid_from": { "type": "string" }
+        },
+        "required": ["assertion_time", "valid_from"]
+      },
+      "then": { "properties": { "validity_origin": { "const": "gkx_authored_timestamp" } } }
+    },
+    {
+      "if": {
+        "properties": { "validity_origin": { "const": "gkx_authored_timestamp" } },
+        "required": ["validity_origin"]
+      },
+      "then": {
+        "properties": {
+          "assertion_time": { "$ref": "#/$defs/timestamp" },
+          "valid_from": { "$ref": "#/$defs/timestamp" }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "uid": { "type": "string", "pattern": "^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[1-8][0-9A-Fa-f]{3}-[89AaBb][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$" },
+    "timestamp": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$" },
+    "nullableTimestamp": { "oneOf": [{ "$ref": "#/$defs/timestamp" }, { "type": "null" }] },
+    "sourceMetadata": {
+      "allOf": [
+        { "$ref": "chunk.schema.json#/$defs/metadata" },
+        {
+          "type": "object",
+          "required": ["title", "sensitivity", "authoritative"],
+          "properties": {
+            "title": { "type": "string", "minLength": 1 },
+            "sensitivity": true,
+            "authoritative": { "const": true }
+          }
+        }
+      ]
+    },
+    "refs": { "type": "array", "items": { "type": "string", "minLength": 1, "maxLength": 512, "pattern": "^[^\\u0000-\\u001f\\u007f]+$" }, "uniqueItems": true },
+    "uids": { "type": "array", "items": { "$ref": "#/$defs/uid" }, "uniqueItems": true },
+    "reasons": { "type": "array", "items": { "enum": ["ASSERTION_TIME_UNAVAILABLE", "LEDGER_BINDING_UNAVAILABLE", "LINEAGE_ID_UNAVAILABLE", "LINEAGE_NEUTRAL", "LINEAGE_PARTICIPANT", "VALIDITY_FROM_GKX_AUTHORED_TIMESTAMP", "VALIDITY_FROM_PROJECTION_REFERENCE_TIME", "VALIDITY_FROM_SOURCE_CREATED_TIME", "VALIDITY_FROM_SOURCE_MODIFIED_TIME", "VALIDITY_UNKNOWN"] }, "uniqueItems": true }
+  }
+}

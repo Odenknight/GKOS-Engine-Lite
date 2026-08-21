@@ -1,30 +1,34 @@
-# Phase 2 lineage and citation evidence draft
+# Phase 2 lineage and citation evidence
 
 Date: 2026-08-21
 
 Repository: `Odenknight/GKOS-Engine-Lite`
 
-Qualification status: **UNASSIGNED**
+Qualification status: **DONE**
 
-Phase 2 is implemented and qualified locally against Full's exact signed,
+Phase 2 is implemented and qualified against Full's exact signed,
 hosted-green draft.2 implementation and contract pack. Owner-ratified Decision
 A governs every cross-record class. The JavaScript wrapper, npm lock, contract
 pin, and Rust conformance gate all bind Full commit
 `6e2df27d33ede62ee0d2e3cb7610df478a7d66ce`; point-in-time command execution
-parity is proven locally. No Lite Phase 2 commit, push, pull request, hosted CI
-run, merge, tag, release, deployment, artifact publication, provider
+parity is proven locally and the complete Lite hosted matrix is green. No
+merge, tag, release, deployment, package or artifact publication, provider
 provisioning, or source-content mutation is claimed.
 
 ## Coordinates
 
 | Subject | Current coordinate | Disposition |
 |---|---|---|
-| Lite branch | `codex/phase-2-lineage-citations` | Uncommitted stacked worktree |
+| Lite branch | `codex/phase-2-lineage-citations` | Published branch; no merge or release |
 | Lite Phase 1 evidence base | `eda2e2105b41de683dfce88b5666443145682a5e` | Qualified and unchanged |
+| Lite Phase 2 implementation | `42df8b047797a725f8b7c31f2f02d123a798515e` | Signed, DCO-compliant, and hosted-green |
+| Lite evidence-only closeout | Not assigned at qualification time | A later one-file head must not replace the implementation coordinate |
+| Lite draft pull request | `Odenknight/GKOS-Engine-Lite#17` | Open draft; unmerged |
+| Lite hosted CI | PR run `32520112318` | 8/8 jobs green |
 | Full Phase 2 implementation | `6e2df27d33ede62ee0d2e3cb7610df478a7d66ce` | Signed and hosted-green |
 | Full draft pull request | `Odenknight/GKOS-Engine#27` | Open draft; unmerged |
 | Full hosted CI | push `32518027278`; PR `32518043098` | 12/12 jobs green |
-| Published wrapper dependency | `6e2df27d33ede62ee0d2e3cb7610df478a7d66ce` | Exact Phase 2 package pin; package `2.1.2` |
+| Wrapper Full dependency pin | `6e2df27d33ede62ee0d2e3cb7610df478a7d66ce` | Exact Phase 2 package pin; package `2.1.2` |
 | Retrieval/result contracts | `gkos-retrieval/1.0.0-draft.2`; `gkos-retrieval-result/1.0.0-draft.2` | Frozen at the signed Full commit |
 | Provenance contract | `gkos-retrieval-provenance/1.0.0-draft.1` | Frozen at the signed Full commit |
 | Projection schema | 3 | Additive; schema 2 behavior remains exact |
@@ -33,8 +37,8 @@ provisioning, or source-content mutation is claimed.
 `rust/contracts/gkos-retrieval-1.0.0-draft.2/FULL-PIN.json` records the exact
 eight frozen hashes, reference commit
 `6e2df27d33ede62ee0d2e3cb7610df478a7d66ce`, and
-`publication_qualified:true`. Lite's terminal phase state remains separate and
-unassigned pending its own hosted qualification.
+`publication_qualified:true`. Lite's independent implementation and hosted
+qualification are now complete, so the terminal phase state is `DONE`.
 
 ## Exact signed Full pack
 
@@ -149,11 +153,20 @@ known-conflict precedence with zero live/provider/rerank work, and corrected
 the current-view interval so an unknown-validity source remains
 `valid_to:null` even when its scoped lineage edge is visible.
 
+Full's final read-only reciprocal review approved the exact 34-path Lite local
+freeze with no blocker, HIGH, or MEDIUM finding. Lite's reciprocal review
+approved Full's final Decision-A implementation and frozen pack before Full
+published its signed Phase 2 commit. Those approvals precede the qualified
+implementation coordinates above; this later evidence-only closeout changes no
+code, contract byte, dependency pin, package metadata, or compatibility
+fixture.
+
 Full's final local freeze independently passed Node `22.23.2`, `23.11.1`, and
 `24.18.0` typecheck/build plus 404/404 repository tests, 143/143 retrieval
 tests, and 44/44 Navigation tests on each runtime, all with zero skipped. Its
 schema/reference gate was 18/18, configuration/credential gate 13/13,
-intelligence 4/4, and sequential package gate 231 files / 696,048 bytes.
+intelligence 4/4, and sequential package gate 231 files / 696,216 bytes packed
+/ 2,923,970 bytes unpacked.
 
 Signed Full commit `6e2df27d33ede62ee0d2e3cb7610df478a7d66ce`
 is published on draft PR #27. Push run `32518027278` passed build jobs
@@ -162,6 +175,25 @@ jobs `96883933168`, `96883932749`, `96883933130` for Node 22/23/24. Pull-request
 run `32518043098` passed build jobs `96883981685`, `96883981904`, `96883981786`
 and Windows jobs `96883981474`, `96883981793`, `96883981725`. Both runs are
 complete and successful; the PR remains draft and unmerged.
+
+Signed, DCO-compliant Lite implementation commit
+`42df8b047797a725f8b7c31f2f02d123a798515e` is published on draft PR #17.
+Pull-request run `32520112318` passed all eight required jobs:
+
+- Node 22 `test (22)` — `96890260101`;
+- Node 23 `test (23)` — `96890260007`;
+- Node 24 `test (24)` — `96890259890`;
+- Rust MSRV — `96890259718`;
+- Rust latest — `96890259900`;
+- Windows MSVC retrieval, including the mandatory alias fixture —
+  `96890259952`;
+- desktop frontend — `96890259855`;
+- desktop native — `96890259986`.
+
+The run completed successfully at the exact implementation SHA. PR #17
+remains draft and unmerged. The future commit that records this one-file
+evidence closeout is evidence-only and is not the qualified implementation
+coordinate.
 
 ## Current Lite local verification
 
@@ -182,13 +214,15 @@ complete and successful; the PR remains draft and unmerged.
 | Provider/authority/action/Cargo-source/stale-state/merge-marker scans | PASS |
 | `git diff --check` | PASS |
 
-## Remaining qualification gates
+## Terminal qualification
 
-Phase 2 cannot receive a terminal state until:
+The final exact-pinned Lite delta received reciprocal read-only approval,
+published as a signed and DCO-compliant implementation commit on draft PR #17,
+and passed every required hosted Ubuntu and Windows job. Phase 2 is therefore
+terminal **DONE**.
 
-1. The final exact-pinned Lite delta receives reciprocal read-only approval.
-2. Lite publishes its signed Phase 2 commit and draft pull request.
-3. Required Ubuntu and Windows hosted CI completes successfully.
-
-The terminal phase state therefore remains **UNASSIGNED**, not `DONE`,
-`BLOCKED`, or `NEEDS_HUMAN`.
+This qualification is not a merge, tag, release, deployment, package publish,
+or artifact publication. Any later evidence-only branch head records the
+qualification but does not supersede implementation commit
+`42df8b047797a725f8b7c31f2f02d123a798515e` or Full pin
+`6e2df27d33ede62ee0d2e3cb7610df478a7d66ce`.

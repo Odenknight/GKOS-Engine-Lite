@@ -1,17 +1,19 @@
-# Phase 1 retrieval core evidence (draft)
+# Phase 1 retrieval core evidence
 
 Date: 2026-08-21
 
 Repository: `Odenknight/GKOS-Engine-Lite`
 
-Qualification status: **ONGOING — terminal phase state not assigned**
+Qualification status: **DONE**
 
-This evidence draft covers the owner-ratified Rust/static Lite retrieval path.
-The initial Phase 1 commit is signed and pushed on a draft pull request; the
-Windows 8.3-path correction and final Full repin remain uncommitted while their
-reciprocal review and hosted rerun are open. This draft therefore does not
-assign `DONE`, `BLOCKED`, or `NEEDS_HUMAN`. Nothing was merged, tagged,
-released, deployed, or published as an artifact.
+This evidence covers the owner-ratified Rust/static Lite retrieval path. The
+qualified implementation is signed commit
+`08233ffa08822a4568f89082a0fae26bdf3b01d3` on draft PR #16. This documentation-
+only closeout is intentionally frozen uncommitted for reciprocal review; any
+later evidence-only branch head does not replace the qualified implementation
+coordinate. All required local, hosted, cross-repository, and reciprocal-review
+gates passed, so Phase 1 ends in terminal state `DONE`. Nothing was merged,
+tagged, released, deployed, or published as an artifact.
 
 ## Exact coordinates
 
@@ -19,9 +21,10 @@ released, deployed, or published as an artifact.
 |---|---|---|
 | Lite branch | `codex/phase-1-retrieval-core` | Phase 1 implementation branch |
 | Lite Phase 0 base | `83b0baac033f469abe508802faad7f6b3873ade9` | Branch `codex/phase-0-recon-adrs` |
-| Lite current committed `HEAD` | `26d3b66c4e126c6dbcc35ae37a2aad8296d8bc63` | Signed initial Phase 1 commit on draft PR #16; reviewed follow-up remains uncommitted |
+| Lite qualified implementation commit | `08233ffa08822a4568f89082a0fae26bdf3b01d3` | Signed Phase 1 implementation head on draft PR #16; hosted run `32464528711` passed 8/8 |
+| Lite evidence-only branch state at this freeze | Uncommitted one-file documentation delta atop `08233ffa08822a4568f89082a0fae26bdf3b01d3` | Any later evidence-only commit changes branch `HEAD`, not the qualified implementation coordinate |
 | Full reference repository | `Odenknight/GKOS-Engine` | TypeScript reference implementation and contract owner |
-| Full reference commit | `bbc2ea874f4dde37e6376e46c080cb1c69ab1bb3` | Signed, pushed Full Phase 1 reference with symmetric Windows 8.3/reparse hardening; package version `2.1.2` |
+| Full reference commit | `bbc2ea874f4dde37e6376e46c080cb1c69ab1bb3` | Signed Full Phase 1 reference on draft PR #26; runs `32463385935` and `32463389721` passed all 12 checks; package version `2.1.2` |
 | Retrieval contract | `gkos-retrieval/1.0.0-draft.1` | Draft integration contract, not a GKX Standard version or authority claim |
 | Rust workspace version / MSRV | `0.1.0` / Rust `1.85` | Future static frontend-adapter foundation under `rust/` |
 | Local reviewed current Rust | `rustc 1.98.0 (88d9e12ae 2026-08-18)` | Both GNU and MSVC toolchains are isolated beneath the uplift workspace |
@@ -160,7 +163,14 @@ as aliases. Lite now rejects reparse-point components explicitly before using
 `GetLongPathNameW` solely for 8.3 spelling normalization; Full published the
 symmetric correction at `bbc2ea874f4dde37e6376e46c080cb1c69ab1bb3` after its
 mandatory Windows Node 22/23/24 matrix passed. Full approved Lite's narrow path
-fix, and final review of this combined repin/evidence delta remains open.
+fix. Full then approved Lite's final 12-path implementation/pin delta with no
+remaining blocker, high, or medium finding after independently replaying the
+root Node matrix, Rust path/conformance tests, metadata, lock, pack, contract,
+and diff checks. Lite approved Full's symmetric Windows path hardening and
+frozen nine-file contract pack before Full published
+`bbc2ea874f4dde37e6376e46c080cb1c69ab1bb3`. These reciprocal approvals cover
+the qualified implementation commits; this evidence-only closeout receives a
+final read-only review before publication.
 
 No source-note fixture contains PHI-adjacent or organization-confidential
 material. Provider request debug tests use synthetic sentinels and prove query,
@@ -229,9 +239,29 @@ normalization rather than missing alias coverage.
 
 The reviewed follow-up expands Windows 8.3 components only after an explicit
 component walk has rejected every `FILE_ATTRIBUTE_REPARSE_POINT`. Latest and
-MSRV GNU suites now pass 90 unit tests, 11 exact Full-contract conformance
-tests, and 2 compile-fail API-sealing doc tests. A new hosted Lite rerun is
-pending; this local evidence does not predeclare its outcome.
+MSRV GNU suites pass 90 unit tests, 11 exact Full-contract conformance tests,
+and 2 compile-fail API-sealing doc tests.
+
+Corrected Lite implementation commit
+`08233ffa08822a4568f89082a0fae26bdf3b01d3` then passed all eight jobs in draft
+PR #16 run `32464528711`:
+
+| Job | Job ID | Result |
+|---|---:|---|
+| `desktop-native` | `96718219176` | SUCCESS |
+| `retrieval-rust-windows-msvc` | `96718219325` | SUCCESS |
+| `desktop` | `96718219377` | SUCCESS |
+| `test (22)` | `96718219395` | SUCCESS |
+| `retrieval-rust-latest` | `96718219448` | SUCCESS |
+| `test (23)` | `96718219452` | SUCCESS |
+| `retrieval-rust-msrv` | `96718219477` | SUCCESS |
+| `test (24)` | `96718219492` | SUCCESS |
+
+The Full reference implementation at
+`bbc2ea874f4dde37e6376e46c080cb1c69ab1bb3` passed all 12 jobs across draft PR
+#26 runs `32463385935` and `32463389721`, including the mandatory Windows Node
+22/23/24 qualification. Full and Lite therefore qualified the same frozen
+nine-file contract bytes and the symmetric Windows path-security behavior.
 
 ## Local MSVC limitation
 
@@ -250,21 +280,29 @@ note: the msvc targets depend on the msvc linker but `link.exe` was not found
 ```
 
 The machine does not have Visual C++ Build Tools/Windows SDK. GNU-linked local
-results do not replace Windows MSVC qualification. The committed workflow's
-separately observable `retrieval-rust-windows-msvc` job must pass with
-`GKOS_REQUIRE_ALIAS_FIXTURE=1`; that environment variable makes the Windows
-symlink/junction alias fixture mandatory rather than silently skipped.
+results did not replace Windows MSVC qualification. The committed workflow's
+separately observable `retrieval-rust-windows-msvc` job passed as job
+`96718219325` with `GKOS_REQUIRE_ALIAS_FIXTURE=1`; that environment variable
+made the Windows symlink/junction alias fixture mandatory rather than silently
+skipped.
 
-## Remaining qualification blockers
+## Terminal phase state
 
-1. Full must complete the final reciprocal read-only review of the combined
-   Lite Windows path, exact commit-pin, and evidence delta.
-2. The Phase 1 pull request must run and pass the hosted Ubuntu MSRV/current
-   Rust jobs and the Windows MSVC retrieval job, along with the Node 22/23/24
-   root matrix and existing desktop/desktop-native jobs. Local GNU results and
-   the expected local missing-linker failure are not substitutes for those
-   hosted gates.
+**DONE** — Phase 1 retrieval-core implementation and qualification are
+complete for Full commit `bbc2ea874f4dde37e6376e46c080cb1c69ab1bb3` and Lite
+implementation commit `08233ffa08822a4568f89082a0fae26bdf3b01d3`.
 
-No terminal Phase 1 state is assigned in this draft. The executor must update
-this evidence with the exact Lite follow-up commit and hosted rerun/job
-identifiers before applying the executor-state protocol.
+- The exact nine-file Full contract pack and Full package pin are verified.
+- All recorded local Rust, Node 22/23/24, desktop, metadata, lock, package,
+  contract, action-pin, dependency-source, nomenclature, and diff gates passed.
+- Lite draft PR #16 run `32464528711` passed 8/8, including mandatory Windows
+  MSVC; Full draft PR #26 runs `32463385935` and `32463389721` passed 12/12.
+- Full and Lite reciprocal reviews reported no remaining blocker, high, or
+  medium finding in the qualified implementation trees.
+- The historical failed Lite Windows job remains above as resolved diagnostic
+  evidence and is not omitted or normalized into a passing result.
+
+Static artifact assembly, target installers, signing, release, and R720 CPU
+qualification remain assigned to later phases; they are not Phase 1 claims or
+Phase 1 blockers. Neither draft PR was merged, and no tag, release, deployment,
+service activation, or artifact publication occurred.

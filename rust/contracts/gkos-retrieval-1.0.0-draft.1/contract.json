@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "contract_version": "gkos-retrieval/1.0.0-draft.1",
+  "status": "draft",
+  "authority": "integration-contract-only",
+  "reference_implementation": "GKOS-Engine TypeScript",
+  "conformant_adapter": "GKOS-Engine-Lite Rust, pin-bound and not a GKX authority",
+  "coordinates": {
+    "chunker": "gkos-heading-chunker/1",
+    "tokenizer": "gkos-ascii-whitespace/1",
+    "projection_schema_version": 2,
+    "result_schema": "gkos-retrieval-result/1.0.0-draft.1"
+  },
+  "identity": {
+    "source_id": "valid canonical authored GKX uid",
+    "lineage_id": "null unless supplied by a canonical GKX profile or projection",
+    "chunk_id_digest": "sha256 of RFC8785-compatible canonical JSON fields contract, chunker, source_id, structural_position, part_ordinal, content_digest",
+    "path_is_identity_input": false
+  },
+  "record_atomicity": "all chunks sharing source_id must bind identical source path/digest, metadata/sensitivity, lineage, validity, and relationship envelopes; any mismatch rejects the generation; discoverability decisions are uniform per source",
+  "phase_1_relationship_disclosure": "supersedes, superseded_by, and MOC target identifiers are suppressed from search result chunks until an authorized endpoint resolver is available",
+  "phase_1_unavailable_filters": ["moc_relationships", "author_agent_ids"],
+  "source_path_grammar": {
+    "form": "already-normalized portable POSIX vault-relative path",
+    "reject": ["absolute paths", "backslash", "empty segment", "dot segment", "dot-dot segment", "NUL/control characters", "Windows-reserved punctuation < > : quote | ? *", "segment ending dot or space"],
+    "normalization_on_input": false
+  },
+  "timestamp_filter_grammar": "existing GKX_TIMESTAMP_RE: YYYY-MM-DDTHH:MM with optional seconds/fraction and mandatory Z or numeric plus/minus HH:MM offset; parsed date must exist",
+  "trusted_config_lexical_profile": "gkos-toml-subset/1; exact accepted/rejected forms and canonical document digests are pinned in gkos-toml-lexical-fixture.json",
+  "path_glob_filters": "memoized Unicode-code-point matching: ? matches one non-slash Unicode scalar, * matches zero or more non-slash scalars, ** matches zero or more scalars including slash; the entire path must match",
+  "canonical_json": {
+    "object_key_order": "ascending UTF-16 code-unit order",
+    "numbers": "JSON.stringify-compatible finite binary64 rendering; negative zero becomes zero; integer-valued numbers outside plus/minus (2^53-1) are rejected",
+    "strings": "no Unicode normalization; unpaired UTF-16 surrogates are rejected",
+    "data_model": "dense arrays and plain enumerable own-string-key data objects only; undefined, accessors, symbols, cycles, sparse arrays, and exotic objects are rejected",
+    "non_finite": "rejected"
+  },
+  "tokenizer": {
+    "unit": "maximal UTF-8 byte sequence",
+    "separator_bytes_hex": ["09", "0a", "0b", "0c", "0d", "20"]
+  },
+  "rrf": {
+    "default_k": 60,
+    "ranks": "one-based",
+    "formula": "sum(1/(k+rank))",
+    "duplicate_collapse": "first occurrence per stage by chunk_id",
+    "ordering": ["fusion_score descending", "chunk_id UTF-16/code-unit ascending"],
+    "numeric": "IEEE-754 binary64; non-finite rejected"
+  },
+  "mmr": {
+    "default_lambda": 0.7,
+    "formula": "lambda*relevance-(1-lambda)*max(0,max_selected_cosine)",
+    "relevance": "fusion_score/max_fusion_score, or reciprocal reranker rank when reranking is active",
+    "negative_cosine": "clamped to zero",
+    "missing_vector_similarity": 0,
+    "ordering": ["mmr_score descending", "fusion_score descending", "chunk_id UTF-16/code-unit ascending"]
+  },
+  "stage_scores": {
+    "lexical_score": "NFD/mark-stripped lowercase Unicode letter/number/private-use query-token substring frequency divided by sqrt(token_count+1); Greek final sigma folds to ordinary sigma, punctuation including underscore/hyphen separates unquoted terms; weights title=3, heading_path=2, tags=1.5, topic=2, category=2, text=1",
+    "semantic_score": "cosine similarity",
+    "fusion_score": "RRF score",
+    "reranker_score": "finite provider-native score",
+    "mmr_score": "MMR selection utility",
+    "probability_claim": false
+  },
+  "confidence_zero_signal": "a rank-one candidate whose lexical, semantic, and reranker signals are all absent or non-positive is low confidence with WEAK_LEXICAL_MATCH; rank alone never creates high confidence",
+  "lexical_backends": {
+    "selection": "probe the actual bundled SQLite virtual-table capability; never infer from Node version",
+    "preferred": "sqlite_fts5 when a real FTS5 virtual-table create/drop probe succeeds",
+    "compatibility": "sqlite_lexical_scan when the runtime has no FTS5 module; ordinary SQLite joins the policy-eligible ID set before deterministic in-process clause matching and scoring",
+    "scan_candidate_rule": "gkos-unicode61-subset-scan/1 uses the host runtime Unicode property tables for letters, numbers, and private-use Co; applies diacritic folding only to Latin-base clusters; folds Greek final sigma to sigma; preserves non-Latin canonical-form distinctions; and treats underscore/hyphen and other punctuation as separators; each normalized clause must occur as one consecutive token sequence within one indexed field; distinct clauses may match distinct fields",
+    "query_grammar": "one or more space/Unicode-whitespace-delimited terms or complete double-quoted phrases; C0/DEL controls (including NUL), unmatched/embedded quotes, empty phrases, and clauses containing no compatibility-subset token are rejected before corpus or store access",
+    "manifest_binding": "lexical_backend is required in projection schema 2 and participates in projection_digest and projection_id",
+    "reporting": "sqlite_lexical_scan is state degraded with SQLITE_LEXICAL_SCAN_ACTIVE, SQLITE_LEXICAL_SCAN_APPROXIMATION, and, when applicable, SQLITE_FTS5_UNAVAILABLE; it is never advertised as FTS5",
+    "parity_scope": "fixed phrase, punctuation, hyphen, underscore, private-use, Latin diacritic/combining-mark, Greek/Hangul canonical-form distinction, Greek sigma folding, cross-field, substring, no-match, ordering, score, and citation fixtures; exhaustive Unicode-6.1 parity outside that frozen corpus is not claimed"
+  },
+  "parent_expansion": "only when the winning child has fewer than the configured token threshold (default 80, valid 1..4096): nearest structural ancestor's first chunk; winning citation remains unchanged",
+  "parent_authorization": "parent independently passes the same discoverability policy and typed filters; otherwise omitted",
+  "citations": "live source digest, exact indexed byte slice, and absolute one-based LF/CRLF line coordinates are recomputed and verified before ranking; stale/forged eligible chunks do not score; returned citations set verified=true and stale=false; unquoted punctuation-separated terms cite exact component spans; a quoted phrase cites the exact phrase when present and otherwise exact component-token spans, never an invented phrase quotation",
+  "overlap_result_dedup": "process final ranked candidates in order; hits with matched spans retain only unclaimed exact (source_id,start_byte,end_byte) spans and are skipped if none remain; hits with no matched spans are skipped when their half-open chunk interval overlaps any accepted interval from the same source; adjacent intervals do not overlap; only accepted hits claim spans/intervals",
+  "eligible_result_count": "authorized, typed-filtered, live-verified chunks in the eligible corpus before matching and scoring",
+  "resource_bounds": { "max_chunk_utf8_bytes": 16384, "max_result_text_utf8_bytes_default": 131072, "max_matched_spans": 8, "max_matched_span_utf8_bytes": 256, "max_total_matched_span_utf8_bytes": 1024 },
+  "result_text_budget": "counts returned winning chunk text plus optional parent text; a winner that fits is retained and its optional parent is omitted when the parent would exceed the remaining budget; a winner is skipped only when its own text cannot fit",
+  "provider_routing": {
+    "families": ["openai_compatible", "local_onnx", "mcp"],
+    "selection": "trusted configuration only",
+    "preference_order": null,
+    "silent_embedding_space_fallback": false,
+    "embedding_space_mismatch": "hard VECTOR_SPACE_MISMATCH_REBUILD_REQUIRED error before provider invocation",
+    "embedding_failure": "reported lexical-only degradation using the manifest-bound active lexical backend",
+    "missing_reranker": "reported skipped stage"
+  },
+  "embedding_cache": "reuse only from the verified active vault-local generation by exact (provider_id, model_id, dimensions, content_digest); missing, corrupt, or mismatched prior state is a cache miss; publication remains all-vectors-or-none",
+  "trusted_config_discovery": ["explicit trusted --config path (missing is error)", "current working directory only with explicit trust", "explicitly designated workspace root or automatically discovered workspace only when outside the vault", "XDG/user application config"],
+  "untrusted_vault_config": "may contain only bounded retrieval preferences; cannot select endpoints, tokens, model/executable paths, credentials, service binding, or policy",
+  "excluded_from_phase_1": ["as_of", "ledger_binding", "MCP_transport", "watcher_recovery", "source_content_writes"]
+}

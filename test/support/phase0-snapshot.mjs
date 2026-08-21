@@ -77,7 +77,7 @@ function withoutHostTiming(graph) {
 }
 
 export function deterministicArtifacts() {
-  const index = new engine.KosmosIndex({ defaultSensitivity: "secret" });
+  const index = new engine.GkxIndex({ defaultSensitivity: "secret" });
   const { graph } = index.setFiles(PHASE0_FILES, ["policy"], []);
   const stableGraph = withoutHostTiming(graph);
   const contents = new Map(PHASE0_FILES.map((file) => [

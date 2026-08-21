@@ -1,5 +1,18 @@
 # Changelog
 
+## Unreleased — Phase 1 integration
+
+- Pinned the delegated CLI to exact reviewed GKOS-Engine commit
+  `5b72aae1aad5b6416b8cb86a4137a7e536d8bb59` and mirrored its package version
+  `2.1.2`; no matching Lite tag or release is claimed.
+- Added `search` to the explicit read-only delegation boundary with byte-exact
+  Full/Lite output and diagnostic conformance tests.
+- Added the owner-ratified Rust retrieval workspace for the future static Lite
+  path, bound to Full's versioned retrieval contracts and never a second GKX
+  authority.
+- Preserved the immutable Phase 0 compatibility bytes and added separately
+  classified Phase 1 graph and Graphiti migration goldens.
+
 ## 1.1.3
 
 - Engine-verbatim catch-up to `GKOS-Engine#v1.1.3`: bumped the `gkos-engine`

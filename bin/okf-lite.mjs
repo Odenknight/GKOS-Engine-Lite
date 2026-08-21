@@ -3,11 +3,12 @@
  * okf-lite — the GKOS-Engine-Lite CLI.
  *
  * A thin, faithful pass-through wrapper around the installed `gkos-engine`
- * package's own CLI (node_modules/gkos-engine/bin/okf.mjs). Same four
+ * package's own CLI (node_modules/gkos-engine/bin/gkx.mjs). Same five
  * commands, same behavior, same output, byte for byte:
  *
  *   okf-lite validate <dir>
  *   okf-lite assess   <dir> [--json]
+ *   okf-lite search   <query> --kb-path <dir> [--limit <n>]
  *   okf-lite graph    <dir> -o graph.json [--watch]
  *   okf-lite export graphiti <dir> --episodes episodes.json [--group-id <ns>]
  *
@@ -21,7 +22,7 @@
  * If/when gkos-engine grows write-capable commands (migrate, proposals,
  * decisions, mv, serve — none exist in the pinned engine; see the
  * "gkos-engine" pin in package.json for the exact version), this wrapper
- * should keep exposing only validate/assess/graph/export, not those.
+ * should keep exposing only validate/assess/search/graph/export, not those.
  */
 import { createRequire } from "node:module";
 import { readFileSync, realpathSync } from "node:fs";
@@ -35,7 +36,7 @@ const require = createRequire(import.meta.url);
 // entry instead and derive the package root from it (root/dist/x.mjs -> root).
 const engineMainPath = require.resolve("gkos-engine");
 const enginePkgRoot = dirname(dirname(engineMainPath));
-const engineBinUrl = pathToFileURL(join(enginePkgRoot, "bin/okf.mjs")).href;
+const engineBinUrl = pathToFileURL(join(enginePkgRoot, "bin/gkx.mjs")).href;
 
 const engine = await import(engineBinUrl);
 
@@ -55,6 +56,7 @@ everyday vaults of Markdown notes — no Obsidian required.
 Usage:
   okf-lite validate <dir>                                  schema/identity/lineage diagnostics; non-zero exit on error
   okf-lite assess   <dir> [--json]                         per-note documentation-quality scores/labels
+  okf-lite search   <query> --kb-path <dir> [--limit <n>]  public-only lexical retrieval with exact citations
   okf-lite graph    <dir> -o <graph.json> [--watch]        canonical Kosmos graph (stable serialization)
   okf-lite export graphiti <dir> --episodes <out.json> [--group-id <ns>]
   okf-lite assist explain <note.md>                        explain an issue in plain language
@@ -71,11 +73,11 @@ https://github.com/Odenknight/GKOS-Engine for the full engine this depends on.`;
 
 export function validateLiteCommand(argv) {
   const first = argv[0];
-  if (["validate", "assess", "graph"].includes(first)) return { allowed: true };
+  if (["validate", "assess", "search", "graph"].includes(first)) return { allowed: true };
   if (first === "export" && argv[1] === "graphiti") return { allowed: true };
   return {
     allowed: false,
-    message: "Unsupported command in GKOS-Engine-Lite. Lite exposes only: validate, assess, graph, export graphiti.",
+    message: "Unsupported command in GKOS-Engine-Lite. Lite exposes only: validate, assess, search, graph, export graphiti.",
   };
 }
 

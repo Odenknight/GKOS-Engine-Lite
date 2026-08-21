@@ -1,0 +1,414 @@
+{
+  "contract_version": "gkos-retrieval/1.0.0-draft.1",
+  "input": {
+    "source_id": "018f0000-0000-7000-8000-000000000101",
+    "source_path": "policy/example.md",
+    "text": "---\r\ngkx_version: \"2.0\"\r\nuid: 018f0000-0000-7000-8000-000000000101\r\nsensitivity: public\r\n---\r\n# Agent Policy\r\nAlpha agents cite sources.\r\n\r\n## Safety\r\nCafé 😀 remains exact.\r\n",
+    "metadata": {
+      "title": "Agent Policy",
+      "tags": ["agents", "policy"],
+      "sensitivity": "public",
+      "gkx_type": "policy",
+      "authoritative": true
+    }
+  },
+  "options": { "max_tokens": 64, "overlap_tokens": 0 },
+  "expected_chunks": [
+    {
+      "chunk_id": "sha256:10119eff89b8b48c68fe304e1ed86802fa4d388569f3886d64a4a5a13b4f8118",
+      "source_id": "018f0000-0000-7000-8000-000000000101",
+      "source_path": "policy/example.md",
+      "source_digest": "sha256:79fa46cd2c85bd4df15185c71dfe1e84a6c404b14698413fe502a3d3915ae9ee",
+      "heading_path": ["Agent Policy"],
+      "heading_depth": 1,
+      "ordinal_within_source": 1,
+      "structural_position": "1-1",
+      "part_ordinal": 1,
+      "start_byte": 94,
+      "end_byte": 140,
+      "start_line": 6,
+      "end_line": 8,
+      "content_digest": "sha256:064afcd29f053134e60303c619f9aaed75f4fe3e0f8b5f1fe100d9026f7beb37",
+      "text": "# Agent Policy\r\nAlpha agents cite sources.\r\n\r\n",
+      "token_count": 7,
+      "lineage_id": null,
+      "valid_from": null,
+      "valid_to": null,
+      "supersedes": [],
+      "superseded_by": [],
+      "metadata": {
+        "title": "Agent Policy",
+        "tags": ["agents", "policy"],
+        "sensitivity": "public",
+        "gkx_type": "policy",
+        "authoritative": true
+      }
+    },
+    {
+      "chunk_id": "sha256:68f3f46f52fd5162304bc5a304701b5761a29a4e05ec0adeaef390a29b26a206",
+      "source_id": "018f0000-0000-7000-8000-000000000101",
+      "source_path": "policy/example.md",
+      "source_digest": "sha256:79fa46cd2c85bd4df15185c71dfe1e84a6c404b14698413fe502a3d3915ae9ee",
+      "heading_path": ["Agent Policy", "Safety"],
+      "heading_depth": 2,
+      "ordinal_within_source": 2,
+      "structural_position": "1-1.2-1",
+      "part_ordinal": 1,
+      "start_byte": 140,
+      "end_byte": 178,
+      "start_line": 9,
+      "end_line": 10,
+      "content_digest": "sha256:d50193f6dc5f1d6346842a16502b7af61201236c00ab718a85f331e642ad6f43",
+      "text": "## Safety\r\nCafé 😀 remains exact.\r\n",
+      "token_count": 6,
+      "parent_chunk_id": "sha256:10119eff89b8b48c68fe304e1ed86802fa4d388569f3886d64a4a5a13b4f8118",
+      "lineage_id": null,
+      "valid_from": null,
+      "valid_to": null,
+      "supersedes": [],
+      "superseded_by": [],
+      "metadata": {
+        "title": "Agent Policy",
+        "tags": ["agents", "policy"],
+        "sensitivity": "public",
+        "gkx_type": "policy",
+        "authoritative": true
+      }
+    }
+  ],
+  "rrf": {
+    "k": 60,
+    "lexical": [
+      { "chunk_id": "chunk-a", "source_id": "source-a", "score": 0.9, "vector": [0, 1] },
+      { "chunk_id": "chunk-b", "source_id": "source-b", "score": 0.8, "vector": [1, 0] },
+      { "chunk_id": "chunk-a", "source_id": "source-a", "score": 0.1, "vector": [0, 1] }
+    ],
+    "semantic": [
+      { "chunk_id": "chunk-b", "source_id": "source-b", "score": 0.95, "vector": [1, 0] },
+      { "chunk_id": "chunk-c", "source_id": "source-c", "score": 0.7, "vector": [0.9, 0.1] },
+      { "chunk_id": "chunk-a", "source_id": "source-a", "score": 0.6, "vector": [0, 1] }
+    ],
+    "expected": [
+      { "chunk_id": "chunk-b", "source_id": "source-b", "lexical_rank": 2, "lexical_score": 0.8, "semantic_rank": 1, "semantic_score": 0.95, "fusion_score": 0.03252247488101534, "vector": [1, 0] },
+      { "chunk_id": "chunk-a", "source_id": "source-a", "lexical_rank": 1, "lexical_score": 0.9, "semantic_rank": 3, "semantic_score": 0.6, "fusion_score": 0.032266458495966696, "vector": [0, 1] },
+      { "chunk_id": "chunk-c", "source_id": "source-c", "lexical_rank": null, "lexical_score": null, "semantic_rank": 2, "semantic_score": 0.7, "fusion_score": 0.016129032258064516, "vector": [0.9, 0.1] }
+    ]
+  },
+  "mmr": {
+    "lambda": 0.7,
+    "limit": 3,
+    "expected": [
+      { "chunk_id": "chunk-b", "source_id": "source-b", "lexical_rank": 2, "lexical_score": 0.8, "semantic_rank": 1, "semantic_score": 0.95, "fusion_score": 0.03252247488101534, "vector": [1, 0], "mmr_score": 0.7 },
+      { "chunk_id": "chunk-a", "source_id": "source-a", "lexical_rank": 1, "lexical_score": 0.9, "semantic_rank": 3, "semantic_score": 0.6, "fusion_score": 0.032266458495966696, "vector": [0, 1], "mmr_score": 0.6944896115627822 },
+      { "chunk_id": "chunk-c", "source_id": "source-c", "lexical_rank": null, "lexical_score": null, "semantic_rank": 2, "semantic_score": 0.7, "fusion_score": 0.016129032258064516, "vector": [0.9, 0.1], "mmr_score": 0.048989351142629645 }
+    ]
+  },
+  "mmr_negative_cosine": {
+    "lambda": 0.7,
+    "limit": 3,
+    "rule": "negative cosine is clamped to zero",
+    "input": [
+      { "chunk_id": "positive", "source_id": "source-positive", "lexical_rank": 1, "lexical_score": 1, "semantic_rank": null, "semantic_score": null, "fusion_score": 0.5, "vector": [1, 0] },
+      { "chunk_id": "opposite", "source_id": "source-opposite", "lexical_rank": 2, "lexical_score": 0.8, "semantic_rank": null, "semantic_score": null, "fusion_score": 0.4, "vector": [-1, 0] },
+      { "chunk_id": "duplicate-direction", "source_id": "source-duplicate", "lexical_rank": 3, "lexical_score": 0.6, "semantic_rank": null, "semantic_score": null, "fusion_score": 0.3, "vector": [1, 0] }
+    ],
+    "expected_chunk_ids": ["positive", "opposite", "duplicate-direction"],
+    "expected_mmr_scores": [0.7, 0.5599999999999999, 0.11999999999999994]
+  },
+  "rerank_mmr": {
+    "lambda": 0.7,
+    "limit": 3,
+    "input": [
+      { "chunk_id": "fusion-first", "source_id": "source-fusion-first", "lexical_rank": 1, "lexical_score": 1, "semantic_rank": null, "semantic_score": null, "fusion_score": 0.9, "vector": [1, 0] },
+      { "chunk_id": "rerank-second", "source_id": "source-rerank-second", "lexical_rank": 2, "lexical_score": 0.8, "semantic_rank": null, "semantic_score": null, "fusion_score": 0.8, "vector": [0, 1] },
+      { "chunk_id": "rerank-first", "source_id": "source-rerank-first", "lexical_rank": 3, "lexical_score": 0.6, "semantic_rank": null, "semantic_score": null, "fusion_score": 0.7, "vector": [1, 0] }
+    ],
+    "reranker_ranks": [
+      { "chunk_id": "rerank-first", "rank": 1 },
+      { "chunk_id": "rerank-second", "rank": 2 },
+      { "chunk_id": "fusion-first", "rank": 3 }
+    ],
+    "relevance_rule": "one divided by one-based reranker rank",
+    "expected_chunk_ids": ["rerank-first", "rerank-second", "fusion-first"],
+    "expected_mmr_scores": [0.7, 0.35, -0.06666666666666674]
+  },
+  "parent_expansion": {
+    "default_max_child_tokens": 80,
+    "comparison": "strictly less than",
+    "examples": [
+      { "child_token_count": 79, "expand": true },
+      { "child_token_count": 80, "expand": false }
+    ]
+  },
+  "overlap_result_dedup": {
+    "intervals": "half-open",
+    "rank_order": "ascending final candidate rank",
+    "candidates": [
+      { "chunk_id": "rank-1", "source_id": "source-a", "start_byte": 0, "end_byte": 100, "matched_spans": [{ "start_byte": 70, "end_byte": 76 }] },
+      { "chunk_id": "rank-2-duplicate", "source_id": "source-a", "start_byte": 60, "end_byte": 140, "matched_spans": [{ "start_byte": 70, "end_byte": 76 }] },
+      { "chunk_id": "rank-3-unique", "source_id": "source-a", "start_byte": 60, "end_byte": 140, "matched_spans": [{ "start_byte": 110, "end_byte": 116 }] },
+      { "chunk_id": "rank-4-zero-span-overlap", "source_id": "source-a", "start_byte": 90, "end_byte": 150, "matched_spans": [] },
+      { "chunk_id": "rank-5-zero-span-adjacent", "source_id": "source-a", "start_byte": 140, "end_byte": 180, "matched_spans": [] }
+    ],
+    "expected_chunk_ids": ["rank-1", "rank-3-unique", "rank-5-zero-span-adjacent"],
+    "expected_claimed_spans": [{ "source_id": "source-a", "start_byte": 70, "end_byte": 76 }, { "source_id": "source-a", "start_byte": 110, "end_byte": 116 }]
+  },
+    "path_glob_filters": [
+    { "path": "notes/😀.md", "glob": "notes/?.md", "matches": true },
+    { "path": "notes/ab.md", "glob": "notes/?.md", "matches": false },
+    { "path": "notes/a/b.md", "glob": "notes/*.md", "matches": false },
+    { "path": "notes/a/b.md", "glob": "notes/**", "matches": true },
+      { "path": "a/x/y/z", "glob": "a/**/**/**/z", "matches": false }
+    ],
+    "citation_normalization": [
+      {
+        "id": "precomposed-diacritic",
+        "source_text": "Café policy",
+        "query": "cafe",
+        "expected_spans": [{ "start_byte": 0, "end_byte": 5, "text": "Café" }]
+      },
+      {
+        "id": "decomposed-combining-mark",
+        "source_text": "Café policy",
+        "query": "cafe",
+        "expected_spans": [{ "start_byte": 0, "end_byte": 6, "text": "Café" }]
+      },
+      {
+        "id": "casefold-after-diacritic-removal",
+        "source_text": "İdea",
+        "query": "idea",
+        "expected_spans": [{ "start_byte": 0, "end_byte": 5, "text": "İdea" }]
+      },
+      {
+        "id": "greek-uppercase-sigma-fold",
+        "source_text": "ΟΣ",
+        "query": "οσ",
+        "expected_spans": [{ "start_byte": 0, "end_byte": 4, "text": "ΟΣ" }]
+      },
+      {
+        "id": "greek-final-sigma-fold",
+        "source_text": "ος",
+        "query": "οσ",
+        "expected_spans": [{ "start_byte": 0, "end_byte": 4, "text": "ος" }]
+      },
+      {
+        "id": "greek-ordinary-sigma",
+        "source_text": "οσ",
+        "query": "οσ",
+        "expected_spans": [{ "start_byte": 0, "end_byte": 4, "text": "οσ" }]
+      },
+      {
+        "id": "private-use-code-point",
+        "source_text": "",
+        "query": "",
+        "expected_spans": [{ "start_byte": 0, "end_byte": 3, "text": "" }]
+      },
+      {
+        "id": "unquoted-hyphen-separator",
+        "source_text": "co-op",
+        "query": "co-op",
+        "expected_spans": [{ "start_byte": 0, "end_byte": 2, "text": "co" }, { "start_byte": 3, "end_byte": 5, "text": "op" }]
+      },
+      {
+        "id": "unquoted-underscore-separator",
+        "source_text": "under score",
+        "query": "under_score",
+        "expected_spans": [{ "start_byte": 0, "end_byte": 5, "text": "under" }, { "start_byte": 6, "end_byte": 11, "text": "score" }]
+      },
+      {
+        "id": "quoted-separator-fallback",
+        "source_text": "under score",
+        "query": "\"under_score\"",
+        "expected_spans": [{ "start_byte": 0, "end_byte": 5, "text": "under" }, { "start_byte": 6, "end_byte": 11, "text": "score" }]
+      },
+      {
+        "id": "quoted-separator-exact",
+        "source_text": "under_score",
+        "query": "\"under_score\"",
+        "expected_spans": [{ "start_byte": 0, "end_byte": 11, "text": "under_score" }]
+      }
+    ],
+    "lexical_backends": {
+      "projection_schema_version": 2,
+      "preferred": {
+        "manifest_value": "sqlite_fts5",
+        "stage": { "kind": "sqlite_fts5", "state": "active", "reason_codes": [] }
+      },
+      "compatibility": {
+        "manifest_value": "sqlite_lexical_scan",
+        "stage_without_fts5": {
+          "kind": "sqlite_lexical_scan",
+          "state": "degraded",
+          "reason_codes": ["SQLITE_FTS5_UNAVAILABLE", "SQLITE_LEXICAL_SCAN_ACTIVE", "SQLITE_LEXICAL_SCAN_APPROXIMATION"]
+        },
+        "stage_when_explicit_on_fts5_runtime": {
+          "kind": "sqlite_lexical_scan",
+          "state": "degraded",
+          "reason_codes": ["SQLITE_LEXICAL_SCAN_ACTIVE", "SQLITE_LEXICAL_SCAN_APPROXIMATION"]
+        }
+      },
+      "differential_rows": [
+        {
+          "chunk_id": "phrase",
+          "title": "Titleword",
+          "heading_path": "phrase",
+          "tags": "",
+          "topic": "topicword",
+          "category": "",
+          "text": "# phrase\nAlpha beta exact. Café co-op under_score.\n",
+          "token_count": 8
+        },
+        {
+          "chunk_id": "split",
+          "title": "Split",
+          "heading_path": "split",
+          "tags": "",
+          "topic": "",
+          "category": "",
+          "text": "# split\nAlpha far apart from beta. Catalog only.\n",
+          "token_count": 9
+        },
+        {
+          "chunk_id": "decomposed",
+          "title": "Combining",
+          "heading_path": "decomposed",
+          "tags": "",
+          "topic": "",
+          "category": "",
+          "text": "# decomposed\nCafé evidence.\n",
+          "token_count": 4
+        },
+        {
+          "chunk_id": "separators",
+          "title": "Separators",
+          "heading_path": "separators",
+          "tags": "",
+          "topic": "",
+          "category": "",
+          "text": "# separators\nunder score only. Private-use  marker.\n",
+          "token_count": 8
+        },
+        {
+          "chunk_id": "greek-precomposed",
+          "title": "",
+          "heading_path": "",
+          "tags": "",
+          "topic": "",
+          "category": "",
+          "text": "ά",
+          "token_count": 1
+        },
+        {
+          "chunk_id": "hangul-precomposed",
+          "title": "",
+          "heading_path": "",
+          "tags": "",
+          "topic": "",
+          "category": "",
+          "text": "한",
+          "token_count": 1
+        },
+        {
+          "chunk_id": "sigma-upper",
+          "title": "",
+          "heading_path": "",
+          "tags": "",
+          "topic": "",
+          "category": "",
+          "text": "ΟΣ",
+          "token_count": 1
+        },
+        {
+          "chunk_id": "sigma-final",
+          "title": "",
+          "heading_path": "",
+          "tags": "",
+          "topic": "",
+          "category": "",
+          "text": "ος",
+          "token_count": 1
+        },
+        {
+          "chunk_id": "sigma-normal",
+          "title": "",
+          "heading_path": "",
+          "tags": "",
+          "topic": "",
+          "category": "",
+          "text": "οσ",
+          "token_count": 1
+        }
+      ],
+      "differential_queries": [
+        { "query": "\"alpha beta\"", "expected": [{ "chunk_id": "phrase", "score": 0.6666666666666666 }] },
+        { "query": "alpha beta", "expected": [{ "chunk_id": "phrase", "score": 0.6666666666666666 }, { "chunk_id": "split", "score": 0.6324555320336759 }] },
+        { "query": "titleword topicword", "expected": [{ "chunk_id": "phrase", "score": 1.6666666666666667 }] },
+        { "query": "co-op", "expected": [{ "chunk_id": "phrase", "score": 1.6666666666666667 }] },
+        { "query": "under_score", "expected": [{ "chunk_id": "phrase", "score": 0.6666666666666666 }, { "chunk_id": "separators", "score": 0.6666666666666666 }] },
+        { "query": "\"under_score\"", "expected": [{ "chunk_id": "phrase", "score": 0.6666666666666666 }, { "chunk_id": "separators", "score": 0.6666666666666666 }] },
+        { "query": "", "expected": [{ "chunk_id": "separators", "score": 0.3333333333333333 }] },
+        { "query": "ά", "expected": [{ "chunk_id": "greek-precomposed", "score": 0.7071067811865475 }] },
+        { "query": "α", "expected": [] },
+        { "query": "한", "expected": [{ "chunk_id": "hangul-precomposed", "score": 0.7071067811865475 }] },
+        { "query": "한", "expected": [] },
+        { "query": "οσ", "expected": [{ "chunk_id": "sigma-final", "score": 0.7071067811865475 }, { "chunk_id": "sigma-normal", "score": 0.7071067811865475 }, { "chunk_id": "sigma-upper", "score": 0.7071067811865475 }] },
+        { "query": "cafe", "expected": [{ "chunk_id": "decomposed", "score": 0.4472135954999579 }, { "chunk_id": "phrase", "score": 0.3333333333333333 }] },
+        { "query": "cat", "expected": [] },
+        { "query": "alpha.beta", "expected": [{ "chunk_id": "phrase", "score": 0.6666666666666666 }] },
+        { "query": "missing", "expected": [] }
+      ],
+      "rejected_queries": [
+        "\"alpha beta",
+        "\"\"",
+        "---",
+        "alpha\"beta",
+        "alpha\u0000beta",
+        "\talpha",
+        "alpha\n",
+        "alpha\u007fbeta"
+      ]
+    },
+    "confidence_zero_signal": {
+      "scores": [{
+        "chunk_id": "zero-signal",
+        "lexical_score": 0,
+        "semantic_score": null,
+        "fusion_score": 0.01639344262295082,
+        "reranker_score": null,
+        "mmr_score": null,
+        "lexical_rank": 1,
+        "semantic_rank": null,
+        "fused_rank": 1,
+        "reranker_rank": null,
+        "final_rank": 1
+      }],
+      "stages": {
+        "vector": { "kind": "none", "state": "disabled", "reason_codes": ["VECTOR_DISABLED"] },
+        "reranker": { "kind": "none", "state": "disabled", "reason_codes": ["RERANKER_DISABLED"] }
+      },
+      "eligible_count": 1,
+      "expected": {
+        "level": "low",
+        "low_confidence": true,
+        "reason_codes": ["WEAK_LEXICAL_MATCH"],
+        "lexical_signal": 0,
+        "semantic_signal": null,
+        "reranker_signal": null,
+        "coverage_signal": 1
+      }
+    },
+    "lexical": {
+    "query": "cafe policy",
+    "fields": {
+      "title": "Café Policy",
+      "heading_path": "Overview",
+      "tags": "café safety",
+      "topic": "policy",
+      "category": "Guides",
+      "text": "Café policy café",
+      "token_count": 8
+    },
+    "expected_terms": ["cafe", "policy"],
+    "expected_score": 4.166666666666667
+  }
+}

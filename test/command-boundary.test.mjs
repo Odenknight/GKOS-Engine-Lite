@@ -2,10 +2,11 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { validateLiteCommand } from "../bin/okf-lite.mjs";
 
-test("allows the four deterministic Lite command paths", () => {
+test("allows the five delegated Lite command paths", () => {
   for (const argv of [
     ["validate", "."],
     ["assess", ".", "--json"],
+    ["search", "canonical policy", "--kb-path", ".", "--limit", "5"],
     ["graph", ".", "-o", "graph.json"],
     ["export", "graphiti", ".", "--episodes", "episodes.json"],
   ]) assert.deepEqual(validateLiteCommand(argv), { allowed: true });

@@ -1,0 +1,28 @@
+[package]
+name = "gkos-retrieval-lite"
+description = "Pin-bound Rust implementation of Full-owned GKOS retrieval contracts"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+rusqlite.workspace = true
+serde.workspace = true
+serde_jcs.workspace = true
+serde_json.workspace = true
+serde-value.workspace = true
+sha2.workspace = true
+toml.workspace = true
+unicode-normalization.workspace = true
+futures-timer.workspace = true
+futures-util.workspace = true
+
+[target.'cfg(windows)'.dependencies]
+windows-sys = { workspace = true, features = ["Win32_Foundation", "Win32_Storage_FileSystem"] }
+
+[dev-dependencies]
+futures-executor.workspace = true
+tempfile.workspace = true

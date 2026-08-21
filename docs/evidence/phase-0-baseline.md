@@ -4,15 +4,16 @@ Date: 2026-08-20
 
 Repository: `Odenknight/GKOS-Engine-Lite`
 
-Phase state: **BLOCKED**
+Phase state: **DONE**
 
-Phase 0 reconnaissance, ADRs, JavaScript baselines, compatibility fixtures, and provider/Standard decisions are complete. The owner's explicit requirement that GKOS-Engine-Lite build as one statically linked binary ratifies ADR-0005's separately governed Rust/static frontend-adapter with exact cross-language conformance. The required native baseline is still not reproducible on this host: `cargo test` stops before project compilation because `link.exe` and the Windows SDK are unavailable. No required test is reported as passed or replaced by a mock.
+Phase 0 reconnaissance, ADRs, JavaScript baselines, compatibility fixtures, provider/Standard decisions, and the exact locked native test are complete. The owner's explicit requirement that GKOS-Engine-Lite build as one statically linked binary ratifies ADR-0005's separately governed Rust/static frontend-adapter with exact cross-language conformance. The local workstation still lacks `link.exe` and the Windows SDK, so its untouched native attempt remains recorded as blocked; the same committed tree passed `cargo test --locked` on the authorized GitHub-hosted Windows MSVC runner. No required test was skipped or replaced by a mock.
 
 ## Exact coordinates
 
 | Subject | Exact coordinate | Disposition |
 |---|---|---|
 | GKOS-Engine-Lite implementation base | `2ebbf77583af3e83032054f1256188dc56376907` | Branch `codex/phase-0-recon-adrs`, initially clean |
+| Phase 0 implementation commit | `8e4de16ae52c5825c2b6e02d6e4aaad1920d5f3e` | DCO-signed commit under draft pull request 15 |
 | Installed Full dependency | tag `v1.1.3` → `72c4a3268c9db132f2f9dd5aaa7eb7075e6bab2a` | Exact immutable SHA in `package-lock.json` |
 | Inspected current GKOS-Engine | `2fbd4ec68ec825b09e5194c9878a7ae90a281392`, package 2.1.2 | Read-only sibling |
 | Pinned GKOS Standard | `a2a2a6ca5c4dac32c6d9dc985ed7460f5f4350c6`, `v0.79-5-ga2a2a6c` | Current release line v0.79; exact post-release study commit pinned |
@@ -76,10 +77,11 @@ Post-change verification:
 | `desktop: npm test` | PASS; 20 tests, 0 failures, 0 skipped, including 2 Phase 0 compatibility tests |
 | `desktop: npm run build` | PASS; Vite built 15 modules |
 | `cargo metadata --manifest-path desktop/src-tauri/Cargo.toml --locked --no-deps --format-version 1` | PASS with the isolated Rust/Cargo toolchain; validates the retained lockfile without replacing the blocked native test |
+| GitHub Actions `desktop-native`, run `32439308236`, job `96646635932` | PASS in 4m26s on `windows-latest`; digest-pinned compile assets and Rust 1.98.0, followed by `cargo test --locked` |
 | ADR headings, forbidden provider-reference scan, trailing-whitespace scan, and `git diff --check` | PASS |
 | `git check-attr eol` for compatibility code/goldens, CI YAML, and `Cargo.lock` | PASS; all resolve to `eol: lf` |
 
-Tracked production code, package manifests/locks, and existing source-note fixtures remained byte-identical. Phase 0 adds a lockfile, ADR/evidence and compatibility files, and modifies the CI workflow; all remain unstaged/uncommitted. No commit, tag, release, workflow dispatch, or publication occurred.
+Tracked production code, package manifests, and existing source-note fixtures remained byte-identical. Phase 0 adds a Cargo lockfile, ADR/evidence and compatibility files, and modifies the CI workflow. The DCO-signed focused branch was pushed and draft pull request 15 was opened to run the required CI. No merge, tag, release, deployment, or publication occurred.
 
 ## Lite boundary inventory
 
@@ -104,7 +106,7 @@ The Phase 0 fixture captures package metadata, all installed Full public exports
 - Existing service boundary is `127.0.0.1`, default port 4814, bearer protected. The shell constructs `/health` and `/mcp` client snippets. The separately bundled viewer consumes the existing read-only note/graph routes.
 - Baseline security debt: current client snippets and viewer URL construction embed the bearer token in generated text/query state. This fixture records existing behavior; later authenticated UI work must remove credential exposure rather than treating it as acceptable precedent.
 - CI root matrix runs on Ubuntu with Node 22 and exercises root plus desktop frontend/type/build, but not Cargo.
-- Phase 0 adds a 30-minute-bounded `desktop-native` job on `windows-latest`. It grants the job only `contents: read`, builds the frontend in the job-local workspace, pins checkout, Node setup, Rust toolchain, and Rust-cache actions to reviewed immutable revisions, installs Rust 1.98.0, downloads the existing Tauri compile-time sidecar/viewer assets, verifies their published SHA-256 digests (`29ab43c...f12c2` and `11e004a5...68dd`), and runs `cargo test --locked`. The existing JavaScript jobs were moved from mutable major action tags to the same reviewed checkout and Node-setup revisions. This job has not run for the Phase 0 tree and is not counted as a pass.
+- Phase 0 adds a 30-minute-bounded `desktop-native` job on `windows-latest`. It grants the job only `contents: read`, builds the frontend in the job-local workspace, pins checkout, Node setup, Rust toolchain, and Rust-cache actions to reviewed immutable revisions, installs Rust 1.98.0, downloads the existing Tauri compile-time sidecar/viewer assets, verifies their published SHA-256 digests (`29ab43c...f12c2` and `11e004a5...68dd`), and runs `cargo test --locked`. The existing JavaScript jobs were moved from mutable major action tags to the same reviewed checkout and Node-setup revisions. Run `32439308236`, job `96646635932`, passed this exact Phase 0 commit in 4m26s.
 - Native `desktop-build` targets macOS arm64, macOS x86_64, and Windows x86_64. It has no Linux x86_64/aarch64 legs.
 - Published prerelease `desktop-v0.2.0` has unsigned arm64/x64 DMGs and a Windows x64 installer. It predates the exact baseline, has no Linux artifacts, no required top-level `sha256.sum`, and no R720 result. It is stale/unqualified for the uplift matrix.
 - The desktop compatibility fixture captures product/bundle fields, status/settings shapes, loopback defaults, generated MCP snippets, and viewer URL behavior. A deliberate `0.0.0.0` perturbation is proven to fail.
@@ -149,6 +151,6 @@ Phase 0 uses a clean-room implementation plan and copies no upstream code or unu
 | External contracts verified or explicitly unavailable | DONE |
 | Compatibility fixtures detect deliberate breakage | DONE |
 | Existing root and desktop frontend suites reproducible | DONE |
-| Native Tauri/Cargo test baseline reproducible | **BLOCKED** |
+| Native Tauri/Cargo test baseline reproducible | DONE; exact locked tree passed hosted Windows MSVC job `96646635932` |
 
-Final Phase 0 state: **BLOCKED**. The packaging architecture is ratified and no owner decision remains. Required unblock: the exact `desktop-native` job in `.github/workflows/ci.yml` must pass for this Phase 0 tree (or the identical locked command must pass in an explicitly accepted equivalent Windows MSVC environment), with the result recorded before gate review. The local missing-linker failure remains the untouched native baseline result. No later phase should be represented as accepted on the strength of a skipped or merely configured native test.
+Final Phase 0 state: **DONE**. The packaging architecture is ratified, every Phase 0 compatibility and JavaScript gate passed, and the retained lockfile plus exact hosted Windows MSVC job make the native Tauri baseline reproducible. The local missing-linker failure remains honest workstation-environment evidence; it does not replace or weaken the passing hosted test. Platform packaging, true-static closure, Linux targets, signing, and R720/AVX qualification remain later-phase obligations rather than Phase 0 claims.

@@ -61,7 +61,7 @@ npm install gkos-engine-lite
 
 `gkos-engine` has no npm registry publish; this integration branch installs
 Engine package 2.1.2 from the exact reviewed commit
-`5b72aae1aad5b6416b8cb86a4137a7e536d8bb59`. This commit pin is not a claim
+`bbc2ea874f4dde37e6376e46c080cb1c69ab1bb3`. This commit pin is not a claim
 that a matching Engine or Lite release tag exists. Git installation runs the
 engine package's standard `prepare` build.
 
@@ -139,7 +139,7 @@ reproducible and auditable.
 `desktop/` contains the separate **GKOS Engine Desktop** presentation package, a Tauri 2 tray app for macOS and
 Windows that wraps the engine's headless sidecar (`kosmos-agent`). The CLI
 integration is bound to [Engine package 2.1.2 at exact commit
-`5b72aae`](https://github.com/Odenknight/GKOS-Engine/commit/5b72aae1aad5b6416b8cb86a4137a7e536d8bb59);
+`bbc2ea8`](https://github.com/Odenknight/GKOS-Engine/commit/bbc2ea874f4dde37e6376e46c080cb1c69ab1bb3);
 desktop sidecar artifacts remain separately qualified and are not implied by
 that source pin.
 Point it at a notes folder; it watches and projects (OKF+ 2.3 + Graphiti) and

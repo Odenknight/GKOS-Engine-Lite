@@ -47,7 +47,7 @@ async function runFixture({ dependency, version, resolvedVersion, resolvedSha, d
 }
 
 test("metadata policy accepts an exact reviewed commit and locks it byte-for-byte", async () => {
-  const sha = "5b72aae1aad5b6416b8cb86a4137a7e536d8bb59";
+  const sha = "bbc2ea874f4dde37e6376e46c080cb1c69ab1bb3";
   const result = await runFixture({
     dependency: `github:Odenknight/GKOS-Engine#${sha}`,
     version: "2.1.2",

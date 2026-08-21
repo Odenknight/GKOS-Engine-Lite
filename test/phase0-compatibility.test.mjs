@@ -118,7 +118,7 @@ test("Phase 0 fixtures remain immutable and Phase 1 records exact authorized old
   assert.equal(historicalFixture.baseline_commit, "2ebbf77583af3e83032054f1256188dc56376907");
   assert.equal(historicalFixture.runtime_snapshot.lite_package.version, "1.1.3");
   assert.equal(historicalFixture.runtime_snapshot.lite_package.engine_resolved_sha, "72c4a3268c9db132f2f9dd5aaa7eb7075e6bab2a");
-  assert.equal(fixture.full_reference.commit, "5b72aae1aad5b6416b8cb86a4137a7e536d8bb59");
+  assert.equal(fixture.full_reference.commit, "bbc2ea874f4dde37e6376e46c080cb1c69ab1bb3");
   assert.equal(fixture.deterministic.source_fixture_change.startsWith("none"), true);
 
   const sha256 = (bytes) => `sha256:${createHash("sha256").update(bytes).digest("hex")}`;

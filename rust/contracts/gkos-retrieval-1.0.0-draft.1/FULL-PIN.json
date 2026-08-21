@@ -1,6 +1,6 @@
 {
   "reference_repository": "Odenknight/GKOS-Engine",
-  "reference_commit": "5b72aae1aad5b6416b8cb86a4137a7e536d8bb59",
+  "reference_commit": "bbc2ea874f4dde37e6376e46c080cb1c69ab1bb3",
   "reference_package_version": "2.1.2",
   "contract_version": "gkos-retrieval/1.0.0-draft.1",
   "pin_kind": "exact_frozen_file_sha256",

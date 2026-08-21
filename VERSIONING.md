@@ -18,7 +18,7 @@ before a matching tag exists:
 
 The CLI never invents its own number, so its tag sequence skips any engine
 version that produced no Lite release. The active Phase 1 integration pins
-Engine commit `5b72aae1aad5b6416b8cb86a4137a7e536d8bb59`, whose package version is
+Engine commit `bbc2ea874f4dde37e6376e46c080cb1c69ab1bb3`, whose package version is
 `2.1.2`; this is not a claim that an Engine or Lite `v2.1.2` tag exists.
 `bin/okf-lite.mjs` reads the version from
 `package.json` at runtime — do not hardcode it. The

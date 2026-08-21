@@ -330,7 +330,7 @@ fn imported_full_contract_pack_has_the_pinned_exact_bytes() {
         serde_json::from_slice(FULL_PIN_BYTES).expect("Full commit pin must parse");
     assert_eq!(
         pin["reference_commit"],
-        "5b72aae1aad5b6416b8cb86a4137a7e536d8bb59"
+        "bbc2ea874f4dde37e6376e46c080cb1c69ab1bb3"
     );
     assert_eq!(pin["reference_package_version"], "2.1.2");
     assert_eq!(pin["contract_version"], RETRIEVAL_CONTRACT);

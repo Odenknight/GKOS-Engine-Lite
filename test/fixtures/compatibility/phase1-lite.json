@@ -4,7 +4,7 @@
   "historical_fixture": "phase0-lite.json",
   "full_reference": {
     "repository": "Odenknight/GKOS-Engine",
-    "commit": "5b72aae1aad5b6416b8cb86a4137a7e536d8bb59",
+    "commit": "bbc2ea874f4dde37e6376e46c080cb1c69ab1bb3",
     "package_version": "2.1.2",
     "retrieval_contract": "gkos-retrieval/1.0.0-draft.1",
     "projection_schema": 2
@@ -23,9 +23,9 @@
         "node": ">=22 <25",
         "npm": ">=10"
       },
-      "engine_dependency": "github:Odenknight/GKOS-Engine#5b72aae1aad5b6416b8cb86a4137a7e536d8bb59",
+      "engine_dependency": "github:Odenknight/GKOS-Engine#bbc2ea874f4dde37e6376e46c080cb1c69ab1bb3",
       "engine_resolved_version": "2.1.2",
-      "engine_resolved_sha": "5b72aae1aad5b6416b8cb86a4137a7e536d8bb59",
+      "engine_resolved_sha": "bbc2ea874f4dde37e6376e46c080cb1c69ab1bb3",
       "engine_license": "Apache-2.0"
     },
     "engine_public_exports": [

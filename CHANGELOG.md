@@ -3,7 +3,7 @@
 ## Unreleased — Phase 1 integration
 
 - Pinned the delegated CLI to exact reviewed GKOS-Engine commit
-  `5b72aae1aad5b6416b8cb86a4137a7e536d8bb59` and mirrored its package version
+  `bbc2ea874f4dde37e6376e46c080cb1c69ab1bb3` and mirrored its package version
   `2.1.2`; no matching Lite tag or release is claimed.
 - Added `search` to the explicit read-only delegation boundary with byte-exact
   Full/Lite output and diagnostic conformance tests.

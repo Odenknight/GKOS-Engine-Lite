@@ -6,21 +6,22 @@ Repository: `Odenknight/GKOS-Engine-Lite`
 
 Qualification status: **ONGOING — terminal phase state not assigned**
 
-This is a pre-commit evidence draft for the owner-ratified Rust/static Lite
-retrieval path. It records completed local implementation and verification but
-does not assign `DONE`, `BLOCKED`, or `NEEDS_HUMAN` while hosted qualification
-and final reciprocal review remain open. Nothing described here was staged,
-committed, pushed, merged, released,
-deployed, or published by this Phase 1 worktree.
+This evidence draft covers the owner-ratified Rust/static Lite retrieval path.
+The initial Phase 1 commit is signed and pushed on a draft pull request; the
+Windows 8.3-path correction and final Full repin remain uncommitted while their
+reciprocal review and hosted rerun are open. This draft therefore does not
+assign `DONE`, `BLOCKED`, or `NEEDS_HUMAN`. Nothing was merged, tagged,
+released, deployed, or published as an artifact.
 
 ## Exact coordinates
 
 | Subject | Exact coordinate | Disposition |
 |---|---|---|
 | Lite branch | `codex/phase-1-retrieval-core` | Phase 1 implementation branch |
-| Lite branch base/current committed `HEAD` | `83b0baac033f469abe508802faad7f6b3873ade9` | Phase 1 changes remain uncommitted in the worktree |
+| Lite Phase 0 base | `83b0baac033f469abe508802faad7f6b3873ade9` | Branch `codex/phase-0-recon-adrs` |
+| Lite current committed `HEAD` | `26d3b66c4e126c6dbcc35ae37a2aad8296d8bc63` | Signed initial Phase 1 commit on draft PR #16; reviewed follow-up remains uncommitted |
 | Full reference repository | `Odenknight/GKOS-Engine` | TypeScript reference implementation and contract owner |
-| Full reference commit | `5b72aae1aad5b6416b8cb86a4137a7e536d8bb59` | Signed, pushed Full Phase 1 reference; package version `2.1.2` |
+| Full reference commit | `bbc2ea874f4dde37e6376e46c080cb1c69ab1bb3` | Signed, pushed Full Phase 1 reference with symmetric Windows 8.3/reparse hardening; package version `2.1.2` |
 | Retrieval contract | `gkos-retrieval/1.0.0-draft.1` | Draft integration contract, not a GKX Standard version or authority claim |
 | Rust workspace version / MSRV | `0.1.0` / Rust `1.85` | Future static frontend-adapter foundation under `rust/` |
 | Local reviewed current Rust | `rustc 1.98.0 (88d9e12ae 2026-08-18)` | Both GNU and MSVC toolchains are isolated beneath the uplift workspace |
@@ -62,7 +63,7 @@ Node-only `sqlite_lexical_scan` compatibility backend.
   infers identity, lineage, validity, authority, supersession, discoverability,
   or write permission.
 - The Tauri presentation shell was not rewritten. The published JavaScript
-  wrapper is pinned to Full commit `5b72aae1aad5b6416b8cb86a4137a7e536d8bb59`
+  wrapper is pinned to Full commit `bbc2ea874f4dde37e6376e46c080cb1c69ab1bb3`
   and delegates the prior read-only boundary plus additive `search`; all other
   Full commands remain blocked.
 - The new Rust workspace currently supplies a library and conformance boundary,
@@ -114,8 +115,9 @@ results until later authorized endpoint resolvers exist.
 
 ## Reciprocal review and debugging record
 
-Full and Lite owners reviewed one another's Phase 1 trees while implementation
-was still uncommitted. Findings were fixed rather than classified as harmless.
+Full and Lite owners reviewed one another's Phase 1 trees throughout
+implementation and before each publication gate. Findings were fixed rather
+than classified as harmless.
 The principal corrections were:
 
 - exact Full/Lite setext behavior, blank/frontmatter-only represented-source
@@ -151,8 +153,14 @@ also required honest runtime backend identity, policy-first fallback scanning,
 strict cross-backend query/citation semantics, and explicit degraded reason
 codes. Lite independently reran the frozen Full focused suite under Node 23 at
 43/43 and approved that delta with no remaining blocking, high, or medium
-findings. Full previously approved the Rust implementation; final reciprocal
-review of the exact wrapper/pin migration remains part of the open qualification.
+findings. Full approved the initial Rust/wrapper/pin migration before its first
+signed publication. The first hosted Windows MSVC run then exposed a shared
+Windows 8.3 spelling defect: ordinary `RUNNER~1` temporary paths were rejected
+as aliases. Lite now rejects reparse-point components explicitly before using
+`GetLongPathNameW` solely for 8.3 spelling normalization; Full published the
+symmetric correction at `bbc2ea874f4dde37e6376e46c080cb1c69ab1bb3` after its
+mandatory Windows Node 22/23/24 matrix passed. Full approved Lite's narrow path
+fix, and final review of this combined repin/evidence delta remains open.
 
 No source-note fixture contains PHI-adjacent or organization-confidential
 material. Provider request debug tests use synthetic sentinels and prove query,
@@ -166,20 +174,20 @@ machine-wide toolchain or `PATH`.
 
 | Command | Exact result |
 |---|---|
-| `cargo +1.98.0-x86_64-pc-windows-gnu test --manifest-path rust/Cargo.toml --workspace --all-targets --locked` | PASS; 89 unit tests and 11 Full-contract conformance tests, 0 failures, 0 skipped |
+| `cargo +1.98.0-x86_64-pc-windows-gnu test --manifest-path rust/Cargo.toml --workspace --all-targets --locked` | PASS; 90 unit tests and 11 Full-contract conformance tests, 0 failures, 0 skipped |
 | `cargo +1.98.0-x86_64-pc-windows-gnu check --manifest-path rust/Cargo.toml --workspace --all-targets --locked` | PASS |
 | `cargo +1.98.0-x86_64-pc-windows-gnu clippy --manifest-path rust/Cargo.toml --workspace --all-targets --locked -- -D warnings` | PASS |
 | `cargo +1.98.0-x86_64-pc-windows-gnu test --manifest-path rust/Cargo.toml --doc --workspace --locked` | PASS; 2 compile-fail API-sealing doc tests |
 | `cargo +1.98.0-x86_64-pc-windows-gnu fmt --manifest-path rust/Cargo.toml --all -- --check` | PASS |
-| `cargo +1.85.0-x86_64-pc-windows-gnu test --manifest-path rust/Cargo.toml --workspace --all-targets --locked` | PASS; 89 unit tests and 11 Full-contract conformance tests, 0 failures, 0 skipped |
+| `cargo +1.85.0-x86_64-pc-windows-gnu test --manifest-path rust/Cargo.toml --workspace --all-targets --locked` | PASS; 90 unit tests and 11 Full-contract conformance tests, 0 failures, 0 skipped |
 | `cargo +1.85.0-x86_64-pc-windows-gnu check --manifest-path rust/Cargo.toml --workspace --all-targets --locked` | PASS |
 | `cargo +1.85.0-x86_64-pc-windows-gnu test --manifest-path rust/Cargo.toml --doc --workspace --locked` | PASS; 2 compile-fail API-sealing doc tests |
-| `npm run check:metadata` | PASS; Lite `2.1.2`, Engine package `2.1.2` at exact commit `5b72aae1aad5b6416b8cb86a4137a7e536d8bb59`, Apache-2.0 |
+| `npm run check:metadata` | PASS; Lite `2.1.2`, Engine package `2.1.2` at exact commit `bbc2ea874f4dde37e6376e46c080cb1c69ab1bb3`, Apache-2.0 |
 | `node scripts/check-lockfile-sha.mjs` | PASS; one git dependency pinned to a 40-hex commit SHA |
 | Node `24.18.0`: `npm test` | PASS; 30 tests, 0 failures, 0 skipped, including Full/Lite `search` stdout and stderr parity |
 | Node `23.11.1`: `node --test "test/*.test.mjs"` | PASS; 30 tests, 0 failures, 0 skipped; Full's explicit degraded lexical backend passes through unchanged |
 | Node `22.23.2`: `node --test "test/*.test.mjs"` | PASS; 30 tests, 0 failures, 0 skipped |
-| `npm pack --dry-run --json` | PASS; 5 files, 8,347-byte tarball, 21,069 bytes unpacked, SHA-1 `965ba2056063645c80e6ceae0ec3deb7f07cc5c9` |
+| `npm pack --dry-run --json` | PASS under npm `11.16.0`; 5 files, 8,348-byte tarball, 21,072 bytes unpacked, SHA-1 `d61fd1030c756cdf460ef25f826db3a0d23700c8` |
 | `npm --prefix desktop run typecheck` | PASS |
 | `npm --prefix desktop test` | PASS; 20 tests, 0 failures, 0 skipped |
 | `npm --prefix desktop run build` | PASS; Vite 8.1.5 built 15 modules |
@@ -208,6 +216,23 @@ Additional dependency and workflow scans passed:
 - documentation trailing-whitespace and forbidden-shorthand scans, contract
   hashes, LF attributes, and `git diff --check` are rerun as handoff hygiene.
 
+## Hosted qualification record
+
+Initial draft-PR run `32461426694` evaluated signed Lite commit
+`26d3b66c4e126c6dbcc35ae37a2aad8296d8bc63` against its then-current Full pin
+`5b72aae1aad5b6416b8cb86a4137a7e536d8bb59`. Seven jobs passed: Node 22, 23,
+and 24; desktop; desktop-native; current Rust; and Rust 1.85 MSRV. Windows MSVC
+retrieval job `96708963465` failed after 52 unit tests passed and 37 filesystem-
+backed tests were rejected by the same false alias decision. Its mandatory real
+symlink/junction fixture passed, proving the failure was ordinary 8.3 spelling
+normalization rather than missing alias coverage.
+
+The reviewed follow-up expands Windows 8.3 components only after an explicit
+component walk has rejected every `FILE_ATTRIBUTE_REPARSE_POINT`. Latest and
+MSRV GNU suites now pass 90 unit tests, 11 exact Full-contract conformance
+tests, and 2 compile-fail API-sealing doc tests. A new hosted Lite rerun is
+pending; this local evidence does not predeclare its outcome.
+
 ## Local MSVC limitation
 
 The exact current-tree command:
@@ -232,8 +257,8 @@ symlink/junction alias fixture mandatory rather than silently skipped.
 
 ## Remaining qualification blockers
 
-1. Full must complete the final reciprocal read-only review of the exact Lite
-   commit-pin, wrapper, compatibility migration, and evidence delta.
+1. Full must complete the final reciprocal read-only review of the combined
+   Lite Windows path, exact commit-pin, and evidence delta.
 2. The Phase 1 pull request must run and pass the hosted Ubuntu MSRV/current
    Rust jobs and the Windows MSVC retrieval job, along with the Node 22/23/24
    root matrix and existing desktop/desktop-native jobs. Local GNU results and
@@ -241,5 +266,5 @@ symlink/junction alias fixture mandatory rather than silently skipped.
    hosted gates.
 
 No terminal Phase 1 state is assigned in this draft. The executor must update
-this evidence with the exact Full and Lite final commits, wrapper parity result,
-and hosted job/run identifiers before applying the executor-state protocol.
+this evidence with the exact Lite follow-up commit and hosted rerun/job
+identifiers before applying the executor-state protocol.

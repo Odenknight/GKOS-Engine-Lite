@@ -71,13 +71,80 @@ pub(crate) fn contained_path(path: &Path, root: &Path) -> bool {
 
 #[cfg(windows)]
 fn windows_key(path: &Path) -> Option<String> {
-    let value = path.as_os_str().to_str()?.replace('/', "\\");
+    if windows_path_has_reparse_component(path).ok()? {
+        return None;
+    }
+    let expanded = expand_windows_short_names(path).unwrap_or_else(|| path.to_path_buf());
+    let value = expanded.as_os_str().to_str()?.replace('/', "\\");
     let value = value
         .strip_prefix(r"\\?\UNC\")
         .map(|suffix| format!(r"\\{suffix}"))
         .or_else(|| value.strip_prefix(r"\\?\").map(ToOwned::to_owned))
         .unwrap_or(value);
     Some(value.trim_end_matches('\\').to_lowercase())
+}
+
+/// Expand only Windows 8.3 short-name components. Reparse-point components are
+/// rejected separately before this expansion, so the later comparison cannot
+/// mistake a junction or symlink target for the caller's original path.
+/// GitHub-hosted Windows runners expose their ordinary temporary directory as
+/// `RUNNER~1`; rejecting that spelling would make every legitimate state path
+/// below the runner temp directory unusable.
+#[cfg(windows)]
+fn expand_windows_short_names(path: &Path) -> Option<PathBuf> {
+    use std::ffi::OsString;
+    use std::os::windows::ffi::{OsStrExt, OsStringExt};
+    use std::ptr;
+    use windows_sys::Win32::Storage::FileSystem::GetLongPathNameW;
+
+    let input = path
+        .as_os_str()
+        .encode_wide()
+        .chain(std::iter::once(0))
+        .collect::<Vec<_>>();
+    let required = unsafe { GetLongPathNameW(input.as_ptr(), ptr::null_mut(), 0) };
+    if required == 0 {
+        return None;
+    }
+    let mut output = vec![0_u16; required as usize];
+    let written = unsafe {
+        GetLongPathNameW(
+            input.as_ptr(),
+            output.as_mut_ptr(),
+            output.len().try_into().ok()?,
+        )
+    };
+    if written == 0 || written as usize >= output.len() {
+        return None;
+    }
+    output.truncate(written as usize);
+    Some(PathBuf::from(OsString::from_wide(&output)))
+}
+
+#[cfg(windows)]
+fn windows_path_has_reparse_component(path: &Path) -> io::Result<bool> {
+    use std::fs;
+    use std::os::windows::fs::MetadataExt;
+    use windows_sys::Win32::Storage::FileSystem::FILE_ATTRIBUTE_REPARSE_POINT;
+
+    let absolute = absolute_lexical_path(path)?;
+    let mut candidate = PathBuf::new();
+    for component in absolute.components() {
+        candidate.push(component.as_os_str());
+        if matches!(component, Component::Prefix(_) | Component::RootDir) {
+            continue;
+        }
+        match fs::symlink_metadata(&candidate) {
+            Ok(metadata) => {
+                if metadata.file_attributes() & FILE_ATTRIBUTE_REPARSE_POINT != 0 {
+                    return Ok(true);
+                }
+            }
+            Err(error) if error.kind() == io::ErrorKind::NotFound => break,
+            Err(error) => return Err(error),
+        }
+    }
+    Ok(false)
 }
 
 #[cfg(test)]
@@ -104,6 +171,18 @@ mod tests {
             ordinary
         ));
         assert!(!contained_path(Path::new(r"C:\Vault2\file"), ordinary));
+    }
+
+    #[cfg(windows)]
+    #[test]
+    fn ordinary_existing_windows_temp_paths_match_their_realpath_spelling() {
+        let directory = tempfile::tempdir().unwrap();
+        let lexical = absolute_lexical_path(directory.path()).unwrap();
+        let canonical = std::fs::canonicalize(&lexical).unwrap();
+        assert!(
+            equivalent_paths(&lexical, &canonical),
+            "ordinary temp path {lexical:?} must match its realpath {canonical:?}"
+        );
     }
 
     #[cfg(not(windows))]

@@ -1,0 +1,7 @@
+/test/phase0-compatibility.test.mjs text eol=lf
+/test/support/phase0-snapshot.mjs text eol=lf
+/test/fixtures/compatibility/** text eol=lf
+/desktop/test/phase0-compatibility.test.mjs text eol=lf
+/desktop/test/fixtures/** text eol=lf
+/desktop/src-tauri/Cargo.lock text eol=lf
+/.github/workflows/ci.yml text eol=lf

@@ -1,0 +1,67 @@
+{
+  "fixture_version": 1,
+  "baseline_commit": "2ebbf77583af3e83032054f1256188dc56376907",
+  "runtime_snapshot": {
+    "desktop_package": {
+      "name": "gkos-engine-desktop",
+      "version": "0.2.0",
+      "tauri_cli": "^2",
+      "typescript": "^5.6.0",
+      "vite": "^8.1.5"
+    },
+    "tauri_bundle": {
+      "product_name": "GKOS Engine Desktop",
+      "version": "0.2.0",
+      "identifier": "org.gkos.engine.desktop",
+      "targets": [
+        "nsis",
+        "dmg"
+      ],
+      "external_bin": [
+        "binaries/kosmos-agent"
+      ],
+      "resources": [
+        "resources/vault-kosmos.html"
+      ]
+    },
+    "service_boundary": {
+      "host": "127.0.0.1",
+      "port": 4814,
+      "mcp_server_name": "kosmos-oden",
+      "status_fields": [
+        "default_sensitivity",
+        "last_scan_iso",
+        "notes_dir",
+        "notes_indexed",
+        "pid",
+        "port",
+        "state",
+        "token_path",
+        "url"
+      ],
+      "settings_fields": [
+        "default_sensitivity",
+        "enabled",
+        "notes_dir",
+        "port",
+        "wizard_completed"
+      ],
+      "default_settings": {
+        "notes_dir": null,
+        "default_sensitivity": "secret",
+        "port": 4814,
+        "enabled": false,
+        "wizard_completed": false
+      }
+    },
+    "snippets": {
+      "claudeCode": "claude mcp add --transport http --header \"Authorization: Bearer phase0-fake-token\" kosmos-oden \"http://127.0.0.1:4814/mcp\"",
+      "claudeJson": "{\n  \"mcpServers\": {\n    \"kosmos-oden\": {\n      \"type\": \"streamable-http\",\n      \"url\": \"http://127.0.0.1:4814/mcp\",\n      \"headers\": {\n        \"Authorization\": \"Bearer phase0-fake-token\"\n      }\n    }\n  }\n}",
+      "cursor": "{\n  \"mcpServers\": {\n    \"kosmos-oden\": {\n      \"url\": \"http://127.0.0.1:4814/mcp\",\n      \"headers\": {\n        \"Authorization\": \"Bearer phase0-fake-token\"\n      }\n    }\n  }\n}",
+      "toml": "[mcp_servers.kosmos-oden]\nurl = \"http://127.0.0.1:4814/mcp\"\nhttp_headers = { Authorization = \"Bearer phase0-fake-token\" }\n",
+      "curl": "curl -H \"Authorization: Bearer phase0-fake-token\" \"http://127.0.0.1:4814/health\""
+    },
+    "viewer_query": "api=http%3A%2F%2F127.0.0.1%3A4814&token=phase0-fake-token",
+    "viewer_app_url": "vault-kosmos.html?api=http%3A%2F%2F127.0.0.1%3A4814&token=phase0-fake-token"
+  }
+}

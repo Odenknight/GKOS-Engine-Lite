@@ -4,20 +4,25 @@ Qualification date: 2026-08-22
 
 Repository: Odenknight/GKOS-Engine-Lite
 
-State: **FROZEN_LOCAL**. This document and the bounded Slice B implementation
-are unstaged, uncommitted, and unpushed pending reciprocal Full review. The
-implementation commit, updated pull-request head, and hosted jobs are therefore
-**UNASSIGNED**. No merge, tag, release, deployment, package publication, or
-artifact publication is authorized or claimed.
+State: **DONE**. The bounded Slice B implementation was reciprocally approved,
+committed with a valid ED25519 signature and DCO signoff, pushed only to the
+Phase 4 branch, and qualified by the exact-head draft pull-request workflow.
+This evidence file was included in that implementation commit in its historical
+local-freeze form. The sole current unstaged change converts it to this DONE
+closeout and records the assigned publication and hosted coordinates. The
+evidence-only closeout commit and its fresh hosted run remain **UNASSIGNED**
+pending a separate reciprocal review. No merge, tag, release, deployment,
+package publication, or artifact publication is authorized or claimed.
 
 ## Exact coordinates
 
 | Coordinate | Value |
 | --- | --- |
-| Lite Slice A evidence base | `408701f18e7fdf8caea1555e3b271d7621a53e4e` (valid ED25519 signature and DCO; local, upstream, and origin equal before this unstaged delta) |
+| Lite Slice A evidence base | `408701f18e7fdf8caea1555e3b271d7621a53e4e` (valid ED25519 signature and DCO; direct parent of the Slice B implementation) |
 | Working branch | `codex/phase-4-retrieval-evaluation` |
-| Lite Slice B implementation | **UNASSIGNED** |
-| Lite pull request | Draft #19 remains open and unmerged; its head remains the Slice A evidence base until an approved Slice B commit is pushed |
+| Lite Slice B implementation | `af8e3ee28bd5c4618cde694365cc8a2713ce2ca6` (direct 13-path child of the Slice A evidence base; valid local and GitHub ED25519 signature; DCO signoff matches the author) |
+| Lite pull request | [Draft #19](https://github.com/Odenknight/GKOS-Engine-Lite/pull/19), open and unmerged against exact Phase 3 base `41912fd6db279f1b46e67cb4b88c1f1b4ba86e63`; local, upstream, origin, and PR head all equal the Slice B implementation |
+| Hosted qualification | PR run [32601823604](https://github.com/Odenknight/GKOS-Engine-Lite/actions/runs/32601823604), exact implementation head, terminal success in all 8 jobs |
 | Full qualified Slice B implementation | `a57b98c00c1913f5b7ed96839b3f8effe5be9c4a` (valid ED25519 signature and DCO; hosted push and pull-request jobs green) |
 | Full package | `gkos-engine` 2.1.2 |
 | Frozen evaluation-pack implementation | `cac029a5b570135b26f3585bc86f4c9beb00c36d` |
@@ -99,18 +104,40 @@ The local machine qualifies the GNU latest and MSRV toolchains. Native MSVC is
 reserved for the mandatory hosted Windows job, including its all-target,
 documentation, and alias fixture gates.
 
-## Exact local-freeze scope
+## Hosted qualification
 
-Before this evidence file, the bounded Slice B implementation is exactly 12
+The sole workflow run for the implementation head was pull-request run
+`32601823604`. It completed successfully at exact head
+`af8e3ee28bd5c4618cde694365cc8a2713ce2ca6`; all eight jobs were terminal green.
+
+| Hosted job | Exact result |
+| --- | --- |
+| `test (22)` / `97101137908` | PASS; 43 passed, 0 failed, 0 cancelled, 0 skipped, 0 todo; exhaustive reviewed eval/tune differential 189,125.038823 ms; five-file package smoke green |
+| `test (23)` / `97101137856` | PASS; 43 passed, 0 failed, 0 cancelled, 0 skipped, 0 todo; exhaustive reviewed eval/tune differential 199,016.028629 ms; five-file package smoke green |
+| `test (24)` / `97101137891` | PASS; 43 passed, 0 failed, 0 cancelled, 0 skipped, 0 todo; exhaustive reviewed eval/tune differential 131,133.762151 ms; five-file package smoke green |
+| `retrieval-rust-latest` / `97101137791` | PASS; 170 library + 11 Full-conformance tests, 4 docs, formatting, sealed-API check, and clippy `-D warnings` |
+| `retrieval-rust-msrv` / `97101137871` | PASS; 170 library + 11 Full-conformance tests, 4 docs, and sealed-API check at Rust 1.85.0 |
+| `retrieval-rust-windows-msvc` / `97101137847` | PASS; `GKOS_REQUIRE_ALIAS_FIXTURE=1`, check, 166 library + 11 Full-conformance tests, 4 docs, and sealed-API check |
+| `desktop` / `97101137895` | PASS; typecheck, production build, and 20/20 frontend tests |
+| `desktop-native` / `97101137842` | PASS; frontend prerequisite build and native Tauri build/test qualification |
+
+GitHub reports the implementation commit signature as valid. The draft PR is
+open, unmerged, and mergeable at the exact qualified head and base. There is no
+local or remote tag at the implementation commit.
+
+## Exact implementation and closeout scope
+
+At local qualification time, the bounded Slice B implementation was exactly 12
 unstaged paths: nine modified tracked files and three untracked test/fixture
-files. The only new production behavior is the narrow CLI delegation and exact
-Full pin update. This evidence makes the reciprocal-review snapshot exactly 13
-unstaged paths. Staging remains empty, and no Slice B byte is on GitHub yet.
+files. This evidence made the reciprocally approved snapshot exactly 13 paths.
+Commit `af8e3ee...` preserves that exact scope with 812 insertions and 28
+deletions. The only new production behavior is the narrow CLI delegation and
+exact Full pin update.
 
-After reciprocal approval only, the implementation and this evidence will be
-committed together as the single authorized bounded Slice B commit, pushed only
-to `codex/phase-4-retrieval-evaluation`, and the existing draft PR will be
-updated. Hosted coordinates remain intentionally unassigned until that occurs.
+This DONE closeout changes only this evidence file. It is intentionally
+unstaged; staging and archive counts remain zero and `git diff --check` remains
+clean. Its evidence-only commit, updated branch/PR head, and fresh hosted run
+remain unassigned until a separate reciprocal approval and authorization.
 
 No merge, tag, release, deployment, package publication, or artifact
 publication is authorized or claimed.

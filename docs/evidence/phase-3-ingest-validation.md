@@ -9,12 +9,14 @@ private verification of Full-produced ingest envelopes, and a cross-runtime
 legacy retrieval-writer guard that prevents the frozen Phase 1/2 writers from
 racing or downgrading Full's owner authority.
 
-Lite state: **DONE** for the exact qualified implementation commit below. The
-one-file evidence-only closeout is currently unstaged, uncommitted, and
-unpushed; its future evidence-only commit remains `UNASSIGNED` so this document
-does not assert its own SHA. Pull request #18 remains draft, open, and unmerged.
-No Lite merge, tag, release, deployment, package publication, or artifact
-publication is claimed.
+Lite state: **DONE** for the exact qualified implementation commit below. At
+its reciprocal-review freeze, the one-file evidence-only closeout was
+unstaged, uncommitted, and unpushed; Full approved that exact freeze before it
+was published as the signed evidence commit below. This later wording-only
+correction was not assigned a commit at its own review freeze, so the document
+does not assert its own SHA. Pull request #18 remains draft, open, and
+unmerged. No Lite merge, tag, release, deployment, package publication, or
+artifact publication is claimed.
 
 ## Exact coordinates
 
@@ -23,7 +25,8 @@ publication is claimed.
 | Phase 2 evidence base | `45bfc3c4b66ae2978ddae814022d8c861076eec3` |
 | Working branch | `codex/phase-3-ingest-validation` |
 | Lite qualified implementation | `9e2a1cbd070e7b2d08aa094e692b65eb50213ccd` (ED25519 signature and DCO verified; direct child of the Phase 2 evidence base) |
-| Lite evidence-only closeout commit | `UNASSIGNED` |
+| Lite first evidence-only closeout | `c31c1369dea710dbbcc6e67ca00c2608ac2d33b7` (ED25519 signature and DCO verified; direct child of the qualified implementation) |
+| Lite wording-only correction | Not assigned at correction-review freeze time; it does not supersede the implementation or first evidence coordinate |
 | Lite pull request | Draft [#18](https://github.com/Odenknight/GKOS-Engine-Lite/pull/18), open against `codex/phase-2-lineage-citations` |
 | Lite reciprocal review | PASS; Full read-only review approved the exact 42-path local implementation freeze with no blocker, HIGH, or MEDIUM finding |
 | Hosted Lite CI | PASS; [PR run 32558687019](https://github.com/Odenknight/GKOS-Engine-Lite/actions/runs/32558687019), 8/8 jobs successful |
@@ -66,6 +69,21 @@ Node jobs exercised exact wrapper/CLI bytes, metadata, dependency lock,
 package/static checks, and the supported Node 22/23/24 matrix. The remaining
 Rust and desktop jobs qualified latest, MSRV, desktop, and native desktop
 surfaces on the same implementation SHA.
+
+After Full approved the one-file DONE closeout, signed DCO evidence commit
+`c31c1369dea710dbbcc6e67ca00c2608ac2d33b7` advanced the draft PR without
+changing the qualified implementation coordinate. Fresh PR run
+[32559214040](https://github.com/Odenknight/GKOS-Engine-Lite/actions/runs/32559214040)
+requalified that exact evidence head with 8/8 terminal-success jobs:
+
+- `test (23)`: `96998104143`;
+- `retrieval-rust-msrv`: `96998104163`;
+- `desktop`: `96998104191`;
+- `test (22)`: `96998104193`;
+- `retrieval-rust-latest`: `96998104203`;
+- `retrieval-rust-windows-msvc`: `96998104209`;
+- `desktop-native`: `96998104214`;
+- `test (24)`: `96998104223`.
 
 ## Frozen 21-file ingest pack
 
@@ -165,10 +183,11 @@ hosted jobs are green. The qualified implementation SHA remains
 `9e2a1cbd070e7b2d08aa094e692b65eb50213ccd` even after a later evidence-only
 commit advances the draft PR head.
 
-This closeout file must receive a separate reciprocal read-only review before
-it is committed. Any later evidence-only commit and its fresh hosted run must
-be recorded separately and cannot supersede the qualified implementation or
-run coordinates above.
+The first closeout file received a separate reciprocal read-only review before
+it was committed as `c31c1369dea710dbbcc6e67ca00c2608ac2d33b7`; its fresh
+hosted run is recorded separately above. This later wording-only correction
+changes no implementation, contract, pin, package, or qualification claim and
+cannot supersede the qualified implementation or its run coordinates.
 
 No merge, tag, release, deployment, npm/package publication, or artifact
 publication occurred or is authorized by this closeout.

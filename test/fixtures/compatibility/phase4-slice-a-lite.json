@@ -1,0 +1,25 @@
+{
+  "fixture_version": 1,
+  "phase": "phase-4-retrieval-evaluation-slice-a",
+  "historical_fixture": "phase3-lite.json",
+  "full_reference": {
+    "repository": "Odenknight/GKOS-Engine",
+    "commit": "cac029a5b570135b26f3585bc86f4c9beb00c36d",
+    "package_version": "2.1.2",
+    "evaluation_contract": "gkos-retrieval-evaluation/1.0.0-draft.1",
+    "evaluation_pack_file_count": 37,
+    "evaluation_pack_bytes": 4948463,
+    "implemented_slice": "A-parser-normalizer-pure-math-conformance"
+  },
+  "runtime_migration": {
+    "expected_changed_paths": [
+      "$.lite_package.engine_dependency",
+      "$.lite_package.engine_resolved_sha"
+    ],
+    "engine_dependency": "github:Odenknight/GKOS-Engine#cac029a5b570135b26f3585bc86f4c9beb00c36d",
+    "engine_resolved_sha": "cac029a5b570135b26f3585bc86f4c9beb00c36d"
+  },
+  "deterministic": {
+    "source_fixture_change": "none; Phase 0 note bytes, Phase 1 graph/Graphiti goldens, and Phase 2/3 contracts remain exact"
+  }
+}

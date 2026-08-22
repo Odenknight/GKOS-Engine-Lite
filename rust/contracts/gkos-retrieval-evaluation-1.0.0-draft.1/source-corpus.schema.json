@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gkos.example/contracts/retrieval/gkos-retrieval-evaluation-1.0.0-draft.1/source-corpus.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["contract_version", "corpora", "source_corpus_digest"],
+  "properties": {
+    "contract_version": { "const": "gkos-retrieval-evaluation-source-corpus/1.0.0-draft.1" },
+    "corpora": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 256,
+      "items": { "$ref": "#/$defs/corpus" }
+    },
+    "source_corpus_digest": { "$ref": "common.schema.json#/$defs/sha256" }
+  },
+  "$defs": {
+    "sourceFile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_id", "source_path", "source_digest", "source_bytes_base64"],
+      "properties": {
+        "source_id": { "$ref": "common.schema.json#/$defs/uid" },
+        "source_path": { "$ref": "common.schema.json#/$defs/sourcePath" },
+        "source_digest": { "$ref": "common.schema.json#/$defs/sha256" },
+        "source_bytes_base64": {
+          "type": "string",
+          "maxLength": 89478488,
+          "pattern": "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$"
+        }
+      }
+    },
+    "corpus": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["vault_fixture", "source_files", "corpus_fixture_digest"],
+      "properties": {
+        "vault_fixture": { "$ref": "common.schema.json#/$defs/evaluationId" },
+        "source_files": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 4096,
+          "items": { "$ref": "#/$defs/sourceFile" }
+        },
+        "corpus_fixture_digest": { "$ref": "common.schema.json#/$defs/sha256" }
+      }
+    }
+  }
+}

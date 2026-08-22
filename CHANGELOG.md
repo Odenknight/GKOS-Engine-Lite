@@ -1,5 +1,17 @@
 # Changelog
 
+## Unreleased — Phase 4 Slice A integration
+
+- Pinned the delegated CLI and exact 37-file evaluation contract mirror to
+  signed, hosted-green GKOS-Engine Slice A commit
+  `cac029a5b570135b26f3585bc86f4c9beb00c36d`; no tag or release is claimed.
+- Added a crate-private pure verifier for normalized evaluation envelopes,
+  u128 metric math, baseline comparison, policy-leak and citation accounting,
+  temporal/scenario outcomes, and deterministic tuning priority.
+- Preserved Full as the sole golden-TOML, GKX, provider, search, tuning,
+  filesystem, output-publication, and CLI authority; no Phase 4 command is
+  added by this slice.
+
 ## Unreleased — Phase 3 integration
 
 - Pinned the delegated CLI and frozen 21-file ingest contract mirror to signed,

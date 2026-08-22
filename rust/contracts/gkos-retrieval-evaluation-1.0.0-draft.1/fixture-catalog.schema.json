@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gkos.example/contracts/retrieval/gkos-retrieval-evaluation-1.0.0-draft.1/fixture-catalog.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["contract_version", "fixture_catalog_id", "entries", "catalog_digest"],
+  "properties": {
+    "contract_version": { "const": "gkos-retrieval-evaluation-fixture-catalog/1.0.0-draft.1" },
+    "fixture_catalog_id": { "$ref": "common.schema.json#/$defs/evaluationId" },
+    "entries": { "type": "array", "minItems": 1, "maxItems": 256, "items": { "$ref": "#/$defs/entry" } },
+    "catalog_digest": { "$ref": "common.schema.json#/$defs/sha256" }
+  },
+  "$defs": {
+    "sourcePolicy": {
+      "type": "object", "additionalProperties": false, "required": ["source_id", "source_path", "discoverable"],
+      "properties": { "source_id": { "$ref": "common.schema.json#/$defs/uid" }, "source_path": { "$ref": "common.schema.json#/$defs/sourcePath" }, "discoverable": { "type": "boolean" } }
+    },
+    "sourceObservation": {
+      "type": "object", "additionalProperties": false, "required": ["source_id", "source_path", "source_digest"],
+      "properties": { "source_id": { "$ref": "common.schema.json#/$defs/uid" }, "source_path": { "$ref": "common.schema.json#/$defs/sourcePath" }, "source_digest": { "$ref": "common.schema.json#/$defs/sha256" } }
+    },
+    "sourceSnapshot": {
+      "type": "object", "additionalProperties": false, "required": ["contract_version", "source_observations", "source_snapshot_digest"],
+      "properties": {
+        "contract_version": { "const": "gkos-retrieval-evaluation-source-snapshot/1.0.0-draft.1" },
+        "source_observations": { "type": "array", "minItems": 1, "maxItems": 4096, "items": { "$ref": "#/$defs/sourceObservation" } },
+        "source_snapshot_digest": { "$ref": "common.schema.json#/$defs/sha256" }
+      }
+    },
+    "chunkPolicy": {
+      "type": "object", "additionalProperties": false, "required": ["chunk_id", "source_id", "discoverable"],
+      "properties": { "chunk_id": { "$ref": "common.schema.json#/$defs/sha256" }, "source_id": { "$ref": "common.schema.json#/$defs/uid" }, "discoverable": { "type": "boolean" } }
+    },
+    "runtimePolicyInputs": {
+      "type": "object", "additionalProperties": false,
+      "required": ["contract_version", "source_discoverability", "chunk_discoverability", "runtime_policy_inputs_digest"],
+      "properties": {
+        "contract_version": { "const": "gkos-retrieval-evaluation-runtime-policy-inputs/1.0.0-draft.1" },
+        "source_discoverability": { "type": "array", "maxItems": 4096, "items": { "$ref": "#/$defs/sourcePolicy" } },
+        "chunk_discoverability": { "type": "array", "maxItems": 16384, "items": { "$ref": "#/$defs/chunkPolicy" } },
+        "runtime_policy_inputs_digest": { "$ref": "common.schema.json#/$defs/sha256" }
+      }
+    },
+    "uidArray": { "type": "array", "maxItems": 4096, "uniqueItems": true, "items": { "$ref": "common.schema.json#/$defs/uid" } },
+    "pathArray": { "type": "array", "maxItems": 4096, "uniqueItems": true, "items": { "$ref": "common.schema.json#/$defs/sourcePath" } },
+    "auditOracle": {
+      "type": "object", "additionalProperties": false,
+      "required": ["contract_version", "authorized_source_ids", "authorized_source_paths", "forbidden_source_ids", "forbidden_source_paths", "authorized_endpoint_ids", "forbidden_endpoint_ids", "evaluation_audit_oracle_digest"],
+      "properties": {
+        "contract_version": { "const": "gkos-retrieval-evaluation-audit-oracle/1.0.0-draft.1" },
+        "authorized_source_ids": { "$ref": "#/$defs/uidArray" }, "authorized_source_paths": { "$ref": "#/$defs/pathArray" },
+        "forbidden_source_ids": { "$ref": "#/$defs/uidArray" }, "forbidden_source_paths": { "$ref": "#/$defs/pathArray" },
+        "authorized_endpoint_ids": { "$ref": "#/$defs/uidArray" }, "forbidden_endpoint_ids": { "$ref": "#/$defs/uidArray" },
+        "evaluation_audit_oracle_digest": { "$ref": "common.schema.json#/$defs/sha256" }
+      }
+    },
+    "entry": {
+      "type": "object", "additionalProperties": false,
+      "required": ["vault_fixture", "source_corpus_file", "corpus_fixture_digest", "source_snapshot", "runtime_policy_inputs", "evaluation_audit_oracle", "fixed_provider_transcript_digest", "embedding_provider_scenario_id", "reranker_provider_scenario_id", "backend", "entry_digest"],
+      "properties": {
+        "vault_fixture": { "$ref": "common.schema.json#/$defs/evaluationId" },
+        "source_corpus_file": { "const": "source-corpus.json" },
+        "corpus_fixture_digest": { "$ref": "common.schema.json#/$defs/sha256" },
+        "source_snapshot": { "$ref": "#/$defs/sourceSnapshot" },
+        "runtime_policy_inputs": { "$ref": "#/$defs/runtimePolicyInputs" },
+        "evaluation_audit_oracle": { "$ref": "#/$defs/auditOracle" },
+        "fixed_provider_transcript_digest": { "oneOf": [{ "$ref": "common.schema.json#/$defs/sha256" }, { "type": "null" }] },
+        "embedding_provider_scenario_id": { "$ref": "common.schema.json#/$defs/evaluationId" },
+        "reranker_provider_scenario_id": { "$ref": "common.schema.json#/$defs/evaluationId" },
+        "backend": { "enum": ["sqlite_fts5", "sqlite_lexical_scan"] },
+        "entry_digest": { "$ref": "common.schema.json#/$defs/sha256" }
+      }
+    }
+  }
+}

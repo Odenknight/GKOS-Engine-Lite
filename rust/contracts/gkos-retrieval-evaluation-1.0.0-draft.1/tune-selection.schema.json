@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gkos.example/contracts/retrieval/gkos-retrieval-evaluation-1.0.0-draft.1/tune-selection.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["contract_version", "evaluated_candidate_count", "excluded_candidate_count", "query_evaluation_count", "conforming_candidate_count", "query_count", "maximum_expected_top_k", "environment_set_digest", "golden_digest", "base_configuration_digest", "tuning_grid_digest", "baseline_metrics_set_digest", "baseline_evaluation_digest", "baseline_aggregate_metrics_digest", "candidate_evaluation_set_digest", "selected_candidate", "tune_selection_digest"],
+  "properties": {
+    "contract_version": { "const": "gkos-retrieval-evaluation-tune-selection/1.0.0-draft.1" },
+    "evaluated_candidate_count": { "type": "integer", "minimum": 0, "maximum": 900 },
+    "excluded_candidate_count": { "type": "integer", "minimum": 0, "maximum": 900 },
+    "query_evaluation_count": { "type": "integer", "minimum": 0, "maximum": 27000 },
+    "conforming_candidate_count": { "type": "integer", "minimum": 0, "maximum": 900 },
+    "query_count": { "type": "integer", "minimum": 1, "maximum": 30 },
+    "maximum_expected_top_k": { "type": "integer", "minimum": 1, "maximum": 100 },
+    "environment_set_digest": { "$ref": "common.schema.json#/$defs/sha256" },
+    "golden_digest": { "$ref": "common.schema.json#/$defs/sha256" },
+    "base_configuration_digest": { "$ref": "common.schema.json#/$defs/sha256" },
+    "tuning_grid_digest": { "$ref": "common.schema.json#/$defs/sha256" },
+    "baseline_metrics_set_digest": { "$ref": "common.schema.json#/$defs/sha256" },
+    "baseline_evaluation_digest": { "$ref": "common.schema.json#/$defs/sha256" },
+    "baseline_aggregate_metrics_digest": { "$ref": "common.schema.json#/$defs/sha256" },
+    "candidate_evaluation_set_digest": { "$ref": "common.schema.json#/$defs/sha256" },
+    "selected_candidate": { "oneOf": [{ "$ref": "#/$defs/candidate" }, { "type": "null" }] },
+    "tune_selection_digest": { "$ref": "common.schema.json#/$defs/sha256" }
+  },
+  "$defs": {
+    "candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["candidate_config_digest", "axes", "metrics_set", "candidate_evaluation_digest"],
+      "properties": {
+        "candidate_config_digest": { "$ref": "common.schema.json#/$defs/sha256" },
+        "axes": { "$ref": "tuning-axes.schema.json" },
+        "metrics_set": { "$ref": "metrics-set.schema.json" },
+        "candidate_evaluation_digest": { "$ref": "common.schema.json#/$defs/sha256" }
+      }
+    }
+  }
+}

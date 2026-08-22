@@ -27,6 +27,14 @@ cross-language conformance, never a second GKX parser, lineage model, or
 authority. No static distribution or platform qualification is claimed yet.
 CI verifies both the restricted command boundary and compatibility fixtures.
 
+Phase 4 Slice A adds a crate-private verifier for Full-produced normalized
+evaluation envelopes, integer metrics, comparisons, temporal and citation
+evidence, policy-leak accounting, scenario outcomes, and tuning priority. It
+does not parse golden TOML, read GKX source corpora, invoke providers or search,
+select or publish configuration, or expose a new public Rust API. Those host
+and CLI responsibilities remain exclusively with the pinned Full engine and
+later, separately reviewed slices.
+
 Version 1.1 also offers an optional `assist` command backed by a separately
 configured local intelligence sidecar. It never modifies a note and prints
 only engine-validated candidate proposals. Python, DSPy, a model, and provider
@@ -64,7 +72,7 @@ npm install gkos-engine-lite
 
 `gkos-engine` has no npm registry publish; this integration branch installs
 Engine package 2.1.2 from the exact reviewed commit
-`e7cc0dd478af3d0bda216c5258dec5f77932def7`. This commit pin is not a claim
+`cac029a5b570135b26f3585bc86f4c9beb00c36d`. This commit pin is not a claim
 that a matching Engine or Lite release tag exists. Git installation runs the
 engine package's standard `prepare` build.
 
@@ -167,7 +175,7 @@ reproducible and auditable.
 `desktop/` contains the separate **GKOS Engine Desktop** presentation package, a Tauri 2 tray app for macOS and
 Windows that wraps the engine's headless sidecar (`kosmos-agent`). The CLI
 integration is bound to [Engine package 2.1.2 at exact commit
-`e7cc0dd`](https://github.com/Odenknight/GKOS-Engine/commit/e7cc0dd478af3d0bda216c5258dec5f77932def7);
+`cac029a`](https://github.com/Odenknight/GKOS-Engine/commit/cac029a5b570135b26f3585bc86f4c9beb00c36d);
 desktop sidecar artifacts remain separately qualified and are not implied by
 that source pin.
 Point it at a notes folder; it watches and projects (OKF+ 2.3 + Graphiti) and

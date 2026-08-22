@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gkos.example/contracts/retrieval/gkos-retrieval-evaluation-1.0.0-draft.1/normalized-golden.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["contract_version", "queries", "golden_digest"],
+  "properties": {
+    "contract_version": { "const": "gkos-retrieval-evaluation-golden/1.0.0-draft.1" },
+    "queries": { "type": "array", "minItems": 1, "maxItems": 256, "items": { "$ref": "#/$defs/query" } },
+    "golden_digest": { "$ref": "common.schema.json#/$defs/sha256" }
+  },
+  "$defs": {
+    "query": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "text", "vault_fixture", "expected_files", "expected_source_ids", "expected_lineage_ids", "forbidden_source_ids", "forbidden_lineage_ids", "expected_top_k", "expected_confidence", "as_of", "query_digest"],
+      "properties": {
+        "id": { "$ref": "common.schema.json#/$defs/evaluationId" },
+        "text": { "type": "string", "minLength": 1, "maxLength": 4096, "pattern": "^[^\\u0000-\\u001f\\u007f]+$" },
+        "vault_fixture": { "$ref": "common.schema.json#/$defs/evaluationId" },
+        "expected_files": { "type": "array", "maxItems": 256, "items": { "$ref": "common.schema.json#/$defs/sourcePath" }, "uniqueItems": true },
+        "expected_source_ids": { "type": "array", "maxItems": 256, "items": { "$ref": "common.schema.json#/$defs/uid" }, "uniqueItems": true },
+        "expected_lineage_ids": { "type": "array", "maxItems": 0 },
+        "forbidden_source_ids": { "type": "array", "maxItems": 256, "items": { "$ref": "common.schema.json#/$defs/uid" }, "uniqueItems": true },
+        "forbidden_lineage_ids": { "type": "array", "maxItems": 0 },
+        "expected_top_k": { "type": "integer", "minimum": 1, "maximum": 100 },
+        "expected_confidence": { "enum": ["high", "medium", "low"] },
+        "as_of": { "oneOf": [{ "$ref": "common.schema.json#/$defs/canonicalTime" }, { "type": "null" }] },
+        "query_digest": { "$ref": "common.schema.json#/$defs/sha256" }
+      }
+    }
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gkos.example/contracts/retrieval/gkos-retrieval-evaluation-1.0.0-draft.1/observation-report.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["contract_version", "evaluation_digest", "fixed_sample_plan_digest", "environment", "warmup_count", "sample_count", "query_latency_micros", "index_time_micros", "update_time_micros", "chunks_reprocessed", "chunks_reused", "observation_digest"],
+  "properties": {
+    "contract_version": { "const": "gkos-retrieval-evaluation-observation/1.0.0-draft.1" },
+    "evaluation_digest": { "$ref": "common.schema.json#/$defs/sha256" },
+    "fixed_sample_plan_digest": { "$ref": "common.schema.json#/$defs/sha256" },
+    "environment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["runtime", "runtime_version", "os", "arch", "sqlite_version", "lexical_backend", "fts5_available", "runner_class"],
+      "properties": {
+        "runtime": { "const": "node" },
+        "runtime_version": { "type": "string", "minLength": 1, "maxLength": 32, "pattern": "^[A-Za-z0-9._-]+$" },
+        "os": { "enum": ["linux", "windows", "darwin"] },
+        "arch": { "enum": ["x64", "arm64"] },
+        "sqlite_version": { "type": "string", "minLength": 1, "maxLength": 32, "pattern": "^[A-Za-z0-9._-]+$" },
+        "lexical_backend": { "enum": ["sqlite_fts5", "sqlite_lexical_scan"] },
+        "fts5_available": { "type": "boolean" },
+        "runner_class": { "enum": ["github_hosted", "local"] }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "lexical_backend": { "const": "sqlite_fts5" } }, "required": ["lexical_backend"] },
+          "then": { "properties": { "fts5_available": { "const": true } }, "required": ["fts5_available"] }
+        }
+      ]
+    },
+    "warmup_count": { "type": "integer", "minimum": 0, "maximum": 1000000 },
+    "sample_count": { "type": "integer", "minimum": 1, "maximum": 1000000 },
+    "query_latency_micros": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["p50", "p95", "p99"],
+      "properties": { "p50": { "$ref": "common.schema.json#/$defs/safeCount" }, "p95": { "$ref": "common.schema.json#/$defs/safeCount" }, "p99": { "$ref": "common.schema.json#/$defs/safeCount" } }
+    },
+    "index_time_micros": { "$ref": "common.schema.json#/$defs/safeCount" },
+    "update_time_micros": { "$ref": "common.schema.json#/$defs/safeCount" },
+    "chunks_reprocessed": { "$ref": "common.schema.json#/$defs/safeCount" },
+    "chunks_reused": { "$ref": "common.schema.json#/$defs/safeCount" },
+    "observation_digest": { "$ref": "common.schema.json#/$defs/sha256" }
+  }
+}

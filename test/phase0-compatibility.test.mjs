@@ -17,6 +17,7 @@ const historicalFixture = JSON.parse(await readFile(resolve(fixtureRoot, "phase0
 const fixture = JSON.parse(await readFile(resolve(fixtureRoot, "phase1-lite.json"), "utf8"));
 const phase2Fixture = JSON.parse(await readFile(resolve(fixtureRoot, "phase2-lite.json"), "utf8"));
 const phase3Fixture = JSON.parse(await readFile(resolve(fixtureRoot, "phase3-lite.json"), "utf8"));
+const phase4Fixture = JSON.parse(await readFile(resolve(fixtureRoot, "phase4-lite.json"), "utf8"));
 
 async function runCli(args) {
   try {
@@ -35,8 +36,8 @@ async function runCli(args) {
 
 function assertCompatibilitySnapshot(actual) {
   const expected = structuredClone(fixture.runtime_snapshot);
-  expected.lite_package.engine_dependency = phase3Fixture.runtime_migration.engine_dependency;
-  expected.lite_package.engine_resolved_sha = phase3Fixture.runtime_migration.engine_resolved_sha;
+  expected.lite_package.engine_dependency = phase4Fixture.runtime_migration.engine_dependency;
+  expected.lite_package.engine_resolved_sha = phase4Fixture.runtime_migration.engine_resolved_sha;
   assert.deepEqual(actual, expected);
 }
 
@@ -61,12 +62,12 @@ function changedPaths(oldValue, newValue, path = "$", output = []) {
   return output;
 }
 
-test("Phase 3 runtime migration changes only the exact Full pin coordinate", async () => {
+test("Phase 4 Slice A runtime migration changes only the exact Full pin coordinate", async () => {
   const actual = await runtimeSnapshot();
   assertCompatibilitySnapshot(actual);
   assert.deepEqual(
     changedPaths(fixture.runtime_snapshot, actual),
-    phase3Fixture.runtime_migration.expected_changed_paths,
+    phase4Fixture.runtime_migration.expected_changed_paths,
   );
 });
 
@@ -151,6 +152,10 @@ test("Phase 0 fixtures remain immutable and Phase 1 records exact authorized old
   assert.equal(phase3Fixture.full_reference.commit, "e7cc0dd478af3d0bda216c5258dec5f77932def7");
   assert.equal(phase3Fixture.full_reference.ingest_contract, "gkos-ingest-validation/1.0.0-draft.1");
   assert.equal(phase3Fixture.deterministic.source_fixture_change.startsWith("none"), true);
+  assert.equal(phase4Fixture.historical_fixture, "phase3-lite.json");
+  assert.equal(phase4Fixture.full_reference.commit, "cac029a5b570135b26f3585bc86f4c9beb00c36d");
+  assert.equal(phase4Fixture.full_reference.evaluation_contract, "gkos-retrieval-evaluation/1.0.0-draft.1");
+  assert.equal(phase4Fixture.deterministic.source_fixture_change.startsWith("none"), true);
 
   const sha256 = (bytes) => `sha256:${createHash("sha256").update(bytes).digest("hex")}`;
   const [oldGraph, newGraph, oldGraphiti, newGraphiti] = await Promise.all([

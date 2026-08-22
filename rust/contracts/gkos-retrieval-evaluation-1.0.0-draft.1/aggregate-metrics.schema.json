@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gkos.example/contracts/retrieval/gkos-retrieval-evaluation-1.0.0-draft.1/aggregate-metrics.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["contract_version", "query_count", "recall_at_k_micros", "mrr_micros", "ndcg_at_k_micros", "citation", "policy", "confidence_mismatch_count", "temporal_mismatch_count", "stale_citation_query_count", "stale_citation_query_rate_micros", "stale_projection_query_count", "unverified_projection_query_count", "unverified_projection_rate_micros", "aggregate_metrics_digest"],
+  "properties": {
+    "contract_version": { "const": "gkos-retrieval-evaluation-aggregate/1.0.0-draft.1" },
+    "query_count": { "type": "integer", "minimum": 1, "maximum": 256 },
+    "recall_at_k_micros": { "$ref": "common.schema.json#/$defs/micros" },
+    "mrr_micros": { "$ref": "common.schema.json#/$defs/micros" },
+    "ndcg_at_k_micros": { "$ref": "common.schema.json#/$defs/micros" },
+    "citation": { "$ref": "common.schema.json#/$defs/citationMetrics" },
+    "policy": { "$ref": "common.schema.json#/$defs/policyMetrics" },
+    "confidence_mismatch_count": { "$ref": "common.schema.json#/$defs/safeCount" },
+    "temporal_mismatch_count": { "$ref": "common.schema.json#/$defs/safeCount" },
+    "stale_citation_query_count": { "$ref": "common.schema.json#/$defs/safeCount" },
+    "stale_citation_query_rate_micros": { "$ref": "common.schema.json#/$defs/micros" },
+    "stale_projection_query_count": { "$ref": "common.schema.json#/$defs/safeCount" },
+    "unverified_projection_query_count": { "$ref": "common.schema.json#/$defs/safeCount" },
+    "unverified_projection_rate_micros": { "$ref": "common.schema.json#/$defs/micros" },
+    "aggregate_metrics_digest": { "$ref": "common.schema.json#/$defs/sha256" }
+  },
+  "allOf": [
+    {
+      "if": { "type": "object", "properties": { "citation": { "type": "object", "properties": { "checked": { "const": 0 } }, "required": ["checked"] } }, "required": ["citation"] },
+      "then": {
+        "type": "object",
+        "properties": {
+          "citation": {
+            "allOf": [
+              { "$ref": "common.schema.json#/$defs/citationMetrics" },
+              { "type": "object", "properties": { "applicability": { "const": "not_applicable" }, "correctness_micros": { "type": "null" } } }
+            ]
+          }
+        }
+      },
+      "else": {
+        "type": "object",
+        "properties": {
+          "citation": {
+            "allOf": [
+              { "$ref": "common.schema.json#/$defs/citationMetrics" },
+              { "type": "object", "properties": { "applicability": { "const": "required" } } }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

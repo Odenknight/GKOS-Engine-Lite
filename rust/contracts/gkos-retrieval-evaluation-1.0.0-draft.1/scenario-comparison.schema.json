@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gkos.example/contracts/retrieval/gkos-retrieval-evaluation-1.0.0-draft.1/scenario-comparison.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["contract_version", "status", "reasons", "expected_outcome_digest", "observed_outcome_digest", "scenario_comparison_digest"],
+  "properties": {
+    "contract_version": { "const": "gkos-retrieval-evaluation-scenario-comparison/1.0.0-draft.1" },
+    "status": { "enum": ["pass", "regression"] },
+    "reasons": { "type": "array", "maxItems": 2, "uniqueItems": true, "items": { "enum": ["SCENARIO_KIND_MISMATCH", "SCENARIO_OUTCOME_MISMATCH"] } },
+    "expected_outcome_digest": { "$ref": "common.schema.json#/$defs/sha256" },
+    "observed_outcome_digest": { "$ref": "common.schema.json#/$defs/sha256" },
+    "scenario_comparison_digest": { "$ref": "common.schema.json#/$defs/sha256" }
+  }
+}

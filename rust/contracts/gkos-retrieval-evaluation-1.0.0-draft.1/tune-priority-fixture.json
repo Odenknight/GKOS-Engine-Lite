@@ -1,0 +1,675 @@
+{
+  "contract_version": "gkos-retrieval-evaluation-tune-priority-fixture/1.0.0-draft.1",
+  "cases": [
+    {
+      "case_id": "priority-01-ndcg",
+      "baseline_axes": {
+        "rrf_k": 60,
+        "mmr": false,
+        "mmr_lambda_micros": null,
+        "semantic_top_k": 20,
+        "lexical_top_k": 20
+      },
+      "baseline_ndcg_at_k_micros": 500000,
+      "candidates": [
+        {
+          "candidate_id": "higher-ndcg",
+          "axes": {
+            "rrf_k": 30,
+            "mmr": false,
+            "mmr_lambda_micros": null,
+            "semantic_top_k": 20,
+            "lexical_top_k": 20
+          },
+          "ndcg_at_k_micros": 800000,
+          "recall_at_k_micros": 100000,
+          "mrr_micros": 100000,
+          "zero_gate_failures": []
+        },
+        {
+          "candidate_id": "lower-ndcg",
+          "axes": {
+            "rrf_k": 100,
+            "mmr": false,
+            "mmr_lambda_micros": null,
+            "semantic_top_k": 20,
+            "lexical_top_k": 20
+          },
+          "ndcg_at_k_micros": 700000,
+          "recall_at_k_micros": 1000000,
+          "mrr_micros": 1000000,
+          "zero_gate_failures": []
+        }
+      ],
+      "expected_conforming_candidate_ids": [
+        "higher-ndcg",
+        "lower-ndcg"
+      ],
+      "expected_ordered_candidate_ids": [
+        "higher-ndcg",
+        "lower-ndcg"
+      ],
+      "expected_selected_candidate_id": "higher-ndcg",
+      "case_digest": "sha256:1ece0331fda19d4b6faeccec00b238f6a464da895a35e8cb64d1d0651c2dc69c"
+    },
+    {
+      "case_id": "priority-02-recall",
+      "baseline_axes": {
+        "rrf_k": 60,
+        "mmr": false,
+        "mmr_lambda_micros": null,
+        "semantic_top_k": 20,
+        "lexical_top_k": 20
+      },
+      "baseline_ndcg_at_k_micros": 500000,
+      "candidates": [
+        {
+          "candidate_id": "higher-recall",
+          "axes": {
+            "rrf_k": 30,
+            "mmr": false,
+            "mmr_lambda_micros": null,
+            "semantic_top_k": 20,
+            "lexical_top_k": 20
+          },
+          "ndcg_at_k_micros": 700000,
+          "recall_at_k_micros": 800000,
+          "mrr_micros": 100000,
+          "zero_gate_failures": []
+        },
+        {
+          "candidate_id": "lower-recall",
+          "axes": {
+            "rrf_k": 100,
+            "mmr": false,
+            "mmr_lambda_micros": null,
+            "semantic_top_k": 20,
+            "lexical_top_k": 20
+          },
+          "ndcg_at_k_micros": 700000,
+          "recall_at_k_micros": 700000,
+          "mrr_micros": 1000000,
+          "zero_gate_failures": []
+        }
+      ],
+      "expected_conforming_candidate_ids": [
+        "higher-recall",
+        "lower-recall"
+      ],
+      "expected_ordered_candidate_ids": [
+        "higher-recall",
+        "lower-recall"
+      ],
+      "expected_selected_candidate_id": "higher-recall",
+      "case_digest": "sha256:be851474ae8f4e9f359585d88258c4d8a7b536a400702b4de773bb71462e57d1"
+    },
+    {
+      "case_id": "priority-03-mrr",
+      "baseline_axes": {
+        "rrf_k": 60,
+        "mmr": false,
+        "mmr_lambda_micros": null,
+        "semantic_top_k": 20,
+        "lexical_top_k": 20
+      },
+      "baseline_ndcg_at_k_micros": 500000,
+      "candidates": [
+        {
+          "candidate_id": "higher-mrr",
+          "axes": {
+            "rrf_k": 30,
+            "mmr": false,
+            "mmr_lambda_micros": null,
+            "semantic_top_k": 20,
+            "lexical_top_k": 20
+          },
+          "ndcg_at_k_micros": 700000,
+          "recall_at_k_micros": 700000,
+          "mrr_micros": 800000,
+          "zero_gate_failures": []
+        },
+        {
+          "candidate_id": "lower-mrr",
+          "axes": {
+            "rrf_k": 100,
+            "mmr": false,
+            "mmr_lambda_micros": null,
+            "semantic_top_k": 20,
+            "lexical_top_k": 20
+          },
+          "ndcg_at_k_micros": 700000,
+          "recall_at_k_micros": 700000,
+          "mrr_micros": 700000,
+          "zero_gate_failures": []
+        }
+      ],
+      "expected_conforming_candidate_ids": [
+        "higher-mrr",
+        "lower-mrr"
+      ],
+      "expected_ordered_candidate_ids": [
+        "higher-mrr",
+        "lower-mrr"
+      ],
+      "expected_selected_candidate_id": "higher-mrr",
+      "case_digest": "sha256:030c30c0a18b5ac4a8328b3b3de8e9f0eeef5a373754ce50da7847fd1fb532c8"
+    },
+    {
+      "case_id": "priority-04-changed-axis-count",
+      "baseline_axes": {
+        "rrf_k": 60,
+        "mmr": false,
+        "mmr_lambda_micros": null,
+        "semantic_top_k": 20,
+        "lexical_top_k": 20
+      },
+      "baseline_ndcg_at_k_micros": 500000,
+      "candidates": [
+        {
+          "candidate_id": "fewer-changes",
+          "axes": {
+            "rrf_k": 60,
+            "mmr": false,
+            "mmr_lambda_micros": null,
+            "semantic_top_k": 20,
+            "lexical_top_k": 20
+          },
+          "ndcg_at_k_micros": 700000,
+          "recall_at_k_micros": 700000,
+          "mrr_micros": 700000,
+          "zero_gate_failures": []
+        },
+        {
+          "candidate_id": "more-changes",
+          "axes": {
+            "rrf_k": 60,
+            "mmr": false,
+            "mmr_lambda_micros": null,
+            "semantic_top_k": 40,
+            "lexical_top_k": 20
+          },
+          "ndcg_at_k_micros": 700000,
+          "recall_at_k_micros": 700000,
+          "mrr_micros": 700000,
+          "zero_gate_failures": []
+        }
+      ],
+      "expected_conforming_candidate_ids": [
+        "fewer-changes",
+        "more-changes"
+      ],
+      "expected_ordered_candidate_ids": [
+        "fewer-changes",
+        "more-changes"
+      ],
+      "expected_selected_candidate_id": "fewer-changes",
+      "case_digest": "sha256:4c80718cda821d46aeec2df6bf571b2484fb648d806edcc3e7c6c8fe1cf3f239"
+    },
+    {
+      "case_id": "priority-05-top-k-sum",
+      "baseline_axes": {
+        "rrf_k": 60,
+        "mmr": false,
+        "mmr_lambda_micros": null,
+        "semantic_top_k": 20,
+        "lexical_top_k": 20
+      },
+      "baseline_ndcg_at_k_micros": 500000,
+      "candidates": [
+        {
+          "candidate_id": "larger-top-k",
+          "axes": {
+            "rrf_k": 60,
+            "mmr": false,
+            "mmr_lambda_micros": null,
+            "semantic_top_k": 40,
+            "lexical_top_k": 40
+          },
+          "ndcg_at_k_micros": 700000,
+          "recall_at_k_micros": 700000,
+          "mrr_micros": 700000,
+          "zero_gate_failures": []
+        },
+        {
+          "candidate_id": "smaller-top-k",
+          "axes": {
+            "rrf_k": 60,
+            "mmr": false,
+            "mmr_lambda_micros": null,
+            "semantic_top_k": 10,
+            "lexical_top_k": 10
+          },
+          "ndcg_at_k_micros": 700000,
+          "recall_at_k_micros": 700000,
+          "mrr_micros": 700000,
+          "zero_gate_failures": []
+        }
+      ],
+      "expected_conforming_candidate_ids": [
+        "larger-top-k",
+        "smaller-top-k"
+      ],
+      "expected_ordered_candidate_ids": [
+        "smaller-top-k",
+        "larger-top-k"
+      ],
+      "expected_selected_candidate_id": "smaller-top-k",
+      "case_digest": "sha256:4004f6286e827a88e6f09bb1f25fac9cf27bb91b0d8ce3b7db1978baa32e8252"
+    },
+    {
+      "case_id": "priority-06-rrf-distance",
+      "baseline_axes": {
+        "rrf_k": 60,
+        "mmr": false,
+        "mmr_lambda_micros": null,
+        "semantic_top_k": 20,
+        "lexical_top_k": 20
+      },
+      "baseline_ndcg_at_k_micros": 500000,
+      "candidates": [
+        {
+          "candidate_id": "farther-rrf",
+          "axes": {
+            "rrf_k": 100,
+            "mmr": false,
+            "mmr_lambda_micros": null,
+            "semantic_top_k": 20,
+            "lexical_top_k": 20
+          },
+          "ndcg_at_k_micros": 700000,
+          "recall_at_k_micros": 700000,
+          "mrr_micros": 700000,
+          "zero_gate_failures": []
+        },
+        {
+          "candidate_id": "nearer-rrf",
+          "axes": {
+            "rrf_k": 30,
+            "mmr": false,
+            "mmr_lambda_micros": null,
+            "semantic_top_k": 20,
+            "lexical_top_k": 20
+          },
+          "ndcg_at_k_micros": 700000,
+          "recall_at_k_micros": 700000,
+          "mrr_micros": 700000,
+          "zero_gate_failures": []
+        }
+      ],
+      "expected_conforming_candidate_ids": [
+        "farther-rrf",
+        "nearer-rrf"
+      ],
+      "expected_ordered_candidate_ids": [
+        "nearer-rrf",
+        "farther-rrf"
+      ],
+      "expected_selected_candidate_id": "nearer-rrf",
+      "case_digest": "sha256:4126275904c405734ca22629b665105d68ed0758b466674e138bf02205c2c101"
+    },
+    {
+      "case_id": "priority-07-disabled-mmr",
+      "baseline_axes": {
+        "rrf_k": 60,
+        "mmr": true,
+        "mmr_lambda_micros": 700000,
+        "semantic_top_k": 10,
+        "lexical_top_k": 40
+      },
+      "baseline_ndcg_at_k_micros": 500000,
+      "candidates": [
+        {
+          "candidate_id": "disabled-mmr",
+          "axes": {
+            "rrf_k": 60,
+            "mmr": false,
+            "mmr_lambda_micros": null,
+            "semantic_top_k": 10,
+            "lexical_top_k": 40
+          },
+          "ndcg_at_k_micros": 700000,
+          "recall_at_k_micros": 700000,
+          "mrr_micros": 700000,
+          "zero_gate_failures": []
+        },
+        {
+          "candidate_id": "enabled-mmr",
+          "axes": {
+            "rrf_k": 60,
+            "mmr": true,
+            "mmr_lambda_micros": 700000,
+            "semantic_top_k": 40,
+            "lexical_top_k": 10
+          },
+          "ndcg_at_k_micros": 700000,
+          "recall_at_k_micros": 700000,
+          "mrr_micros": 700000,
+          "zero_gate_failures": []
+        }
+      ],
+      "expected_conforming_candidate_ids": [
+        "disabled-mmr",
+        "enabled-mmr"
+      ],
+      "expected_ordered_candidate_ids": [
+        "disabled-mmr",
+        "enabled-mmr"
+      ],
+      "expected_selected_candidate_id": "disabled-mmr",
+      "case_digest": "sha256:7204b08aaf0261fcd5852fae89409e185019ffe87a916b86ced4ea1c7cb5298b"
+    },
+    {
+      "case_id": "priority-08-lambda-distance",
+      "baseline_axes": {
+        "rrf_k": 60,
+        "mmr": true,
+        "mmr_lambda_micros": 500000,
+        "semantic_top_k": 20,
+        "lexical_top_k": 20
+      },
+      "baseline_ndcg_at_k_micros": 500000,
+      "candidates": [
+        {
+          "candidate_id": "farther-lambda",
+          "axes": {
+            "rrf_k": 60,
+            "mmr": true,
+            "mmr_lambda_micros": 300000,
+            "semantic_top_k": 20,
+            "lexical_top_k": 20
+          },
+          "ndcg_at_k_micros": 700000,
+          "recall_at_k_micros": 700000,
+          "mrr_micros": 700000,
+          "zero_gate_failures": []
+        },
+        {
+          "candidate_id": "nearer-lambda",
+          "axes": {
+            "rrf_k": 60,
+            "mmr": true,
+            "mmr_lambda_micros": 700000,
+            "semantic_top_k": 20,
+            "lexical_top_k": 20
+          },
+          "ndcg_at_k_micros": 700000,
+          "recall_at_k_micros": 700000,
+          "mrr_micros": 700000,
+          "zero_gate_failures": []
+        }
+      ],
+      "expected_conforming_candidate_ids": [
+        "farther-lambda",
+        "nearer-lambda"
+      ],
+      "expected_ordered_candidate_ids": [
+        "nearer-lambda",
+        "farther-lambda"
+      ],
+      "expected_selected_candidate_id": "nearer-lambda",
+      "case_digest": "sha256:6f52c2552b7f20c2ddcbee46bd078f58c2e3f6a1a96ac55cb519e94b5d7ef8b0"
+    },
+    {
+      "case_id": "priority-09-canonical-config",
+      "baseline_axes": {
+        "rrf_k": 60,
+        "mmr": false,
+        "mmr_lambda_micros": null,
+        "semantic_top_k": 20,
+        "lexical_top_k": 20
+      },
+      "baseline_ndcg_at_k_micros": 500000,
+      "candidates": [
+        {
+          "candidate_id": "rrf-one-hundred",
+          "axes": {
+            "rrf_k": 100,
+            "mmr": false,
+            "mmr_lambda_micros": null,
+            "semantic_top_k": 20,
+            "lexical_top_k": 20
+          },
+          "ndcg_at_k_micros": 700000,
+          "recall_at_k_micros": 700000,
+          "mrr_micros": 700000,
+          "zero_gate_failures": []
+        },
+        {
+          "candidate_id": "rrf-twenty",
+          "axes": {
+            "rrf_k": 20,
+            "mmr": false,
+            "mmr_lambda_micros": null,
+            "semantic_top_k": 20,
+            "lexical_top_k": 20
+          },
+          "ndcg_at_k_micros": 700000,
+          "recall_at_k_micros": 700000,
+          "mrr_micros": 700000,
+          "zero_gate_failures": []
+        }
+      ],
+      "expected_conforming_candidate_ids": [
+        "rrf-one-hundred",
+        "rrf-twenty"
+      ],
+      "expected_ordered_candidate_ids": [
+        "rrf-one-hundred",
+        "rrf-twenty"
+      ],
+      "expected_selected_candidate_id": "rrf-one-hundred",
+      "case_digest": "sha256:2f139b360aa3f0c5db9e08e357fbb919795f4fad69fbad90acaff0907f453ab4"
+    },
+    {
+      "case_id": "priority-10-zero-gates",
+      "baseline_axes": {
+        "rrf_k": 60,
+        "mmr": false,
+        "mmr_lambda_micros": null,
+        "semantic_top_k": 20,
+        "lexical_top_k": 20
+      },
+      "baseline_ndcg_at_k_micros": 500000,
+      "candidates": [
+        {
+          "candidate_id": "citation-coverage",
+          "axes": {
+            "rrf_k": 5,
+            "mmr": false,
+            "mmr_lambda_micros": null,
+            "semantic_top_k": 20,
+            "lexical_top_k": 20
+          },
+          "ndcg_at_k_micros": 1000000,
+          "recall_at_k_micros": 700000,
+          "mrr_micros": 700000,
+          "zero_gate_failures": [
+            "CITATION_COVERAGE"
+          ]
+        },
+        {
+          "candidate_id": "citation-mismatch",
+          "axes": {
+            "rrf_k": 10,
+            "mmr": false,
+            "mmr_lambda_micros": null,
+            "semantic_top_k": 20,
+            "lexical_top_k": 20
+          },
+          "ndcg_at_k_micros": 1000000,
+          "recall_at_k_micros": 700000,
+          "mrr_micros": 700000,
+          "zero_gate_failures": [
+            "CITATION_MISMATCH"
+          ]
+        },
+        {
+          "candidate_id": "clean",
+          "axes": {
+            "rrf_k": 60,
+            "mmr": false,
+            "mmr_lambda_micros": null,
+            "semantic_top_k": 20,
+            "lexical_top_k": 20
+          },
+          "ndcg_at_k_micros": 600000,
+          "recall_at_k_micros": 700000,
+          "mrr_micros": 700000,
+          "zero_gate_failures": []
+        },
+        {
+          "candidate_id": "confidence-mismatch",
+          "axes": {
+            "rrf_k": 20,
+            "mmr": false,
+            "mmr_lambda_micros": null,
+            "semantic_top_k": 20,
+            "lexical_top_k": 20
+          },
+          "ndcg_at_k_micros": 1000000,
+          "recall_at_k_micros": 700000,
+          "mrr_micros": 700000,
+          "zero_gate_failures": [
+            "CONFIDENCE_MISMATCH"
+          ]
+        },
+        {
+          "candidate_id": "policy-leak",
+          "axes": {
+            "rrf_k": 30,
+            "mmr": false,
+            "mmr_lambda_micros": null,
+            "semantic_top_k": 20,
+            "lexical_top_k": 20
+          },
+          "ndcg_at_k_micros": 1000000,
+          "recall_at_k_micros": 700000,
+          "mrr_micros": 700000,
+          "zero_gate_failures": [
+            "POLICY_LEAK"
+          ]
+        },
+        {
+          "candidate_id": "stale-citation",
+          "axes": {
+            "rrf_k": 60,
+            "mmr": false,
+            "mmr_lambda_micros": null,
+            "semantic_top_k": 5,
+            "lexical_top_k": 20
+          },
+          "ndcg_at_k_micros": 1000000,
+          "recall_at_k_micros": 700000,
+          "mrr_micros": 700000,
+          "zero_gate_failures": [
+            "STALE_CITATION"
+          ]
+        },
+        {
+          "candidate_id": "stale-projection",
+          "axes": {
+            "rrf_k": 60,
+            "mmr": false,
+            "mmr_lambda_micros": null,
+            "semantic_top_k": 10,
+            "lexical_top_k": 20
+          },
+          "ndcg_at_k_micros": 1000000,
+          "recall_at_k_micros": 700000,
+          "mrr_micros": 700000,
+          "zero_gate_failures": [
+            "STALE_PROJECTION"
+          ]
+        },
+        {
+          "candidate_id": "temporal-mismatch",
+          "axes": {
+            "rrf_k": 60,
+            "mmr": false,
+            "mmr_lambda_micros": null,
+            "semantic_top_k": 40,
+            "lexical_top_k": 20
+          },
+          "ndcg_at_k_micros": 1000000,
+          "recall_at_k_micros": 700000,
+          "mrr_micros": 700000,
+          "zero_gate_failures": [
+            "TEMPORAL_MISMATCH"
+          ]
+        },
+        {
+          "candidate_id": "unverified-projection",
+          "axes": {
+            "rrf_k": 60,
+            "mmr": false,
+            "mmr_lambda_micros": null,
+            "semantic_top_k": 80,
+            "lexical_top_k": 20
+          },
+          "ndcg_at_k_micros": 1000000,
+          "recall_at_k_micros": 700000,
+          "mrr_micros": 700000,
+          "zero_gate_failures": [
+            "UNVERIFIED_PROJECTION"
+          ]
+        }
+      ],
+      "expected_conforming_candidate_ids": [
+        "clean"
+      ],
+      "expected_ordered_candidate_ids": [
+        "clean"
+      ],
+      "expected_selected_candidate_id": "clean",
+      "case_digest": "sha256:e49de9966c60a13dd4f0a81c7b6206e80f05bda2055514f56bc346da0dad7028"
+    },
+    {
+      "case_id": "priority-11-no-conforming",
+      "baseline_axes": {
+        "rrf_k": 60,
+        "mmr": false,
+        "mmr_lambda_micros": null,
+        "semantic_top_k": 20,
+        "lexical_top_k": 20
+      },
+      "baseline_ndcg_at_k_micros": 500000,
+      "candidates": [
+        {
+          "candidate_id": "below-baseline",
+          "axes": {
+            "rrf_k": 30,
+            "mmr": false,
+            "mmr_lambda_micros": null,
+            "semantic_top_k": 20,
+            "lexical_top_k": 20
+          },
+          "ndcg_at_k_micros": 499999,
+          "recall_at_k_micros": 700000,
+          "mrr_micros": 700000,
+          "zero_gate_failures": []
+        },
+        {
+          "candidate_id": "zero-gate",
+          "axes": {
+            "rrf_k": 100,
+            "mmr": false,
+            "mmr_lambda_micros": null,
+            "semantic_top_k": 20,
+            "lexical_top_k": 20
+          },
+          "ndcg_at_k_micros": 1000000,
+          "recall_at_k_micros": 700000,
+          "mrr_micros": 700000,
+          "zero_gate_failures": [
+            "POLICY_LEAK"
+          ]
+        }
+      ],
+      "expected_conforming_candidate_ids": [],
+      "expected_ordered_candidate_ids": [],
+      "expected_selected_candidate_id": null,
+      "case_digest": "sha256:feda8732fa6fcd3736d6a28f14a6bc77fcc0b86f4c621d3b1b6e2e55ac10d138"
+    }
+  ],
+  "fixture_digest": "sha256:d3cf3fc9aee519d39c3ef04df1edf57d581001820bcdb94f4b2b5125f875ad03"
+}

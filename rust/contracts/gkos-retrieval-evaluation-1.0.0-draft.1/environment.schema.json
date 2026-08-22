@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gkos.example/contracts/retrieval/gkos-retrieval-evaluation-1.0.0-draft.1/environment.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["contract_version", "scenario_id", "vault_fixture", "retrieval_contract_version", "evaluation_contract_version", "golden_contract_version", "metric_contract_version", "engine_version", "gkx_standard_commit", "gkx_projection_profile", "projection_schema_version", "chunker_version", "tokenizer_version", "lexical_backend", "normalized_golden_digest", "fixture_catalog_digest", "corpus_fixture_digest", "source_snapshot_digest", "runtime_policy_inputs_digest", "evaluation_audit_oracle_digest", "projection_id", "projection_digest", "embedding_role", "reranker_role", "ndcg_discount_table_digest", "metric_scale", "environment_digest"],
+  "properties": {
+    "contract_version": { "const": "gkos-retrieval-evaluation-environment/1.0.0-draft.1" },
+    "scenario_id": { "type": "string", "minLength": 1, "maxLength": 512, "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*(?:--[a-z0-9]+(?:-[a-z0-9]+)*){3}$" },
+    "vault_fixture": { "$ref": "common.schema.json#/$defs/evaluationId" },
+    "retrieval_contract_version": { "const": "gkos-retrieval/1.0.0-draft.2" },
+    "evaluation_contract_version": { "const": "gkos-retrieval-evaluation/1.0.0-draft.1" },
+    "golden_contract_version": { "const": "gkos-retrieval-evaluation-golden/1.0.0-draft.1" },
+    "metric_contract_version": { "const": "gkos-retrieval-evaluation-metrics/1.0.0-draft.1" },
+    "engine_version": { "const": "2.1.2" },
+    "gkx_standard_commit": { "const": "a2a2a6ca5c4dac32c6d9dc985ed7460f5f4350c6" },
+    "gkx_projection_profile": { "const": "gkx-2.3-validating-projection" },
+    "projection_schema_version": { "const": 3 },
+    "chunker_version": { "const": "gkos-heading-chunker/1" },
+    "tokenizer_version": { "const": "gkos-ascii-whitespace/1" },
+    "lexical_backend": { "enum": ["sqlite_fts5", "sqlite_lexical_scan"] },
+    "normalized_golden_digest": { "$ref": "common.schema.json#/$defs/sha256" },
+    "fixture_catalog_digest": { "$ref": "common.schema.json#/$defs/sha256" },
+    "corpus_fixture_digest": { "$ref": "common.schema.json#/$defs/sha256" },
+    "source_snapshot_digest": { "$ref": "common.schema.json#/$defs/sha256" },
+    "runtime_policy_inputs_digest": { "$ref": "common.schema.json#/$defs/sha256" },
+    "evaluation_audit_oracle_digest": { "$ref": "common.schema.json#/$defs/sha256" },
+    "projection_id": { "type": "string", "pattern": "^retrieval:[0-9a-f]{24}$" },
+    "projection_digest": { "$ref": "common.schema.json#/$defs/sha256" },
+    "embedding_role": { "$ref": "#/$defs/embeddingRole" },
+    "reranker_role": { "$ref": "#/$defs/rerankerRole" },
+    "ndcg_discount_table_digest": { "$ref": "common.schema.json#/$defs/sha256" },
+    "metric_scale": { "const": 1000000 },
+    "environment_digest": { "$ref": "common.schema.json#/$defs/sha256" }
+  },
+  "$defs": {
+    "identity": { "type": "string", "minLength": 1, "maxLength": 512, "pattern": "^(?![ \\u00a0\\u1680\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000\\ufeff]*$)[^\\u0000-\\u001f\\u007f]+$" },
+    "embeddingRole": {
+      "type": "object", "additionalProperties": false,
+      "required": ["state", "provider_scenario_id", "provider_kind", "provider_id", "model_id", "dimensions", "fixed_provider_transcript_digest"],
+      "properties": {
+        "state": { "enum": ["active", "disabled"] }, "provider_scenario_id": { "$ref": "common.schema.json#/$defs/evaluationId" },
+        "provider_kind": { "type": ["string", "null"], "enum": ["openai_compatible", "local_onnx", "mcp", null] },
+        "provider_id": { "oneOf": [{ "$ref": "#/$defs/identity" }, { "type": "null" }] },
+        "model_id": { "oneOf": [{ "$ref": "#/$defs/identity" }, { "type": "null" }] },
+        "dimensions": { "type": ["integer", "null"], "minimum": 1, "maximum": 4096 },
+        "fixed_provider_transcript_digest": { "oneOf": [{ "$ref": "common.schema.json#/$defs/sha256" }, { "type": "null" }] }
+      },
+      "allOf": [{ "if": { "properties": { "state": { "const": "disabled" } } }, "then": { "properties": { "provider_scenario_id": { "const": "disabled" }, "provider_kind": { "type": "null" }, "provider_id": { "type": "null" }, "model_id": { "type": "null" }, "dimensions": { "type": "null" }, "fixed_provider_transcript_digest": { "type": "null" } } }, "else": { "properties": { "provider_scenario_id": { "not": { "const": "disabled" } }, "provider_kind": { "enum": ["openai_compatible", "local_onnx", "mcp"] }, "provider_id": { "$ref": "#/$defs/identity" }, "model_id": { "$ref": "#/$defs/identity" }, "dimensions": { "type": "integer", "minimum": 1, "maximum": 4096 }, "fixed_provider_transcript_digest": { "$ref": "common.schema.json#/$defs/sha256" } } } }]
+    },
+    "rerankerRole": {
+      "type": "object", "additionalProperties": false,
+      "required": ["state", "provider_scenario_id", "provider_kind", "provider_id", "model_id", "fixed_provider_transcript_digest"],
+      "properties": {
+        "state": { "enum": ["active", "disabled"] }, "provider_scenario_id": { "$ref": "common.schema.json#/$defs/evaluationId" },
+        "provider_kind": { "type": ["string", "null"], "enum": ["openai_compatible", "local_onnx", "mcp", null] },
+        "provider_id": { "oneOf": [{ "$ref": "#/$defs/identity" }, { "type": "null" }] },
+        "model_id": { "oneOf": [{ "$ref": "#/$defs/identity" }, { "type": "null" }] },
+        "fixed_provider_transcript_digest": { "oneOf": [{ "$ref": "common.schema.json#/$defs/sha256" }, { "type": "null" }] }
+      },
+      "allOf": [{ "if": { "properties": { "state": { "const": "disabled" } } }, "then": { "properties": { "provider_scenario_id": { "const": "disabled" }, "provider_kind": { "type": "null" }, "provider_id": { "type": "null" }, "model_id": { "type": "null" }, "fixed_provider_transcript_digest": { "type": "null" } } }, "else": { "properties": { "provider_scenario_id": { "not": { "const": "disabled" } }, "provider_kind": { "enum": ["openai_compatible", "local_onnx", "mcp"] }, "provider_id": { "$ref": "#/$defs/identity" }, "model_id": { "$ref": "#/$defs/identity" }, "fixed_provider_transcript_digest": { "$ref": "common.schema.json#/$defs/sha256" } } } }]
+    }
+  }
+}

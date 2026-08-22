@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gkos.example/contracts/retrieval/gkos-retrieval-evaluation-1.0.0-draft.1/query-metrics.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["contract_version", "query_id", "expected_top_k", "relevant_source_count", "returned_unique_source_count", "relevant_returned_source_count", "relevant_source_ranks", "first_relevant_rank", "recall_at_k_micros", "mrr_micros", "ndcg_at_k_micros", "citation", "policy", "confidence_mismatch_count", "temporal_mismatch_count", "stale_citation_query_count", "stale_projection_query_count", "unverified_projection_query_count", "query_metrics_digest"],
+  "properties": {
+    "contract_version": { "const": "gkos-retrieval-evaluation-query-metrics/1.0.0-draft.1" },
+    "query_id": { "$ref": "common.schema.json#/$defs/evaluationId" },
+    "expected_top_k": { "type": "integer", "minimum": 1, "maximum": 100 },
+    "relevant_source_count": { "type": "integer", "minimum": 1, "maximum": 512 },
+    "returned_unique_source_count": { "type": "integer", "minimum": 0, "maximum": 100 },
+    "relevant_returned_source_count": { "$ref": "common.schema.json#/$defs/safeCount" },
+    "relevant_source_ranks": { "type": "array", "maxItems": 100, "items": { "type": "integer", "minimum": 1, "maximum": 100 }, "uniqueItems": true },
+    "first_relevant_rank": { "oneOf": [{ "type": "integer", "minimum": 1, "maximum": 100 }, { "type": "null" }] },
+    "recall_at_k_micros": { "$ref": "common.schema.json#/$defs/micros" },
+    "mrr_micros": { "$ref": "common.schema.json#/$defs/micros" },
+    "ndcg_at_k_micros": { "$ref": "common.schema.json#/$defs/micros" },
+    "citation": { "$ref": "common.schema.json#/$defs/citationMetrics" },
+    "policy": { "$ref": "common.schema.json#/$defs/policyMetrics" },
+    "confidence_mismatch_count": { "type": "integer", "minimum": 0, "maximum": 1 },
+    "temporal_mismatch_count": { "type": "integer", "minimum": 0, "maximum": 1 },
+    "stale_citation_query_count": { "type": "integer", "minimum": 0, "maximum": 1 },
+    "stale_projection_query_count": { "type": "integer", "minimum": 0, "maximum": 1 },
+    "unverified_projection_query_count": { "type": "integer", "minimum": 0, "maximum": 1 },
+    "query_metrics_digest": { "$ref": "common.schema.json#/$defs/sha256" }
+  },
+  "allOf": [
+    {
+      "if": { "type": "object", "properties": { "returned_unique_source_count": { "const": 0 } }, "required": ["returned_unique_source_count"] },
+      "then": {
+        "type": "object",
+        "properties": {
+          "citation": {
+            "allOf": [
+              { "$ref": "common.schema.json#/$defs/citationMetrics" },
+              { "type": "object", "properties": { "applicability": { "const": "not_applicable" }, "checked": { "const": 0 }, "passed": { "const": 0 }, "mismatch": { "const": 0 }, "stale": { "const": 0 }, "correctness_micros": { "type": "null" } } }
+            ]
+          }
+        }
+      },
+      "else": {
+        "type": "object",
+        "properties": {
+          "citation": {
+            "allOf": [
+              { "$ref": "common.schema.json#/$defs/citationMetrics" },
+              { "type": "object", "properties": { "applicability": { "const": "required" }, "checked": { "type": "integer", "minimum": 1 } } }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

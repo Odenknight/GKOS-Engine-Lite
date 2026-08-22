@@ -1,0 +1,152 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "contract_version": "gkos-retrieval-evaluation/1.0.0-draft.1",
+  "status": "provisional",
+  "frozen": false,
+  "hashes_frozen": false,
+  "implemented_slice": "A-parser-normalizer-pure-math-conformance",
+  "excluded_slices": [
+    "host-search-execution",
+    "cli-presentation",
+    "candidate-output-publication",
+    "temporal-ci-workflow",
+    "observational-performance-execution",
+    "final-contract-hashing"
+  ],
+  "authority": {
+    "full": "sole-human-TOML-parser-search-evaluator-tuner-output-authority",
+    "lite": "crate-private-pure-normalized-envelope-and-metric-verifier-only",
+    "gkx_authority": false,
+    "policy_authority": false,
+    "provider_authority": false
+  },
+  "coordinates": {
+    "retrieval_contract_version": "gkos-retrieval/1.0.0-draft.2",
+    "golden_contract_version": "gkos-retrieval-evaluation-golden/1.0.0-draft.1",
+    "query_metrics_contract_version": "gkos-retrieval-evaluation-query-metrics/1.0.0-draft.1",
+    "aggregate_contract_version": "gkos-retrieval-evaluation-aggregate/1.0.0-draft.1",
+    "environment_contract_version": "gkos-retrieval-evaluation-environment/1.0.0-draft.1",
+    "environment_set_contract_version": "gkos-retrieval-evaluation-environment-set/1.0.0-draft.1",
+    "metrics_set_contract_version": "gkos-retrieval-evaluation-metrics-set/1.0.0-draft.1",
+    "query_metrics_set_contract_version": "gkos-retrieval-evaluation-query-metrics-set/1.0.0-draft.1",
+    "metric_computation_fixture_contract_version": "gkos-retrieval-evaluation-metric-computation-fixture/1.0.0-draft.1",
+    "tune_priority_fixture_contract_version": "gkos-retrieval-evaluation-tune-priority-fixture/1.0.0-draft.1",
+    "source_corpus_contract_version": "gkos-retrieval-evaluation-source-corpus/1.0.0-draft.1",
+    "reviewed_bundle_contract_version": "gkos-retrieval-evaluation-reviewed-bundle/1.0.0-draft.1",
+    "result_origin_contract_version": "gkos-retrieval-evaluation-result-origin/1.0.0-draft.1",
+    "query_attempt_counters_contract_version": "gkos-retrieval-evaluation-query-attempt-counters/1.0.0-draft.1",
+    "temporal_noninterference_pair_contract_version": "gkos-retrieval-evaluation-temporal-noninterference-pair/1.0.0-draft.1",
+    "baseline_contract_version": "gkos-retrieval-evaluation-baseline/1.0.0-draft.1",
+    "evaluation_coordinate_contract_version": "gkos-retrieval-evaluation-evaluation-coordinate/1.0.0-draft.1",
+    "comparison_contract_version": "gkos-retrieval-evaluation-comparison/1.0.0-draft.1",
+    "tune_selection_contract_version": "gkos-retrieval-evaluation-tune-selection/1.0.0-draft.1",
+    "scenario_outcome_contract_version": "gkos-retrieval-evaluation-scenario-outcome/1.0.0-draft.1",
+    "scenario_comparison_contract_version": "gkos-retrieval-evaluation-scenario-comparison/1.0.0-draft.1",
+    "metric_scale": 1000000,
+    "ndcg_discount_scale": 1000000000000,
+    "relative_ndcg_budget": { "numerator": 2, "denominator": 100 },
+    "tuning_grid_candidate_count": 900,
+    "maximum_tuning_query_count": 30,
+    "maximum_query_evaluation_count": 27000
+  },
+  "source_identity_amendment": {
+    "expected_source_ids": "canonical-authored-GKX-UID",
+    "forbidden_source_ids": "canonical-authored-GKX-UID",
+    "current_profile_expected_lineage_ids": [],
+    "current_profile_forbidden_lineage_ids": [],
+    "source_lineage_fallback": false,
+    "future_lineage_requires_new_versioned_profile": true
+  },
+  "query_text_semantics": {
+    "authored_text_in_normalized_golden": "exact-untrimmed-no-unicode-normalization",
+    "authored_text_in_query_digest": true,
+    "effective_query_text": "exact-ecmascript-edge-trim",
+    "all_trim_invalid": true,
+    "provider_and_public_result_query_binding": "effective-query-text",
+    "lexical_parser_input": "authored-text",
+    "lexical_clause_count_maximum": 64,
+    "lexical_clause_utf8_bytes_maximum": 256,
+    "lexical_failure_codes": [
+      "GKX_EVAL_QUERY_LEXICAL_INVALID",
+      "GKX_EVAL_QUERY_LEXICAL_CLAUSE_COUNT_INVALID",
+      "GKX_EVAL_QUERY_LEXICAL_CLAUSE_SIZE_INVALID"
+    ]
+  },
+  "relevance": {
+    "labels": "binary-source-union",
+    "path_and_source_resolution": "independent-exactly-once",
+    "rank": "first-physical-hit-position",
+    "duplicate_backfill": false
+  },
+  "metric_math": {
+    "rounding": "nonnegative-half-up",
+    "runtime_logarithms": false,
+    "macro": "mean-of-already-rounded-query-millionths",
+    "citation_correctness": "passed-divided-by-checked",
+    "citation_evidence": "exact-production-lexicalCitationSpans-then-deduplicateOverlapEvidence-plus-source-byte-verification",
+    "policy_leak": "exact-forbidden-public-identity-field-occurrences-only",
+    "ordinary_zero_hit": "empty-authorized-not-applicable-zero-counts-null-correctness",
+    "stale_citation_query_rate": "queries-with-one-or-more-stale-citation-occurrences",
+    "projection_freshness_zero_gates": ["STALE_PROJECTION", "UNVERIFIED_PROJECTION"]
+  },
+  "schema_semantic_supplements": {
+    "schema_alone_authorizes_acceptance": false,
+    "opaque_identity_utf16_code_units_maximum": 512,
+    "source_path_utf8_bytes_maximum": 1024,
+    "all_frozen_utf8_byte_bounds_enforced_by_semantic_sealer": true,
+    "well_formed_unicode_enforced_by_semantic_sealer": true,
+    "js_and_rust_semantic_parity_required": true
+  },
+  "tuning": {
+    "rrf_k": [5, 10, 20, 30, 60, 100],
+    "mmr": [
+      { "enabled": false, "lambda_micros": null },
+      { "enabled": true, "lambda_micros": 0 },
+      { "enabled": true, "lambda_micros": 300000 },
+      { "enabled": true, "lambda_micros": 500000 },
+      { "enabled": true, "lambda_micros": 700000 },
+      { "enabled": true, "lambda_micros": 1000000 }
+    ],
+    "semantic_top_k": [5, 10, 20, 40, 80],
+    "lexical_top_k": [5, 10, 20, 40, 80],
+    "eligibility": "semantic_top_k-and-lexical_top_k-greater-than-or-equal-to-maximum_expected_top_k",
+    "candidate_set": "complete-exact-eligible-grid",
+    "output_replaces_active_config": false
+  },
+  "provider_boundary": {
+    "offline_fixed_fixtures_only": true,
+    "network": false,
+    "secrets": false,
+    "named_provider_allowlist": false,
+    "named_provider_preference": false,
+    "self_provision": false
+  },
+  "source_corpus_boundary": {
+    "companion_file": "source-corpus.json",
+    "source_bytes_encoding": "canonical-padded-rfc4648-base64",
+    "source_utf8": "fatal-no-normalization",
+    "maximum_source_bytes": 67108864,
+    "maximum_aggregate_source_bytes": 536870912,
+    "maximum_companion_canonical_json_bytes": 805306368,
+    "canonical_full_parser_and_chunker_only": true,
+    "golden_resolution_before_provider_or_state": true,
+    "derived_chunk_policy_bijection": true,
+    "provider_derived_chunk_binding": "all-and-only-authorized-discoverable"
+  },
+  "reviewed_bundle_boundary": {
+    "reviewed_query_count": 24,
+    "result_origin_count": 24,
+    "temporal_absent_corpus_count": 1,
+    "temporal_noninterference_pair_count": 1,
+    "manifest_projection_coordinate": "exact-environment-manifest",
+    "public_result_projection_coordinate": "production-lineageResultCoordinate-over-authorized-temporal-view",
+    "expected_query_view_oracle": "audit-only-catalog-authorized-corpus-declarations-and-as_of-never-runtime-policy-search-input",
+    "provider_kind": "local_onnx",
+    "slice_b_public_coordinator_replay_required": true
+  },
+  "compatibility": {
+    "phase_0_through_3_contract_bytes_changed": false,
+    "phase_0_through_3_public_exports_removed_or_changed": false,
+    "host_runtime_or_cli_changed": false
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gkos.example/contracts/retrieval/gkos-retrieval-evaluation-1.0.0-draft.1/tuning-grid.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["contract_version", "rrf_k", "mmr", "semantic_top_k", "lexical_top_k", "candidate_count", "tuning_grid_digest"],
+  "properties": {
+    "contract_version": { "const": "gkos-retrieval-evaluation-tuning-grid/1.0.0-draft.1" },
+    "rrf_k": { "const": [5, 10, 20, 30, 60, 100] },
+    "mmr": { "const": [{ "enabled": false, "lambda_micros": null }, { "enabled": true, "lambda_micros": 0 }, { "enabled": true, "lambda_micros": 300000 }, { "enabled": true, "lambda_micros": 500000 }, { "enabled": true, "lambda_micros": 700000 }, { "enabled": true, "lambda_micros": 1000000 }] },
+    "semantic_top_k": { "const": [5, 10, 20, 40, 80] },
+    "lexical_top_k": { "const": [5, 10, 20, 40, 80] },
+    "candidate_count": { "const": 900 },
+    "tuning_grid_digest": { "$ref": "common.schema.json#/$defs/sha256" }
+  }
+}

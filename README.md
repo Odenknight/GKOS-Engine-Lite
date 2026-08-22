@@ -14,7 +14,8 @@ individuals and small vaults the same GKOS-Engine-Lite schema — GKX Notes
 (2.2) with the optional Agent-Ready flat 2.3 profile — as a command-line tool
 you can point at any folder of Markdown notes. The CLI package has no Obsidian
 dependency, plugin, or GUI: just `okf-lite validate`, `index`, `assess`,
-`search`, `graph`, and `export` over a directory.
+`search`, `retrieval eval`, `retrieval tune`, `graph`, and `export` over a
+directory.
 
 The published JavaScript CLI remains a thin delegate. Under the hood it depends
 directly on [gkos-engine](https://github.com/Odenknight/GKOS-Engine) — the
@@ -26,6 +27,16 @@ pin-bound implementation of Full-owned retrieval contracts with exact
 cross-language conformance, never a second GKX parser, lineage model, or
 authority. No static distribution or platform qualification is claimed yet.
 CI verifies both the restricted command boundary and compatibility fixtures.
+
+Phase 4 Slice A adds a crate-private verifier for Full-produced normalized
+evaluation envelopes, integer metrics, comparisons, temporal and citation
+evidence, policy-leak accounting, scenario outcomes, and tuning priority. It
+does not parse golden TOML, read GKX source corpora, invoke providers or search,
+select or publish configuration, or expose a new public Rust API. Those host
+responsibilities remain exclusively with the pinned Full engine. Slice B adds
+only byte-for-byte delegation of Full's `retrieval eval` and `retrieval tune`
+CLI: Lite does not discover fixtures, execute providers/search, stage evaluation
+state, select a candidate, or publish output itself.
 
 Version 1.1 also offers an optional `assist` command backed by a separately
 configured local intelligence sidecar. It never modifies a note and prints
@@ -51,8 +62,8 @@ command writes only sealed derived retrieval generations under the pinned
 Engine's fail-closed owner protocol; it never changes source notes. If
 gkos-engine later grows broader write-capable commands (migrate, proposals,
 decisions, mv, or serve), GKOS-Engine-Lite's CLI surface will stay limited to
-the six delegated commands below plus the separate, proposal-only `assist`
-surface.
+the eight delegated command paths below plus the separate, proposal-only
+`assist` surface.
 
 ## Install
 
@@ -64,7 +75,7 @@ npm install gkos-engine-lite
 
 `gkos-engine` has no npm registry publish; this integration branch installs
 Engine package 2.1.2 from the exact reviewed commit
-`e7cc0dd478af3d0bda216c5258dec5f77932def7`. This commit pin is not a claim
+`a57b98c00c1913f5b7ed96839b3f8effe5be9c4a`. This commit pin is not a claim
 that a matching Engine or Lite release tag exists. Git installation runs the
 engine package's standard `prepare` build.
 
@@ -82,6 +93,8 @@ node bin/okf-lite.mjs index --kb-path ./my-notes --strict
 node bin/okf-lite.mjs assess   ./my-notes --json
 node bin/okf-lite.mjs search   "canonical policy" --kb-path ./my-notes --limit 5
 node bin/okf-lite.mjs search   "historical policy" --kb-path ./my-notes --as-of 2026-07-15T00:00-04:00 --limit 5
+node bin/okf-lite.mjs retrieval eval --fixture ./evaluation/golden-fixture.toml --json
+node bin/okf-lite.mjs retrieval tune --fixture ./evaluation/golden-fixture.toml --output ./candidate.toml
 node bin/okf-lite.mjs graph    ./my-notes -o graph.json
 node bin/okf-lite.mjs export graphiti ./my-notes --episodes episodes.json
 ```
@@ -149,6 +162,17 @@ experimental-warning line is normalized by the test. See
 [Citation and temporal provenance](docs/citations.md) for the pin-bound result
 semantics and authority boundary.
 
+### `okf-lite retrieval eval|tune`
+
+Delegates the original argv array unchanged to the exact pinned Full CLI.
+`eval --fixture <golden-toml> [--json]` is read-only. `tune --fixture
+<golden-toml> --output <candidate-config>` may create only the requested new
+candidate file under Full's guarded, no-clobber publication protocol; it never
+changes an active configuration. Full remains the sole TOML, fixture, corpus,
+provider, search, comparison, tuning, temporary-state, and output authority.
+The copied private CLI conformance fixture binds exact nested argv, help,
+status, stdout, stderr, exit, and candidate bytes on Node 22, 23, and 24.
+
 ### `okf-lite graph <dir> -o <graph.json> [--watch]`
 
 Builds the canonical Kosmos graph (nodes, links, stats, diagnostics) with
@@ -167,7 +191,7 @@ reproducible and auditable.
 `desktop/` contains the separate **GKOS Engine Desktop** presentation package, a Tauri 2 tray app for macOS and
 Windows that wraps the engine's headless sidecar (`kosmos-agent`). The CLI
 integration is bound to [Engine package 2.1.2 at exact commit
-`e7cc0dd`](https://github.com/Odenknight/GKOS-Engine/commit/e7cc0dd478af3d0bda216c5258dec5f77932def7);
+`a57b98c`](https://github.com/Odenknight/GKOS-Engine/commit/a57b98c00c1913f5b7ed96839b3f8effe5be9c4a);
 desktop sidecar artifacts remain separately qualified and are not implied by
 that source pin.
 Point it at a notes folder; it watches and projects (OKF+ 2.3 + Graphiti) and

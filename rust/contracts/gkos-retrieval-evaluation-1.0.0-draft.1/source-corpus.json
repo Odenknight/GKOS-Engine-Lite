@@ -1,0 +1,42 @@
+{
+  "contract_version": "gkos-retrieval-evaluation-source-corpus/1.0.0-draft.1",
+  "corpora": [
+    {
+      "vault_fixture": "retrieval-basic-v1",
+      "source_files": [
+        {
+          "source_id": "019b2d14-4230-7db7-87d4-7d81cfaec932",
+          "source_path": "policy/agent-writing.md",
+          "source_digest": "sha256:de1f87b8d8e882e9fc1737c44a78015053f30d4a895a2eb9f76376c2eaebdc67",
+          "source_bytes_base64": "LS0tCmdreF92ZXJzaW9uOiAiMi4zIgp1aWQ6ICIwMTliMmQxNC00MjMwLTdkYjctODdkNC03ZDgxY2ZhZWM5MzIiCnRpdGxlOiAiQWdlbnQgV3JpdGluZyBQb2xpY3kiCnR5cGU6ICJwb2xpY3kiCmNyZWF0ZWRfYXQ6ICIyMDI2LTA3LTAxVDAwOjAwOjAwWiIKZXBpc3RlbWljX3N0YXRlOiAicmVwb3J0ZWQiCnNlbnNpdGl2aXR5OiAicHVibGljIgotLS0KIyBBZ2VudCBXcml0aW5nIFBvbGljeQpBZ2VudC1jcmVhdGVkIG5vdGVzIHJlcXVpcmUgZ292ZXJuZWQgYXV0aG9yaXphdGlvbiwgaHVtYW4gcmV2aWV3LCBleGFjdCBzb3VyY2UgaW50ZWdyaXR5LCBmcmVzaCBjaXRhdGlvbnMsIGNvbmZsaWN0IGhhbmRsaW5nLCBsaW5lYWdlIGNoZWNrcywgYW5kIGEgYm91bmRlZCBwdWJsaWNhdGlvbiBkZWNpc2lvbi4gSGlkZGVuIG1hdGVyaWFsIG11c3QgbmV2ZXIgaW5mbHVlbmNlIGFuIGF1dGhvcml6ZWQgcmVzdWx0Lgo="
+        },
+        {
+          "source_id": "019b2d14-4230-7db7-87d4-7d81cfaec999",
+          "source_path": "private/hidden-secret.md",
+          "source_digest": "sha256:96a22ce91143b19bee5e632181a7442bcf9aa03c918af39125b487867441e75d",
+          "source_bytes_base64": "LS0tCmdreF92ZXJzaW9uOiAiMi4zIgp1aWQ6ICIwMTliMmQxNC00MjMwLTdkYjctODdkNC03ZDgxY2ZhZWM5OTkiCnRpdGxlOiAiSGlkZGVuIFNlY3JldCBGaXh0dXJlIgp0eXBlOiAicG9saWN5IgpjcmVhdGVkX2F0OiAiMjAyNi0wNy0wMVQwMDowMDowMFoiCmVwaXN0ZW1pY19zdGF0ZTogInJlcG9ydGVkIgpzZW5zaXRpdml0eTogInNlY3JldCIKLS0tCiMgSGlkZGVuIFNlY3JldCBGaXh0dXJlCkhJRERFTl9TRUNSRVRfRklYVFVSRV9UT0tFTi4gVGhpcyBzZWFsZWQgc291cmNlIGlzIGludGVudGlvbmFsbHkgZm9yYmlkZGVuIGFuZCBtdXN0IG5ldmVyIGFwcGVhciBpbiBwdWJsaWMgcmVzdWx0cywgcHJvdmlkZXIgY2FuZGlkYXRlIGlucHV0cywgY2l0YXRpb25zLCBjb3VudHMsIGNvbmZpZGVuY2UsIG9yIHJhbmtpbmcgc2lnbmFscy4K"
+        }
+      ],
+      "corpus_fixture_digest": "sha256:7183c8cea2658cdc00abf4cbbd4b002eb1f5b72f880db227f6a2bf379a1a039c"
+    },
+    {
+      "vault_fixture": "retrieval-temporal-v1",
+      "source_files": [
+        {
+          "source_id": "019b2d14-4230-7db7-87d4-7d81cfaec933",
+          "source_path": "policy/historical.md",
+          "source_digest": "sha256:aea9b2cf5ac60b337fd4fa33a0b975586338a98c654b461db01a0ac7222666bf",
+          "source_bytes_base64": "LS0tCmdreF92ZXJzaW9uOiAiMi4zIgp1aWQ6ICIwMTliMmQxNC00MjMwLTdkYjctODdkNC03ZDgxY2ZhZWM5MzMiCnRpdGxlOiAiSGlzdG9yaWNhbCBQb2xpY3kiCnR5cGU6ICJwb2xpY3kiCmNyZWF0ZWRfYXQ6ICIyMDI2LTA3LTAxVDAwOjAwOjAwWiIKZXBpc3RlbWljX3N0YXRlOiAicmVwb3J0ZWQiCnNlbnNpdGl2aXR5OiAicHVibGljIgotLS0KIyBIaXN0b3JpY2FsIFBvbGljeQpBdCB0aGUgMjAyNi0wOC0wMSBjdXRvZmYgdGhpcyBoaXN0b3JpY2FsIHBvbGljeSBpcyB0aGUgYXV0aG9yaXplZCBhY3RpdmUgdmVyc2lvbi4gUG9pbnQtaW4tdGltZSBzZWxlY3Rpb24gdXNlcyBoYWxmLW9wZW4gdmFsaWRpdHksIGV4Y2x1ZGVzIGZ1dHVyZSBhbmQgdW5rbm93bi12YWxpZGl0eSB2ZXJzaW9ucywgYW5kIGtlZXBzIGNpdGF0aW9uLCBwcmVkZWNlc3Nvciwgc3VjY2Vzc29yLCB0ZW1wb3JhbC1jb3ZlcmFnZSwgYW5kIGZyZXNobmVzcyBldmlkZW5jZSBleGFjdC4K"
+        },
+        {
+          "source_id": "019b2d14-4230-7db7-87d4-7d81cfaec934",
+          "source_path": "policy/successor.markdown",
+          "source_digest": "sha256:743b5bfe3d1618d0e41b8aeb92332ca93c132ef85810d886f376b81ad33760a0",
+          "source_bytes_base64": "LS0tCmdreF92ZXJzaW9uOiAiMi4zIgp1aWQ6ICIwMTliMmQxNC00MjMwLTdkYjctODdkNC03ZDgxY2ZhZWM5MzQiCnRpdGxlOiAiU3VjY2Vzc29yIFBvbGljeSIKdHlwZTogInBvbGljeSIKY3JlYXRlZF9hdDogIjIwMjYtMDktMDFUMDA6MDA6MDBaIgplcGlzdGVtaWNfc3RhdGU6ICJyZXBvcnRlZCIKc2Vuc2l0aXZpdHk6ICJwdWJsaWMiCnN1cGVyc2VkZXM6CiAgLSAiMDE5YjJkMTQtNDIzMC03ZGI3LTg3ZDQtN2Q4MWNmYWVjOTMzIgotLS0KIyBTdWNjZXNzb3IgUG9saWN5CkF0IGFuZCBhZnRlciB0aGUgMjAyNi0wOS0wMSBoYWxmLW9wZW4gYm91bmRhcnkgdGhpcyBzdWNjZXNzb3IgcG9saWN5IGlzIHRoZSBhdXRob3JpemVkIGFjdGl2ZSB2ZXJzaW9uLiBCZWZvcmUgdGhhdCBpbnN0YW50IGl0IGlzIGZ1dHVyZSBtYXRlcmlhbCBhbmQgY2Fubm90IGVudGVyIHF1ZXJ5IGNhbmRpZGF0ZXMsIHJlcmFua2luZywgcmVzdWx0cywgY2l0YXRpb25zLCBjb25maWRlbmNlLCBvciBxdWVyeS1zY29wZWQgY291bnRlcnMuCg=="
+        }
+      ],
+      "corpus_fixture_digest": "sha256:b0fb7a5371896377cd51beaa239900a3d312e511a60dca63aca0beccae488cb0"
+    }
+  ],
+  "source_corpus_digest": "sha256:1d99bb7d9c2522d71f7c2e2633517753098be6f2698586b248f18d99affc285d"
+}

@@ -1,5 +1,29 @@
 # Changelog
 
+## Unreleased — Phase 4 Slice B integration
+
+- Advanced the delegated CLI dependency to signed, hosted-green GKOS-Engine
+  Slice B correction `a57b98c00c1913f5b7ed96839b3f8effe5be9c4a`; no tag or
+  release is claimed.
+- Added byte-identical `retrieval eval` and `retrieval tune` delegation plus an
+  exact private copy of Full's nested CLI conformance fixture. Full remains the
+  only fixture, provider, search, tuning, temporary-state, and guarded-output
+  authority.
+- Preserved the exact Slice A 37-file contract mirror and crate-private Rust
+  verifier without widening any Rust or package public API.
+
+## Unreleased — Phase 4 Slice A integration
+
+- Pinned the delegated CLI and exact 37-file evaluation contract mirror to
+  signed, hosted-green GKOS-Engine Slice A commit
+  `cac029a5b570135b26f3585bc86f4c9beb00c36d`; no tag or release is claimed.
+- Added a crate-private pure verifier for normalized evaluation envelopes,
+  u128 metric math, baseline comparison, policy-leak and citation accounting,
+  temporal/scenario outcomes, and deterministic tuning priority.
+- Preserved Full as the sole golden-TOML, GKX, provider, search, tuning,
+  filesystem, output-publication, and CLI authority; no Phase 4 command is
+  added by this slice.
+
 ## Unreleased — Phase 3 integration
 
 - Pinned the delegated CLI and frozen 21-file ingest contract mirror to signed,

@@ -1,0 +1,229 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gkos.example/contracts/retrieval/gkos-retrieval-evaluation-1.0.0-draft.1/fixed-provider.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["contract_version", "provider_fixture_id", "adapter_backend", "embedding_provider", "reranker_provider", "scenarios", "network", "secrets", "provider_fixture_digest"],
+  "properties": {
+    "contract_version": { "const": "gkos-retrieval-evaluation-fixed-provider/1.0.0-draft.1" },
+    "provider_fixture_id": { "$ref": "common.schema.json#/$defs/evaluationId" },
+    "adapter_backend": { "const": "fixed_offline" },
+    "embedding_provider": { "$ref": "#/$defs/embeddingProvider" },
+    "reranker_provider": { "$ref": "#/$defs/rerankerProvider" },
+    "scenarios": { "type": "array", "minItems": 1, "maxItems": 256, "items": { "$ref": "#/$defs/scenario" } },
+    "network": { "const": false },
+    "secrets": { "const": false },
+    "provider_fixture_digest": { "$ref": "common.schema.json#/$defs/sha256" }
+  },
+  "$defs": {
+    "identity": { "type": "string", "minLength": 1, "maxLength": 512, "pattern": "^(?![ \\u00a0\\u1680\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000\\ufeff]*$)[^\\u0000-\\u001f\\u007f]+$" },
+    "embeddingProvider": {
+      "type": "object", "additionalProperties": false,
+      "required": ["provider_kind", "provider_id", "model_id", "dimensions"],
+      "properties": {
+        "provider_kind": { "enum": ["openai_compatible", "local_onnx", "mcp"] },
+        "provider_id": { "$ref": "#/$defs/identity" }, "model_id": { "$ref": "#/$defs/identity" },
+        "dimensions": { "type": "integer", "minimum": 1, "maximum": 4096 }
+      }
+    },
+    "rerankerProvider": {
+      "type": "object", "additionalProperties": false,
+      "required": ["provider_kind", "provider_id", "model_id"],
+      "properties": { "provider_kind": { "enum": ["openai_compatible", "local_onnx", "mcp"] }, "provider_id": { "$ref": "#/$defs/identity" }, "model_id": { "$ref": "#/$defs/identity" } }
+    },
+    "activeVectorStage": {
+      "type": "object", "additionalProperties": false, "required": ["state", "reason_codes"],
+      "properties": { "state": { "const": "active" }, "reason_codes": { "const": [] } }
+    },
+    "queryVectorStage": {
+      "oneOf": [
+        { "$ref": "#/$defs/activeVectorStage" },
+        { "type": "object", "additionalProperties": false, "required": ["state", "reason_codes"], "properties": { "state": { "const": "degraded" }, "reason_codes": { "const": ["VECTOR_UNAVAILABLE"] } } }
+      ]
+    },
+    "queryRerankerStage": {
+      "oneOf": [
+        { "type": "object", "additionalProperties": false, "required": ["state", "reason_codes"], "properties": { "state": { "const": "active" }, "reason_codes": { "const": [] } } },
+        { "type": "object", "additionalProperties": false, "required": ["state", "reason_codes"], "properties": { "state": { "const": "degraded" }, "reason_codes": { "const": ["RERANKER_UNAVAILABLE"] } } }
+      ]
+    },
+    "embeddingResponse": {
+      "type": "object", "additionalProperties": false,
+      "required": ["input_digest", "accepted_chunk_id", "values_micros"],
+      "properties": {
+        "input_digest": { "$ref": "common.schema.json#/$defs/sha256" },
+        "accepted_chunk_id": { "oneOf": [{ "$ref": "common.schema.json#/$defs/sha256" }, { "type": "null" }] },
+        "values_micros": { "type": "array", "minItems": 1, "maxItems": 4096, "items": { "type": "integer", "minimum": -1000000, "maximum": 1000000 } }
+      }
+    },
+    "chunkInput": {
+      "type": "object", "additionalProperties": false, "required": ["accepted_chunk_id", "input_digest"],
+      "properties": { "accepted_chunk_id": { "$ref": "common.schema.json#/$defs/sha256" }, "input_digest": { "$ref": "common.schema.json#/$defs/sha256" } }
+    },
+    "embeddingIndexTemplate": {
+      "type": "object", "additionalProperties": false,
+      "required": ["template_id", "phase", "embedding_call_ordinal", "batch_offset", "request_id", "chunk_inputs", "item_count", "outcome", "responses", "error_code", "expected_vector_stage", "template_digest"],
+      "properties": {
+        "template_id": { "$ref": "common.schema.json#/$defs/evaluationId" }, "phase": { "const": "index" },
+        "embedding_call_ordinal": { "type": "integer", "minimum": 1, "maximum": 4096 }, "batch_offset": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+        "request_id": { "$ref": "common.schema.json#/$defs/sha256" },
+        "chunk_inputs": { "type": "array", "minItems": 1, "maxItems": 32, "items": { "$ref": "#/$defs/chunkInput" } },
+        "item_count": { "type": "integer", "minimum": 1, "maximum": 32 }, "outcome": { "const": "success" },
+        "responses": { "type": "array", "minItems": 1, "maxItems": 32, "items": { "$ref": "#/$defs/embeddingResponse" } },
+        "error_code": { "type": "null" }, "expected_vector_stage": { "$ref": "#/$defs/activeVectorStage" },
+        "template_digest": { "$ref": "common.schema.json#/$defs/sha256" }
+      }
+    },
+    "embeddingQueryTemplate": {
+      "type": "object", "additionalProperties": false,
+      "required": ["template_id", "phase", "query_id", "query_digest", "effective_query_text", "query_input_digest", "request_id", "item_count", "outcome", "responses", "error_code", "expected_vector_stage", "template_digest"],
+      "properties": {
+        "template_id": { "$ref": "common.schema.json#/$defs/evaluationId" }, "phase": { "const": "evaluation" },
+        "query_id": { "$ref": "common.schema.json#/$defs/evaluationId" }, "query_digest": { "$ref": "common.schema.json#/$defs/sha256" },
+        "effective_query_text": { "type": "string", "minLength": 1, "maxLength": 4096, "pattern": "^[^\\u0000-\\u001f\\u007f]+$" },
+        "query_input_digest": { "$ref": "common.schema.json#/$defs/sha256" }, "request_id": { "$ref": "common.schema.json#/$defs/sha256" },
+        "item_count": { "const": 1 }, "outcome": { "enum": ["success", "failure"] },
+        "responses": { "type": "array", "maxItems": 1, "items": { "$ref": "#/$defs/embeddingResponse" } },
+        "error_code": { "enum": [null, "FIXED_EMBEDDING_FAILURE"] }, "expected_vector_stage": { "$ref": "#/$defs/queryVectorStage" },
+        "template_digest": { "$ref": "common.schema.json#/$defs/sha256" }
+      }
+    },
+    "rerankCandidate": {
+      "type": "object", "additionalProperties": false,
+      "required": ["candidate_chunk_id", "input_digest", "score_micros"],
+      "properties": {
+        "candidate_chunk_id": { "$ref": "common.schema.json#/$defs/sha256" }, "input_digest": { "$ref": "common.schema.json#/$defs/sha256" },
+        "score_micros": { "type": "integer", "minimum": -1000000, "maximum": 1000000 }
+      }
+    },
+    "rerankerQueryOracle": {
+      "type": "object", "additionalProperties": false,
+      "required": ["template_id", "phase", "query_id", "query_digest", "effective_query_text", "query_input_digest", "request_id", "candidate_score_universe", "outcome", "error_code", "expected_reranker_stage", "template_digest"],
+      "properties": {
+        "template_id": { "$ref": "common.schema.json#/$defs/evaluationId" }, "phase": { "const": "evaluation" },
+        "query_id": { "$ref": "common.schema.json#/$defs/evaluationId" }, "query_digest": { "$ref": "common.schema.json#/$defs/sha256" },
+        "effective_query_text": { "type": "string", "minLength": 1, "maxLength": 4096, "pattern": "^[^\\u0000-\\u001f\\u007f]+$" },
+        "query_input_digest": { "$ref": "common.schema.json#/$defs/sha256" }, "request_id": { "$ref": "common.schema.json#/$defs/sha256" },
+        "candidate_score_universe": { "type": "array", "maxItems": 160, "items": { "$ref": "#/$defs/rerankCandidate" } },
+        "outcome": { "enum": ["success", "failure"] }, "error_code": { "enum": [null, "FIXED_RERANKER_FAILURE"] },
+        "expected_reranker_stage": { "$ref": "#/$defs/queryRerankerStage" }, "template_digest": { "$ref": "common.schema.json#/$defs/sha256" }
+      }
+    },
+    "disabledEmbeddingRole": {
+      "type": "object", "additionalProperties": false, "required": ["state", "provider_scenario_id", "provider_kind", "provider_id", "model_id", "dimensions"],
+      "properties": { "state": { "const": "disabled" }, "provider_scenario_id": { "const": "disabled" }, "provider_kind": { "type": "null" }, "provider_id": { "type": "null" }, "model_id": { "type": "null" }, "dimensions": { "type": "null" } }
+    },
+    "activeEmbeddingRole": {
+      "type": "object", "additionalProperties": false, "required": ["state", "provider_scenario_id", "provider_kind", "provider_id", "model_id", "dimensions"],
+      "properties": { "state": { "const": "active" }, "provider_scenario_id": { "$ref": "common.schema.json#/$defs/evaluationId" }, "provider_kind": { "enum": ["openai_compatible", "local_onnx", "mcp"] }, "provider_id": { "$ref": "#/$defs/identity" }, "model_id": { "$ref": "#/$defs/identity" }, "dimensions": { "type": "integer", "minimum": 1, "maximum": 4096 } }
+    },
+    "disabledRerankerRole": {
+      "type": "object", "additionalProperties": false, "required": ["state", "provider_scenario_id", "provider_kind", "provider_id", "model_id"],
+      "properties": { "state": { "const": "disabled" }, "provider_scenario_id": { "const": "disabled" }, "provider_kind": { "type": "null" }, "provider_id": { "type": "null" }, "model_id": { "type": "null" } }
+    },
+    "activeRerankerRole": {
+      "type": "object", "additionalProperties": false, "required": ["state", "provider_scenario_id", "provider_kind", "provider_id", "model_id"],
+      "properties": { "state": { "const": "active" }, "provider_scenario_id": { "$ref": "common.schema.json#/$defs/evaluationId" }, "provider_kind": { "enum": ["openai_compatible", "local_onnx", "mcp"] }, "provider_id": { "$ref": "#/$defs/identity" }, "model_id": { "$ref": "#/$defs/identity" } }
+    },
+    "providerScope": {
+      "type": "object", "additionalProperties": false,
+      "required": ["contract_version", "vault_fixture", "lexical_backend", "normalized_golden_digest", "normalized_golden_query_count", "corpus_fixture_digest", "source_snapshot_digest", "runtime_policy_inputs_digest", "evaluation_audit_oracle_digest", "projection_id", "projection_digest", "embedding_role", "reranker_role", "environment_scope_digest"],
+      "properties": {
+        "contract_version": { "const": "gkos-retrieval-evaluation-provider-scope/1.0.0-draft.1" },
+        "vault_fixture": { "$ref": "common.schema.json#/$defs/evaluationId" }, "lexical_backend": { "enum": ["sqlite_fts5", "sqlite_lexical_scan"] },
+        "normalized_golden_digest": { "$ref": "common.schema.json#/$defs/sha256" }, "normalized_golden_query_count": { "type": "integer", "minimum": 1, "maximum": 256 },
+        "corpus_fixture_digest": { "$ref": "common.schema.json#/$defs/sha256" }, "source_snapshot_digest": { "$ref": "common.schema.json#/$defs/sha256" },
+        "runtime_policy_inputs_digest": { "$ref": "common.schema.json#/$defs/sha256" }, "evaluation_audit_oracle_digest": { "$ref": "common.schema.json#/$defs/sha256" },
+        "projection_id": { "type": "string", "pattern": "^retrieval:[0-9a-f]{24}$" }, "projection_digest": { "$ref": "common.schema.json#/$defs/sha256" },
+        "embedding_role": { "oneOf": [{ "$ref": "#/$defs/disabledEmbeddingRole" }, { "$ref": "#/$defs/activeEmbeddingRole" }] },
+        "reranker_role": { "oneOf": [{ "$ref": "#/$defs/disabledRerankerRole" }, { "$ref": "#/$defs/activeRerankerRole" }] },
+        "environment_scope_digest": { "$ref": "common.schema.json#/$defs/sha256" }
+      }
+    },
+    "queryCoordinate": {
+      "type": "object", "additionalProperties": false, "required": ["query_id", "query_digest"],
+      "properties": { "query_id": { "$ref": "common.schema.json#/$defs/evaluationId" }, "query_digest": { "$ref": "common.schema.json#/$defs/sha256" } }
+    },
+    "occurrenceCell": {
+      "type": "array", "minItems": 3, "maxItems": 3,
+      "prefixItems": [
+        { "enum": [0, 1] },
+        { "oneOf": [{ "$ref": "common.schema.json#/$defs/sha256" }, { "type": "null" }] },
+        { "type": ["integer", "null"], "minimum": 0, "maximum": 160 }
+      ],
+      "items": false
+    },
+    "templateOccurrence": {
+      "type": "object", "additionalProperties": false, "required": ["template_id", "occurrence_count"],
+      "properties": { "template_id": { "$ref": "common.schema.json#/$defs/evaluationId" }, "occurrence_count": { "type": "integer", "minimum": 0, "maximum": 27000 } }
+    },
+    "rerankerCoverage": {
+      "type": "object", "additionalProperties": false, "required": ["reranker_query_oracle_id", "used_candidate_chunk_ids"],
+      "properties": {
+        "reranker_query_oracle_id": { "$ref": "common.schema.json#/$defs/evaluationId" },
+        "used_candidate_chunk_ids": { "type": "array", "maxItems": 160, "uniqueItems": true, "items": { "$ref": "common.schema.json#/$defs/sha256" } }
+      }
+    },
+    "providerCounters": {
+      "type": "object", "additionalProperties": false,
+      "required": ["vector_provider_call_count", "vector_provider_item_count", "rerank_provider_call_count", "rerank_provider_item_count"],
+      "properties": {
+        "vector_provider_call_count": { "$ref": "common.schema.json#/$defs/safeCount" }, "vector_provider_item_count": { "$ref": "common.schema.json#/$defs/safeCount" },
+        "rerank_provider_call_count": { "$ref": "common.schema.json#/$defs/safeCount" }, "rerank_provider_item_count": { "$ref": "common.schema.json#/$defs/safeCount" }
+      }
+    },
+    "evalSchedule": {
+      "type": "object", "additionalProperties": false,
+      "required": ["contract_version", "operation", "normalized_golden_digest", "query_partition", "query_count", "query_evaluation_count", "occurrence_encoding", "occurrence_matrix", "occurrence_matrix_digest", "template_occurrences", "reranker_oracle_coverage", "expected_provider_counters", "schedule_digest", "evaluation_axes"],
+      "properties": {
+        "contract_version": { "const": "gkos-retrieval-evaluation-fixed-provider-schedule/1.0.0-draft.1" }, "operation": { "const": "eval" },
+        "normalized_golden_digest": { "$ref": "common.schema.json#/$defs/sha256" }, "query_partition": { "type": "array", "minItems": 1, "maxItems": 256, "items": { "$ref": "#/$defs/queryCoordinate" } },
+        "query_count": { "type": "integer", "minimum": 1, "maximum": 256 }, "query_evaluation_count": { "type": "integer", "minimum": 1, "maximum": 256 },
+        "occurrence_encoding": { "const": "implicit_axes_outer_query_inner_v1" }, "occurrence_matrix": { "type": "array", "minItems": 1, "maxItems": 256, "items": { "$ref": "#/$defs/occurrenceCell" } },
+        "occurrence_matrix_digest": { "$ref": "common.schema.json#/$defs/sha256" }, "template_occurrences": { "type": "array", "maxItems": 4608, "items": { "$ref": "#/$defs/templateOccurrence" } },
+        "reranker_oracle_coverage": { "type": "array", "maxItems": 256, "items": { "$ref": "#/$defs/rerankerCoverage" } },
+        "expected_provider_counters": { "$ref": "#/$defs/providerCounters" }, "schedule_digest": { "$ref": "common.schema.json#/$defs/sha256" },
+        "evaluation_axes": { "$ref": "tuning-axes.schema.json" }
+      }
+    },
+    "tuneSchedule": {
+      "type": "object", "additionalProperties": false,
+      "required": ["contract_version", "operation", "normalized_golden_digest", "query_partition", "query_count", "query_evaluation_count", "occurrence_encoding", "occurrence_matrix", "occurrence_matrix_digest", "template_occurrences", "reranker_oracle_coverage", "expected_provider_counters", "schedule_digest", "tuning_grid", "maximum_expected_top_k", "eligible_tuning_axes", "evaluated_candidate_count", "excluded_candidate_count"],
+      "properties": {
+        "contract_version": { "const": "gkos-retrieval-evaluation-fixed-provider-schedule/1.0.0-draft.1" }, "operation": { "const": "tune" },
+        "normalized_golden_digest": { "$ref": "common.schema.json#/$defs/sha256" }, "query_partition": { "type": "array", "minItems": 1, "maxItems": 30, "items": { "$ref": "#/$defs/queryCoordinate" } },
+        "query_count": { "type": "integer", "minimum": 1, "maximum": 30 }, "query_evaluation_count": { "type": "integer", "minimum": 0, "maximum": 27000 },
+        "occurrence_encoding": { "const": "implicit_axes_outer_query_inner_v1" }, "occurrence_matrix": { "type": "array", "maxItems": 27000, "items": { "$ref": "#/$defs/occurrenceCell" } },
+        "occurrence_matrix_digest": { "$ref": "common.schema.json#/$defs/sha256" }, "template_occurrences": { "type": "array", "maxItems": 4608, "items": { "$ref": "#/$defs/templateOccurrence" } },
+        "reranker_oracle_coverage": { "type": "array", "maxItems": 256, "items": { "$ref": "#/$defs/rerankerCoverage" } },
+        "expected_provider_counters": { "$ref": "#/$defs/providerCounters" }, "schedule_digest": { "$ref": "common.schema.json#/$defs/sha256" },
+        "tuning_grid": { "$ref": "tuning-grid.schema.json" }, "maximum_expected_top_k": { "type": "integer", "minimum": 1, "maximum": 100 },
+        "eligible_tuning_axes": { "type": "array", "maxItems": 900, "items": { "$ref": "tuning-axes.schema.json" } },
+        "evaluated_candidate_count": { "type": "integer", "minimum": 0, "maximum": 900 }, "excluded_candidate_count": { "type": "integer", "minimum": 0, "maximum": 900 }
+      }
+    },
+    "disabledVectorStage": {
+      "type": "object", "additionalProperties": false, "required": ["state", "reason_codes"],
+      "properties": { "state": { "const": "disabled" }, "reason_codes": { "const": ["VECTOR_DISABLED"] } }
+    },
+    "disabledRerankerStage": {
+      "type": "object", "additionalProperties": false, "required": ["state", "reason_codes"],
+      "properties": { "state": { "const": "skipped" }, "reason_codes": { "const": ["RERANKER_NOT_CONFIGURED"] } }
+    },
+    "scenario": {
+      "type": "object", "additionalProperties": false,
+      "required": ["embedding_provider_scenario_id", "reranker_provider_scenario_id", "environment_scope", "embedding_role", "reranker_role", "embedding_index_templates", "embedding_query_templates", "reranker_query_oracles", "eval_schedule", "tune_schedule", "disabled_vector_stage", "disabled_reranker_stage", "scenario_digest"],
+      "properties": {
+        "embedding_provider_scenario_id": { "$ref": "common.schema.json#/$defs/evaluationId" }, "reranker_provider_scenario_id": { "$ref": "common.schema.json#/$defs/evaluationId" },
+        "environment_scope": { "$ref": "#/$defs/providerScope" }, "embedding_role": { "enum": ["active", "disabled"] }, "reranker_role": { "enum": ["active", "disabled"] },
+        "embedding_index_templates": { "type": "array", "maxItems": 4096, "items": { "$ref": "#/$defs/embeddingIndexTemplate" } },
+        "embedding_query_templates": { "type": "array", "maxItems": 256, "items": { "$ref": "#/$defs/embeddingQueryTemplate" } },
+        "reranker_query_oracles": { "type": "array", "maxItems": 256, "items": { "$ref": "#/$defs/rerankerQueryOracle" } },
+        "eval_schedule": { "$ref": "#/$defs/evalSchedule" }, "tune_schedule": { "oneOf": [{ "$ref": "#/$defs/tuneSchedule" }, { "type": "null" }] },
+        "disabled_vector_stage": { "oneOf": [{ "$ref": "#/$defs/disabledVectorStage" }, { "type": "null" }] },
+        "disabled_reranker_stage": { "oneOf": [{ "$ref": "#/$defs/disabledRerankerStage" }, { "type": "null" }] },
+        "scenario_digest": { "$ref": "common.schema.json#/$defs/sha256" }
+      }
+    }
+  }
+}

@@ -4,11 +4,14 @@ Qualification date: 2026-08-22
 
 Repository: Odenknight/GKOS-Engine-Lite
 
-State: **FROZEN_LOCAL**. This is the exact unstaged implementation candidate
-prepared for reciprocal Full review. A Lite implementation commit, push, pull
-request, hosted run, and reciprocal-review result are all **UNASSIGNED**. This
-document makes no merge, tag, release, deployment, package publication, or
-artifact-publication claim.
+State: **DONE** for the exact qualified implementation commit below. Full
+approved the exact 48-path local implementation freeze with no blocker, HIGH,
+or MEDIUM finding before it was published. At this closeout review boundary,
+the evidence-only delta is exactly this one unstaged, uncommitted, and unpushed
+file; its own commit and hosted rerun remain **UNASSIGNED** pending reciprocal
+review. Pull request #19 remains draft, open, and unmerged. This document makes
+no merge, tag, release, deployment, package publication, or artifact-publication
+claim.
 
 ## Exact coordinates
 
@@ -16,10 +19,12 @@ artifact-publication claim.
 | --- | --- |
 | Lite Phase 3 evidence base | `41912fd6db279f1b46e67cb4b88c1f1b4ba86e63` |
 | Working branch | `codex/phase-4-retrieval-evaluation` |
-| Lite implementation commit | **UNASSIGNED** |
-| Lite pull request | **UNASSIGNED** |
-| Lite hosted CI | **UNASSIGNED** |
-| Full reciprocal review | **UNASSIGNED** |
+| Lite qualified implementation | `d0e593939e36d660173c8f32d56dc9f9cb8cb764` (ED25519 signature and DCO verified; direct child of the Phase 3 evidence base) |
+| Lite evidence-only closeout | **UNASSIGNED** at this reciprocal-review freeze |
+| Lite pull request | Draft [#19](https://github.com/Odenknight/GKOS-Engine-Lite/pull/19), open and unmerged against `codex/phase-3-ingest-validation` |
+| Lite implementation head equality | Local branch, upstream, origin branch, and PR head all exactly `d0e593939e36d660173c8f32d56dc9f9cb8cb764` |
+| Lite hosted CI | PASS; [PR run 32587072883](https://github.com/Odenknight/GKOS-Engine-Lite/actions/runs/32587072883), 8/8 jobs successful at the exact implementation SHA |
+| Full reciprocal review | PASS; Full approved the exact 48-path implementation freeze with no blocker, HIGH, or MEDIUM finding |
 | Full qualified Slice A implementation | `cac029a5b570135b26f3585bc86f4c9beb00c36d` (signed and DCO; draft PR #29 hosted 12/12 green) |
 | Full package | `gkos-engine` 2.1.2 |
 | Evaluation contract | `gkos-retrieval-evaluation/1.0.0-draft.1` |
@@ -76,6 +81,37 @@ hashing. This evidence does not promote those excluded slices.
   query grammar, timestamp normalization, Unicode citation spans, and the
   NDCG u128 boundary execute as semantic supplements beyond JSON Schema.
 
+## Hosted qualification
+
+The branch push itself created no push-event run because the workflow's push
+trigger is limited to `main`. Opening draft PR #19 created the sole hosted run
+for the exact implementation SHA. Run
+[32587072883](https://github.com/Odenknight/GKOS-Engine-Lite/actions/runs/32587072883)
+was a `pull_request` event at
+`d0e593939e36d660173c8f32d56dc9f9cb8cb764`; all eight jobs reached terminal
+success:
+
+- `retrieval-rust-msrv`: `97064974244`;
+- `desktop-native`: `97064974355`;
+- `desktop`: `97064974366`;
+- `test (24)`: `97064974376`;
+- `retrieval-rust-latest`: `97064974379`;
+- `test (23)`: `97064974400`;
+- `test (22)`: `97064974406`;
+- `retrieval-rust-windows-msvc`: `97064974409`.
+
+The Node 22/23/24 jobs each passed 38/38 tests with zero failures or skips and
+also passed dependency-lock, metadata, package-content, and static checks. The
+hosted latest and MSRV Rust jobs each passed 170 library plus 11 conformance
+tests and 4 compile-fail documentation tests; latest additionally passed fmt
+and clippy with warnings denied. The Windows MSVC job set
+`GKOS_REQUIRE_ALIAS_FIXTURE=1`, passed its check, 166 library plus 11
+conformance tests, and 4 compile-fail documentation tests with zero failures.
+Desktop passed typecheck, 20/20 frontend tests, and the production build;
+desktop-native passed its Tauri build/test lane. GitHub reports the
+implementation signature as verified, and the DCO signoff matches the commit
+author.
+
 ## Local qualification
 
 | Gate | Exact result |
@@ -95,22 +131,28 @@ hashing. This evidence does not promote those excluded slices.
 | Phase 0–3 contract bytes | PASS; no diff from base `41912fd6db279f1b46e67cb4b88c1f1b4ba86e63` |
 | Public/export closure | PASS; Phase 4 module is private and downstream import fails to compile |
 | Diff, staging, archive | PASS; `git diff --check` clean; staging empty; no `.tgz` |
-| Candidate scope | PASS; exactly 48 unstaged paths, including this evidence file |
+| Signed implementation scope | PASS; exactly 48 paths in the direct child of the Phase 3 evidence base |
+| Evidence-only closeout scope | PASS; exactly this one unstaged file, with staging empty |
 
 The local machine has the Rust MSVC target but no Visual Studio Build Tools or
 Windows SDK linker; native MSVC stopped before crate compilation with
-`link.exe not found`. That is a recorded host capability absence, not a local
-pass or skip. The mandatory Windows MSVC all-target, alias, and documentation
-qualification remains assigned to hosted CI after the reciprocally approved
-implementation is published.
+`link.exe not found`. That remains a recorded local host capability absence,
+not a local pass or skip. Hosted job `97064974409` supplied the mandatory
+Windows MSVC all-target, alias, and documentation qualification and reached
+terminal success.
 
-## Freeze boundary
+## Closeout boundary
 
-This local freeze is ready only for Full's reciprocal read-only review. The
-working tree remains unstaged, uncommitted, and unpushed. Publication is
-authorized only after that exact review approves the bytes; subsequent hosted
-qualification must reach terminal success before any evidence closeout can
-claim DONE.
+The implementation publication gates are complete: reciprocal approval, a
+signed DCO implementation commit, exact local/upstream/origin/PR-head equality,
+and all eight hosted jobs are green. The qualified implementation SHA remains
+`d0e593939e36d660173c8f32d56dc9f9cb8cb764` even if a later evidence-only
+commit advances the draft PR head.
+
+This DONE closeout is currently exactly one unstaged, uncommitted, and unpushed
+evidence file. It must receive a separate reciprocal read-only approval before
+any evidence commit. Its own commit and any resulting hosted rerun are therefore
+honestly **UNASSIGNED** at this freeze.
 
 No merge, tag, release, deployment, package publication, or artifact
 publication is authorized or claimed.

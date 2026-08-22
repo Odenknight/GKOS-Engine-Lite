@@ -1,6 +1,6 @@
 # GKOS-Engine-Lite Phase 3 ingest-validation evidence
 
-Local freeze date: 2026-08-22
+Qualification date: 2026-08-22
 
 Repository: Odenknight/GKOS-Engine-Lite
 
@@ -9,10 +9,12 @@ private verification of Full-produced ingest envelopes, and a cross-runtime
 legacy retrieval-writer guard that prevents the frozen Phase 1/2 writers from
 racing or downgrading Full's owner authority.
 
-Lite state: **FROZEN_LOCAL**. This is an unstaged, uncommitted, unpushed local
-freeze for reciprocal Full review. The Lite implementation commit, pull
-request, and hosted CI coordinates remain `UNASSIGNED`. No Lite merge, tag,
-release, deployment, package publication, or artifact publication is claimed.
+Lite state: **DONE** for the exact qualified implementation commit below. The
+one-file evidence-only closeout is currently unstaged, uncommitted, and
+unpushed; its future evidence-only commit remains `UNASSIGNED` so this document
+does not assert its own SHA. Pull request #18 remains draft, open, and unmerged.
+No Lite merge, tag, release, deployment, package publication, or artifact
+publication is claimed.
 
 ## Exact coordinates
 
@@ -20,10 +22,11 @@ release, deployment, package publication, or artifact publication is claimed.
 | --- | --- |
 | Phase 2 evidence base | `45bfc3c4b66ae2978ddae814022d8c861076eec3` |
 | Working branch | `codex/phase-3-ingest-validation` |
-| Lite implementation commit | `UNASSIGNED` |
-| Lite pull request | `UNASSIGNED` |
-| Lite reciprocal review | `UNASSIGNED` |
-| Hosted Lite CI | `UNASSIGNED` |
+| Lite qualified implementation | `9e2a1cbd070e7b2d08aa094e692b65eb50213ccd` (ED25519 signature and DCO verified; direct child of the Phase 2 evidence base) |
+| Lite evidence-only closeout commit | `UNASSIGNED` |
+| Lite pull request | Draft [#18](https://github.com/Odenknight/GKOS-Engine-Lite/pull/18), open against `codex/phase-2-lineage-citations` |
+| Lite reciprocal review | PASS; Full read-only review approved the exact 42-path local implementation freeze with no blocker, HIGH, or MEDIUM finding |
+| Hosted Lite CI | PASS; [PR run 32558687019](https://github.com/Odenknight/GKOS-Engine-Lite/actions/runs/32558687019), 8/8 jobs successful |
 | Full qualified implementation | `e7cc0dd478af3d0bda216c5258dec5f77932def7` (ED25519 signature and DCO verified) |
 | Full package | `gkos-engine` 2.1.2 |
 | Full Phase 3 pull request | [#28](https://github.com/Odenknight/GKOS-Engine/pull/28); qualified implementation remains the exact code pin even though later evidence/provenance-only commits advanced and merged the phase branch |
@@ -42,6 +45,27 @@ evidence/provenance-only branch advancement. Their successful job IDs were:
   `96982352070`, and `96982352140`;
 - pull request: `96982356658`, `96982356791`, `96982356798`,
   `96982356833`, `96982356836`, and `96982356844`.
+
+The Lite workflow triggers branch pushes only on `main`, so the implementation
+push to `codex/phase-3-ingest-validation` created no separate push-event run.
+Opening draft PR #18 created the sole hosted run for the exact implementation
+SHA. All eight jobs reached terminal success with zero failed or skipped jobs:
+
+- `retrieval-rust-latest`: `96996771579`;
+- `test (24)`: `96996771672`;
+- `desktop`: `96996771677`;
+- `desktop-native`: `96996771691`;
+- `retrieval-rust-msrv`: `96996771696`;
+- `test (23)`: `96996771702`;
+- `retrieval-rust-windows-msvc`: `96996771705`;
+- `test (22)`: `96996771714`.
+
+The Windows MSVC job performed the mandatory all-target tests with
+`GKOS_REQUIRE_ALIAS_FIXTURE=1` and the compile-fail documentation lane. The
+Node jobs exercised exact wrapper/CLI bytes, metadata, dependency lock,
+package/static checks, and the supported Node 22/23/24 matrix. The remaining
+Rust and desktop jobs qualified latest, MSRV, desktop, and native desktop
+surfaces on the same implementation SHA.
 
 ## Frozen 21-file ingest pack
 
@@ -108,7 +132,7 @@ matches every byte below.
   search-routing matrices are consumed with exact row/class-set equality. No
   fixture row is merely copied without an executable assertion.
 
-## Local qualification
+## Qualification
 
 | Runtime / gate | Exact result |
 | --- | --- |
@@ -123,28 +147,28 @@ matches every byte below.
 | Root metadata and dependency lock | PASS; package 2.1.2 and exact Full SHA `e7cc0dd…`; one immutable 40-hex Git dependency |
 | Root dry package | PASS; 5 files / 9067 packed / 23397 unpacked / SHA-1 `217934ab74fb0c353da61c2b4e4d6ab8daac8692` / SHA-512 `GcXBPMwWG1sKtX6rSXcqRP+K3qpZawUKQCMG6MTIXPqMuN8XRouyDMRnNA9qPp4H0GZYNVU6e9npj3p7FF+aWQ==` |
 | Phase 0–2 contract/evidence/compatibility bytes | PASS; no diff from `45bfc3c4b66ae2978ddae814022d8c861076eec3` |
-| Static boundary, forbidden-provider, merge-marker, diff, and staging scans | PASS; no external ingest module, no named-provider restriction, no merge marker, no whitespace error, staging empty |
-| Local freeze scope | PASS; exactly 42 unstaged paths after this evidence file; no `.tgz` artifact |
+| Static boundary, forbidden-provider, merge-marker, diff, and staging scans | PASS on the qualified implementation; no external ingest module, no named-provider restriction, no merge marker, no whitespace error, staging empty |
+| Qualified implementation scope | PASS; the signed commit contains exactly the 42 reciprocally approved paths and no `.tgz` artifact |
+| Evidence-only closeout scope | PASS; exactly this one unstaged file, with staging empty |
 
 The local machine has the Rust MSVC target but not Visual Studio Build Tools or
-the Windows SDK linker, so a local MSVC invocation stops before compiling this
-crate with `link.exe not found`. This is recorded as host capability absence,
-not a pass. The mandatory `retrieval-rust-windows-msvc` hosted job performs
-check, all-target tests with `GKOS_REQUIRE_ALIAS_FIXTURE=1`, and compile-fail
-docs on `windows-latest`; its Phase 3 run remains `UNASSIGNED` until the
-approved implementation is committed and pushed.
+the Windows SDK linker, so its local MSVC invocation stopped before compiling
+this crate with `link.exe not found`. That remains an honestly recorded host
+capability absence, not a local pass. Hosted job `96996771705` supplied the
+mandatory Windows MSVC qualification and reached terminal success.
 
-## Remaining publication gates
+## Closeout boundary
 
-1. Full must complete read-only reciprocal review of this exact unstaged
-   implementation and evidence freeze.
-2. Only after explicit authorization may Lite create and push one signed DCO
-   implementation commit and open/update its Phase 3 pull request.
-3. Node 22/23/24, Rust latest/MSRV, Windows MSVC including the mandatory alias
-   fixture, desktop, and desktop-native hosted jobs must all reach terminal
-   success on that exact commit.
-4. A later evidence-only closeout must distinguish the qualified implementation
-   SHA from its own evidence head and record exact Lite run/job coordinates.
+The implementation publication gates are complete: reciprocal approval, the
+signed DCO implementation commit, exact remote/PR-head equality, and all eight
+hosted jobs are green. The qualified implementation SHA remains
+`9e2a1cbd070e7b2d08aa094e692b65eb50213ccd` even after a later evidence-only
+commit advances the draft PR head.
 
-Until those gates complete, no merge, tag, release, deployment, npm/package
-publication, or artifact publication is authorized or claimed.
+This closeout file must receive a separate reciprocal read-only review before
+it is committed. Any later evidence-only commit and its fresh hosted run must
+be recorded separately and cannot supersede the qualified implementation or
+run coordinates above.
+
+No merge, tag, release, deployment, npm/package publication, or artifact
+publication occurred or is authorized by this closeout.

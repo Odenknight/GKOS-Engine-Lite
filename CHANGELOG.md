@@ -1,5 +1,20 @@
 # Changelog
 
+## Unreleased — Phase 3 integration
+
+- Pinned the delegated CLI and frozen 21-file ingest contract mirror to signed,
+  hosted-green GKOS-Engine implementation commit
+  `e7cc0dd478af3d0bda216c5258dec5f77932def7`; no tag or release is claimed.
+- Added byte-exact `validate --kb-path ... [--schema ...]` and `index`
+  delegation, including strict/non-strict results, safe operational failures,
+  and unchanged source-note bytes.
+- Added a private Rust verifier for Full-produced normalized profiles,
+  findings, rejections, journals, owner/state envelopes, and digests without a
+  second YAML, TOML, GKX identity, profile, or Decision-A authority.
+- Added the Full-compatible durable guard around the frozen public legacy
+  schema-2 writer APIs and the internal schema-3 writer, preventing provider or
+  pointer work when Phase 3 owner authority exists.
+
 ## Unreleased — Phase 2 integration
 
 - Pinned the five-command JavaScript delegate and the static Rust retrieval

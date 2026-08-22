@@ -71,6 +71,55 @@ test("okf-lite assess --json produces identical output to gkos-engine's own CLI"
   assert.ok(Array.isArray(parsed) && parsed.length > 0);
 });
 
+test("okf-lite Phase-3 validate preserves exact argv, output bytes, and source bytes", async () => {
+  const kb = await mkdtemp(join(tmpdir(), "gkos-lite-ingest-validate-"));
+  try {
+    await writeFile(join(kb, "policy.md"), SEARCH_NOTE, "utf8");
+    const argv = ["validate", "--kb-path", kb, "--format", "json"];
+    const engine = await run(okfEngineBin, argv);
+    const lite = await run(okfLiteBin, argv);
+    assert.equal(lite.code, engine.code);
+    assert.equal(lite.stdout, engine.stdout);
+    assertEquivalentStderr(lite.stderr, engine.stderr);
+    assert.equal(JSON.parse(lite.stdout).contract_version, "gkos-ingest-validation/1.0.0-draft.1");
+    assert.equal(await readFile(join(kb, "policy.md"), "utf8"), SEARCH_NOTE);
+  } finally {
+    await rm(kb, { recursive: true, force: true });
+  }
+});
+
+test("okf-lite Phase-3 strict index is byte-identical after an exact clean-state replay", async () => {
+  const kb = await mkdtemp(join(tmpdir(), "gkos-lite-ingest-index-"));
+  const stateRoot = join(kb, ".gkx");
+  try {
+    await writeFile(join(kb, "policy.md"), SEARCH_NOTE, "utf8");
+    const argv = ["index", "--kb-path", kb, "--strict"];
+    const engine = await run(okfEngineBin, argv);
+    assert.equal(engine.code, 0, engine.stderr);
+    await rm(stateRoot, { recursive: true, force: true });
+
+    const lite = await run(okfLiteBin, argv);
+    assert.equal(lite.code, engine.code);
+    assert.equal(lite.stdout, engine.stdout);
+    assertEquivalentStderr(lite.stderr, engine.stderr);
+    const result = JSON.parse(lite.stdout);
+    assert.equal(result.contract_version, "gkos-ingest-index-result/1.0.0-draft.1");
+    assert.equal(result.status, "published");
+    assert.equal(result.mode, "strict");
+
+    const searchArgv = ["search", "canonical policy", "--kb-path", kb, "--limit", "5"];
+    const searchEngine = await run(okfEngineBin, searchArgv);
+    const searchLite = await run(okfLiteBin, searchArgv);
+    assert.equal(searchLite.code, searchEngine.code);
+    assert.equal(searchLite.stdout, searchEngine.stdout);
+    assertEquivalentStderr(searchLite.stderr, searchEngine.stderr);
+    assert.equal(JSON.parse(searchLite.stdout).hits[0].citation.verified, true);
+    assert.equal(await readFile(join(kb, "policy.md"), "utf8"), SEARCH_NOTE);
+  } finally {
+    await rm(kb, { recursive: true, force: true });
+  }
+});
+
 test("okf-lite search returns byte-identical contract output through the Engine CLI boundary", async () => {
   const kb = await mkdtemp(join(tmpdir(), "gkos-lite-search-"));
   const config = join(kb, "operator.toml");

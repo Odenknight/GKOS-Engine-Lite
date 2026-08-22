@@ -1,0 +1,33 @@
+{
+  "reference_repository": "Odenknight/GKOS-Engine",
+  "reference_commit": "e7cc0dd478af3d0bda216c5258dec5f77932def7",
+  "reference_package_version": "2.1.2",
+  "reference_state": "full_phase3_published_hosted_green",
+  "contract_version": "gkos-ingest-validation/1.0.0-draft.1",
+  "pin_kind": "exact_full_commit_and_frozen_file_sha256",
+  "publication_qualified": true,
+  "note": "Exact 21-file Phase 3 pack copied byte-for-byte from the signed, hosted-green Full implementation commit. Rust consumes only Full-produced normalized profiles, findings, rejections, journals, owner coordinates, and opaque candidate bindings; it never parses YAML/TOML or assigns GKX identity, profile, or Decision-A authority.",
+  "files": {
+    "README.md": "sha256:c3acdf6b0870694ca9bd63a25da0fbe1bccd757ee76521284f048888f302ac5b",
+    "activation-root.schema.json": "sha256:59383a035ad0edc25e087ac5a94f1a5564002d849e1d6116ec814c1322608bfe",
+    "active-pointer.schema.json": "sha256:7f877c9dc3827356b097a7635965b63a64349ffb4331efa3be720629f9347a7d",
+    "attempt-status.schema.json": "sha256:d474ba6e10f8636334ea6c63fccb8ea06708cbd947ee20934c38e716e2c80b26",
+    "authority-lock.schema.json": "sha256:1f8505291e2be7abb5e59b301beb410dd4f903d010623de461ba84da9ed58603",
+    "authority-witness.schema.json": "sha256:372f25fbe7c83fce7be5185c40e43866d8e667406bb8afafdc39ad5a45876962",
+    "cli-conformance-fixture.json": "sha256:567f7d3371ddfe33ec314b05959f90b90080d55519e1a1a2618ce74798d6e680",
+    "conformance-fixture.json": "sha256:920ae8bdd54a633e490a6e6efa34f73adfd55bb6786562da08655797931e26c8",
+    "contract.json": "sha256:ee62ad7f1b0d2ae9a626680bbdca20feca443a52d7ba0d09b58b07979c3e0061",
+    "finding.schema.json": "sha256:8aee60ee2a2906081a244421664da564867a7c8fa71d8aebe775968d359756f1",
+    "index-result.schema.json": "sha256:ccd3361cec041be4d220ab6e10833ee48d7b46255a3463341d9e553454627bae",
+    "legacy-tombstone.schema.json": "sha256:c7bff930b5fa0fa174cd13f47ac9d9f1b19b7f1adadb2fa5c1292ff32924256e",
+    "migration.schema.json": "sha256:680d3f9d87bcbd637c772886333f7870e6f0b2b7bd76d0a047c77060e7314fcf",
+    "normalized-profile.schema.json": "sha256:016e3673f7db116ef53f0ce32e4faeb572eb1f5505c016ccd1b26e407e93c9c4",
+    "owner-generation.schema.json": "sha256:4c70f4a84240ad712c0ef943801332c5339e9021dd65c561563e03f173bd1ea8",
+    "profile-coordinate.schema.json": "sha256:1a4c2f7102c957aa6e1a9afdc6ab935ff1c5d942f1557272f9a151becef3b3db",
+    "rejection-journal.schema.json": "sha256:abf8e836ab7f2a4ec968c8c19ceef250265020c53e10ec84684a57edc006ca37",
+    "rejection.schema.json": "sha256:0d318333b02b8fdf1654ffff52f75fa3aa67640ee7d692f4e759a67ec00432c5",
+    "result.schema.json": "sha256:0a4ce21898d14a1cbaef3cf4f37b963cd361e547d2c68395578c241e9d0c50ed",
+    "state-common.schema.json": "sha256:6cccb19ede2357782af5a330e07745954da4b4bed2881470a6a04371bdf6a58e",
+    "storage-conformance-fixture.json": "sha256:35a91dd23354fe0d5b2ad5a1d6f68019a84c1070f1d3cb45910d939927eb03e0"
+  }
+}

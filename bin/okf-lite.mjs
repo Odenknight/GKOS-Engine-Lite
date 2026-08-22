@@ -3,10 +3,12 @@
  * okf-lite — the GKOS-Engine-Lite CLI.
  *
  * A thin, faithful pass-through wrapper around the installed `gkos-engine`
- * package's own CLI (node_modules/gkos-engine/bin/gkx.mjs). Same five
+ * package's own CLI (node_modules/gkos-engine/bin/gkx.mjs). Same delegated
  * commands, same behavior, same output, byte for byte:
  *
  *   okf-lite validate <dir>
+ *   okf-lite validate --kb-path <path> [--schema <path-or-id>] [--format text|json]
+ *   okf-lite index --kb-path <path> [--schema <path-or-id>] [--strict]
  *   okf-lite assess   <dir> [--json]
  *   okf-lite search   <query> --kb-path <dir> [--limit <n>] [--as-of <GKX timestamp>]
  *   okf-lite graph    <dir> -o graph.json [--watch]
@@ -22,7 +24,7 @@
  * If/when gkos-engine grows write-capable commands (migrate, proposals,
  * decisions, mv, serve — none exist in the pinned engine; see the
  * "gkos-engine" pin in package.json for the exact version), this wrapper
- * should keep exposing only validate/assess/search/graph/export, not those.
+ * should keep exposing only validate/index/assess/search/graph/export, not those.
  */
 import { createRequire } from "node:module";
 import { readFileSync, realpathSync } from "node:fs";
@@ -55,6 +57,8 @@ everyday vaults of Markdown notes — no Obsidian required.
 
 Usage:
   okf-lite validate <dir>                                  schema/identity/lineage diagnostics; non-zero exit on error
+  okf-lite validate --kb-path <path> [--schema <path-or-id>] [--format text|json]
+  okf-lite index --kb-path <path> [--schema <path-or-id>] [--strict]
   okf-lite assess   <dir> [--json]                         per-note documentation-quality scores/labels
   okf-lite search   <query> --kb-path <dir> [--limit <n>] [--as-of <GKX timestamp>]
                                                              public-only retrieval with exact citations
@@ -74,11 +78,11 @@ https://github.com/Odenknight/GKOS-Engine for the full engine this depends on.`;
 
 export function validateLiteCommand(argv) {
   const first = argv[0];
-  if (["validate", "assess", "search", "graph"].includes(first)) return { allowed: true };
+  if (["validate", "index", "assess", "search", "graph"].includes(first)) return { allowed: true };
   if (first === "export" && argv[1] === "graphiti") return { allowed: true };
   return {
     allowed: false,
-    message: "Unsupported command in GKOS-Engine-Lite. Lite exposes only: validate, assess, search, graph, export graphiti.",
+    message: "Unsupported command in GKOS-Engine-Lite. Lite exposes only: validate, index, assess, search, graph, export graphiti.",
   };
 }
 

@@ -1,0 +1,265 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Odenknight/GKOS-Engine/contracts/ingest/gkos-ingest-validation-1.0.0-draft.1/finding.schema.json",
+  "title": "GKOS safe ingest finding draft 1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract_version", "finding_id", "code", "severity", "classification", "scope",
+    "coordinate_basis", "source_path", "source_observation_ordinal", "line", "field", "deterministic"
+  ],
+  "properties": {
+    "contract_version": { "const": "gkos-ingest-finding/1.0.0-draft.1" },
+    "finding_id": { "$ref": "#/$defs/sha256" },
+    "code": {
+      "enum": [
+        "AUTHORED_LINK_REFERENCE_INVALID", "AUTHORED_RELATIONSHIP_REFERENCE_INVALID", "CANONICAL_PROJECTION_INVALID",
+        "CANONICAL_SOURCE_UID_UNAVAILABLE", "CANONICAL_VALIDITY_BINDING_MISMATCH",
+        "CANONICAL_VALIDITY_REFERENCE_UNAVAILABLE", "CANONICAL_VALIDITY_TIMESTAMP_NONPORTABLE",
+        "GKX-AUTHORITY-ROLE-001", "GKX-AUTHORITY-ROLE-002", "GKX-EPISTEMIC-002",
+        "GKX-EPISTEMIC-004", "GKX-EVIDENCE-002", "GKX-EVIDENCE-003", "GKX-IDENTITY-001",
+        "GKX-IDENTITY-002", "GKX-PROVENANCE-001", "GKX-PROVENANCE-002", "GKX-SCHEMA-002",
+        "GKX-SCHEMA-003", "GKX-SCHEMA-004", "GKX-SENSITIVITY-001", "GKX-SENSITIVITY-005",
+        "GKX-TEMPORAL-001", "GKX_FRONTMATTER_LINE_LIMIT", "GKX_FRONTMATTER_REQUIRED",
+        "GKX_FRONTMATTER_SIZE_LIMIT", "GKX_FRONTMATTER_UNTERMINATED",
+        "GKX_INGEST_CANONICAL_DIAGNOSTIC_UNMAPPED", "GKX_INGEST_PROFILE_VERSION_REQUIRED",
+        "GKX_INGEST_UID_REQUIRED", "GKX_PROFILE_ENUM_INVALID", "GKX_PROFILE_FIELD_REQUIRED",
+        "GKX_PROFILE_LENGTH_INVALID", "GKX_PROFILE_SENSITIVITY_BELOW_MINIMUM",
+        "GKX_PROFILE_TYPE_INVALID", "GKX_PROFILE_UNKNOWN_FIELD", "GKX_YAML_DUPLICATE_KEY",
+        "GKX_YAML_FEATURE_UNSUPPORTED", "GKX_YAML_FLOW_INVALID", "GKX_YAML_INDENT_TAB",
+        "GKX_YAML_KEY_UNSAFE", "GKX_YAML_LIST_MAPPING_CONTINUATION",
+        "GKX_YAML_LIST_SCALAR_CONTINUATION", "GKX_YAML_MAPPING_UNSUPPORTED",
+        "GKX_YAML_NESTING_LIMIT", "GKX_YAML_NUMBER_NONFINITE", "GKX_YAML_NUMBER_UNSUPPORTED",
+        "GKX_YAML_QUOTE_INVALID", "GKX_YAML_TOP_LEVEL_INDENT", "GKX_YAML_UNPARSED_CONTENT",
+        "RETRIEVAL_AUTHORIZED_VIEW_CONFLICT", "SOURCE_FILESYSTEM_ALIAS_REJECTED",
+        "SOURCE_READ_FAILED", "SOURCE_SIZE_LIMIT_EXCEEDED",
+        "SOURCE_SNAPSHOT_CHANGED_DURING_SCAN", "SOURCE_UTF8_INVALID"
+      ]
+    },
+    "severity": { "enum": ["info", "warning", "error", "critical"] },
+    "classification": { "enum": ["intrinsic", "cross_record_report_only"] },
+    "scope": { "enum": ["file", "frontmatter", "field", "corpus"] },
+    "coordinate_basis": { "enum": ["file_observation", "document_line", "frontmatter_field", "missing_field", "corpus"] },
+    "source_path": { "oneOf": [{ "$ref": "#/$defs/path" }, { "type": "null" }] },
+    "source_observation_ordinal": { "oneOf": [{ "type": "integer", "minimum": 0, "maximum": 999999 }, { "type": "null" }] },
+    "line": { "oneOf": [{ "type": "integer", "minimum": 1, "maximum": 2147483647 }, { "type": "null" }] },
+    "field": {
+      "oneOf": [
+        { "type": "string", "minLength": 1, "maxLength": 256, "pattern": "^[A-Za-z][A-Za-z0-9_.-]*(?:\\[[0-9]+\\](?:\\.[A-Za-z][A-Za-z0-9_.-]*)?)?$" },
+        { "type": "null" }
+      ]
+    },
+    "deterministic": { "const": true }
+  },
+  "allOf": [
+    {
+      "if": { "type": "object", "properties": { "scope": { "const": "corpus" } }, "required": ["scope"] },
+      "then": {
+        "type": "object",
+        "properties": {
+          "source_path": { "type": "null" }, "source_observation_ordinal": { "type": "null" }, "line": { "type": "null" },
+          "field": { "type": "null" }, "coordinate_basis": { "const": "corpus" }
+        }
+      },
+      "else": { "type": "object", "properties": { "source_path": { "$ref": "#/$defs/path" }, "source_observation_ordinal": { "type": "integer", "minimum": 0, "maximum": 999999 } } }
+    },
+    {
+      "if": { "type": "object", "properties": { "coordinate_basis": { "enum": ["document_line", "frontmatter_field"] } }, "required": ["coordinate_basis"] },
+      "then": { "type": "object", "properties": { "line": { "type": "integer", "minimum": 1, "maximum": 2147483647 } } },
+      "else": { "type": "object", "properties": { "line": { "type": "null" } } }
+    },
+    {
+      "if": { "type": "object", "properties": { "code": { "const": "RETRIEVAL_AUTHORIZED_VIEW_CONFLICT" } }, "required": ["code"] },
+      "then": {
+        "type": "object",
+        "properties": {
+          "severity": { "const": "error" }, "classification": { "const": "cross_record_report_only" },
+          "scope": { "const": "corpus" }, "coordinate_basis": { "const": "corpus" },
+          "source_path": { "type": "null" }, "line": { "type": "null" }, "field": { "type": "null" }
+        }
+      },
+      "else": { "type": "object", "properties": { "classification": { "const": "intrinsic" } } }
+    },
+    {
+      "if": { "type": "object", "properties": { "code": { "const": "GKX-AUTHORITY-ROLE-001" } }, "required": ["code"] },
+      "then": { "type": "object", "properties": { "severity": { "const": "critical" } } }
+    },
+    {
+      "if": { "type": "object", "properties": { "code": { "enum": [
+        "GKX-AUTHORITY-ROLE-002", "GKX-EPISTEMIC-002", "GKX-EVIDENCE-002", "GKX-EVIDENCE-003",
+        "GKX-IDENTITY-002", "GKX-PROVENANCE-002", "GKX-SCHEMA-004", "GKX-SENSITIVITY-005"
+      ] } }, "required": ["code"] },
+      "then": { "type": "object", "properties": { "severity": { "enum": ["error", "critical"] } } }
+    },
+    {
+      "if": { "type": "object", "properties": { "code": { "enum": [
+        "GKX-EPISTEMIC-004", "GKX-IDENTITY-001", "GKX-PROVENANCE-001", "GKX-SCHEMA-003",
+        "GKX-TEMPORAL-001"
+      ] } }, "required": ["code"] },
+      "then": { "type": "object", "properties": { "severity": { "enum": ["warning", "error", "critical"] } } }
+    },
+    {
+      "if": { "type": "object", "properties": { "code": { "const": "GKX-SENSITIVITY-001" } }, "required": ["code"] },
+      "then": { "type": "object", "properties": { "severity": { "const": "warning" } } }
+    },
+    {
+      "if": { "type": "object", "properties": { "code": { "const": "GKX_PROFILE_UNKNOWN_FIELD" } }, "required": ["code"] },
+      "then": { "type": "object", "properties": {
+        "severity": { "enum": ["warning", "error"] }, "classification": { "const": "intrinsic" },
+        "scope": { "const": "frontmatter" }, "coordinate_basis": { "const": "frontmatter_field" },
+        "line": { "type": "integer", "minimum": 1 }, "field": { "type": "null" }
+      } }
+    },
+    {
+      "if": { "type": "object", "properties": { "code": { "const": "GKX_PROFILE_FIELD_REQUIRED" } }, "required": ["code"] },
+      "then": { "type": "object", "properties": {
+        "severity": { "const": "error" }, "classification": { "const": "intrinsic" },
+        "scope": { "const": "field" }, "coordinate_basis": { "const": "missing_field" },
+        "line": { "type": "null" }, "field": { "type": "string", "minLength": 1 }
+      } }
+    },
+    {
+      "if": { "type": "object", "properties": { "code": { "enum": [
+        "GKX_PROFILE_ENUM_INVALID", "GKX_PROFILE_LENGTH_INVALID",
+        "GKX_PROFILE_SENSITIVITY_BELOW_MINIMUM", "GKX_PROFILE_TYPE_INVALID"
+      ] } }, "required": ["code"] },
+      "then": { "type": "object", "properties": {
+        "severity": { "const": "error" }, "classification": { "const": "intrinsic" },
+        "scope": { "const": "field" }, "coordinate_basis": { "const": "frontmatter_field" },
+        "line": { "type": "integer", "minimum": 1 }, "field": { "type": "string", "minLength": 1 }
+      } }
+    },
+    {
+      "if": { "type": "object", "properties": { "code": { "const": "GKX_INGEST_CANONICAL_DIAGNOSTIC_UNMAPPED" } }, "required": ["code"] },
+      "then": { "type": "object", "properties": {
+        "severity": { "const": "error" }, "classification": { "const": "intrinsic" },
+        "scope": { "const": "frontmatter" }, "coordinate_basis": { "const": "file_observation" },
+        "line": { "type": "null" }, "field": { "type": "null" }
+      } }
+    },
+    {
+      "if": { "type": "object", "properties": { "code": { "enum": [
+        "AUTHORED_LINK_REFERENCE_INVALID", "AUTHORED_RELATIONSHIP_REFERENCE_INVALID", "CANONICAL_PROJECTION_INVALID",
+        "CANONICAL_SOURCE_UID_UNAVAILABLE", "CANONICAL_VALIDITY_BINDING_MISMATCH",
+        "CANONICAL_VALIDITY_REFERENCE_UNAVAILABLE", "CANONICAL_VALIDITY_TIMESTAMP_NONPORTABLE",
+        "GKX_FRONTMATTER_LINE_LIMIT", "GKX_FRONTMATTER_REQUIRED", "GKX_FRONTMATTER_SIZE_LIMIT",
+        "GKX_FRONTMATTER_UNTERMINATED", "GKX_INGEST_CANONICAL_DIAGNOSTIC_UNMAPPED",
+        "GKX_INGEST_PROFILE_VERSION_REQUIRED", "GKX_INGEST_UID_REQUIRED", "GKX_PROFILE_ENUM_INVALID",
+        "GKX_PROFILE_FIELD_REQUIRED", "GKX_PROFILE_LENGTH_INVALID", "GKX_PROFILE_SENSITIVITY_BELOW_MINIMUM",
+        "GKX_PROFILE_TYPE_INVALID", "GKX_YAML_DUPLICATE_KEY", "GKX_YAML_FEATURE_UNSUPPORTED",
+        "GKX_YAML_FLOW_INVALID", "GKX_YAML_INDENT_TAB", "GKX_YAML_KEY_UNSAFE",
+        "GKX_YAML_LIST_MAPPING_CONTINUATION", "GKX_YAML_LIST_SCALAR_CONTINUATION",
+        "GKX_YAML_MAPPING_UNSUPPORTED", "GKX_YAML_NESTING_LIMIT", "GKX_YAML_NUMBER_NONFINITE",
+        "GKX_YAML_NUMBER_UNSUPPORTED", "GKX_YAML_QUOTE_INVALID", "GKX_YAML_TOP_LEVEL_INDENT",
+        "GKX_YAML_UNPARSED_CONTENT", "RETRIEVAL_AUTHORIZED_VIEW_CONFLICT",
+        "SOURCE_FILESYSTEM_ALIAS_REJECTED", "SOURCE_READ_FAILED", "SOURCE_SIZE_LIMIT_EXCEEDED",
+        "SOURCE_SNAPSHOT_CHANGED_DURING_SCAN", "SOURCE_UTF8_INVALID"
+      ] } }, "required": ["code"] },
+      "then": { "type": "object", "properties": { "severity": { "const": "error" } } }
+    },
+    {
+      "if": {
+        "type": "object", "properties": {
+          "code": { "enum": ["SOURCE_FILESYSTEM_ALIAS_REJECTED", "SOURCE_READ_FAILED", "SOURCE_SIZE_LIMIT_EXCEEDED", "SOURCE_SNAPSHOT_CHANGED_DURING_SCAN", "SOURCE_UTF8_INVALID"] }
+        }, "required": ["code"]
+      },
+      "then": {
+        "type": "object", "properties": {
+          "severity": { "const": "error" }, "classification": { "const": "intrinsic" },
+          "scope": { "const": "file" }, "coordinate_basis": { "const": "file_observation" },
+          "line": { "type": "null" }, "field": { "type": "null" }
+        }
+      }
+    },
+    {
+      "if": {
+        "type": "object", "properties": {
+          "code": {
+            "enum": [
+              "GKX_FRONTMATTER_LINE_LIMIT", "GKX_FRONTMATTER_SIZE_LIMIT", "GKX_FRONTMATTER_UNTERMINATED",
+              "GKX_YAML_DUPLICATE_KEY", "GKX_YAML_FEATURE_UNSUPPORTED", "GKX_YAML_FLOW_INVALID",
+              "GKX_YAML_INDENT_TAB", "GKX_YAML_KEY_UNSAFE", "GKX_YAML_LIST_MAPPING_CONTINUATION",
+              "GKX_YAML_LIST_SCALAR_CONTINUATION", "GKX_YAML_MAPPING_UNSUPPORTED", "GKX_YAML_NESTING_LIMIT",
+              "GKX_YAML_NUMBER_NONFINITE", "GKX_YAML_NUMBER_UNSUPPORTED", "GKX_YAML_QUOTE_INVALID",
+              "GKX_YAML_TOP_LEVEL_INDENT", "GKX_YAML_UNPARSED_CONTENT"
+            ]
+          }
+        }, "required": ["code"]
+      },
+      "then": {
+        "type": "object", "properties": {
+          "severity": { "const": "error" }, "classification": { "const": "intrinsic" },
+          "scope": { "const": "frontmatter" }, "coordinate_basis": { "const": "document_line" },
+          "line": { "type": "integer", "minimum": 1 }, "field": { "type": "null" }
+        }
+      }
+    },
+    {
+      "if": { "type": "object", "properties": { "scope": { "const": "field" } }, "required": ["scope"] },
+      "then": { "type": "object", "properties": { "field": { "type": "string", "minLength": 1 } } }
+    },
+    {
+      "if": { "type": "object", "properties": { "code": { "enum": ["CANONICAL_SOURCE_UID_UNAVAILABLE", "GKX-IDENTITY-001", "GKX-IDENTITY-002", "GKX_INGEST_UID_REQUIRED"] } }, "required": ["code"] },
+      "then": { "type": "object", "properties": { "field": { "const": "uid" } } }
+    },
+    {
+      "if": { "type": "object", "properties": { "code": { "enum": ["GKX-SCHEMA-002", "GKX-SCHEMA-003", "GKX_INGEST_PROFILE_VERSION_REQUIRED"] } }, "required": ["code"] },
+      "then": { "type": "object", "properties": { "field": { "const": "gkx_version" } } }
+    },
+    {
+      "if": { "type": "object", "properties": { "code": { "enum": ["CANONICAL_VALIDITY_BINDING_MISMATCH", "CANONICAL_VALIDITY_TIMESTAMP_NONPORTABLE"] } }, "required": ["code"] },
+      "then": { "type": "object", "properties": { "field": { "const": "created_at" } } }
+    },
+    {
+      "if": { "type": "object", "properties": { "code": { "enum": ["GKX-EPISTEMIC-002", "GKX-EPISTEMIC-004"] } }, "required": ["code"] },
+      "then": { "type": "object", "properties": { "field": { "const": "epistemic.state" } } }
+    },
+    {
+      "if": { "type": "object", "properties": { "code": { "enum": ["GKX-SENSITIVITY-001", "GKX-SENSITIVITY-005", "GKX_PROFILE_SENSITIVITY_BELOW_MINIMUM"] } }, "required": ["code"] },
+      "then": { "type": "object", "properties": { "field": { "const": "sensitivity.level" } } }
+    },
+    {
+      "if": { "type": "object", "properties": { "code": { "const": "GKX-PROVENANCE-001" } }, "required": ["code"] },
+      "then": { "type": "object", "properties": { "field": { "const": "provenance.source_refs" } } }
+    },
+    {
+      "if": { "type": "object", "properties": { "code": { "const": "GKX-PROVENANCE-002" } }, "required": ["code"] },
+      "then": { "type": "object", "properties": { "field": { "const": "provenance.content_hash" } } }
+    },
+    {
+      "if": { "type": "object", "properties": { "code": { "const": "GKX-SCHEMA-004" } }, "required": ["code"] },
+      "then": { "type": "object", "properties": { "field": { "enum": [
+        "assessment", "authorship", "authorization", "created_at", "epistemic", "epistemic.state",
+        "evidence", "gkx_version", "labels", "lineage", "provenance", "relationships", "review",
+        "sensitivity", "title", "type", "uid"
+      ] } } }
+    },
+    {
+      "if": { "type": "object", "properties": { "code": { "const": "AUTHORED_LINK_REFERENCE_INVALID" } }, "required": ["code"] },
+      "then": { "type": "object", "properties": {
+        "severity": { "const": "error" }, "classification": { "const": "intrinsic" },
+        "scope": { "const": "file" }, "coordinate_basis": { "const": "document_line" },
+        "line": { "type": "integer", "minimum": 1 }, "field": { "type": "null" }
+      } }
+    },
+    {
+      "if": { "type": "object", "properties": { "code": { "const": "AUTHORED_RELATIONSHIP_REFERENCE_INVALID" } }, "required": ["code"] },
+      "then": { "type": "object", "properties": {
+        "severity": { "const": "error" }, "scope": { "const": "field" },
+        "coordinate_basis": { "const": "frontmatter_field" }, "line": { "type": "integer", "minimum": 1 },
+        "field": { "type": "string", "pattern": "^(?:relationships|relationships\\.(?:approved_by|blocks|cites|contradicts|depends_on|derived_from|derives_from|documents|extends|fails_to_replicate|generalizes|governed_by|has_part|implements|interprets|narrows|part_of|quotes|refines|related_to|replicates|reviewed_by|supports|tests)|superseded_by|supersedes)(?:\\[(?:0|[1-9][0-9]*)\\])?$" }
+      } }
+    },
+    {
+      "if": { "type": "object", "properties": { "code": { "enum": ["CANONICAL_PROJECTION_INVALID", "CANONICAL_VALIDITY_REFERENCE_UNAVAILABLE"] } }, "required": ["code"] },
+      "then": { "type": "object", "properties": { "field": { "type": "null" } } }
+    }
+  ],
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "path": {
+      "type": "string", "minLength": 1, "maxLength": 4096,
+      "pattern": "^(?!/)(?!.*//)(?!.*(?:^|/)\\.{1,2}(?:/|$))(?!.*(?:^|/)[^/]*[. ](?:/|$))(?!.*[<>:\"|?*\\\\\\u0000-\\u001f\\u007f])[^/]+(?:/[^/]+)*$"
+    }
+  }
+}

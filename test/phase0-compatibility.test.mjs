@@ -16,6 +16,7 @@ const fixtureRoot = resolve(root, "test/fixtures/compatibility");
 const historicalFixture = JSON.parse(await readFile(resolve(fixtureRoot, "phase0-lite.json"), "utf8"));
 const fixture = JSON.parse(await readFile(resolve(fixtureRoot, "phase1-lite.json"), "utf8"));
 const phase2Fixture = JSON.parse(await readFile(resolve(fixtureRoot, "phase2-lite.json"), "utf8"));
+const phase3Fixture = JSON.parse(await readFile(resolve(fixtureRoot, "phase3-lite.json"), "utf8"));
 
 async function runCli(args) {
   try {
@@ -34,8 +35,8 @@ async function runCli(args) {
 
 function assertCompatibilitySnapshot(actual) {
   const expected = structuredClone(fixture.runtime_snapshot);
-  expected.lite_package.engine_dependency = phase2Fixture.runtime_migration.engine_dependency;
-  expected.lite_package.engine_resolved_sha = phase2Fixture.runtime_migration.engine_resolved_sha;
+  expected.lite_package.engine_dependency = phase3Fixture.runtime_migration.engine_dependency;
+  expected.lite_package.engine_resolved_sha = phase3Fixture.runtime_migration.engine_resolved_sha;
   assert.deepEqual(actual, expected);
 }
 
@@ -60,12 +61,12 @@ function changedPaths(oldValue, newValue, path = "$", output = []) {
   return output;
 }
 
-test("Phase 2 runtime migration changes only the exact Full pin coordinate", async () => {
+test("Phase 3 runtime migration changes only the exact Full pin coordinate", async () => {
   const actual = await runtimeSnapshot();
   assertCompatibilitySnapshot(actual);
   assert.deepEqual(
     changedPaths(fixture.runtime_snapshot, actual),
-    phase2Fixture.runtime_migration.expected_changed_paths,
+    phase3Fixture.runtime_migration.expected_changed_paths,
   );
 });
 
@@ -85,15 +86,22 @@ test("Phase 1 delegated and local proposal-only boundaries match the compatibili
     assert.equal(validateLiteCommand(argv).allowed, false, `expected blocked: ${argv.join(" ")}`);
   }
   assert.deepEqual(validateLiteCommand(phase2Fixture.cli.delegated_as_of_argv), { allowed: true });
+  assert.deepEqual(validateLiteCommand(phase3Fixture.cli.delegated_validate_argv), { allowed: true });
+  assert.deepEqual(validateLiteCommand(phase3Fixture.cli.delegated_index_argv), { allowed: true });
 });
 
-test("Phase 2 CLI help adds only the authorized as-of syntax to the immutable Phase 1 bytes", async () => {
+test("Phase 3 CLI help adds only authorized ingest lines atop the derived Phase 2 help", async () => {
   const phase1Expected = await readFile(resolve(fixtureRoot, fixture.cli.help_stdout_file));
-  const expected = Buffer.from(phase1Expected.toString("utf8").replace(
+  const phase2Expected = Buffer.from(phase1Expected.toString("utf8").replace(
     phase2Fixture.cli.phase1_help_line,
     phase2Fixture.cli.phase2_help_lines,
   ), "utf8");
-  assert.notDeepEqual(expected, phase1Expected, "the Phase 1 help fixture remains an immutable baseline");
+  const expected = Buffer.from(phase2Expected.toString("utf8").replace(
+    phase3Fixture.cli.phase2_validate_help_line,
+    phase3Fixture.cli.phase3_validate_help_lines,
+  ), "utf8");
+  assert.notDeepEqual(phase2Expected, phase1Expected, "the Phase 1 help fixture remains immutable");
+  assert.notDeepEqual(expected, phase2Expected, "the Phase 2 help is a derived immutable baseline");
   const help = await runCli(["--help"]);
   assert.equal(help.code, fixture.cli.help_exit);
   assert.deepEqual(help.stdout, expected);
@@ -139,6 +147,10 @@ test("Phase 0 fixtures remain immutable and Phase 1 records exact authorized old
   assert.equal(phase2Fixture.full_reference.commit, "6e2df27d33ede62ee0d2e3cb7610df478a7d66ce");
   assert.equal(phase2Fixture.cli.search_result_contract, "gkos-retrieval/1.0.0-draft.2");
   assert.equal(phase2Fixture.deterministic.source_fixture_change.startsWith("none"), true);
+  assert.equal(phase3Fixture.historical_fixture, "phase2-lite.json");
+  assert.equal(phase3Fixture.full_reference.commit, "e7cc0dd478af3d0bda216c5258dec5f77932def7");
+  assert.equal(phase3Fixture.full_reference.ingest_contract, "gkos-ingest-validation/1.0.0-draft.1");
+  assert.equal(phase3Fixture.deterministic.source_fixture_change.startsWith("none"), true);
 
   const sha256 = (bytes) => `sha256:${createHash("sha256").update(bytes).digest("hex")}`;
   const [oldGraph, newGraph, oldGraphiti, newGraphiti] = await Promise.all([

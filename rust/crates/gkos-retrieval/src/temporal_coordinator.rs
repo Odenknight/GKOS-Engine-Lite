@@ -26,7 +26,7 @@ use crate::fusion::{
     code_unit_compare, maximal_marginal_relevance_with_relevance, reciprocal_rank_fusion,
 };
 use crate::lineage_store::{
-    build_gkx_retrieval_generation, open_active_gkx_retrieval_generation,
+    build_gkx_retrieval_generation_with_writer, open_active_gkx_retrieval_generation,
     try_open_active_gkx_retrieval_generation, BuiltGkxRetrievalGeneration,
     GkxRetrievalGenerationInput, GkxSqliteRetrievalStore,
 };
@@ -36,9 +36,13 @@ use crate::provenance::{
 };
 use crate::providers::{
     bounded_provider_call, validate_rerank_provider_identity, validate_vector_provider_identity,
-    RerankProvider, VectorProvider,
+    RerankProvider, VectorProvider, VectorProviderIdentity,
 };
 use crate::sqlite_store::trim_ecmascript_whitespace;
+use crate::writer_lock::{
+    acquire_legacy_retrieval_writer, assert_legacy_writer_capability, assert_no_phase3_authority,
+    finish_with_writer,
+};
 use crate::{RetrievalError, RetrievalResult};
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize)]
@@ -159,7 +163,7 @@ pub(crate) struct IndexGkxRetrievalResult {
 }
 
 pub(crate) async fn index_gkx_retrieval_generation(
-    mut input: GkxRetrievalGenerationInput,
+    input: GkxRetrievalGenerationInput,
     vector_provider: Option<&dyn VectorProvider>,
 ) -> RetrievalResult<IndexGkxRetrievalResult> {
     if !input.vectors.is_empty()
@@ -171,9 +175,38 @@ pub(crate) async fn index_gkx_retrieval_generation(
             "schema-3 index coordinator accepts only an unembedded generation".to_owned(),
         ));
     }
+    let prepared = crate::lineage_store::prepare_chunks_for_embedding(&input)?;
+    let mut writer = acquire_legacy_retrieval_writer(&input.state_directory)?;
+    let result = async {
+        let identity = vector_provider.map(|provider| provider.identity().clone());
+        if let Some(identity) = &identity {
+            validate_vector_provider_identity(identity)?;
+        }
+        index_gkx_retrieval_generation_with_writer(
+            input,
+            vector_provider,
+            identity,
+            prepared,
+            &writer,
+        )
+        .await
+    }
+    .await;
+    finish_with_writer(result, &mut writer)
+}
+
+async fn index_gkx_retrieval_generation_with_writer(
+    mut input: GkxRetrievalGenerationInput,
+    vector_provider: Option<&dyn VectorProvider>,
+    identity: Option<VectorProviderIdentity>,
+    prepared: Vec<GkxCandidateChunk>,
+    writer: &crate::writer_lock::LegacyRetrievalWriterCapability,
+) -> RetrievalResult<IndexGkxRetrievalResult> {
+    assert_legacy_writer_capability(writer, &input.state_directory)?;
+    assert_no_phase3_authority(writer.state_directory())?;
     let Some(provider) = vector_provider else {
         return Ok(IndexGkxRetrievalResult {
-            generation: build_gkx_retrieval_generation(input)?,
+            generation: build_gkx_retrieval_generation_with_writer(input, writer)?,
             vector_stage: stage(
                 RetrievalProviderStageKind::None,
                 RetrievalStageState::Disabled,
@@ -182,9 +215,7 @@ pub(crate) async fn index_gkx_retrieval_generation(
             ),
         });
     };
-    let identity = provider.identity().clone();
-    validate_vector_provider_identity(&identity)?;
-    let prepared = crate::lineage_store::prepare_chunks_for_embedding(&input)?;
+    let identity = identity.expect("provider identity is preflighted with its provider");
     let eligible_ids = input
         .embedding_eligible_candidate_chunk_keys
         .iter()
@@ -230,7 +261,7 @@ pub(crate) async fn index_gkx_retrieval_generation(
             input.embedding_model_id = Some(identity.model_id.clone());
             input.embedding_dimensions = Some(identity.dimensions);
             Ok(IndexGkxRetrievalResult {
-                generation: build_gkx_retrieval_generation(input)?,
+                generation: build_gkx_retrieval_generation_with_writer(input, writer)?,
                 vector_stage: stage(
                     identity.kind,
                     RetrievalStageState::Active,
@@ -240,7 +271,7 @@ pub(crate) async fn index_gkx_retrieval_generation(
             })
         }
         Err(_) => Ok(IndexGkxRetrievalResult {
-            generation: build_gkx_retrieval_generation(input)?,
+            generation: build_gkx_retrieval_generation_with_writer(input, writer)?,
             vector_stage: stage(
                 identity.kind,
                 RetrievalStageState::Degraded,
@@ -1314,10 +1345,13 @@ impl LexicalBackendStageKind for crate::contract::SqliteLexicalBackend {
 #[cfg(test)]
 mod tests {
     use std::fs;
+    use std::future::Future;
     use std::path::PathBuf;
     use std::sync::atomic::{AtomicUsize, Ordering};
+    use std::task::{Context, Poll};
 
     use futures_executor::block_on;
+    use futures_util::task::noop_waker_ref;
     use tempfile::tempdir;
 
     use super::*;
@@ -1606,12 +1640,18 @@ mod tests {
 
     struct CountingProvider {
         identity: VectorProviderIdentity,
+        identity_calls: AtomicUsize,
         calls: AtomicUsize,
         texts: AtomicUsize,
     }
 
     struct CountingReranker {
         identity: RerankProviderIdentity,
+        calls: AtomicUsize,
+    }
+
+    struct PendingProvider {
+        identity: VectorProviderIdentity,
         calls: AtomicUsize,
     }
 
@@ -1626,6 +1666,7 @@ mod tests {
                     timeout_ms: 1_000,
                     configuration_digest: crate::digest::sha256(b"fixture-provider-config"),
                 },
+                identity_calls: AtomicUsize::new(0),
                 calls: AtomicUsize::new(0),
                 texts: AtomicUsize::new(0),
             }
@@ -1634,6 +1675,7 @@ mod tests {
 
     impl VectorProvider for CountingProvider {
         fn identity(&self) -> &VectorProviderIdentity {
+            self.identity_calls.fetch_add(1, Ordering::SeqCst);
             &self.identity
         }
 
@@ -1645,6 +1687,21 @@ mod tests {
             self.calls.fetch_add(1, Ordering::SeqCst);
             self.texts.fetch_add(texts.len(), Ordering::SeqCst);
             Box::pin(async move { Ok(texts.iter().map(|_| vec![1.0, 0.0]).collect()) })
+        }
+    }
+
+    impl VectorProvider for PendingProvider {
+        fn identity(&self) -> &VectorProviderIdentity {
+            &self.identity
+        }
+
+        fn embed<'a>(
+            &'a self,
+            _request_id: &'a str,
+            _texts: &'a [String],
+        ) -> ProviderFuture<'a, Vec<Vec<f32>>> {
+            self.calls.fetch_add(1, Ordering::SeqCst);
+            Box::pin(std::future::pending())
         }
     }
 
@@ -3097,6 +3154,7 @@ mod tests {
                 timeout_ms: 1_000,
                 configuration_digest: sha256(b"custom-config"),
             },
+            identity_calls: AtomicUsize::new(0),
             calls: AtomicUsize::new(0),
             texts: AtomicUsize::new(0),
         };
@@ -3148,6 +3206,79 @@ mod tests {
         ));
         assert_eq!(malformed_vector.calls.load(Ordering::SeqCst), 0);
         assert_eq!(malformed_reranker.calls.load(Ordering::SeqCst), 0);
+    }
+
+    #[test]
+    fn schema3_full_phase3_authority_precedes_every_provider_trait_call() {
+        let root = tempdir().unwrap();
+        let state = root.path().join("state");
+        fs::create_dir(&state).unwrap();
+        crate::sqlite_store::harden_directory_permissions(&state).unwrap();
+        let fixture: serde_json::Value = serde_json::from_slice(include_bytes!(concat!(
+            "../../../contracts/gkos-ingest-validation-1.0.0-draft.1/",
+            "storage-conformance-fixture.json"
+        )))
+        .unwrap();
+        let status = format!(
+            "{}\n",
+            canonical_json(&fixture["valid_envelopes"]["attempt_status"]).unwrap()
+        )
+        .into_bytes();
+        let status_path = state.join("ingest-attempt-status.json");
+        crate::sqlite_store::write_owner_file(&status_path, &status).unwrap();
+        crate::sqlite_store::harden_file_permissions(&status_path).unwrap();
+
+        let pair = source(
+            OLD,
+            "old.md",
+            "# Old\nPolicy\n",
+            "2026-07-01T00:00:00.000Z",
+            GkxSensitivity::Public,
+        );
+        let sources = vec![pair.0.clone()];
+        let eligible = chunks(&sources)
+            .into_iter()
+            .map(|chunk| chunk.chunk_id)
+            .collect::<Vec<_>>();
+        let input = generation(state.clone(), vec![pair], eligible, vec![], None);
+        let provider = CountingProvider::new();
+        assert!(block_on(index_gkx_retrieval_generation(input, Some(&provider))).is_err());
+        assert_eq!(provider.identity_calls.load(Ordering::SeqCst), 0);
+        assert_eq!(provider.calls.load(Ordering::SeqCst), 0);
+        assert_eq!(provider.texts.load(Ordering::SeqCst), 0);
+        assert_eq!(fs::read(&status_path).unwrap(), status);
+        assert_eq!(fs::read_dir(&state).unwrap().count(), 1);
+    }
+
+    #[test]
+    fn schema3_held_legacy_writer_precedes_every_provider_trait_call() {
+        let root = tempdir().unwrap();
+        let state = root.path().join("state");
+        let pair = source(
+            OLD,
+            "old.md",
+            "# Old\nPolicy\n",
+            "2026-07-01T00:00:00.000Z",
+            GkxSensitivity::Public,
+        );
+        let sources = vec![pair.0.clone()];
+        let eligible = chunks(&sources)
+            .into_iter()
+            .map(|chunk| chunk.chunk_id)
+            .collect::<Vec<_>>();
+        let input = generation(state.clone(), vec![pair], eligible, vec![], None);
+        let capability = acquire_legacy_retrieval_writer(&state).unwrap();
+        let lock_before = fs::read(state.join("retrieval-writer.lock")).unwrap();
+        let provider = CountingProvider::new();
+        assert!(block_on(index_gkx_retrieval_generation(input, Some(&provider))).is_err());
+        assert_eq!(provider.identity_calls.load(Ordering::SeqCst), 0);
+        assert_eq!(provider.calls.load(Ordering::SeqCst), 0);
+        assert_eq!(provider.texts.load(Ordering::SeqCst), 0);
+        assert_eq!(
+            fs::read(state.join("retrieval-writer.lock")).unwrap(),
+            lock_before
+        );
+        drop(capability);
     }
 
     #[test]
@@ -3385,7 +3516,8 @@ mod tests {
         let provider = CountingProvider::new();
         assert!(matches!(
             block_on(index_gkx_retrieval_generation(input, Some(&provider))),
-            Err(RetrievalError::InvalidConfig(message)) if message.contains("non-aliased")
+            Err(RetrievalError::InvalidConfig(message))
+                if message.contains("HARDLINK") || message.contains("ALIAS")
         ));
         assert_eq!(provider.calls.load(Ordering::SeqCst), 0);
         assert_eq!(provider.texts.load(Ordering::SeqCst), 0);
@@ -3397,7 +3529,7 @@ mod tests {
     }
 
     #[test]
-    fn schema3_corrupt_cache_is_a_miss_before_fresh_provider_work() {
+    fn schema3_corrupt_pointer_is_authority_failure_before_provider_or_state_work() {
         let root = tempdir().unwrap();
         let state = root.path().join("state");
         let pair = source(
@@ -3416,11 +3548,60 @@ mod tests {
         let first = build_gkx_retrieval_generation(input.clone()).unwrap();
         activate_gkx_retrieval_generation(&state, &first).unwrap();
         fs::write(state.join("active-retrieval.json"), b"{broken").unwrap();
+        let before = fs::read_dir(&state)
+            .unwrap()
+            .map(|entry| entry.unwrap().file_name())
+            .collect::<BTreeSet<_>>();
         let provider = CountingProvider::new();
-        let result = block_on(index_gkx_retrieval_generation(input, Some(&provider))).unwrap();
+        assert!(block_on(index_gkx_retrieval_generation(input, Some(&provider))).is_err());
+        assert_eq!(provider.calls.load(Ordering::SeqCst), 0);
+        assert_eq!(provider.texts.load(Ordering::SeqCst), 0);
+        let after = fs::read_dir(&state)
+            .unwrap()
+            .map(|entry| entry.unwrap().file_name())
+            .collect::<BTreeSet<_>>();
+        assert_eq!(before, after);
+    }
+
+    #[test]
+    fn dropping_schema3_index_future_releases_exact_owned_writer_lock() {
+        let root = tempdir().unwrap();
+        let state = root.path().join("state");
+        let pair = source(
+            OLD,
+            "old.md",
+            "# Old\nPolicy\n",
+            "2026-07-01T00:00:00.000Z",
+            GkxSensitivity::Public,
+        );
+        let inputs = vec![pair.0.clone()];
+        let eligible = chunks(&inputs)
+            .into_iter()
+            .map(|chunk| chunk.chunk_id)
+            .collect::<Vec<_>>();
+        let input = generation(state.clone(), vec![pair], eligible, vec![], None);
+        let provider = PendingProvider {
+            identity: VectorProviderIdentity {
+                kind: RetrievalProviderStageKind::Mcp,
+                provider_id: "fixture-provider".to_owned(),
+                model_id: "fixture-2d".to_owned(),
+                dimensions: 2,
+                timeout_ms: 300_000,
+                configuration_digest: crate::digest::sha256(b"pending-provider-config"),
+            },
+            calls: AtomicUsize::new(0),
+        };
+        let mut future = Box::pin(index_gkx_retrieval_generation(
+            input.clone(),
+            Some(&provider),
+        ));
+        let mut context = Context::from_waker(noop_waker_ref());
+        assert!(matches!(future.as_mut().poll(&mut context), Poll::Pending));
         assert_eq!(provider.calls.load(Ordering::SeqCst), 1);
-        assert_eq!(provider.texts.load(Ordering::SeqCst), 1);
-        assert_eq!(result.vector_stage.state, RetrievalStageState::Active);
+        assert!(state.join("retrieval-writer.lock").exists());
+        drop(future);
+        assert!(!state.join("retrieval-writer.lock").exists());
+        block_on(index_gkx_retrieval_generation(input, None)).unwrap();
     }
 
     #[test]

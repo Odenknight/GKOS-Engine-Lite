@@ -2229,6 +2229,7 @@ token_env = "GKOS_MISSING_TOKEN"
             assert_eq!(reranker.identity().kind, expected_kind);
 
             let state = tempdir().unwrap();
+            crate::sqlite_store::harden_directory_permissions(state.path()).unwrap();
             let source =
                 |source_id: &str, source_path: &str, text: &str| crate::contract::RetrievalSource {
                     contract_version: crate::contract::RETRIEVAL_CONTRACT.to_owned(),
@@ -2263,7 +2264,7 @@ token_env = "GKOS_MISSING_TOKEN"
             let indexed = block_on(crate::coordinator::index_retrieval_generation(
                 crate::sqlite_store::RetrievalGenerationInput {
                     state_directory: state.path().to_path_buf(),
-                    engine_version: "lite-phase1".to_owned(),
+                    engine_version: "2.1.2".to_owned(),
                     vault_id: "vault-a".to_owned(),
                     source_snapshot_digest: crate::digest::sha256(b"fixed-snapshot"),
                     configuration_digest: crate::digest::sha256(b"fixed-config"),

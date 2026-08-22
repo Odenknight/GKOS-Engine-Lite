@@ -23,13 +23,20 @@ use crate::fusion::{
 use crate::path_security::{absolute_lexical_path, contained_path, equivalent_paths};
 use crate::providers::{
     bounded_provider_call, validate_rerank_provider_identity, validate_vector_provider_identity,
-    RerankProvider, VectorProvider,
+    RerankProvider, VectorProvider, VectorProviderIdentity,
 };
 use crate::redaction::{authorize_search_result, AuthorizedRetrievalSearchResult};
+#[cfg(test)]
+use crate::sqlite_store::build_retrieval_generation;
 use crate::sqlite_store::{
-    build_retrieval_generation, lexical_query_clauses, open_active_retrieval_generation,
-    trim_ecmascript_whitespace, try_open_active_retrieval_generation, BuiltRetrievalGeneration,
+    build_retrieval_generation_with_writer, lexical_query_clauses,
+    open_active_retrieval_generation, trim_ecmascript_whitespace,
+    try_open_active_retrieval_generation, validate_full_engine_version, BuiltRetrievalGeneration,
     RetrievalGenerationInput, SqliteRetrievalStore, StoredVector,
+};
+use crate::writer_lock::{
+    acquire_legacy_retrieval_writer, assert_legacy_writer_capability, assert_no_phase3_authority,
+    finish_with_writer, LegacyRetrievalWriterCapability,
 };
 use crate::{RetrievalError, RetrievalResult};
 
@@ -190,9 +197,10 @@ pub struct IndexRetrievalResult {
 }
 
 pub async fn index_retrieval_generation(
-    mut input: RetrievalGenerationInput,
+    input: RetrievalGenerationInput,
     vector_provider: Option<&dyn VectorProvider>,
 ) -> RetrievalResult<IndexRetrievalResult> {
+    validate_full_engine_version(&input.engine_version)?;
     if !input.vectors.is_empty()
         || input.embedding_provider_id.is_some()
         || input.embedding_model_id.is_some()
@@ -202,9 +210,29 @@ pub async fn index_retrieval_generation(
             "index coordinator accepts only an unembedded base generation".to_owned(),
         ));
     }
+    let mut writer = acquire_legacy_retrieval_writer(&input.state_directory)?;
+    let result = async {
+        let identity = vector_provider.map(|provider| provider.identity().clone());
+        if let Some(identity) = &identity {
+            validate_vector_provider_identity(identity)?;
+        }
+        index_retrieval_generation_with_writer(input, vector_provider, identity, &writer).await
+    }
+    .await;
+    finish_with_writer(result, &mut writer)
+}
+
+async fn index_retrieval_generation_with_writer(
+    mut input: RetrievalGenerationInput,
+    vector_provider: Option<&dyn VectorProvider>,
+    identity: Option<VectorProviderIdentity>,
+    writer: &LegacyRetrievalWriterCapability,
+) -> RetrievalResult<IndexRetrievalResult> {
+    assert_legacy_writer_capability(writer, &input.state_directory)?;
+    assert_no_phase3_authority(writer.state_directory())?;
     let Some(provider) = vector_provider else {
         return Ok(IndexRetrievalResult {
-            generation: build_retrieval_generation(input)?,
+            generation: build_retrieval_generation_with_writer(input, writer)?,
             vector_stage: stage(
                 RetrievalProviderStageKind::None,
                 RetrievalStageState::Disabled,
@@ -213,8 +241,7 @@ pub async fn index_retrieval_generation(
             ),
         });
     };
-    let identity = provider.identity().clone();
-    validate_vector_provider_identity(&identity)?;
+    let identity = identity.expect("provider identity is preflighted with its provider");
     let mut chunks = Vec::new();
     for source in &input.sources {
         chunks.extend(chunk_source(source, input.chunking)?);
@@ -240,7 +267,7 @@ pub async fn index_retrieval_generation(
             input.embedding_model_id = Some(identity.model_id.clone());
             input.embedding_dimensions = Some(identity.dimensions);
             Ok(IndexRetrievalResult {
-                generation: build_retrieval_generation(input)?,
+                generation: build_retrieval_generation_with_writer(input, writer)?,
                 vector_stage: stage(
                     identity.kind,
                     RetrievalStageState::Active,
@@ -250,7 +277,7 @@ pub async fn index_retrieval_generation(
             })
         }
         Err(_) => Ok(IndexRetrievalResult {
-            generation: build_retrieval_generation(input)?,
+            generation: build_retrieval_generation_with_writer(input, writer)?,
             vector_stage: stage(
                 identity.kind,
                 RetrievalStageState::Degraded,
@@ -1242,6 +1269,7 @@ mod tests {
     use std::time::{Duration, Instant};
 
     use futures_executor::block_on;
+    use futures_util::task::noop_waker_ref;
     use serde::Deserialize;
     use tempfile::tempdir;
 
@@ -1250,10 +1278,14 @@ mod tests {
         CanonicalLineageEnvelope, CanonicalTemporalEnvelope, RetrievalChunkMetadata,
         RetrievalFilters, RetrievalProviderStageKind,
     };
+    use crate::digest::canonical_json;
     use crate::providers::{
         ProviderFuture, RerankProviderIdentity, RerankScore, VectorProviderIdentity,
     };
-    use crate::sqlite_store::activate_retrieval_generation;
+    use crate::sqlite_store::{
+        activate_retrieval_generation, harden_directory_permissions, harden_file_permissions,
+        write_owner_file,
+    };
 
     use super::*;
 
@@ -1290,6 +1322,12 @@ mod tests {
         identity: VectorProviderIdentity,
         calls: AtomicUsize,
         items: AtomicUsize,
+    }
+
+    struct BoundaryCountingVectorProvider {
+        identity: VectorProviderIdentity,
+        identity_calls: AtomicUsize,
+        embed_calls: AtomicUsize,
     }
 
     struct RecordingVectorProvider {
@@ -1333,6 +1371,22 @@ mod tests {
         }
     }
 
+    impl VectorProvider for BoundaryCountingVectorProvider {
+        fn identity(&self) -> &VectorProviderIdentity {
+            self.identity_calls.fetch_add(1, Ordering::SeqCst);
+            &self.identity
+        }
+
+        fn embed<'a>(
+            &'a self,
+            _request_id: &'a str,
+            texts: &'a [String],
+        ) -> ProviderFuture<'a, Vec<Vec<f32>>> {
+            self.embed_calls.fetch_add(1, Ordering::SeqCst);
+            Box::pin(ready(Ok(texts.iter().map(|_| vec![1.0, 0.0]).collect())))
+        }
+    }
+
     impl RerankProvider for CountingRerankProvider {
         fn identity(&self) -> &RerankProviderIdentity {
             &self.identity
@@ -1347,10 +1401,6 @@ mod tests {
             self.calls.fetch_add(1, Ordering::SeqCst);
             Box::pin(ready(Ok(Vec::new())))
         }
-    }
-
-    struct FailingVectorProvider {
-        identity: VectorProviderIdentity,
     }
 
     struct DropPending<T> {
@@ -1420,21 +1470,6 @@ mod tests {
         }
     }
 
-    impl VectorProvider for FailingVectorProvider {
-        fn identity(&self) -> &VectorProviderIdentity {
-            &self.identity
-        }
-
-        fn embed<'a>(
-            &'a self,
-            _request_id: &'a str,
-            _texts: &'a [String],
-        ) -> ProviderFuture<'a, Vec<Vec<f32>>> {
-            Box::pin(ready(Err(RetrievalError::ProviderResponse(
-                "provider unavailable".to_owned(),
-            ))))
-        }
-    }
     impl VectorProvider for FixedVectorProvider {
         fn identity(&self) -> &VectorProviderIdentity {
             &self.identity
@@ -1465,9 +1500,12 @@ mod tests {
     }
 
     fn generation(path: PathBuf) -> RetrievalGenerationInput {
+        if path.exists() {
+            harden_directory_permissions(&path).unwrap();
+        }
         RetrievalGenerationInput {
             state_directory: path,
-            engine_version: "lite-phase1".to_owned(),
+            engine_version: "2.1.2".to_owned(),
             vault_id: "vault-a".to_owned(),
             source_snapshot_digest: sha256(b"snapshot"),
             configuration_digest: sha256(b"config"),
@@ -1483,6 +1521,23 @@ mod tests {
             embedding_model_id: None,
             embedding_dimensions: None,
         }
+    }
+
+    fn phase3_storage_envelope(name: &str) -> Vec<u8> {
+        let fixture: serde_json::Value = serde_json::from_slice(include_bytes!(concat!(
+            "../../../contracts/gkos-ingest-validation-1.0.0-draft.1/",
+            "storage-conformance-fixture.json"
+        )))
+        .unwrap();
+        let envelope = fixture["valid_envelopes"]
+            .get(name)
+            .unwrap_or_else(|| panic!("missing Phase-3 fixture envelope {name}"));
+        format!("{}\n", canonical_json(envelope).unwrap()).into_bytes()
+    }
+
+    fn write_controlled_fixture(path: &Path, bytes: &[u8]) {
+        write_owner_file(path, bytes).unwrap();
+        harden_file_permissions(path).unwrap();
     }
 
     fn request() -> RetrievalSearchRequest {
@@ -1863,6 +1918,199 @@ mod tests {
     }
 
     #[test]
+    fn dropping_index_future_releases_its_exact_legacy_writer_lock() {
+        let root = tempdir().unwrap();
+        let state = root.path().join("state");
+        let dropped = Arc::new(AtomicBool::new(false));
+        let provider = HangingVectorProvider {
+            identity: VectorProviderIdentity {
+                kind: RetrievalProviderStageKind::Mcp,
+                provider_id: "provider-a".to_owned(),
+                model_id: "model-a".to_owned(),
+                dimensions: 2,
+                timeout_ms: 300_000,
+                configuration_digest: sha256(b"provider-cancellation-config"),
+            },
+            dropped: dropped.clone(),
+        };
+        let mut future = Box::pin(index_retrieval_generation(
+            generation(state.clone()),
+            Some(&provider),
+        ));
+        let mut context = Context::from_waker(noop_waker_ref());
+        assert!(matches!(future.as_mut().poll(&mut context), Poll::Pending));
+        assert!(state.join("retrieval-writer.lock").exists());
+        drop(future);
+        assert!(dropped.load(Ordering::SeqCst));
+        assert!(!state.join("retrieval-writer.lock").exists());
+        block_on(index_retrieval_generation(generation(state), None)).unwrap();
+    }
+
+    #[test]
+    fn mismatched_engine_version_fails_before_provider_or_state() {
+        let root = tempdir().unwrap();
+        let state = root.path().join("state");
+        let calls = Arc::new(AtomicUsize::new(0));
+        let provider = CountingVectorProvider {
+            identity: VectorProviderIdentity {
+                kind: RetrievalProviderStageKind::Mcp,
+                provider_id: "provider-a".to_owned(),
+                model_id: "model-a".to_owned(),
+                dimensions: 2,
+                timeout_ms: 15_000,
+                configuration_digest: sha256(b"provider-engine-config"),
+            },
+            calls: AtomicUsize::new(0),
+            items: AtomicUsize::new(0),
+        };
+        let mut input = generation(state.clone());
+        input.engine_version = "forged".to_owned();
+        let result = block_on(index_retrieval_generation(input, Some(&provider)));
+        calls.store(provider.calls.load(Ordering::SeqCst), Ordering::SeqCst);
+        assert!(matches!(result, Err(RetrievalError::InvalidConfig(_))));
+        assert_eq!(calls.load(Ordering::SeqCst), 0);
+        assert!(!state.exists());
+    }
+
+    #[test]
+    fn exact_full_phase3_authority_envelopes_block_before_provider_or_state_work() {
+        for (filename, envelope) in [
+            ("ingest-authority.lock", "authority_lock"),
+            ("ingest-attempt-status.json", "attempt_status"),
+            ("active-retrieval.json", "legacy_tombstone"),
+            ("Ingest-Attempt-Status.json", "attempt_status"),
+        ] {
+            let directory = tempdir().unwrap();
+            let input = generation(directory.path().to_path_buf());
+            let path = directory.path().join(filename);
+            let bytes = phase3_storage_envelope(envelope);
+            write_controlled_fixture(&path, &bytes);
+            let modified = fs::metadata(&path).unwrap().modified().unwrap();
+            let provider = BoundaryCountingVectorProvider {
+                identity: VectorProviderIdentity {
+                    kind: RetrievalProviderStageKind::Mcp,
+                    provider_id: "provider-a".to_owned(),
+                    model_id: "model-a".to_owned(),
+                    dimensions: 2,
+                    timeout_ms: 15_000,
+                    configuration_digest: sha256(b"phase3-authority-provider"),
+                },
+                identity_calls: AtomicUsize::new(0),
+                embed_calls: AtomicUsize::new(0),
+            };
+            assert!(block_on(index_retrieval_generation(input, Some(&provider),)).is_err());
+            assert_eq!(provider.identity_calls.load(Ordering::SeqCst), 0);
+            assert_eq!(provider.embed_calls.load(Ordering::SeqCst), 0);
+            assert_eq!(fs::read(&path).unwrap(), bytes);
+            assert_eq!(fs::metadata(&path).unwrap().modified().unwrap(), modified);
+            assert_eq!(fs::read_dir(directory.path()).unwrap().count(), 1);
+        }
+    }
+
+    #[test]
+    fn held_legacy_writer_lock_precedes_every_provider_trait_call() {
+        let root = tempdir().unwrap();
+        let state = root.path().join("state");
+        let capability = acquire_legacy_retrieval_writer(&state).unwrap();
+        let lock_before = fs::read(state.join("retrieval-writer.lock")).unwrap();
+        let provider = BoundaryCountingVectorProvider {
+            identity: VectorProviderIdentity {
+                kind: RetrievalProviderStageKind::Mcp,
+                provider_id: "provider-a".to_owned(),
+                model_id: "model-a".to_owned(),
+                dimensions: 2,
+                timeout_ms: 15_000,
+                configuration_digest: sha256(b"held-writer-provider"),
+            },
+            identity_calls: AtomicUsize::new(0),
+            embed_calls: AtomicUsize::new(0),
+        };
+        assert!(block_on(index_retrieval_generation(
+            generation(state.clone()),
+            Some(&provider),
+        ))
+        .is_err());
+        assert_eq!(provider.identity_calls.load(Ordering::SeqCst), 0);
+        assert_eq!(provider.embed_calls.load(Ordering::SeqCst), 0);
+        assert_eq!(
+            fs::read(state.join("retrieval-writer.lock")).unwrap(),
+            lock_before
+        );
+        drop(capability);
+    }
+
+    #[test]
+    fn phase3_evidence_appearing_after_legacy_lock_still_blocks_before_provider() {
+        let directory = tempdir().unwrap();
+        let input = generation(directory.path().to_path_buf());
+        let provider = CountingVectorProvider {
+            identity: VectorProviderIdentity {
+                kind: RetrievalProviderStageKind::Mcp,
+                provider_id: "provider-a".to_owned(),
+                model_id: "model-a".to_owned(),
+                dimensions: 2,
+                timeout_ms: 15_000,
+                configuration_digest: sha256(b"phase3-interleave-provider"),
+            },
+            calls: AtomicUsize::new(0),
+            items: AtomicUsize::new(0),
+        };
+        let identity = provider.identity.clone();
+        let mut writer = acquire_legacy_retrieval_writer(directory.path()).unwrap();
+        let evidence = directory.path().join("ingest-attempt-status.json");
+        write_controlled_fixture(&evidence, &phase3_storage_envelope("attempt_status"));
+        let result = block_on(index_retrieval_generation_with_writer(
+            input,
+            Some(&provider),
+            Some(identity),
+            &writer,
+        ));
+        assert!(result.is_err());
+        assert_eq!(provider.calls.load(Ordering::SeqCst), 0);
+        assert_eq!(provider.items.load(Ordering::SeqCst), 0);
+        fs::remove_file(evidence).unwrap();
+        assert!(finish_with_writer(result, &mut writer).is_err());
+        assert!(!directory.path().join("retrieval-writer.lock").exists());
+    }
+
+    #[cfg(unix)]
+    #[test]
+    fn widened_phase3_state_is_not_repaired_or_read_before_provider_rejection() {
+        use std::os::unix::fs::PermissionsExt;
+
+        let root = tempdir().unwrap();
+        let state = root.path().join("state");
+        let input = generation(state.clone());
+        fs::create_dir(&state).unwrap();
+        fs::set_permissions(&state, fs::Permissions::from_mode(0o777)).unwrap();
+        let evidence = state.join("ingest-activation-root.json");
+        fs::write(&evidence, b"sealed phase3 sentinel\n").unwrap();
+        fs::set_permissions(&evidence, fs::Permissions::from_mode(0o600)).unwrap();
+        let before = fs::read(&evidence).unwrap();
+        let provider = CountingVectorProvider {
+            identity: VectorProviderIdentity {
+                kind: RetrievalProviderStageKind::Mcp,
+                provider_id: "provider-a".to_owned(),
+                model_id: "model-a".to_owned(),
+                dimensions: 2,
+                timeout_ms: 15_000,
+                configuration_digest: sha256(b"provider-mode-config"),
+            },
+            calls: AtomicUsize::new(0),
+            items: AtomicUsize::new(0),
+        };
+        assert!(block_on(index_retrieval_generation(input, Some(&provider))).is_err());
+        assert_eq!(provider.calls.load(Ordering::SeqCst), 0);
+        assert_eq!(provider.items.load(Ordering::SeqCst), 0);
+        assert_eq!(fs::read(&evidence).unwrap(), before);
+        assert_eq!(
+            fs::metadata(&state).unwrap().permissions().mode() & 0o777,
+            0o777
+        );
+        assert_eq!(fs::read_dir(&state).unwrap().count(), 1);
+    }
+
+    #[test]
     fn query_and_rerank_timeouts_drop_work_and_degrade_without_losing_fts() {
         let directory = tempdir().unwrap();
         let mut input = generation(directory.path().to_path_buf());
@@ -2152,7 +2400,7 @@ mod tests {
     }
 
     #[test]
-    fn corrupt_active_cache_is_a_miss_and_provider_failure_publishes_fts_only() {
+    fn corrupt_active_pointer_fails_authority_preflight_before_provider_or_generation_work() {
         let directory = tempdir().unwrap();
         let working = CountingVectorProvider {
             identity: VectorProviderIdentity {
@@ -2172,15 +2420,27 @@ mod tests {
             .generation;
         activate_retrieval_generation(directory.path(), &first).unwrap();
         fs::write(directory.path().join("active-retrieval.json"), b"{broken").unwrap();
-        let failing = FailingVectorProvider {
+        let provider = CountingVectorProvider {
             identity: working.identity.clone(),
+            calls: AtomicUsize::new(0),
+            items: AtomicUsize::new(0),
         };
-        let result = block_on(index_retrieval_generation(input, Some(&failing))).unwrap();
-        assert_eq!(result.vector_stage.state, RetrievalStageState::Degraded);
-        assert_eq!(result.vector_stage.reason_codes, ["VECTOR_UNAVAILABLE"]);
-        assert!(result.generation.manifest.embedding_provider_id.is_none());
-        assert!(result.generation.manifest.embedding_model_id.is_none());
-        assert!(result.generation.manifest.embedding_dimensions.is_none());
+        let before = fs::read_dir(directory.path())
+            .unwrap()
+            .map(|entry| entry.unwrap().file_name())
+            .collect::<BTreeSet<_>>();
+        assert!(matches!(
+            block_on(index_retrieval_generation(input, Some(&provider))),
+            Err(RetrievalError::InvalidConfig(message))
+                if message == "RETRIEVAL_STATE_POINTER_JSON_INVALID"
+        ));
+        assert_eq!(provider.calls.load(Ordering::SeqCst), 0);
+        assert_eq!(provider.items.load(Ordering::SeqCst), 0);
+        let after = fs::read_dir(directory.path())
+            .unwrap()
+            .map(|entry| entry.unwrap().file_name())
+            .collect::<BTreeSet<_>>();
+        assert_eq!(before, after);
     }
 
     #[test]
@@ -2212,7 +2472,8 @@ mod tests {
         };
         assert!(matches!(
             block_on(index_retrieval_generation(input, Some(&provider))),
-            Err(RetrievalError::InvalidConfig(message)) if message.contains("non-aliased")
+            Err(RetrievalError::InvalidConfig(message))
+                if message.contains("HARDLINK") || message.contains("ALIAS")
         ));
         assert_eq!(provider.calls.load(Ordering::SeqCst), 0);
         assert_eq!(provider.items.load(Ordering::SeqCst), 0);

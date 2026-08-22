@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Odenknight/GKOS-Engine/contracts/ingest/gkos-ingest-validation-1.0.0-draft.1/result.schema.json",
+  "title": "GKOS ingest validation result draft 1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract_version", "status", "corpus_valid", "ingest_intrinsic_valid", "profile",
+    "normalized_profile", "summary", "findings", "observations", "rejections"
+  ],
+  "properties": {
+    "contract_version": { "const": "gkos-ingest-validation/1.0.0-draft.1" },
+    "status": { "enum": ["valid", "invalid"] },
+    "corpus_valid": { "type": "boolean" },
+    "ingest_intrinsic_valid": { "type": "boolean" },
+    "profile": { "$ref": "profile-coordinate.schema.json" },
+    "normalized_profile": { "$ref": "normalized-profile.schema.json" },
+    "summary": {
+      "type": "object", "additionalProperties": false,
+      "required": ["observed_source_count", "valid_source_count", "rejected_source_count", "findings"],
+      "properties": {
+        "observed_source_count": { "$ref": "#/$defs/count" },
+        "valid_source_count": { "$ref": "#/$defs/count" },
+        "rejected_source_count": { "$ref": "#/$defs/count" },
+        "findings": {
+          "type": "object", "additionalProperties": false,
+          "required": ["info", "warning", "error", "critical"],
+          "properties": {
+            "info": { "$ref": "#/$defs/count" }, "warning": { "$ref": "#/$defs/count" },
+            "error": { "$ref": "#/$defs/count" }, "critical": { "$ref": "#/$defs/count" }
+          }
+        }
+      }
+    },
+    "findings": { "type": "array", "maxItems": 1000000, "uniqueItems": true, "items": { "$ref": "finding.schema.json" } },
+    "observations": { "type": "array", "maxItems": 1000000, "uniqueItems": true, "items": { "$ref": "#/$defs/observation" } },
+    "rejections": { "type": "array", "maxItems": 1000000, "uniqueItems": true, "items": { "$ref": "rejection.schema.json" } }
+  },
+  "allOf": [
+    {
+      "if": { "type": "object", "properties": { "status": { "const": "valid" } }, "required": ["status"] },
+      "then": { "type": "object", "properties": { "corpus_valid": { "const": true } } },
+      "else": { "type": "object", "properties": { "corpus_valid": { "const": false } } }
+    },
+    {
+      "if": { "type": "object", "properties": { "ingest_intrinsic_valid": { "const": true } }, "required": ["ingest_intrinsic_valid"] },
+      "then": { "type": "object", "properties": { "rejections": { "type": "array", "maxItems": 0 } } },
+      "else": { "type": "object", "properties": { "rejections": { "type": "array", "minItems": 1 } } }
+    }
+  ],
+  "$defs": {
+    "count": { "type": "integer", "minimum": 0, "maximum": 1000000 },
+    "sha256": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "path": {
+      "type": "string", "minLength": 1, "maxLength": 4096,
+      "pattern": "^(?!/)(?!.*//)(?!.*(?:^|/)\\.{1,2}(?:/|$))(?!.*(?:^|/)[^/]*[. ](?:/|$))(?!.*[<>:\"|?*\\\\\\u0000-\\u001f\\u007f])[^/]+(?:/[^/]+)*$"
+    },
+    "findingIds": {
+      "type": "array", "maxItems": 530000, "uniqueItems": true,
+      "items": { "$ref": "#/$defs/sha256" }
+    },
+    "observation": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "contract_version", "source_observation_ordinal", "source_path", "source_digest",
+        "source_size_bytes", "classification", "finding_ids", "intrinsic_blocking_finding_ids"
+      ],
+      "properties": {
+        "contract_version": { "const": "gkos-ingest-source-observation/1.0.0-draft.1" },
+        "source_observation_ordinal": { "type": "integer", "minimum": 0, "maximum": 999999 },
+        "source_path": { "$ref": "#/$defs/path" },
+        "source_digest": { "oneOf": [{ "$ref": "#/$defs/sha256" }, { "type": "null" }] },
+        "source_size_bytes": { "oneOf": [{ "type": "integer", "minimum": 0, "maximum": 9007199254740991 }, { "type": "null" }] },
+        "classification": { "enum": ["accepted", "rejected"] },
+        "finding_ids": { "$ref": "#/$defs/findingIds" },
+        "intrinsic_blocking_finding_ids": { "$ref": "#/$defs/findingIds" }
+      },
+      "allOf": [
+        {
+          "if": { "type": "object", "properties": { "source_digest": { "$ref": "#/$defs/sha256" } }, "required": ["source_digest"] },
+          "then": { "type": "object", "properties": { "source_size_bytes": { "type": "integer", "minimum": 0 } } }
+        },
+        {
+          "if": { "type": "object", "properties": { "classification": { "const": "accepted" } }, "required": ["classification"] },
+          "then": { "type": "object", "properties": {
+            "source_digest": { "$ref": "#/$defs/sha256" },
+            "source_size_bytes": { "type": "integer", "minimum": 0 },
+            "intrinsic_blocking_finding_ids": { "type": "array", "maxItems": 0 }
+          } },
+          "else": { "type": "object", "properties": { "intrinsic_blocking_finding_ids": { "type": "array", "minItems": 1 } } }
+        }
+      ]
+    }
+  }
+}

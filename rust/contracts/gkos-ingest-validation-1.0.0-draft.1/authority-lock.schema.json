@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Odenknight/GKOS-Engine/contracts/ingest/gkos-ingest-validation-1.0.0-draft.1/authority-lock.schema.json",
+  "title": "GKOS ingest exclusive authority lock draft 1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract_version", "lock_id", "process_id", "prior_active", "prior_authority_digest",
+    "operation", "target", "lock_digest"
+  ],
+  "properties": {
+    "contract_version": { "const": "gkos-ingest-authority-lock/1.0.0-draft.1" },
+    "lock_id": { "$ref": "state-common.schema.json#/$defs/sha256" },
+    "process_id": { "type": "integer", "minimum": 1, "maximum": 9007199254740991 },
+    "prior_active": { "$ref": "state-common.schema.json#/$defs/priorActive" },
+    "prior_authority_digest": { "$ref": "state-common.schema.json#/$defs/sha256" },
+    "operation": { "enum": ["preflight", "activation", "blocked"] },
+    "target": {
+      "oneOf": [
+        { "type": "null" },
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["kind", "owner_generation_id", "owner_manifest_digest", "inner", "pointer_digest"],
+          "properties": {
+            "kind": { "const": "activation" },
+            "owner_generation_id": { "$ref": "state-common.schema.json#/$defs/ownerGenerationId" },
+            "owner_manifest_digest": { "$ref": "state-common.schema.json#/$defs/sha256" },
+            "inner": { "$ref": "state-common.schema.json#/$defs/activeProjection" },
+            "pointer_digest": { "$ref": "state-common.schema.json#/$defs/sha256" }
+          }
+        },
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["kind", "status_digest"],
+          "properties": {
+            "kind": { "const": "blocked" },
+            "status_digest": { "$ref": "state-common.schema.json#/$defs/sha256" }
+          }
+        }
+      ]
+    },
+    "lock_digest": { "$ref": "state-common.schema.json#/$defs/sha256" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "operation": { "const": "preflight" } }, "required": ["operation"] },
+      "then": { "properties": { "target": { "type": "null" } } }
+    },
+    {
+      "if": { "properties": { "operation": { "const": "activation" } }, "required": ["operation"] },
+      "then": { "properties": { "target": { "type": "object", "properties": { "kind": { "const": "activation" } }, "required": ["kind"] } } }
+    },
+    {
+      "if": { "properties": { "operation": { "const": "blocked" } }, "required": ["operation"] },
+      "then": { "properties": { "target": { "type": "object", "properties": { "kind": { "const": "blocked" } }, "required": ["kind"] } } }
+    }
+  ]
+}

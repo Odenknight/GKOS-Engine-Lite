@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Odenknight/GKOS-Engine/contracts/ingest/gkos-ingest-validation-1.0.0-draft.1/attempt-status.schema.json",
+  "title": "GKOS ingest strict blocked-attempt owner status draft 1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract_version", "state", "availability", "prior_active", "attempt_digest",
+    "effective_profile_digest", "observation_snapshot_digest", "status_digest"
+  ],
+  "properties": {
+    "contract_version": { "const": "gkos-ingest-attempt-status/1.0.0-draft.1" },
+    "state": { "const": "blocked" },
+    "availability": { "enum": ["stale", "unavailable"] },
+    "prior_active": { "$ref": "state-common.schema.json#/$defs/priorActive" },
+    "attempt_digest": { "$ref": "state-common.schema.json#/$defs/sha256" },
+    "effective_profile_digest": { "$ref": "state-common.schema.json#/$defs/sha256" },
+    "observation_snapshot_digest": { "$ref": "state-common.schema.json#/$defs/sha256" },
+    "status_digest": { "$ref": "state-common.schema.json#/$defs/sha256" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "prior_active": { "type": "null" } }, "required": ["prior_active"] },
+      "then": { "properties": { "availability": { "const": "unavailable" } } },
+      "else": { "properties": { "availability": { "const": "stale" } } }
+    }
+  ]
+}

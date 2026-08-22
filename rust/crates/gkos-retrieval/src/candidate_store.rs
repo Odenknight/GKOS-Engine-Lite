@@ -23,10 +23,17 @@ use crate::digest::{canonical_digest, canonical_json};
 use crate::fusion::{code_unit_compare, cosine_similarity, RankedInput};
 use crate::path_security::{absolute_lexical_path, contained_path, equivalent_paths};
 use crate::sqlite_store::{
-    ensure_fts5, fts_expression, harden_directory_permissions, harden_file_permissions,
+    assert_owner_file_permissions, ensure_fts5, fts_expression, harden_file_permissions,
     path_entry_exists, quarantine_generation_files, quarantine_orphan_sidecars, reject_file_alias,
-    reject_generation_sidecars, sync_directory, validate_existing_state_directory,
-    validate_persisted_chunks, validate_state_directory, weighted_lexical_score,
+    reject_generation_sidecars, remove_writer_generation_temporary, sync_directory,
+    validate_existing_state_directory, validate_full_engine_version, validate_persisted_chunks,
+    validate_state_directory, weighted_lexical_score,
+};
+use crate::writer_lock::{
+    acquire_legacy_retrieval_writer, assert_legacy_writer_capability, assert_legacy_writer_commit,
+    assert_legacy_writer_directory_permissions, assert_no_phase3_authority,
+    bind_legacy_writer_target, finish_with_writer, remove_uncommitted_writer_temporary,
+    verify_legacy_writer_target_published, LegacyRetrievalWriterCapability,
 };
 use crate::{RetrievalError, RetrievalResult};
 
@@ -128,6 +135,13 @@ impl BuiltGkxRetrievalGeneration {
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 #[serde(deny_unknown_fields)]
 struct ActivePointer {
+    database_file: String,
+    manifest: GkxRetrievalProjectionManifest,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(deny_unknown_fields)]
+struct HistoricalLiteActivePointer {
     contract_version: String,
     database_file: String,
     manifest: GkxRetrievalProjectionManifest,
@@ -179,9 +193,10 @@ pub(crate) fn prepare_chunks_for_embedding(
 }
 
 fn prepare_generation(input: &GkxRetrievalGenerationInput) -> RetrievalResult<PreparedGeneration> {
-    if input.engine_version.trim().is_empty() || input.vault_id.trim().is_empty() {
+    validate_full_engine_version(&input.engine_version)?;
+    if input.vault_id.trim().is_empty() {
         return Err(RetrievalError::InvalidConfig(
-            "engine_version and vault_id must not be empty".to_owned(),
+            "vault_id must not be empty".to_owned(),
         ));
     }
     for digest in [
@@ -465,21 +480,39 @@ fn projection_digest(
 pub(crate) fn build_gkx_retrieval_generation(
     input: GkxRetrievalGenerationInput,
 ) -> RetrievalResult<BuiltGkxRetrievalGeneration> {
-    let state_directory = validate_state_directory(&input.state_directory)?;
     let prepared = prepare_generation(&input)?;
-    fs::create_dir_all(&state_directory)?;
-    let state_directory = validate_existing_state_directory(&state_directory)?;
-    harden_directory_permissions(&state_directory)?;
+    let mut writer = acquire_legacy_retrieval_writer(&input.state_directory)?;
+    let result = build_prepared_gkx_retrieval_generation(input, prepared, &writer);
+    finish_with_writer(result, &mut writer)
+}
+
+pub(crate) fn build_gkx_retrieval_generation_with_writer(
+    input: GkxRetrievalGenerationInput,
+    writer: &LegacyRetrievalWriterCapability,
+) -> RetrievalResult<BuiltGkxRetrievalGeneration> {
+    let prepared = prepare_generation(&input)?;
+    build_prepared_gkx_retrieval_generation(input, prepared, writer)
+}
+
+fn build_prepared_gkx_retrieval_generation(
+    input: GkxRetrievalGenerationInput,
+    prepared: PreparedGeneration,
+    writer: &LegacyRetrievalWriterCapability,
+) -> RetrievalResult<BuiltGkxRetrievalGeneration> {
+    assert_legacy_writer_capability(writer, &input.state_directory)?;
+    assert_no_phase3_authority(writer.state_directory())?;
+    let state_directory = validate_existing_state_directory(writer.state_directory())?;
+    assert_legacy_writer_directory_permissions(&state_directory)?;
     let suffix = prepared
         .manifest
         .projection_digest
         .trim_start_matches("sha256:");
     let final_path = state_directory.join(format!("retrieval-{suffix}.sqlite"));
     if path_entry_exists(&final_path)? {
+        assert_owner_file_permissions(&final_path, "schema-3 retrieval generation")?;
         match GkxSqliteRetrievalStore::open(&final_path) {
             Ok(store) if store.manifest == prepared.manifest => {
                 drop(store);
-                harden_file_permissions(&final_path)?;
                 return Ok(BuiltGkxRetrievalGeneration {
                     database_path: final_path,
                     manifest: prepared.manifest,
@@ -490,22 +523,25 @@ pub(crate) fn build_gkx_retrieval_generation(
     } else {
         quarantine_orphan_sidecars(&final_path)?;
     }
-    let temporary = state_directory.join(format!(".retrieval-{suffix}-{}.tmp", std::process::id()));
-    if path_entry_exists(&temporary)? {
-        quarantine_generation_files(&temporary)?;
-    }
+    let temporary = state_directory.join(format!(
+        "retrieval-{suffix}.sqlite.{}.tmp",
+        std::process::id()
+    ));
+    remove_writer_generation_temporary(&temporary)?;
     if let Err(error) = insert_generation(&temporary, &prepared) {
-        let _ = quarantine_generation_files(&temporary);
+        let _ = remove_writer_generation_temporary(&temporary);
         return Err(error);
     }
     harden_file_permissions(&temporary)?;
     let verified = GkxSqliteRetrievalStore::open(&temporary)?;
     if verified.manifest != prepared.manifest {
         drop(verified);
-        let _ = quarantine_generation_files(&temporary);
+        let _ = remove_writer_generation_temporary(&temporary);
         return Err(mismatch("new schema-3 generation did not verify"));
     }
     drop(verified);
+    assert_legacy_writer_capability(writer, &state_directory)?;
+    assert_no_phase3_authority(&state_directory)?;
     fs::rename(&temporary, &final_path)?;
     harden_file_permissions(&final_path)?;
     sync_directory(&state_directory)?;
@@ -526,7 +562,29 @@ pub(crate) fn activate_gkx_retrieval_generation(
     state_directory: &Path,
     generation: &BuiltGkxRetrievalGeneration,
 ) -> RetrievalResult<PathBuf> {
-    let state_directory = validate_existing_state_directory(state_directory)?;
+    validate_full_engine_version(&generation.manifest.engine_version)?;
+    let mut writer = acquire_legacy_retrieval_writer(state_directory)?;
+    let result = activate_gkx_retrieval_generation_with_writer(
+        state_directory,
+        generation,
+        &mut writer,
+        || {},
+    );
+    finish_with_writer(result, &mut writer)
+}
+
+fn activate_gkx_retrieval_generation_with_writer<F>(
+    state_directory: &Path,
+    generation: &BuiltGkxRetrievalGeneration,
+    writer: &mut LegacyRetrievalWriterCapability,
+    before_pointer_write: F,
+) -> RetrievalResult<PathBuf>
+where
+    F: FnOnce(),
+{
+    assert_legacy_writer_capability(writer, state_directory)?;
+    assert_no_phase3_authority(writer.state_directory())?;
+    let state_directory = validate_existing_state_directory(writer.state_directory())?;
     let lexical_database = absolute_lexical_path(&generation.database_path)?;
     reject_file_alias(&lexical_database, "schema-3 retrieval generation")?;
     let canonical_database = fs::canonicalize(&lexical_database)?;
@@ -538,6 +596,7 @@ pub(crate) fn activate_gkx_retrieval_generation(
         return Err(mismatch("generation is outside its state directory"));
     }
     reject_file_alias(&canonical_database, "schema-3 retrieval generation")?;
+    assert_owner_file_permissions(&canonical_database, "schema-3 retrieval generation")?;
     let verified = GkxSqliteRetrievalStore::open(&canonical_database)?;
     if verified.manifest != generation.manifest {
         return Err(mismatch(
@@ -551,26 +610,37 @@ pub(crate) fn activate_gkx_retrieval_generation(
         .ok_or_else(|| mismatch("generation filename is invalid"))?
         .to_owned();
     let pointer = ActivePointer {
-        contract_version: RETRIEVAL_LINEAGE_CONTRACT.to_owned(),
         database_file,
         manifest: generation.manifest.clone(),
     };
+    let bytes = format!("{}\n", canonical_json(&pointer)?).into_bytes();
+    bind_legacy_writer_target(writer, &bytes)?;
+    before_pointer_write();
+    assert_legacy_writer_commit(writer, &bytes)?;
     let pointer_path = state_directory.join(ACTIVE_POINTER_NAME);
     let temporary =
         state_directory.join(format!("{ACTIVE_POINTER_NAME}.{}.tmp", std::process::id()));
     if path_entry_exists(&temporary)? {
-        quarantine_generation_files(&temporary)?;
+        return Err(mismatch("RETRIEVAL_STATE_WRITER_POINTER_TEMP_CONFLICT"));
     }
-    crate::sqlite_store::write_owner_file(
-        &temporary,
-        format!("{}\n", canonical_json(&pointer)?).as_bytes(),
-    )?;
+    if let Err(error) = crate::sqlite_store::write_owner_file(&temporary, &bytes) {
+        let _ = remove_uncommitted_writer_temporary(&temporary, &state_directory);
+        return Err(error);
+    }
     if path_entry_exists(&pointer_path)? {
         reject_file_alias(&pointer_path, "active schema-3 retrieval pointer")?;
+    }
+    if let Err(error) = assert_legacy_writer_commit(writer, &bytes) {
+        if fs::read(&temporary).ok().as_deref() == Some(bytes.as_slice()) {
+            let _ = fs::remove_file(&temporary);
+            let _ = sync_directory(&state_directory);
+        }
+        return Err(error);
     }
     crate::sqlite_store::atomic_replace(&temporary, &pointer_path)?;
     harden_file_permissions(&pointer_path)?;
     sync_directory(&state_directory)?;
+    verify_legacy_writer_target_published(writer, &bytes)?;
     let reopened = open_active_gkx_retrieval_generation(&state_directory)?;
     if reopened.manifest != generation.manifest {
         return Err(mismatch("activated schema-3 pointer did not reopen"));
@@ -588,11 +658,9 @@ pub(crate) fn open_active_gkx_retrieval_generation(
         return Err(mismatch("active retrieval pointer exceeds 1 MiB"));
     }
     let bytes = fs::read(&pointer_path)?;
-    let pointer: ActivePointer = serde_json::from_slice(&bytes)?;
+    let pointer = parse_active_pointer(&bytes)?;
     pointer.manifest.validate()?;
-    if pointer.contract_version != RETRIEVAL_LINEAGE_CONTRACT
-        || bytes != format!("{}\n", canonical_json(&pointer)?).as_bytes()
-        || pointer.database_file.contains('/')
+    if pointer.database_file.contains('/')
         || pointer.database_file.contains('\\')
         || Path::new(&pointer.database_file)
             .file_name()
@@ -618,6 +686,25 @@ pub(crate) fn open_active_gkx_retrieval_generation(
         return Err(mismatch("active schema-3 pointer manifest mismatch"));
     }
     Ok(store)
+}
+
+fn parse_active_pointer(bytes: &[u8]) -> RetrievalResult<ActivePointer> {
+    if let Ok(pointer) = serde_json::from_slice::<ActivePointer>(bytes) {
+        if bytes == format!("{}\n", canonical_json(&pointer)?).as_bytes() {
+            return Ok(pointer);
+        }
+    }
+    let historical: HistoricalLiteActivePointer = serde_json::from_slice(bytes)?;
+    if historical.contract_version != historical.manifest.contract_version
+        || historical.contract_version != RETRIEVAL_LINEAGE_CONTRACT
+        || bytes != format!("{}\n", canonical_json(&historical)?).as_bytes()
+    {
+        return Err(mismatch("active schema-3 pointer is invalid"));
+    }
+    Ok(ActivePointer {
+        database_file: historical.database_file,
+        manifest: historical.manifest,
+    })
 }
 
 pub(crate) fn try_open_active_gkx_retrieval_generation(
@@ -1667,6 +1754,85 @@ mod tests {
         let reopened = GkxSqliteRetrievalStore::open(built.database_path()).unwrap();
         assert_eq!(reopened.list_candidate_sources().unwrap().len(), 1);
         assert!(reopened.list_candidate_chunks().unwrap().is_empty());
+    }
+
+    #[test]
+    fn schema_three_writes_full_two_key_pointer_and_old_lite_pointer_is_read_only() {
+        let root = tempdir().unwrap();
+        let state = root.path().join("state");
+        let pair = source(
+            test_support::OLD,
+            "old.md",
+            "# Old\nVisible text.\n",
+            "2026-07-01T00:00:00.000Z",
+            GkxSensitivity::Public,
+        );
+        let input = generation(state.clone(), vec![pair], vec![], vec![], None);
+        let built = build_gkx_retrieval_generation(input.clone()).unwrap();
+        activate_gkx_retrieval_generation(&state, &built).unwrap();
+        let pointer_path = state.join(ACTIVE_POINTER_NAME);
+        let pointer_bytes = fs::read(&pointer_path).unwrap();
+        let mut pointer: serde_json::Value = serde_json::from_slice(&pointer_bytes).unwrap();
+        assert_eq!(
+            pointer
+                .as_object()
+                .unwrap()
+                .keys()
+                .cloned()
+                .collect::<Vec<_>>(),
+            ["database_file", "manifest"]
+        );
+
+        pointer.as_object_mut().unwrap().insert(
+            "contract_version".to_owned(),
+            RETRIEVAL_LINEAGE_CONTRACT.into(),
+        );
+        let historical = format!("{}\n", canonical_json(&pointer).unwrap()).into_bytes();
+        fs::write(&pointer_path, &historical).unwrap();
+        let opened = open_active_gkx_retrieval_generation(&state).unwrap();
+        assert_eq!(opened.manifest, *built.manifest());
+        drop(opened);
+        let database_before = fs::read(built.database_path()).unwrap();
+        assert!(build_gkx_retrieval_generation(input).is_err());
+        assert_eq!(fs::read(pointer_path).unwrap(), historical);
+        assert_eq!(fs::read(built.database_path()).unwrap(), database_before);
+        assert!(!state.join("retrieval-writer.lock").exists());
+    }
+
+    #[cfg(unix)]
+    #[test]
+    fn schema_three_widened_immutable_generation_is_rejected_without_repair_or_activation() {
+        use std::os::unix::fs::PermissionsExt;
+
+        let root = tempdir().unwrap();
+        let state = root.path().join("state");
+        let pair = source(
+            test_support::OLD,
+            "old.md",
+            "# Old\nVisible text.\n",
+            "2026-07-01T00:00:00.000Z",
+            GkxSensitivity::Public,
+        );
+        let input = generation(state.clone(), vec![pair], vec![], vec![], None);
+        let built = build_gkx_retrieval_generation(input.clone()).unwrap();
+        let database_before = fs::read(built.database_path()).unwrap();
+        fs::set_permissions(built.database_path(), fs::Permissions::from_mode(0o644)).unwrap();
+
+        assert!(build_gkx_retrieval_generation(input).is_err());
+        assert!(activate_gkx_retrieval_generation(&state, &built).is_err());
+        assert_eq!(fs::read(built.database_path()).unwrap(), database_before);
+        assert_eq!(
+            fs::metadata(built.database_path())
+                .unwrap()
+                .permissions()
+                .mode()
+                & 0o777,
+            0o644
+        );
+        assert!(!state.join(ACTIVE_POINTER_NAME).exists());
+        assert!(!state
+            .join(crate::writer_lock::LEGACY_WRITER_LOCK_FILE)
+            .exists());
     }
 
     #[test]

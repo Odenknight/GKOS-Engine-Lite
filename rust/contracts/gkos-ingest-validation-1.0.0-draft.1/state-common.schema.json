@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Odenknight/GKOS-Engine/contracts/ingest/gkos-ingest-validation-1.0.0-draft.1/state-common.schema.json",
+  "title": "GKOS ingest owner-state common definitions draft 1",
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "ownerGenerationId": { "type": "string", "pattern": "^ingest:[0-9a-f]{24}$" },
+    "retrievalProjectionId": { "type": "string", "pattern": "^retrieval:[0-9a-f]{24}$" },
+    "artifactName": {
+      "type": "string", "minLength": 1, "maxLength": 255,
+      "pattern": "^[a-z0-9][a-z0-9.-]*$"
+    },
+    "activeProjection": {
+      "type": "object", "additionalProperties": false,
+      "required": ["database_file", "manifest_digest", "projection_id", "projection_digest"],
+      "properties": {
+        "database_file": { "type": "string", "pattern": "^retrieval-[0-9a-f]{64}\\.sqlite$" },
+        "manifest_digest": { "$ref": "#/$defs/sha256" },
+        "projection_id": { "$ref": "#/$defs/retrievalProjectionId" },
+        "projection_digest": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "priorActive": {
+      "oneOf": [
+        { "type": "null" },
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["kind", "projection_id", "projection_digest", "pointer_digest"],
+          "properties": {
+            "kind": { "const": "legacy" },
+            "projection_id": { "$ref": "#/$defs/retrievalProjectionId" },
+            "projection_digest": { "$ref": "#/$defs/sha256" },
+            "pointer_digest": { "$ref": "#/$defs/sha256" }
+          }
+        },
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["kind", "owner_generation_id", "owner_manifest_digest", "inner", "pointer_digest"],
+          "properties": {
+            "kind": { "const": "ingest" },
+            "owner_generation_id": { "$ref": "#/$defs/ownerGenerationId" },
+            "owner_manifest_digest": { "$ref": "#/$defs/sha256" },
+            "inner": { "$ref": "#/$defs/activeProjection" },
+            "pointer_digest": { "$ref": "#/$defs/sha256" }
+          }
+        }
+      ]
+    },
+    "gkxManifest": {
+      "$ref": "https://gkos.example/contracts/retrieval/gkos-retrieval-1.0.0-draft.2/projection.schema.json"
+    },
+    "innerCoordinate": {
+      "type": "object", "additionalProperties": false,
+      "required": ["database_file", "manifest", "manifest_digest"],
+      "properties": {
+        "database_file": { "type": "string", "pattern": "^retrieval-[0-9a-f]{64}\\.sqlite$" },
+        "manifest": { "$ref": "#/$defs/gkxManifest" },
+        "manifest_digest": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "legacyManifest": {
+      "oneOf": [
+        { "$ref": "https://gkos.example/contracts/retrieval/gkos-retrieval-1.0.0-draft.1/projection.schema.json" },
+        { "$ref": "https://gkos.example/contracts/retrieval/gkos-retrieval-1.0.0-draft.2/projection.schema.json" }
+      ]
+    },
+    "legacyPointer": {
+      "type": "object", "additionalProperties": false,
+      "required": ["database_file", "manifest"],
+      "properties": {
+        "database_file": { "type": "string", "pattern": "^retrieval-[0-9a-f]{64}\\.sqlite$" },
+        "manifest": { "$ref": "#/$defs/legacyManifest" }
+      }
+    }
+  }
+}

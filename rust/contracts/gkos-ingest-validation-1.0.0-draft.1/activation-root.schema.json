@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Odenknight/GKOS-Engine/contracts/ingest/gkos-ingest-validation-1.0.0-draft.1/activation-root.schema.json",
+  "title": "GKOS ingest irreversible activation root draft 1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract_version", "first_owner_generation_id", "first_owner_manifest_digest", "first_inner",
+    "migration_file", "migration_digest", "legacy_pointer_digest", "tombstone_digest",
+    "active_pointer_digest", "authority_lock_digest", "activation_root_digest"
+  ],
+  "properties": {
+    "contract_version": { "const": "gkos-ingest-activation-root/1.0.0-draft.1" },
+    "first_owner_generation_id": { "$ref": "state-common.schema.json#/$defs/ownerGenerationId" },
+    "first_owner_manifest_digest": { "$ref": "state-common.schema.json#/$defs/sha256" },
+    "first_inner": { "$ref": "state-common.schema.json#/$defs/activeProjection" },
+    "migration_file": { "type": "string", "pattern": "^ingest-migration-[0-9a-f]{64}\\.json$" },
+    "migration_digest": { "$ref": "state-common.schema.json#/$defs/sha256" },
+    "legacy_pointer_digest": {
+      "oneOf": [{ "$ref": "state-common.schema.json#/$defs/sha256" }, { "type": "null" }]
+    },
+    "tombstone_digest": { "$ref": "state-common.schema.json#/$defs/sha256" },
+    "active_pointer_digest": { "$ref": "state-common.schema.json#/$defs/sha256" },
+    "authority_lock_digest": { "$ref": "state-common.schema.json#/$defs/sha256" },
+    "activation_root_digest": { "$ref": "state-common.schema.json#/$defs/sha256" }
+  }
+}

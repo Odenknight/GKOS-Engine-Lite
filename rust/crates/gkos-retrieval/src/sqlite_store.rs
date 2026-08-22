@@ -19,6 +19,12 @@ use crate::contract::{
 use crate::digest::{canonical_digest, canonical_json, sha256};
 use crate::fusion::{code_unit_compare, cosine_similarity, RankedInput};
 use crate::path_security::{contained_path, equivalent_paths};
+use crate::writer_lock::{
+    acquire_legacy_retrieval_writer, assert_legacy_writer_capability, assert_legacy_writer_commit,
+    assert_legacy_writer_directory_permissions, assert_no_phase3_authority,
+    bind_legacy_writer_target, finish_with_writer, remove_uncommitted_writer_temporary,
+    verify_legacy_writer_target_published, LegacyRetrievalWriterCapability,
+};
 use crate::{RetrievalError, RetrievalResult};
 
 const MIGRATION: &str = r#"
@@ -86,6 +92,7 @@ CREATE INDEX chunks_parent_idx ON chunks(parent_chunk_id);
 "#;
 
 const ACTIVE_POINTER_NAME: &str = "active-retrieval.json";
+pub(crate) const FULL_ENGINE_VERSION: &str = "2.1.2";
 const VECTOR_ELIGIBLE_SQL: &str =
     "SELECT v.chunk_id, c.source_id, v.provider_id, v.model_id, v.dimensions, v.vector_json
      FROM chunk_vectors AS v
@@ -125,6 +132,13 @@ pub struct BuiltRetrievalGeneration {
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 #[serde(deny_unknown_fields)]
 struct ActiveRetrievalPointer {
+    database_file: String,
+    manifest: RetrievalProjectionManifest,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(deny_unknown_fields)]
+struct HistoricalLiteActiveRetrievalPointer {
     contract_version: String,
     database_file: String,
     manifest: RetrievalProjectionManifest,
@@ -154,18 +168,40 @@ struct ProjectionDigestEnvelope<'a> {
 pub fn build_retrieval_generation(
     input: RetrievalGenerationInput,
 ) -> RetrievalResult<BuiltRetrievalGeneration> {
-    let state_directory = validate_state_directory(&input.state_directory)?;
     let (chunks, vectors, manifest) = prepare_generation(&input)?;
+    let mut writer = acquire_legacy_retrieval_writer(&input.state_directory)?;
+    let result = build_prepared_retrieval_generation(input, chunks, vectors, manifest, &writer);
+    finish_with_writer(result, &mut writer)
+}
+
+pub(crate) fn build_retrieval_generation_with_writer(
+    input: RetrievalGenerationInput,
+    writer: &LegacyRetrievalWriterCapability,
+) -> RetrievalResult<BuiltRetrievalGeneration> {
+    let (chunks, vectors, manifest) = prepare_generation(&input)?;
+    build_prepared_retrieval_generation(input, chunks, vectors, manifest, writer)
+}
+
+fn build_prepared_retrieval_generation(
+    input: RetrievalGenerationInput,
+    chunks: Vec<RetrievalChunk>,
+    vectors: Vec<StoredVector>,
+    manifest: RetrievalProjectionManifest,
+    writer: &LegacyRetrievalWriterCapability,
+) -> RetrievalResult<BuiltRetrievalGeneration> {
+    assert_legacy_writer_capability(writer, &input.state_directory)?;
+    assert_no_phase3_authority(writer.state_directory())?;
+    let state_directory = writer.state_directory().to_path_buf();
     fs::create_dir_all(&state_directory)?;
     let state_directory = validate_existing_state_directory(&state_directory)?;
-    harden_directory_permissions(&state_directory)?;
+    assert_legacy_writer_directory_permissions(&state_directory)?;
     let suffix = manifest.projection_digest.trim_start_matches("sha256:");
     let final_path = state_directory.join(format!("retrieval-{suffix}.sqlite"));
     if path_entry_exists(&final_path)? {
+        assert_owner_file_permissions(&final_path, "retrieval generation")?;
         match SqliteRetrievalStore::open(&final_path) {
             Ok(store) if store.manifest == manifest => {
                 drop(store);
-                harden_file_permissions(&final_path)?;
                 return Ok(BuiltRetrievalGeneration {
                     database_path: final_path,
                     manifest,
@@ -182,26 +218,28 @@ pub fn build_retrieval_generation(
     } else {
         quarantine_orphan_sidecars(&final_path)?;
     }
-    let temporary_path =
-        state_directory.join(format!(".retrieval-{suffix}-{}.tmp", std::process::id()));
-    if path_entry_exists(&temporary_path)? {
-        quarantine_generation_files(&temporary_path)?;
-    }
+    let temporary_path = state_directory.join(format!(
+        "retrieval-{suffix}.sqlite.{}.tmp",
+        std::process::id()
+    ));
+    remove_writer_generation_temporary(&temporary_path)?;
     let build_result = insert_generation(&temporary_path, &manifest, &chunks, &vectors);
     if let Err(error) = build_result {
-        let _ = quarantine_generation_files(&temporary_path);
+        let _ = remove_writer_generation_temporary(&temporary_path);
         return Err(error);
     }
     harden_file_permissions(&temporary_path)?;
     let verified = SqliteRetrievalStore::open(&temporary_path)?;
     if verified.manifest != manifest || verified.count_chunks()? != chunks.len() {
         drop(verified);
-        let _ = quarantine_generation_files(&temporary_path);
+        let _ = remove_writer_generation_temporary(&temporary_path);
         return Err(RetrievalError::ProjectionMismatch(
             "new retrieval generation did not verify".to_owned(),
         ));
     }
     drop(verified);
+    assert_legacy_writer_capability(writer, &state_directory)?;
+    assert_no_phase3_authority(&state_directory)?;
     fs::rename(&temporary_path, &final_path)?;
     harden_file_permissions(&final_path)?;
     sync_directory(&state_directory)?;
@@ -232,7 +270,45 @@ pub fn activate_retrieval_generation(
     state_directory: &Path,
     generation: &BuiltRetrievalGeneration,
 ) -> RetrievalResult<()> {
-    let state_directory = validate_existing_state_directory(state_directory)?;
+    validate_full_engine_version(&generation.manifest.engine_version)?;
+    let mut writer = acquire_legacy_retrieval_writer(state_directory)?;
+    let result =
+        activate_retrieval_generation_with_writer(state_directory, generation, &mut writer, || {});
+    finish_with_writer(result, &mut writer)
+}
+
+/// Recovers an exact stale legacy writer lock after a process crash.
+///
+/// The caller must provide the sealed `lock_digest` from the controlled lock
+/// and explicitly attest that the recorded process incarnation is stale. A
+/// retained recovery claim requires a second explicit attestation. Phase-3
+/// ingest authority is never read, written, or exposed by this seam.
+pub fn recover_stale_retrieval_writer(
+    state_directory: &Path,
+    expected_lock_digest: &str,
+    confirm_process_incarnation_stale: bool,
+    confirm_recovery_claim_stale: bool,
+) -> RetrievalResult<()> {
+    crate::writer_lock::recover_stale_legacy_retrieval_writer(
+        state_directory,
+        expected_lock_digest,
+        confirm_process_incarnation_stale,
+        confirm_recovery_claim_stale,
+    )
+}
+
+fn activate_retrieval_generation_with_writer<F>(
+    state_directory: &Path,
+    generation: &BuiltRetrievalGeneration,
+    writer: &mut LegacyRetrievalWriterCapability,
+    before_pointer_write: F,
+) -> RetrievalResult<()>
+where
+    F: FnOnce(),
+{
+    assert_legacy_writer_capability(writer, state_directory)?;
+    assert_no_phase3_authority(writer.state_directory())?;
+    let state_directory = writer.state_directory().to_path_buf();
     let database_path = fs::canonicalize(&generation.database_path)?;
     if !database_path
         .parent()
@@ -245,6 +321,7 @@ pub fn activate_retrieval_generation(
         ));
     }
     reject_file_alias(&database_path, "retrieval generation")?;
+    assert_owner_file_permissions(&database_path, "retrieval generation")?;
     let verified = SqliteRetrievalStore::open(&database_path)?;
     if verified.manifest != generation.manifest {
         return Err(RetrievalError::ProjectionMismatch(
@@ -262,23 +339,38 @@ pub fn activate_retrieval_generation(
         })?
         .to_owned();
     let pointer = ActiveRetrievalPointer {
-        contract_version: RETRIEVAL_CONTRACT.to_owned(),
         database_file,
         manifest: generation.manifest.clone(),
     };
     let bytes = format!("{}\n", canonical_json(&pointer)?).into_bytes();
+    bind_legacy_writer_target(writer, &bytes)?;
+    before_pointer_write();
+    assert_legacy_writer_commit(writer, &bytes)?;
     let temporary_path =
-        state_directory.join(format!(".active-retrieval-{}.tmp", std::process::id()));
+        state_directory.join(format!("active-retrieval.json.{}.tmp", std::process::id()));
     if path_entry_exists(&temporary_path)? {
-        quarantine_file(&temporary_path)?;
+        return Err(RetrievalError::InvalidConfig(
+            "RETRIEVAL_STATE_WRITER_POINTER_TEMP_CONFLICT".to_owned(),
+        ));
     }
-    write_owner_file(&temporary_path, &bytes)?;
+    if let Err(error) = write_owner_file(&temporary_path, &bytes) {
+        let _ = remove_uncommitted_writer_temporary(&temporary_path, &state_directory);
+        return Err(error);
+    }
     let active_path = state_directory.join(ACTIVE_POINTER_NAME);
     if path_entry_exists(&active_path)? {
         reject_file_alias(&active_path, "active retrieval pointer")?;
     }
+    if let Err(error) = assert_legacy_writer_commit(writer, &bytes) {
+        if fs::read(&temporary_path).ok().as_deref() == Some(bytes.as_slice()) {
+            let _ = fs::remove_file(&temporary_path);
+            let _ = sync_directory(&state_directory);
+        }
+        return Err(error);
+    }
     atomic_replace(&temporary_path, &active_path)?;
     sync_directory(&state_directory)?;
+    verify_legacy_writer_target_published(writer, &bytes)?;
     let reopened = open_active_retrieval_generation(&state_directory)?;
     if reopened.manifest != generation.manifest {
         return Err(RetrievalError::ProjectionMismatch(
@@ -311,10 +403,8 @@ pub(crate) fn open_active_retrieval_generation(
         ));
     }
     let bytes = fs::read(&active_path)?;
-    let pointer: ActiveRetrievalPointer = serde_json::from_slice(&bytes)?;
-    if pointer.contract_version != RETRIEVAL_CONTRACT
-        || bytes != format!("{}\n", canonical_json(&pointer)?).as_bytes()
-    {
+    let pointer = parse_active_retrieval_pointer(&bytes)?;
+    if pointer.manifest.contract_version != RETRIEVAL_CONTRACT {
         return Err(RetrievalError::ProjectionMismatch(
             "active retrieval pointer is noncanonical or incompatible".to_owned(),
         ));
@@ -346,6 +436,26 @@ pub(crate) fn open_active_retrieval_generation(
         ));
     }
     Ok(store)
+}
+
+fn parse_active_retrieval_pointer(bytes: &[u8]) -> RetrievalResult<ActiveRetrievalPointer> {
+    if let Ok(pointer) = serde_json::from_slice::<ActiveRetrievalPointer>(bytes) {
+        if bytes == format!("{}\n", canonical_json(&pointer)?).as_bytes() {
+            return Ok(pointer);
+        }
+    }
+    let historical: HistoricalLiteActiveRetrievalPointer = serde_json::from_slice(bytes)?;
+    if historical.contract_version != historical.manifest.contract_version
+        || bytes != format!("{}\n", canonical_json(&historical)?).as_bytes()
+    {
+        return Err(RetrievalError::ProjectionMismatch(
+            "active retrieval pointer is noncanonical or incompatible".to_owned(),
+        ));
+    }
+    Ok(ActiveRetrievalPointer {
+        database_file: historical.database_file,
+        manifest: historical.manifest,
+    })
 }
 
 pub(crate) fn validate_state_directory(path: &Path) -> RetrievalResult<PathBuf> {
@@ -436,6 +546,22 @@ pub(crate) fn reject_file_alias(path: &Path, label: &str) -> RetrievalResult<()>
 }
 
 #[cfg(unix)]
+pub(crate) fn assert_owner_file_permissions(path: &Path, label: &str) -> RetrievalResult<()> {
+    use std::os::unix::fs::PermissionsExt;
+    if fs::metadata(path)?.permissions().mode() & 0o777 != 0o600 {
+        return Err(RetrievalError::InvalidConfig(format!(
+            "{label} must have owner-only permissions"
+        )));
+    }
+    Ok(())
+}
+
+#[cfg(not(unix))]
+pub(crate) fn assert_owner_file_permissions(_path: &Path, _label: &str) -> RetrievalResult<()> {
+    Ok(())
+}
+
+#[cfg(unix)]
 fn file_link_count(_path: &Path, metadata: &fs::Metadata) -> RetrievalResult<u64> {
     use std::os::unix::fs::MetadataExt;
     Ok(metadata.nlink())
@@ -506,6 +632,33 @@ pub(crate) fn quarantine_orphan_sidecars(path: &Path) -> RetrievalResult<()> {
         if path_entry_exists(&candidate)? {
             quarantine_file(&candidate)?;
         }
+    }
+    Ok(())
+}
+
+pub(crate) fn remove_writer_generation_temporary(path: &Path) -> RetrievalResult<()> {
+    for candidate in [
+        path.to_path_buf(),
+        sidecar_path(path, "-wal"),
+        sidecar_path(path, "-shm"),
+    ] {
+        if !path_entry_exists(&candidate)? {
+            continue;
+        }
+        reject_file_alias(&candidate, "retrieval writer temporary")?;
+        #[cfg(unix)]
+        {
+            use std::os::unix::fs::PermissionsExt;
+            if fs::metadata(&candidate)?.permissions().mode() & 0o777 != 0o600 {
+                return Err(RetrievalError::InvalidConfig(
+                    "RETRIEVAL_STATE_WRITER_TEMP_PERMISSION_REJECTED".to_owned(),
+                ));
+            }
+        }
+        fs::remove_file(candidate)?;
+    }
+    if let Some(parent) = path.parent() {
+        sync_directory(parent)?;
     }
     Ok(())
 }
@@ -642,9 +795,20 @@ fn prepare_generation(
     Vec<StoredVector>,
     RetrievalProjectionManifest,
 )> {
-    if input.engine_version.trim().is_empty() || input.vault_id.trim().is_empty() {
+    validate_full_engine_version(&input.engine_version)?;
+    prepare_generation_after_engine_validation(input)
+}
+
+fn prepare_generation_after_engine_validation(
+    input: &RetrievalGenerationInput,
+) -> RetrievalResult<(
+    Vec<RetrievalChunk>,
+    Vec<StoredVector>,
+    RetrievalProjectionManifest,
+)> {
+    if input.vault_id.trim().is_empty() {
         return Err(RetrievalError::InvalidConfig(
-            "engine_version and vault_id must not be empty".to_owned(),
+            "vault_id must not be empty".to_owned(),
         ));
     }
     let mut sources = input.sources.iter().collect::<Vec<_>>();
@@ -715,6 +879,15 @@ fn prepare_generation(
     };
     manifest.validate()?;
     Ok((chunks, vectors, manifest))
+}
+
+pub(crate) fn validate_full_engine_version(engine_version: &str) -> RetrievalResult<()> {
+    if engine_version != FULL_ENGINE_VERSION {
+        return Err(RetrievalError::InvalidConfig(
+            "engine_version must match pinned Full 2.1.2".to_owned(),
+        ));
+    }
+    Ok(())
 }
 
 fn validate_vectors(
@@ -1767,9 +1940,12 @@ mod tests {
     }
 
     fn generation(state_directory: PathBuf) -> RetrievalGenerationInput {
+        if state_directory.exists() {
+            harden_directory_permissions(&state_directory).unwrap();
+        }
         RetrievalGenerationInput {
             state_directory,
-            engine_version: "lite-phase1".to_owned(),
+            engine_version: "2.1.2".to_owned(),
             vault_id: "vault-a".to_owned(),
             source_snapshot_digest: sha256(b"snapshot"),
             configuration_digest: sha256(b"configuration"),
@@ -1916,6 +2092,7 @@ mod tests {
     #[test]
     fn projection_digest_matches_the_full_reference_envelope() {
         let directory = tempdir().unwrap();
+        harden_directory_permissions(directory.path()).unwrap();
         let input = RetrievalGenerationInput {
             state_directory: directory.path().to_path_buf(),
             engine_version: "2.1.2".to_owned(),
@@ -2222,27 +2399,49 @@ mod tests {
 
     #[cfg(unix)]
     #[test]
-    fn reused_generation_and_state_directory_are_rehardened_owner_only() {
+    fn widened_existing_state_directory_is_rejected_without_repair_or_generation_mutation() {
         use std::os::unix::fs::PermissionsExt;
 
         let directory = tempdir().unwrap();
         let input = generation(directory.path().to_path_buf());
         let first = build_retrieval_generation(input.clone()).unwrap();
-        fs::set_permissions(&first.database_path, fs::Permissions::from_mode(0o644)).unwrap();
         fs::set_permissions(directory.path(), fs::Permissions::from_mode(0o755)).unwrap();
-        build_retrieval_generation(input).unwrap();
+        let before = fs::read(&first.database_path).unwrap();
+        assert!(build_retrieval_generation(input).is_err());
+        assert_eq!(fs::read(&first.database_path).unwrap(), before);
         assert_eq!(
-            fs::metadata(&first.database_path)
+            fs::metadata(directory.path()).unwrap().permissions().mode() & 0o777,
+            0o755
+        );
+    }
+
+    #[cfg(unix)]
+    #[test]
+    fn widened_immutable_generation_is_rejected_without_permission_repair_or_pointer_write() {
+        use std::os::unix::fs::PermissionsExt;
+
+        let directory = tempdir().unwrap();
+        let input = generation(directory.path().to_path_buf());
+        let built = build_retrieval_generation(input.clone()).unwrap();
+        let database_before = fs::read(&built.database_path).unwrap();
+        fs::set_permissions(&built.database_path, fs::Permissions::from_mode(0o644)).unwrap();
+
+        assert!(build_retrieval_generation(input).is_err());
+        assert!(activate_retrieval_generation(directory.path(), &built).is_err());
+        assert_eq!(fs::read(&built.database_path).unwrap(), database_before);
+        assert_eq!(
+            fs::metadata(&built.database_path)
                 .unwrap()
                 .permissions()
                 .mode()
                 & 0o777,
-            0o600
+            0o644
         );
-        assert_eq!(
-            fs::metadata(directory.path()).unwrap().permissions().mode() & 0o777,
-            0o700
-        );
+        assert!(!directory.path().join(ACTIVE_POINTER_NAME).exists());
+        assert!(!directory
+            .path()
+            .join(crate::writer_lock::LEGACY_WRITER_LOCK_FILE)
+            .exists());
     }
 
     #[test]
@@ -2250,6 +2449,17 @@ mod tests {
         let directory = tempdir().unwrap();
         let first = build_retrieval_generation(generation(directory.path().to_path_buf())).unwrap();
         activate_retrieval_generation(directory.path(), &first).unwrap();
+        let pointer_bytes = fs::read(directory.path().join(ACTIVE_POINTER_NAME)).unwrap();
+        let pointer_value: serde_json::Value = serde_json::from_slice(&pointer_bytes).unwrap();
+        assert_eq!(
+            pointer_value
+                .as_object()
+                .unwrap()
+                .keys()
+                .cloned()
+                .collect::<Vec<_>>(),
+            ["database_file", "manifest"]
+        );
         let active = open_active_retrieval_generation(directory.path()).unwrap();
         assert_eq!(active.manifest, first.manifest);
         drop(active);
@@ -2265,6 +2475,210 @@ mod tests {
             second.manifest
         );
         assert!(first.database_path.exists());
+    }
+
+    #[test]
+    fn activation_panic_unwinds_through_exact_lock_cleanup() {
+        let directory = tempdir().unwrap();
+        let built = build_retrieval_generation(generation(directory.path().to_path_buf())).unwrap();
+        let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let mut writer = acquire_legacy_retrieval_writer(directory.path()).unwrap();
+            let activation = activate_retrieval_generation_with_writer(
+                directory.path(),
+                &built,
+                &mut writer,
+                || panic!("activation boundary"),
+            );
+            finish_with_writer(activation, &mut writer)
+        }));
+        assert!(result.is_err());
+        assert!(!directory
+            .path()
+            .join(crate::writer_lock::LEGACY_WRITER_LOCK_FILE)
+            .exists());
+        assert!(!directory.path().join(ACTIVE_POINTER_NAME).exists());
+        activate_retrieval_generation(directory.path(), &built).unwrap();
+    }
+
+    #[test]
+    fn public_stale_recovery_refuses_without_attestation_and_recovers_crash_residue() {
+        let root = tempdir().unwrap();
+        let state = root.path().join("state");
+        let capability = acquire_legacy_retrieval_writer(&state).unwrap();
+        let lock: serde_json::Value = serde_json::from_slice(
+            &fs::read(state.join(crate::writer_lock::LEGACY_WRITER_LOCK_FILE)).unwrap(),
+        )
+        .unwrap();
+        let expected = lock["lock_digest"].as_str().unwrap().to_owned();
+        std::mem::forget(capability);
+        assert!(recover_stale_retrieval_writer(&state, &expected, false, false).is_err());
+        assert!(state
+            .join(crate::writer_lock::LEGACY_WRITER_LOCK_FILE)
+            .exists());
+        recover_stale_retrieval_writer(&state, &expected, true, false).unwrap();
+        assert!(!state
+            .join(crate::writer_lock::LEGACY_WRITER_LOCK_FILE)
+            .exists());
+        build_retrieval_generation(generation(state)).unwrap();
+    }
+
+    #[test]
+    fn full_compatible_lock_recovery_leaves_private_database_temp_for_next_guarded_publish() {
+        let root = tempdir().unwrap();
+        let state = root.path().join("state");
+        let capability = acquire_legacy_retrieval_writer(&state).unwrap();
+        let lock: serde_json::Value = serde_json::from_slice(
+            &fs::read(state.join(crate::writer_lock::LEGACY_WRITER_LOCK_FILE)).unwrap(),
+        )
+        .unwrap();
+        let expected = lock["lock_digest"].as_str().unwrap().to_owned();
+        std::mem::forget(capability);
+
+        let private_temp = state.join(format!(
+            "retrieval-{}.sqlite.{}.tmp",
+            "f".repeat(64),
+            std::process::id()
+        ));
+        write_owner_file(&private_temp, b"crashed Lite SQLite build").unwrap();
+        harden_file_permissions(&private_temp).unwrap();
+
+        recover_stale_retrieval_writer(&state, &expected, true, false).unwrap();
+        assert!(!state
+            .join(crate::writer_lock::LEGACY_WRITER_LOCK_FILE)
+            .exists());
+        assert!(private_temp.exists());
+
+        let built = build_retrieval_generation(generation(state.clone())).unwrap();
+        assert!(!private_temp.exists());
+        SqliteRetrievalStore::open(&built.database_path).unwrap();
+        assert!(!state
+            .join(crate::writer_lock::LEGACY_WRITER_LOCK_FILE)
+            .exists());
+    }
+
+    #[test]
+    fn historical_lite_pointer_is_read_only_and_never_qualifies_for_guarded_rewrite() {
+        let directory = tempdir().unwrap();
+        let mut input = generation(directory.path().to_path_buf());
+        input.engine_version = "historical-lite".to_owned();
+        let (chunks, vectors, manifest) =
+            prepare_generation_after_engine_validation(&input).unwrap();
+        let database_path = directory.path().join(format!(
+            "retrieval-{}.sqlite",
+            manifest.projection_digest.trim_start_matches("sha256:")
+        ));
+        insert_generation(&database_path, &manifest, &chunks, &vectors).unwrap();
+        harden_file_permissions(&database_path).unwrap();
+        let pointer = HistoricalLiteActiveRetrievalPointer {
+            contract_version: manifest.contract_version.clone(),
+            database_file: database_path
+                .file_name()
+                .unwrap()
+                .to_str()
+                .unwrap()
+                .to_owned(),
+            manifest,
+        };
+        let pointer_bytes = format!("{}\n", canonical_json(&pointer).unwrap()).into_bytes();
+        write_owner_file(&directory.path().join(ACTIVE_POINTER_NAME), &pointer_bytes).unwrap();
+        harden_file_permissions(&directory.path().join(ACTIVE_POINTER_NAME)).unwrap();
+
+        let opened = open_active_retrieval_generation(directory.path()).unwrap();
+        assert_eq!(opened.manifest.engine_version, "historical-lite");
+        drop(opened);
+        let database_before = fs::read(&database_path).unwrap();
+        let result = build_retrieval_generation(generation(directory.path().to_path_buf()));
+        assert!(matches!(result, Err(RetrievalError::InvalidConfig(_))));
+        assert_eq!(
+            fs::read(directory.path().join(ACTIVE_POINTER_NAME)).unwrap(),
+            pointer_bytes
+        );
+        assert_eq!(fs::read(database_path).unwrap(), database_before);
+        assert!(!directory.path().join("retrieval-writer.lock").exists());
+    }
+
+    #[test]
+    fn current_engine_historical_pointer_migrates_to_exact_full_two_key_bytes() {
+        let directory = tempdir().unwrap();
+        let built = build_retrieval_generation(generation(directory.path().to_path_buf())).unwrap();
+        let pointer = HistoricalLiteActiveRetrievalPointer {
+            contract_version: built.manifest.contract_version.clone(),
+            database_file: built
+                .database_path
+                .file_name()
+                .unwrap()
+                .to_str()
+                .unwrap()
+                .to_owned(),
+            manifest: built.manifest.clone(),
+        };
+        let historical = format!("{}\n", canonical_json(&pointer).unwrap()).into_bytes();
+        let active = directory.path().join(ACTIVE_POINTER_NAME);
+        write_owner_file(&active, &historical).unwrap();
+        harden_file_permissions(&active).unwrap();
+        assert_eq!(
+            open_active_retrieval_generation(directory.path())
+                .unwrap()
+                .manifest,
+            built.manifest
+        );
+
+        activate_retrieval_generation(directory.path(), &built).unwrap();
+        let migrated = fs::read(active).unwrap();
+        let value: serde_json::Value = serde_json::from_slice(&migrated).unwrap();
+        assert_eq!(
+            value
+                .as_object()
+                .unwrap()
+                .keys()
+                .cloned()
+                .collect::<Vec<_>>(),
+            ["database_file", "manifest"]
+        );
+        assert_eq!(
+            migrated,
+            format!("{}\n", canonical_json(&value).unwrap()).as_bytes()
+        );
+    }
+
+    #[test]
+    fn current_engine_historical_pointer_is_unchanged_while_full_writer_guard_exists() {
+        let directory = tempdir().unwrap();
+        let built = build_retrieval_generation(generation(directory.path().to_path_buf())).unwrap();
+        let pointer = HistoricalLiteActiveRetrievalPointer {
+            contract_version: built.manifest.contract_version.clone(),
+            database_file: built
+                .database_path
+                .file_name()
+                .unwrap()
+                .to_str()
+                .unwrap()
+                .to_owned(),
+            manifest: built.manifest.clone(),
+        };
+        let historical = format!("{}\n", canonical_json(&pointer).unwrap()).into_bytes();
+        let active = directory.path().join(ACTIVE_POINTER_NAME);
+        write_owner_file(&active, &historical).unwrap();
+        harden_file_permissions(&active).unwrap();
+
+        let fixture: serde_json::Value = serde_json::from_slice(include_bytes!(concat!(
+            "../../../contracts/gkos-ingest-validation-1.0.0-draft.1/",
+            "storage-conformance-fixture.json"
+        )))
+        .unwrap();
+        let authority = format!(
+            "{}\n",
+            canonical_json(&fixture["valid_envelopes"]["authority_lock"]).unwrap()
+        )
+        .into_bytes();
+        let authority_path = directory.path().join("ingest-authority.lock");
+        write_owner_file(&authority_path, &authority).unwrap();
+        harden_file_permissions(&authority_path).unwrap();
+
+        assert!(activate_retrieval_generation(directory.path(), &built).is_err());
+        assert_eq!(fs::read(active).unwrap(), historical);
+        assert_eq!(fs::read(authority_path).unwrap(), authority);
+        assert!(!directory.path().join("retrieval-writer.lock").exists());
     }
 
     #[test]

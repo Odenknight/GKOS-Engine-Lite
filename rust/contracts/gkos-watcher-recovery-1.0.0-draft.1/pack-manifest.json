@@ -1,0 +1,94 @@
+{
+  "contract_version": "gkos-watcher-recovery-pack-manifest/1.0.0-draft.1",
+  "file_count": 17,
+  "files": [
+    {
+      "byte_size": 831,
+      "file": "README.md",
+      "raw_sha256": "sha256:4e8ffe6cc79eee0e27a3986ffc9ad8fb85814beacd561c595f04f39c4b4d5eb0"
+    },
+    {
+      "byte_size": 6072,
+      "file": "TECHNICAL_README.md",
+      "raw_sha256": "sha256:eb20f11ceab07bd3ed92c9e0e1549ab94b3a39d15f1ed4af5835fdec720ed0a4"
+    },
+    {
+      "byte_size": 14987,
+      "file": "authority.schema.json",
+      "raw_sha256": "sha256:126b53ca289fab729f6e304613b84650e2220870c3214acb868e4730ed6efbf4"
+    },
+    {
+      "byte_size": 20573,
+      "file": "batch.schema.json",
+      "raw_sha256": "sha256:5a1e701ab573b1a2814fa8d81e08eae460d844b454cca83bb38ee47d3fed0727"
+    },
+    {
+      "byte_size": 28483,
+      "file": "coherent-manifest.schema.json",
+      "raw_sha256": "sha256:83eaaae8c5de736b397944e9900b179cae7822fe348d073568caf0eb90218a1a"
+    },
+    {
+      "byte_size": 57131,
+      "file": "conformance.schema.json",
+      "raw_sha256": "sha256:1bf0ff36b6ca5b6aa7185e75bfb381a001764ba8792e38781903318898b56067"
+    },
+    {
+      "byte_size": 240588,
+      "file": "journal.schema.json",
+      "raw_sha256": "sha256:6e1f934b0dba5be85814408fdb7fd2c9943bdccf5ee9bee26ca94600cb5b6693"
+    },
+    {
+      "byte_size": 25826,
+      "file": "sample-plan.schema.json",
+      "raw_sha256": "sha256:3a2dc6a25840449544354999540e2a10a9aff7847230ffca46f085042d1a10b3"
+    },
+    {
+      "byte_size": 23293,
+      "file": "source-removal.schema.json",
+      "raw_sha256": "sha256:a3de608e4ea8ba24fc1ff550952bc4c0c8a5aea45807ca5231d1a118f90e8e96"
+    },
+    {
+      "byte_size": 39315,
+      "file": "status.schema.json",
+      "raw_sha256": "sha256:df7ceece8aa6775c5000af9eba42a0a00561ed6a98ffee4d9b0976eba261c46c"
+    },
+    {
+      "byte_size": 11552,
+      "file": "topology.schema.json",
+      "raw_sha256": "sha256:0b19bdd60d37af65cbacefeb6b2f89b9a818195630bc3d6b8384acd56a4315b5"
+    },
+    {
+      "byte_size": 169385,
+      "file": "transition.schema.json",
+      "raw_sha256": "sha256:2071ea49575469109f83b317e5bd76e90b76f1683cb1da75267a90d4eec2406e"
+    },
+    {
+      "byte_size": 52045,
+      "file": "watcher-cli-fixture.json",
+      "raw_sha256": "sha256:0fa73a0f2d7ea9c73c7e4ab1fa9c0b815f048a8d8cf2a86be1c0f048e8b65675"
+    },
+    {
+      "byte_size": 5130773,
+      "file": "watcher-conformance-fixture.json",
+      "raw_sha256": "sha256:c5b45040b5d21c77af0aad109851a7b381302d812bdce0f1ea0217f692893615"
+    },
+    {
+      "byte_size": 16342,
+      "file": "watcher-recovery-fixture.json",
+      "raw_sha256": "sha256:400ed229baa32affd4dd9e784b5116dee46d725b7e33c98d0720a07c441391cb"
+    },
+    {
+      "byte_size": 3978,
+      "file": "watcher-sample-plan.json",
+      "raw_sha256": "sha256:6ab764aad47cbb072469f19760b772df90b2138acaf6a9f022041d38094bb695"
+    },
+    {
+      "byte_size": 19769,
+      "file": "watcher-storage-fixture.json",
+      "raw_sha256": "sha256:cc4b25d5fcbabf3a5bdd7248a8e37f3221350cba3852fd053e703bc2c5c1c7e3"
+    }
+  ],
+  "pack_contract_version": "gkos-watcher-recovery/1.0.0-draft.1",
+  "pack_digest": "sha256:c08520c1392d6be04c71159050c0d60f5bf03afeeb915ae44920e758e35cb49a",
+  "total_bytes": 5860943
+}

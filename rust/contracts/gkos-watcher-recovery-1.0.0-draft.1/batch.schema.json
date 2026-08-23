@@ -1,0 +1,732 @@
+{
+  "$defs": {
+    "batchRecord": {
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "else": {
+            "properties": {
+              "retry_of_batch_id": {
+                "type": "null"
+              }
+            }
+          },
+          "if": {
+            "properties": {
+              "batch_kind": {
+                "const": "failure_reconciliation"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "execution_kind": {
+                "const": "set_files"
+              },
+              "retry_of_batch_id": {
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+                "type": "string"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "batch_kind": {
+                "const": "startup_reconciliation"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "execution_kind": {
+                "const": "set_files"
+              }
+            }
+          }
+        }
+      ],
+      "properties": {
+        "batch_id": {
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "type": "string"
+        },
+        "batch_kind": {
+          "enum": [
+            "event",
+            "startup_reconciliation",
+            "shutdown_flush",
+            "failure_reconciliation"
+          ]
+        },
+        "batch_record_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "contract_version": {
+          "const": "gkos-watcher-batch-record/1.0.0-draft.1"
+        },
+        "execution_kind": {
+          "enum": [
+            "apply_changes",
+            "set_files"
+          ]
+        },
+        "observation_authority_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "retry_of_batch_id": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "started_at": {
+          "format": "date-time",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "contract_version",
+        "batch_id",
+        "batch_kind",
+        "observation_authority_digest",
+        "started_at",
+        "execution_kind",
+        "retry_of_batch_id",
+        "batch_record_digest"
+      ],
+      "type": "object",
+      "unevaluatedProperties": false
+    },
+    "observation": {
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "overflow": {
+                "const": true
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "unscoped": {
+                "const": true
+              }
+            }
+          }
+        }
+      ],
+      "properties": {
+        "batch_id": {
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "type": "string"
+        },
+        "batch_kind": {
+          "enum": [
+            "event",
+            "startup_reconciliation",
+            "shutdown_flush",
+            "failure_reconciliation"
+          ]
+        },
+        "contract_version": {
+          "const": "gkos-watcher-observation/1.0.0-draft.1"
+        },
+        "observation_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "observed_paths": {
+          "items": {
+            "maxLength": 1024,
+            "minLength": 1,
+            "pattern": "^(?!/)(?![A-Za-z]:)(?![A-Za-z][A-Za-z0-9+.-]*:)(?!.*:)(?!.*\\\\)(?!.*(?:^|/)\\.\\.?(?:/|$))(?!.*//)[^\\u0000-\\u001f<>:\"|?*\\u007f]+$",
+            "type": "string"
+          },
+          "maxItems": 2000,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "overflow": {
+          "type": "boolean"
+        },
+        "started_at": {
+          "format": "date-time",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$",
+          "type": "string"
+        },
+        "unscoped": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "contract_version",
+        "batch_id",
+        "batch_kind",
+        "observed_paths",
+        "unscoped",
+        "overflow",
+        "started_at",
+        "observation_digest"
+      ],
+      "type": "object",
+      "unevaluatedProperties": false
+    },
+    "observationAuthority": {
+      "additionalProperties": false,
+      "properties": {
+        "authority_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "batch_id": {
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "type": "string"
+        },
+        "contract_version": {
+          "const": "gkos-watcher-observation-authority/1.0.0-draft.1"
+        },
+        "observation_artifact_file": {
+          "pattern": "^watcher-observation-[0-9a-f]{64}\\.json$",
+          "type": "string"
+        },
+        "observation_byte_size": {
+          "maximum": 4194304,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "observation_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "observation_raw_sha256": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "pre_scan_state_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "started_at": {
+          "format": "date-time",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "contract_version",
+        "batch_id",
+        "observation_digest",
+        "observation_artifact_file",
+        "observation_raw_sha256",
+        "observation_byte_size",
+        "pre_scan_state_digest",
+        "started_at",
+        "authority_digest"
+      ],
+      "type": "object",
+      "unevaluatedProperties": false
+    },
+    "plan": {
+      "additionalProperties": false,
+      "properties": {
+        "attachment_set_changed": {
+          "type": "boolean"
+        },
+        "batch_id": {
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "type": "string"
+        },
+        "contract_version": {
+          "const": "gkos-watcher-batch-plan/1.0.0-draft.1"
+        },
+        "effective_profile_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "folder_set_changed": {
+          "type": "boolean"
+        },
+        "intended_source_mutations": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "cause": {
+                "enum": [
+                  "physical_appearance",
+                  "physical_disappearance",
+                  "content_change",
+                  "metadata_change",
+                  "verified_rename",
+                  "validation_rejection",
+                  "validation_reacceptance"
+                ]
+              },
+              "from_path": {
+                "anyOf": [
+                  {
+                    "maxLength": 1024,
+                    "minLength": 1,
+                    "pattern": "^(?!/)(?![A-Za-z]:)(?![A-Za-z][A-Za-z0-9+.-]*:)(?!.*:)(?!.*\\\\)(?!.*(?:^|/)\\.\\.?(?:/|$))(?!.*//)[^\\u0000-\\u001f<>:\"|?*\\u007f]+$",
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "kind": {
+                "enum": [
+                  "add",
+                  "change",
+                  "delete",
+                  "rename"
+                ]
+              },
+              "parser_descriptor_digest_after": {
+                "anyOf": [
+                  {
+                    "pattern": "^sha256:[0-9a-f]{64}$",
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "parser_descriptor_digest_before": {
+                "anyOf": [
+                  {
+                    "pattern": "^sha256:[0-9a-f]{64}$",
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "source_digest_after": {
+                "anyOf": [
+                  {
+                    "pattern": "^sha256:[0-9a-f]{64}$",
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "source_digest_before": {
+                "anyOf": [
+                  {
+                    "pattern": "^sha256:[0-9a-f]{64}$",
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "source_id_after": {
+                "anyOf": [
+                  {
+                    "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$",
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "source_id_before": {
+                "anyOf": [
+                  {
+                    "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$",
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "to_path": {
+                "anyOf": [
+                  {
+                    "maxLength": 1024,
+                    "minLength": 1,
+                    "pattern": "^(?!/)(?![A-Za-z]:)(?![A-Za-z][A-Za-z0-9+.-]*:)(?!.*:)(?!.*\\\\)(?!.*(?:^|/)\\.\\.?(?:/|$))(?!.*//)[^\\u0000-\\u001f<>:\"|?*\\u007f]+$",
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "kind",
+              "cause",
+              "from_path",
+              "to_path",
+              "source_id_before",
+              "source_id_after",
+              "source_digest_before",
+              "source_digest_after",
+              "parser_descriptor_digest_before",
+              "parser_descriptor_digest_after"
+            ],
+            "type": "object",
+            "unevaluatedProperties": false
+          },
+          "maxItems": 1000000,
+          "type": "array"
+        },
+        "mutation_set_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "observation_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "plan_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "rejection_journal_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "topology_snapshot_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "validation_result_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "contract_version",
+        "batch_id",
+        "observation_digest",
+        "topology_snapshot_digest",
+        "effective_profile_digest",
+        "validation_result_digest",
+        "rejection_journal_digest",
+        "intended_source_mutations",
+        "folder_set_changed",
+        "attachment_set_changed",
+        "mutation_set_digest",
+        "plan_digest"
+      ],
+      "type": "object",
+      "unevaluatedProperties": false
+    },
+    "planAuthority": {
+      "additionalProperties": false,
+      "properties": {
+        "authority_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "batch_id": {
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "type": "string"
+        },
+        "contract_version": {
+          "const": "gkos-watcher-plan-authority/1.0.0-draft.1"
+        },
+        "observation_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "plan_artifact_file": {
+          "pattern": "^watcher-plan-[0-9a-f]{64}\\.json$",
+          "type": "string"
+        },
+        "plan_byte_size": {
+          "maximum": 536870912,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "plan_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "plan_raw_sha256": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "source_removal_event_count": {
+          "maximum": 1000000,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "source_removal_event_set_digest": {
+          "anyOf": [
+            {
+              "pattern": "^sha256:[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "target_topology_snapshot_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "contract_version",
+        "batch_id",
+        "observation_digest",
+        "plan_digest",
+        "plan_artifact_file",
+        "plan_raw_sha256",
+        "plan_byte_size",
+        "target_topology_snapshot_digest",
+        "source_removal_event_count",
+        "source_removal_event_set_digest",
+        "authority_digest"
+      ],
+      "type": "object",
+      "unevaluatedProperties": false
+    },
+    "preScanState": {
+      "additionalProperties": false,
+      "properties": {
+        "active_coherent_manifest_digest": {
+          "anyOf": [
+            {
+              "pattern": "^sha256:[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "active_pointer_digest": {
+          "anyOf": [
+            {
+              "pattern": "^sha256:[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "configuration_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "contract_version": {
+          "const": "gkos-watcher-pre-scan-state/1.0.0-draft.1"
+        },
+        "effective_profile_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "policy_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "topology_snapshot_digest": {
+          "anyOf": [
+            {
+              "pattern": "^sha256:[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "vault_id": {
+          "pattern": "^[a-z0-9](?:[a-z0-9._:-]{0,127})$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "contract_version",
+        "vault_id",
+        "active_pointer_digest",
+        "active_coherent_manifest_digest",
+        "topology_snapshot_digest",
+        "configuration_digest",
+        "policy_digest",
+        "effective_profile_digest"
+      ],
+      "type": "object",
+      "unevaluatedProperties": false
+    },
+    "sourceMutation": {
+      "additionalProperties": false,
+      "properties": {
+        "cause": {
+          "enum": [
+            "physical_appearance",
+            "physical_disappearance",
+            "content_change",
+            "metadata_change",
+            "verified_rename",
+            "validation_rejection",
+            "validation_reacceptance"
+          ]
+        },
+        "from_path": {
+          "anyOf": [
+            {
+              "maxLength": 1024,
+              "minLength": 1,
+              "pattern": "^(?!/)(?![A-Za-z]:)(?![A-Za-z][A-Za-z0-9+.-]*:)(?!.*:)(?!.*\\\\)(?!.*(?:^|/)\\.\\.?(?:/|$))(?!.*//)[^\\u0000-\\u001f<>:\"|?*\\u007f]+$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "kind": {
+          "enum": [
+            "add",
+            "change",
+            "delete",
+            "rename"
+          ]
+        },
+        "parser_descriptor_digest_after": {
+          "anyOf": [
+            {
+              "pattern": "^sha256:[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "parser_descriptor_digest_before": {
+          "anyOf": [
+            {
+              "pattern": "^sha256:[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "source_digest_after": {
+          "anyOf": [
+            {
+              "pattern": "^sha256:[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "source_digest_before": {
+          "anyOf": [
+            {
+              "pattern": "^sha256:[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "source_id_after": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "source_id_before": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "to_path": {
+          "anyOf": [
+            {
+              "maxLength": 1024,
+              "minLength": 1,
+              "pattern": "^(?!/)(?![A-Za-z]:)(?![A-Za-z][A-Za-z0-9+.-]*:)(?!.*:)(?!.*\\\\)(?!.*(?:^|/)\\.\\.?(?:/|$))(?!.*//)[^\\u0000-\\u001f<>:\"|?*\\u007f]+$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "kind",
+        "cause",
+        "from_path",
+        "to_path",
+        "source_id_before",
+        "source_id_after",
+        "source_digest_before",
+        "source_digest_after",
+        "parser_descriptor_digest_before",
+        "parser_descriptor_digest_after"
+      ],
+      "type": "object",
+      "unevaluatedProperties": false
+    }
+  },
+  "$id": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/batch.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "oneOf": [
+    {
+      "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/batch.schema.json#/$defs/observation"
+    },
+    {
+      "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/batch.schema.json#/$defs/observationAuthority"
+    },
+    {
+      "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/batch.schema.json#/$defs/batchRecord"
+    },
+    {
+      "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/batch.schema.json#/$defs/preScanState"
+    },
+    {
+      "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/batch.schema.json#/$defs/plan"
+    },
+    {
+      "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/batch.schema.json#/$defs/planAuthority"
+    }
+  ],
+  "title": "batch.schema.json"
+}

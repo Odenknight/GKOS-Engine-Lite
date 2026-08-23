@@ -1,0 +1,987 @@
+{
+  "$defs": {
+    "canonicalGraph": {
+      "additionalProperties": false,
+      "properties": {
+        "contract_version": {
+          "const": "gkos-watcher-canonical-gkx-graph/1.0.0-draft.1"
+        },
+        "normalized_graph": {
+          "additionalProperties": false,
+          "properties": {
+            "__timeSpan": {},
+            "areas": {
+              "type": "array"
+            },
+            "diagnostics": {
+              "additionalProperties": false,
+              "properties": {
+                "ambiguousLinks": {},
+                "attachments": {},
+                "folders": {},
+                "lineageCycles": {},
+                "lineageEdges": {},
+                "lineageWarnings": {},
+                "notes": {},
+                "residualCollisions": {},
+                "unresolvedLinks": {}
+              },
+              "required": [
+                "notes",
+                "folders",
+                "attachments",
+                "unresolvedLinks",
+                "ambiguousLinks",
+                "lineageEdges",
+                "lineageCycles",
+                "lineageWarnings",
+                "residualCollisions"
+              ],
+              "type": "object",
+              "unevaluatedProperties": false
+            },
+            "gkxAssessments": {
+              "type": "array"
+            },
+            "gkxDiagnostics": {
+              "type": "array"
+            },
+            "gkxProfile": {},
+            "gkxUidIndex": {},
+            "links": {
+              "type": "array"
+            },
+            "nodes": {
+              "type": "array"
+            },
+            "stats": {
+              "additionalProperties": false,
+              "properties": {
+                "files": {},
+                "folders": {},
+                "links": {},
+                "markdownLinks": {},
+                "orphans": {},
+                "propertyLinks": {},
+                "unresolved": {},
+                "wikilinks": {}
+              },
+              "required": [
+                "files",
+                "folders",
+                "unresolved",
+                "links",
+                "wikilinks",
+                "markdownLinks",
+                "propertyLinks",
+                "orphans"
+              ],
+              "type": "object",
+              "unevaluatedProperties": false
+            },
+            "statuses": {
+              "type": "array"
+            },
+            "tags": {
+              "type": "array"
+            },
+            "types": {
+              "type": "array"
+            }
+          },
+          "required": [
+            "nodes",
+            "links",
+            "areas",
+            "tags",
+            "statuses",
+            "types",
+            "__timeSpan",
+            "gkxProfile",
+            "gkxUidIndex",
+            "gkxAssessments",
+            "gkxDiagnostics",
+            "stats",
+            "diagnostics"
+          ],
+          "type": "object",
+          "unevaluatedProperties": false
+        }
+      },
+      "required": [
+        "contract_version",
+        "normalized_graph"
+      ],
+      "type": "object",
+      "unevaluatedProperties": false
+    },
+    "coherentManifest": {
+      "additionalProperties": false,
+      "properties": {
+        "coherent_manifest_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "completed_batch_id": {
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "type": "string"
+        },
+        "completed_transition_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "configuration_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "contract_version": {
+          "const": "gkos-watcher-coherent-manifest/1.0.0-draft.1"
+        },
+        "created_at": {
+          "format": "date-time",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$",
+          "type": "string"
+        },
+        "effective_profile_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "gkx_snapshot_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "graph_projection_state": {
+          "additionalProperties": false,
+          "allOf": [
+            {
+              "else": {
+                "properties": {
+                  "canonical_graph_digest": {
+                    "pattern": "^sha256:[0-9a-f]{64}$",
+                    "type": "string"
+                  },
+                  "gkx_delta_digest": {
+                    "pattern": "^sha256:[0-9a-f]{64}$",
+                    "type": "string"
+                  },
+                  "graph_artifact_digest": {
+                    "pattern": "^sha256:[0-9a-f]{64}$",
+                    "type": "string"
+                  },
+                  "graph_artifact_file": {
+                    "pattern": "^watcher-graph-[0-9a-f]{64}\\.json$",
+                    "type": "string"
+                  },
+                  "graph_contract_version": {
+                    "const": "gkos-watcher-canonical-gkx-graph/1.0.0-draft.1"
+                  },
+                  "graphiti_projection_digest": {
+                    "pattern": "^sha256:[0-9a-f]{64}$",
+                    "type": "string"
+                  },
+                  "reason_codes": {
+                    "maxItems": 0,
+                    "type": "array"
+                  },
+                  "sink_receipts": {
+                    "maxItems": 0,
+                    "type": "array"
+                  },
+                  "sink_state": {
+                    "const": "not_applicable"
+                  }
+                }
+              },
+              "if": {
+                "properties": {
+                  "state": {
+                    "const": "not_started"
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "canonical_graph_digest": {
+                    "type": "null"
+                  },
+                  "gkx_delta_digest": {
+                    "type": "null"
+                  },
+                  "graph_artifact_digest": {
+                    "type": "null"
+                  },
+                  "graph_artifact_file": {
+                    "type": "null"
+                  },
+                  "graph_contract_version": {
+                    "type": "null"
+                  },
+                  "graphiti_projection_digest": {
+                    "type": "null"
+                  },
+                  "reason_codes": {
+                    "maxItems": 0,
+                    "type": "array"
+                  },
+                  "sink_receipts": {
+                    "maxItems": 0,
+                    "type": "array"
+                  },
+                  "sink_state": {
+                    "const": "not_applicable"
+                  }
+                }
+              }
+            }
+          ],
+          "properties": {
+            "canonical_graph_digest": {
+              "anyOf": [
+                {
+                  "pattern": "^sha256:[0-9a-f]{64}$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "gkx_delta_digest": {
+              "anyOf": [
+                {
+                  "pattern": "^sha256:[0-9a-f]{64}$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "graph_artifact_digest": {
+              "anyOf": [
+                {
+                  "pattern": "^sha256:[0-9a-f]{64}$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "graph_artifact_file": {
+              "anyOf": [
+                {
+                  "pattern": "^watcher-graph-[0-9a-f]{64}\\.json$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "graph_contract_version": {
+              "anyOf": [
+                {
+                  "const": "gkos-watcher-canonical-gkx-graph/1.0.0-draft.1"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "graphiti_projection_digest": {
+              "anyOf": [
+                {
+                  "pattern": "^sha256:[0-9a-f]{64}$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "reason_codes": {
+              "items": {
+                "type": "string"
+              },
+              "maxItems": 64,
+              "type": "array",
+              "uniqueItems": true
+            },
+            "sink_receipts": {
+              "maxItems": 0,
+              "type": "array"
+            },
+            "sink_state": {
+              "const": "not_applicable"
+            },
+            "state": {
+              "enum": [
+                "not_started",
+                "ready"
+              ]
+            }
+          },
+          "required": [
+            "state",
+            "graph_contract_version",
+            "graph_artifact_file",
+            "graph_artifact_digest",
+            "canonical_graph_digest",
+            "gkx_delta_digest",
+            "graphiti_projection_digest",
+            "sink_state",
+            "sink_receipts",
+            "reason_codes"
+          ],
+          "type": "object",
+          "unevaluatedProperties": false
+        },
+        "policy_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "rejection_journal_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "retrieval_projection_state": {
+          "additionalProperties": false,
+          "allOf": [
+            {
+              "else": {
+                "properties": {
+                  "database_file": {
+                    "pattern": "^retrieval-[0-9a-f]{64}\\.sqlite$",
+                    "type": "string"
+                  },
+                  "lexical_backend": {
+                    "enum": [
+                      "sqlite_fts5",
+                      "sqlite_lexical_scan"
+                    ]
+                  },
+                  "manifest_digest": {
+                    "pattern": "^sha256:[0-9a-f]{64}$",
+                    "type": "string"
+                  },
+                  "owner_generation_id": {
+                    "pattern": "^ingest:[0-9a-f]{24}$",
+                    "type": "string"
+                  },
+                  "owner_manifest_digest": {
+                    "pattern": "^sha256:[0-9a-f]{64}$",
+                    "type": "string"
+                  },
+                  "projection_digest": {
+                    "pattern": "^sha256:[0-9a-f]{64}$",
+                    "type": "string"
+                  },
+                  "projection_id": {
+                    "pattern": "^retrieval:[0-9a-f]{24}$",
+                    "type": "string"
+                  },
+                  "vector_stage_state": {
+                    "enum": [
+                      "disabled",
+                      "complete",
+                      "degraded"
+                    ]
+                  }
+                }
+              },
+              "if": {
+                "properties": {
+                  "state": {
+                    "const": "not_started"
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "database_file": {
+                    "type": "null"
+                  },
+                  "dimensions": {
+                    "type": "null"
+                  },
+                  "lexical_backend": {
+                    "type": "null"
+                  },
+                  "manifest_digest": {
+                    "type": "null"
+                  },
+                  "model_id": {
+                    "type": "null"
+                  },
+                  "owner_generation_id": {
+                    "type": "null"
+                  },
+                  "owner_manifest_digest": {
+                    "type": "null"
+                  },
+                  "projection_digest": {
+                    "type": "null"
+                  },
+                  "projection_id": {
+                    "type": "null"
+                  },
+                  "provider_id": {
+                    "type": "null"
+                  },
+                  "provider_kind": {
+                    "type": "null"
+                  },
+                  "reason_codes": {
+                    "maxItems": 0,
+                    "type": "array"
+                  },
+                  "vector_stage_state": {
+                    "type": "null"
+                  }
+                }
+              }
+            },
+            {
+              "else": {
+                "if": {
+                  "properties": {
+                    "state": {
+                      "const": "ready"
+                    }
+                  },
+                  "required": [
+                    "state"
+                  ]
+                },
+                "then": {
+                  "properties": {
+                    "dimensions": {
+                      "maximum": 9007199254740991,
+                      "minimum": 1,
+                      "type": "integer"
+                    },
+                    "model_id": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "provider_id": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "provider_kind": {
+                      "enum": [
+                        "openai_compatible",
+                        "local_onnx",
+                        "mcp"
+                      ]
+                    }
+                  }
+                }
+              },
+              "if": {
+                "properties": {
+                  "state": {
+                    "const": "ready"
+                  },
+                  "vector_stage_state": {
+                    "const": "disabled"
+                  }
+                },
+                "required": [
+                  "state",
+                  "vector_stage_state"
+                ]
+              },
+              "then": {
+                "properties": {
+                  "dimensions": {
+                    "type": "null"
+                  },
+                  "model_id": {
+                    "type": "null"
+                  },
+                  "provider_id": {
+                    "type": "null"
+                  },
+                  "provider_kind": {
+                    "type": "null"
+                  }
+                }
+              }
+            }
+          ],
+          "properties": {
+            "database_file": {
+              "anyOf": [
+                {
+                  "pattern": "^retrieval-[0-9a-f]{64}\\.sqlite$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "dimensions": {
+              "anyOf": [
+                {
+                  "maximum": 9007199254740991,
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "lexical_backend": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "sqlite_fts5",
+                    "sqlite_lexical_scan"
+                  ]
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "manifest_digest": {
+              "anyOf": [
+                {
+                  "pattern": "^sha256:[0-9a-f]{64}$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "model_id": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "owner_generation_id": {
+              "anyOf": [
+                {
+                  "pattern": "^ingest:[0-9a-f]{24}$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "owner_manifest_digest": {
+              "anyOf": [
+                {
+                  "pattern": "^sha256:[0-9a-f]{64}$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "projection_digest": {
+              "anyOf": [
+                {
+                  "pattern": "^sha256:[0-9a-f]{64}$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "projection_id": {
+              "anyOf": [
+                {
+                  "pattern": "^retrieval:[0-9a-f]{24}$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "provider_id": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "provider_kind": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "openai_compatible",
+                    "local_onnx",
+                    "mcp"
+                  ]
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "reason_codes": {
+              "items": {
+                "type": "string"
+              },
+              "maxItems": 64,
+              "type": "array",
+              "uniqueItems": true
+            },
+            "state": {
+              "enum": [
+                "not_started",
+                "ready"
+              ]
+            },
+            "vector_stage_state": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "disabled",
+                    "complete",
+                    "degraded"
+                  ]
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "state",
+            "owner_generation_id",
+            "owner_manifest_digest",
+            "database_file",
+            "manifest_digest",
+            "projection_id",
+            "projection_digest",
+            "lexical_backend",
+            "vector_stage_state",
+            "provider_kind",
+            "provider_id",
+            "model_id",
+            "dimensions",
+            "reason_codes"
+          ],
+          "type": "object",
+          "unevaluatedProperties": false
+        },
+        "service_generation_id": {
+          "pattern": "^watcher:[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "type": "string"
+        },
+        "source_observation_snapshot_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "source_removal_event_count": {
+          "maximum": 1000000,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "source_removal_event_set_digest": {
+          "anyOf": [
+            {
+              "pattern": "^sha256:[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "topology_artifact_file": {
+          "pattern": "^watcher-topology-[0-9a-f]{64}\\.json$",
+          "type": "string"
+        },
+        "topology_artifact_raw_sha256": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "topology_snapshot_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "validation_result_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "vault_id": {
+          "pattern": "^[a-z0-9](?:[a-z0-9._:-]{0,127})$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "contract_version",
+        "service_generation_id",
+        "vault_id",
+        "completed_batch_id",
+        "completed_transition_digest",
+        "topology_snapshot_digest",
+        "topology_artifact_file",
+        "topology_artifact_raw_sha256",
+        "source_observation_snapshot_digest",
+        "effective_profile_digest",
+        "validation_result_digest",
+        "rejection_journal_digest",
+        "configuration_digest",
+        "policy_digest",
+        "gkx_snapshot_digest",
+        "retrieval_projection_state",
+        "graph_projection_state",
+        "source_removal_event_count",
+        "source_removal_event_set_digest",
+        "created_at",
+        "coherent_manifest_digest"
+      ],
+      "type": "object",
+      "unevaluatedProperties": false
+    },
+    "graphitiProjection": {
+      "additionalProperties": false,
+      "properties": {
+        "contract_version": {
+          "const": "gkos-watcher-graphiti-projection/1.0.0-draft.1"
+        },
+        "episodes": {
+          "maxItems": 1000000,
+          "type": "array"
+        },
+        "processing_time": {
+          "const": "1970-01-01T00:00:00.000Z"
+        }
+      },
+      "required": [
+        "contract_version",
+        "processing_time",
+        "episodes"
+      ],
+      "type": "object",
+      "unevaluatedProperties": false
+    },
+    "pointer": {
+      "additionalProperties": false,
+      "properties": {
+        "coherent_manifest_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "coherent_manifest_file": {
+          "pattern": "^watcher-coherent-[0-9a-f]{64}\\.json$",
+          "type": "string"
+        },
+        "contract_version": {
+          "const": "gkos-watcher-active-pointer/1.0.0-draft.1"
+        },
+        "kind": {
+          "const": "watcher_coherent"
+        },
+        "pointer_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "prior_pointer_digest": {
+          "anyOf": [
+            {
+              "pattern": "^sha256:[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "service_generation_id": {
+          "pattern": "^watcher:[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "contract_version",
+        "kind",
+        "service_generation_id",
+        "coherent_manifest_file",
+        "coherent_manifest_digest",
+        "prior_pointer_digest",
+        "pointer_digest"
+      ],
+      "type": "object",
+      "unevaluatedProperties": false
+    },
+    "rawGraphArtifact": {
+      "additionalProperties": false,
+      "properties": {
+        "contract_version": {
+          "const": "gkos-watcher-raw-graph-artifact/1.0.0-draft.1"
+        },
+        "graph": {
+          "additionalProperties": false,
+          "properties": {
+            "__timeSpan": {},
+            "areas": {
+              "type": "array"
+            },
+            "diagnostics": {
+              "additionalProperties": false,
+              "properties": {
+                "ambiguousLinks": {},
+                "attachments": {},
+                "folders": {},
+                "lastFullBuildMs": {},
+                "lastIncrementalUpdateMs": {},
+                "lineageCycles": {},
+                "lineageEdges": {},
+                "lineageWarnings": {},
+                "notes": {},
+                "residualCollisions": {},
+                "unresolvedLinks": {}
+              },
+              "required": [
+                "notes",
+                "folders",
+                "attachments",
+                "unresolvedLinks",
+                "ambiguousLinks",
+                "lineageEdges",
+                "lineageCycles",
+                "lineageWarnings",
+                "residualCollisions"
+              ],
+              "type": "object",
+              "unevaluatedProperties": false
+            },
+            "gkxAssessments": {
+              "type": "array"
+            },
+            "gkxDiagnostics": {
+              "type": "array"
+            },
+            "gkxProfile": {},
+            "gkxUidIndex": {},
+            "links": {
+              "type": "array"
+            },
+            "nodes": {
+              "type": "array"
+            },
+            "stats": {
+              "additionalProperties": false,
+              "properties": {
+                "durationMs": {},
+                "files": {},
+                "folders": {},
+                "indexedAt": {},
+                "links": {},
+                "markdownLinks": {},
+                "orphans": {},
+                "propertyLinks": {},
+                "unresolved": {},
+                "wikilinks": {}
+              },
+              "required": [
+                "indexedAt",
+                "durationMs",
+                "files",
+                "folders",
+                "unresolved",
+                "links",
+                "wikilinks",
+                "markdownLinks",
+                "propertyLinks",
+                "orphans"
+              ],
+              "type": "object",
+              "unevaluatedProperties": false
+            },
+            "statuses": {
+              "type": "array"
+            },
+            "tags": {
+              "type": "array"
+            },
+            "types": {
+              "type": "array"
+            }
+          },
+          "required": [
+            "nodes",
+            "links",
+            "areas",
+            "tags",
+            "statuses",
+            "types",
+            "__timeSpan",
+            "gkxProfile",
+            "gkxUidIndex",
+            "gkxAssessments",
+            "gkxDiagnostics",
+            "stats",
+            "diagnostics"
+          ],
+          "type": "object",
+          "unevaluatedProperties": false
+        },
+        "graph_artifact_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "service_generation_id": {
+          "pattern": "^watcher:[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "type": "string"
+        },
+        "topology_snapshot_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "contract_version",
+        "service_generation_id",
+        "topology_snapshot_digest",
+        "graph",
+        "graph_artifact_digest"
+      ],
+      "type": "object",
+      "unevaluatedProperties": false
+    }
+  },
+  "$id": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/coherent-manifest.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "oneOf": [
+    {
+      "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/coherent-manifest.schema.json#/$defs/rawGraphArtifact"
+    },
+    {
+      "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/coherent-manifest.schema.json#/$defs/coherentManifest"
+    },
+    {
+      "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/coherent-manifest.schema.json#/$defs/pointer"
+    },
+    {
+      "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/coherent-manifest.schema.json#/$defs/canonicalGraph"
+    },
+    {
+      "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/coherent-manifest.schema.json#/$defs/graphitiProjection"
+    }
+  ],
+  "title": "coherent-manifest.schema.json"
+}

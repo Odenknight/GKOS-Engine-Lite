@@ -1,0 +1,510 @@
+{
+  "admission_boundary_cases": [
+    {
+      "case_id": "post-reopen-aggregate-exact",
+      "expectation": {
+        "expected_reason": null,
+        "expected_valid": true
+      },
+      "recipe": {
+        "blob_bytes": 0,
+        "current_database_bytes": 2048000000,
+        "mutated_rows": 0,
+        "recipe_kind": "post_reopen",
+        "shm_bytes": 67108864,
+        "wal_bytes": 2179858432
+      }
+    },
+    {
+      "case_id": "post-reopen-aggregate-plus-one",
+      "expectation": {
+        "expected_reason": "WATCHER_JOURNAL_CAP_EXCEEDED",
+        "expected_valid": false
+      },
+      "recipe": {
+        "blob_bytes": 0,
+        "current_database_bytes": 2048000000,
+        "mutated_rows": 0,
+        "recipe_kind": "post_reopen",
+        "shm_bytes": 67108864,
+        "wal_bytes": 2179858433
+      }
+    },
+    {
+      "case_id": "pre-transaction-blob-exact",
+      "expectation": {
+        "expected_reason": null,
+        "expected_valid": true
+      },
+      "recipe": {
+        "blob_bytes": 33554432,
+        "current_database_bytes": 0,
+        "mutated_rows": 0,
+        "recipe_kind": "pre_transaction",
+        "shm_bytes": 0,
+        "wal_bytes": 0
+      }
+    },
+    {
+      "case_id": "pre-transaction-blob-plus-one",
+      "expectation": {
+        "expected_reason": "WATCHER_JOURNAL_CAP_EXCEEDED",
+        "expected_valid": false
+      },
+      "recipe": {
+        "blob_bytes": 33554433,
+        "current_database_bytes": 0,
+        "mutated_rows": 0,
+        "recipe_kind": "pre_transaction",
+        "shm_bytes": 0,
+        "wal_bytes": 0
+      }
+    },
+    {
+      "case_id": "pre-transaction-projected-database-exact",
+      "expectation": {
+        "expected_reason": null,
+        "expected_valid": true
+      },
+      "recipe": {
+        "blob_bytes": 0,
+        "current_database_bytes": 2031222784,
+        "mutated_rows": 0,
+        "recipe_kind": "pre_transaction",
+        "shm_bytes": 0,
+        "wal_bytes": 0
+      }
+    },
+    {
+      "case_id": "pre-transaction-projected-database-plus-one",
+      "expectation": {
+        "expected_reason": "WATCHER_JOURNAL_CAP_EXCEEDED",
+        "expected_valid": false
+      },
+      "recipe": {
+        "blob_bytes": 0,
+        "current_database_bytes": 2031222785,
+        "mutated_rows": 0,
+        "recipe_kind": "pre_transaction",
+        "shm_bytes": 0,
+        "wal_bytes": 0
+      }
+    },
+    {
+      "case_id": "pre-transaction-rows-exact",
+      "expectation": {
+        "expected_reason": null,
+        "expected_valid": true
+      },
+      "recipe": {
+        "blob_bytes": 0,
+        "current_database_bytes": 0,
+        "mutated_rows": 10000,
+        "recipe_kind": "pre_transaction",
+        "shm_bytes": 0,
+        "wal_bytes": 0
+      }
+    },
+    {
+      "case_id": "pre-transaction-rows-plus-one",
+      "expectation": {
+        "expected_reason": "WATCHER_JOURNAL_CAP_EXCEEDED",
+        "expected_valid": false
+      },
+      "recipe": {
+        "blob_bytes": 0,
+        "current_database_bytes": 0,
+        "mutated_rows": 10001,
+        "recipe_kind": "pre_transaction",
+        "shm_bytes": 0,
+        "wal_bytes": 0
+      }
+    }
+  ],
+  "contract_version": "gkos-watcher-storage-fixture/1.0.0-draft.1",
+  "ddl": [
+    "CREATE TABLE watcher_meta (singleton INTEGER PRIMARY KEY CHECK (singleton = 1), journal_instance_id TEXT NOT NULL UNIQUE, meta_digest TEXT NOT NULL UNIQUE, body BLOB NOT NULL CHECK (length(body) BETWEEN 1 AND 33554432)) STRICT;",
+    "CREATE TABLE batches (batch_id TEXT PRIMARY KEY, started_at TEXT NOT NULL, target_topology_snapshot_digest TEXT NULL, terminal_state TEXT NULL, terminal_transition_digest TEXT NULL, body BLOB NOT NULL CHECK (length(body) BETWEEN 1 AND 33554432)) STRICT;",
+    "CREATE TABLE observations (batch_id TEXT PRIMARY KEY, observation_digest TEXT NOT NULL UNIQUE, authority_digest TEXT NOT NULL UNIQUE, artifact_file TEXT NOT NULL, raw_sha256 TEXT NOT NULL, byte_size INTEGER NOT NULL, body BLOB NOT NULL CHECK (length(body) BETWEEN 1 AND 33554432), FOREIGN KEY (batch_id) REFERENCES batches(batch_id)) STRICT;",
+    "CREATE TABLE normalized_plans (batch_id TEXT PRIMARY KEY, plan_digest TEXT NOT NULL UNIQUE, authority_digest TEXT NOT NULL UNIQUE, artifact_file TEXT NOT NULL, raw_sha256 TEXT NOT NULL, byte_size INTEGER NOT NULL, target_topology_snapshot_digest TEXT NOT NULL, source_removal_event_set_digest TEXT NULL, body BLOB NOT NULL CHECK (length(body) BETWEEN 1 AND 33554432), FOREIGN KEY (batch_id) REFERENCES batches(batch_id)) STRICT;",
+    "CREATE TABLE transitions (batch_id TEXT NOT NULL, transition_ordinal INTEGER NOT NULL, state TEXT NOT NULL, prior_transition_digest TEXT NULL, transition_digest TEXT NOT NULL UNIQUE, body BLOB NOT NULL CHECK (length(body) BETWEEN 1 AND 33554432), PRIMARY KEY (batch_id, transition_ordinal), FOREIGN KEY (batch_id) REFERENCES batches(batch_id)) STRICT;",
+    "CREATE TABLE activation_intents (intent_digest TEXT PRIMARY KEY, coherent_manifest_digest TEXT NOT NULL UNIQUE, target_complete_transition_digest TEXT NOT NULL UNIQUE, body BLOB NOT NULL CHECK (length(body) BETWEEN 1 AND 33554432)) STRICT;",
+    "CREATE TABLE activation_outcomes (outcome_digest TEXT PRIMARY KEY, intent_digest TEXT NOT NULL UNIQUE, coherent_manifest_digest TEXT NOT NULL UNIQUE, outcome TEXT NOT NULL, body BLOB NOT NULL CHECK (length(body) BETWEEN 1 AND 33554432), FOREIGN KEY (intent_digest) REFERENCES activation_intents(intent_digest)) STRICT;",
+    "CREATE TABLE active_coherent (singleton INTEGER PRIMARY KEY CHECK (singleton = 1), active_digest TEXT NOT NULL UNIQUE, coherent_manifest_digest TEXT NOT NULL UNIQUE, pointer_digest TEXT NOT NULL UNIQUE, body BLOB NOT NULL CHECK (length(body) BETWEEN 1 AND 33554432)) STRICT;",
+    "CREATE TABLE source_removal_occurrences (occurrence_digest TEXT PRIMARY KEY, source_id TEXT NOT NULL, source_path TEXT NOT NULL, source_digest TEXT NOT NULL, prior_coherent_manifest_digest TEXT NOT NULL, prior_topology_snapshot_digest TEXT NOT NULL, body BLOB NOT NULL CHECK (length(body) BETWEEN 1 AND 33554432)) STRICT;",
+    "CREATE TABLE source_removal_events (event_digest TEXT PRIMARY KEY, occurrence_digest TEXT NOT NULL UNIQUE, adapter_binding_digest TEXT NULL, delivery_mode TEXT NOT NULL, body BLOB NOT NULL CHECK (length(body) BETWEEN 1 AND 33554432), FOREIGN KEY (occurrence_digest) REFERENCES source_removal_occurrences(occurrence_digest)) STRICT;",
+    "CREATE TABLE source_removal_event_sets (event_set_digest TEXT PRIMARY KEY, set_kind TEXT NOT NULL, origin_id TEXT NOT NULL, target_topology_snapshot_digest TEXT NULL, event_count INTEGER NOT NULL, membership_digest_sequence_digest TEXT NOT NULL, body BLOB NOT NULL CHECK (length(body) BETWEEN 1 AND 33554432)) STRICT;",
+    "CREATE TABLE source_removal_event_set_members (event_set_digest TEXT NOT NULL, event_ordinal INTEGER NOT NULL, membership_digest TEXT NOT NULL UNIQUE, event_digest TEXT NOT NULL, original_membership_digest TEXT NULL, body BLOB NOT NULL CHECK (length(body) BETWEEN 1 AND 33554432), PRIMARY KEY (event_set_digest, event_ordinal), UNIQUE (event_set_digest, event_digest), FOREIGN KEY (event_set_digest) REFERENCES source_removal_event_sets(event_set_digest), FOREIGN KEY (event_digest) REFERENCES source_removal_events(event_digest)) STRICT;",
+    "CREATE TABLE activated_source_removal_event_sets (event_set_digest TEXT PRIMARY KEY, coherent_manifest_digest TEXT NOT NULL, activated_at TEXT NOT NULL, activation_digest TEXT NOT NULL UNIQUE, body BLOB NOT NULL CHECK (length(body) BETWEEN 1 AND 33554432), FOREIGN KEY (event_set_digest) REFERENCES source_removal_event_sets(event_set_digest)) STRICT;",
+    "CREATE TABLE source_removal_adapter_responses (response_digest TEXT PRIMARY KEY, binding_digest TEXT NOT NULL, occurrence_digest TEXT NOT NULL UNIQUE, status TEXT NOT NULL, adapter_event_id TEXT NOT NULL, adapter_result_digest TEXT NOT NULL, body BLOB NOT NULL CHECK (length(body) BETWEEN 1 AND 33554432), FOREIGN KEY (occurrence_digest) REFERENCES source_removal_occurrences(occurrence_digest)) STRICT;",
+    "CREATE TABLE source_removal_receipts (receipt_digest TEXT PRIMARY KEY, event_digest TEXT NOT NULL UNIQUE, occurrence_digest TEXT NOT NULL UNIQUE, adapter_binding_digest TEXT NOT NULL, adapter_response_digest TEXT NOT NULL UNIQUE, adapter_result_digest TEXT NOT NULL, adapter_event_id TEXT NOT NULL, status TEXT NOT NULL, body BLOB NOT NULL CHECK (length(body) BETWEEN 1 AND 33554432), FOREIGN KEY (event_digest) REFERENCES source_removal_events(event_digest), FOREIGN KEY (adapter_response_digest) REFERENCES source_removal_adapter_responses(response_digest)) STRICT;",
+    "CREATE TABLE journal_resets (reset_digest TEXT PRIMARY KEY, prior_journal_generation_digest TEXT NOT NULL UNIQUE, new_journal_generation_digest TEXT NOT NULL UNIQUE, body BLOB NOT NULL CHECK (length(body) BETWEEN 1 AND 33554432)) STRICT;",
+    "CREATE INDEX transitions_state_idx ON transitions (state, batch_id, transition_ordinal);",
+    "CREATE INDEX batches_terminal_idx ON batches (terminal_state, batch_id);",
+    "CREATE INDEX source_removal_ready_idx ON source_removal_events (delivery_mode, adapter_binding_digest, event_digest);"
+  ],
+  "fixture_digest": "sha256:9fe6cbc34ca7368a28fb0d9c980c24139402dc945fa4bdb53d6e91b4a67f748a",
+  "journal_reset_recovery": {
+    "anchored_new_database": "meta_present_no_active_coherent_no_batches_only_until_mandatory_startup_reconciliation",
+    "guard_publication_protocol": "exact_reserved_reset_s_to_g_then_three_reset_states",
+    "mismatch_action": "retain_everything_and_exit3",
+    "old_sqlite_files": "immutable_never_moved_deleted_or_recursively_cleaned",
+    "recoverable_states": [
+      {
+        "action": "verify_every_present_item_then_resume_guarded_creation_or_finalization",
+        "journal_pointer": "old_exact",
+        "new_generation": "absent_or_partial_or_exact_guard_bound",
+        "ordinal": 1,
+        "pointer_guard": "absent",
+        "reset_guard": "exact"
+      },
+      {
+        "action": "start_or_resume_exact_nested_pointer_replacement",
+        "journal_pointer": "old_exact",
+        "new_generation": "complete_exact",
+        "ordinal": 2,
+        "pointer_guard": "absent_or_any_exact_recoverable_nested_old_pointer_branch",
+        "reset_guard": "exact"
+      },
+      {
+        "action": "verify_new_pointer_and_database_finalize_nested_pointer_guard_then_remove_reset_guard_last",
+        "journal_pointer": "new_exact",
+        "new_generation": "complete_exact",
+        "ordinal": 3,
+        "pointer_guard": "absent_or_exact_nested_new_pointer_branch",
+        "reset_guard": "exact"
+      }
+    ],
+    "removal_order": [
+      "nested_pointer_guard",
+      "reset_guard"
+    ]
+  },
+  "limits": {
+    "admission_formula": "projected_database_bytes<=2048000000&&projected_database_bytes+wal_upper+67108864<=4294967296",
+    "aggregate_bytes_max": 4294967296,
+    "blob_bytes_per_transaction_max": 33554432,
+    "database_projected_bytes_max": 2048000000,
+    "dirty_page_upper_formula": "ceil(blob_bytes/4096)+4*mutated_rows+4096",
+    "mutated_rows_per_transaction_max": 10000,
+    "observation_artifact_bytes_max": 4194304,
+    "page_size_bytes": 4096,
+    "plan_artifact_bytes_max": 536870912,
+    "post_reopen_formula": "current_database_bytes+wal_bytes+shm_bytes<=4294967296",
+    "projected_database_bytes_formula": "current_database_bytes+dirty_page_upper*4096",
+    "raw_graph_artifact_bytes_max": 536870912,
+    "shm_reservation_bytes": 67108864,
+    "source_rows_max": 1000000,
+    "topology_artifact_bytes_max": 536870912,
+    "wal_frame_bytes": 4120,
+    "wal_header_bytes": 32,
+    "wal_upper_formula": "32+dirty_page_upper*4120"
+  },
+  "pragmas": [
+    "PRAGMA page_size=4096",
+    "PRAGMA auto_vacuum=NONE",
+    "PRAGMA encoding='UTF-8'",
+    "PRAGMA user_version=1",
+    "PRAGMA foreign_keys=ON",
+    "PRAGMA trusted_schema=OFF",
+    "PRAGMA locking_mode=EXCLUSIVE",
+    "PRAGMA synchronous=FULL",
+    "PRAGMA journal_mode=WAL",
+    "PRAGMA wal_autocheckpoint=0",
+    "PRAGMA temp_store=MEMORY",
+    "PRAGMA max_page_count=500000"
+  ],
+  "sqlite_authority_cases": [
+    {
+      "case_id": "canonical-authority",
+      "expectation": {
+        "expected_reason": null,
+        "expected_valid": true
+      },
+      "recipe": {
+        "blob_bytes": 0,
+        "current_database_bytes": 0,
+        "mutated_rows": 0,
+        "recipe_kind": "pre_transaction",
+        "shm_bytes": 0,
+        "wal_bytes": 0
+      }
+    },
+    {
+      "case_id": "body-scalar-digest",
+      "expectation": {
+        "expected_reason": "WATCHER_JOURNAL_VALUE_INVALID",
+        "expected_valid": false
+      },
+      "recipe": {
+        "mutation": "body_digest_mismatch",
+        "recipe_kind": "body_scalar",
+        "target": "canonical_authority"
+      }
+    },
+    {
+      "case_id": "body-scalar-noncanonical",
+      "expectation": {
+        "expected_reason": "WATCHER_JOURNAL_VALUE_INVALID",
+        "expected_valid": false
+      },
+      "recipe": {
+        "mutation": "noncanonical_body",
+        "recipe_kind": "body_scalar",
+        "target": "canonical_authority"
+      }
+    },
+    {
+      "case_id": "column-affinity",
+      "expectation": {
+        "expected_reason": "WATCHER_JOURNAL_SCHEMA_INVALID",
+        "expected_valid": false
+      },
+      "recipe": {
+        "mutation": "affinity_drift",
+        "recipe_kind": "column",
+        "target": "canonical_authority"
+      }
+    },
+    {
+      "case_id": "column-notnull",
+      "expectation": {
+        "expected_reason": "WATCHER_JOURNAL_SCHEMA_INVALID",
+        "expected_valid": false
+      },
+      "recipe": {
+        "mutation": "notnull_drift",
+        "recipe_kind": "column",
+        "target": "canonical_authority"
+      }
+    },
+    {
+      "case_id": "column-order",
+      "expectation": {
+        "expected_reason": "WATCHER_JOURNAL_SCHEMA_INVALID",
+        "expected_valid": false
+      },
+      "recipe": {
+        "mutation": "column_order_drift",
+        "recipe_kind": "column",
+        "target": "canonical_authority"
+      }
+    },
+    {
+      "case_id": "column-primary-key",
+      "expectation": {
+        "expected_reason": "WATCHER_JOURNAL_SCHEMA_INVALID",
+        "expected_valid": false
+      },
+      "recipe": {
+        "mutation": "primary_key_drift",
+        "recipe_kind": "column",
+        "target": "canonical_authority"
+      }
+    },
+    {
+      "case_id": "foreign-key-drift",
+      "expectation": {
+        "expected_reason": "WATCHER_JOURNAL_SCHEMA_INVALID",
+        "expected_valid": false
+      },
+      "recipe": {
+        "mutation": "foreign_key_drift",
+        "recipe_kind": "foreign_key",
+        "target": "canonical_authority"
+      }
+    },
+    {
+      "case_id": "identity-alias",
+      "expectation": {
+        "expected_reason": "WATCHER_JOURNAL_IDENTITY_INVALID",
+        "expected_valid": false
+      },
+      "recipe": {
+        "mutation": "alias_swap",
+        "recipe_kind": "identity",
+        "target": "canonical_authority"
+      }
+    },
+    {
+      "case_id": "identity-hardlink",
+      "expectation": {
+        "expected_reason": "WATCHER_JOURNAL_IDENTITY_INVALID",
+        "expected_valid": false
+      },
+      "recipe": {
+        "mutation": "hardlink",
+        "recipe_kind": "identity",
+        "target": "canonical_authority"
+      }
+    },
+    {
+      "case_id": "identity-mode-widened",
+      "expectation": {
+        "expected_reason": "WATCHER_JOURNAL_IDENTITY_INVALID",
+        "expected_valid": false
+      },
+      "recipe": {
+        "mutation": "mode_widened",
+        "recipe_kind": "identity",
+        "target": "canonical_authority"
+      }
+    },
+    {
+      "case_id": "identity-parent-swap",
+      "expectation": {
+        "expected_reason": "WATCHER_JOURNAL_IDENTITY_INVALID",
+        "expected_valid": false
+      },
+      "recipe": {
+        "mutation": "parent_swap",
+        "recipe_kind": "identity",
+        "target": "canonical_authority"
+      }
+    },
+    {
+      "case_id": "identity-reparse",
+      "expectation": {
+        "expected_reason": "WATCHER_JOURNAL_IDENTITY_INVALID",
+        "expected_valid": false
+      },
+      "recipe": {
+        "mutation": "reparse",
+        "recipe_kind": "identity",
+        "target": "canonical_authority"
+      }
+    },
+    {
+      "case_id": "identity-sqlite-replacement",
+      "expectation": {
+        "expected_reason": "WATCHER_JOURNAL_IDENTITY_INVALID",
+        "expected_valid": false
+      },
+      "recipe": {
+        "mutation": "sqlite_replacement",
+        "recipe_kind": "identity",
+        "target": "canonical_authority"
+      }
+    },
+    {
+      "case_id": "index-missing",
+      "expectation": {
+        "expected_reason": "WATCHER_JOURNAL_SCHEMA_INVALID",
+        "expected_valid": false
+      },
+      "recipe": {
+        "mutation": "missing_object",
+        "recipe_kind": "index",
+        "target": "canonical_authority"
+      }
+    },
+    {
+      "case_id": "integrity-corrupt",
+      "expectation": {
+        "expected_reason": "WATCHER_JOURNAL_INTEGRITY_INVALID",
+        "expected_valid": false
+      },
+      "recipe": {
+        "mutation": "corrupt_database",
+        "recipe_kind": "integrity",
+        "target": "canonical_authority"
+      }
+    },
+    {
+      "case_id": "integrity-failure",
+      "expectation": {
+        "expected_reason": "WATCHER_JOURNAL_INTEGRITY_INVALID",
+        "expected_valid": false
+      },
+      "recipe": {
+        "mutation": "integrity_failure",
+        "recipe_kind": "integrity",
+        "target": "canonical_authority"
+      }
+    },
+    {
+      "case_id": "outbox-unreadable",
+      "expectation": {
+        "expected_reason": "GKX_WATCHER_JOURNAL_OUTBOX_UNREADABLE",
+        "expected_valid": false
+      },
+      "recipe": {
+        "mutation": "body_digest_mismatch",
+        "recipe_kind": "outbox",
+        "target": "canonical_authority"
+      }
+    },
+    {
+      "case_id": "pragma-drift",
+      "expectation": {
+        "expected_reason": "WATCHER_JOURNAL_SCHEMA_INVALID",
+        "expected_valid": false
+      },
+      "recipe": {
+        "mutation": "pragma_drift",
+        "recipe_kind": "pragma",
+        "target": "canonical_authority"
+      }
+    },
+    {
+      "case_id": "reset-unknown-leaf",
+      "expectation": {
+        "expected_reason": "WATCHER_POINTER_RECOVERY_REQUIRED",
+        "expected_valid": false
+      },
+      "recipe": {
+        "mutation": "unknown_reserved_leaf",
+        "recipe_kind": "reset",
+        "target": "canonical_authority"
+      }
+    },
+    {
+      "case_id": "sqlite-master-extra",
+      "expectation": {
+        "expected_reason": "WATCHER_JOURNAL_SCHEMA_INVALID",
+        "expected_valid": false
+      },
+      "recipe": {
+        "mutation": "extra_object",
+        "recipe_kind": "sqlite_master",
+        "target": "canonical_authority"
+      }
+    },
+    {
+      "case_id": "sqlite-master-trigger",
+      "expectation": {
+        "expected_reason": "WATCHER_JOURNAL_SCHEMA_INVALID",
+        "expected_valid": false
+      },
+      "recipe": {
+        "mutation": "trigger_added",
+        "recipe_kind": "sqlite_master",
+        "target": "canonical_authority"
+      }
+    },
+    {
+      "case_id": "sqlite-master-view",
+      "expectation": {
+        "expected_reason": "WATCHER_JOURNAL_SCHEMA_INVALID",
+        "expected_valid": false
+      },
+      "recipe": {
+        "mutation": "view_added",
+        "recipe_kind": "sqlite_master",
+        "target": "canonical_authority"
+      }
+    },
+    {
+      "case_id": "sqlite-master-virtual-table",
+      "expectation": {
+        "expected_reason": "WATCHER_JOURNAL_SCHEMA_INVALID",
+        "expected_valid": false
+      },
+      "recipe": {
+        "mutation": "virtual_table_added",
+        "recipe_kind": "sqlite_master",
+        "target": "canonical_authority"
+      }
+    }
+  ]
+}

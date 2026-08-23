@@ -64,6 +64,11 @@ mod redaction;
 mod sqlite_store;
 #[cfg_attr(not(test), allow(dead_code))]
 mod temporal_coordinator;
+// Phase-5 consumes only Full-produced inert watcher/recovery envelopes. Live
+// filesystem watching, GKX interpretation, activation, and service control
+// remain host-side authorities.
+#[cfg_attr(not(test), allow(dead_code))]
+mod watcher;
 #[cfg_attr(not(test), allow(dead_code))]
 mod writer_lock;
 

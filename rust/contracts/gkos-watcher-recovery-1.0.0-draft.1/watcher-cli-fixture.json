@@ -1,0 +1,1008 @@
+{
+  "commands": [
+    {
+      "argv_template": [
+        "watcher",
+        "journal-reset",
+        "--state",
+        "<STATE_DIRECTORY>",
+        "--expected-journal-generation-digest",
+        "sha256:76b477b2be27e4c446f89072424ea7a52aec90e80fb3295e26e18deffddc4572",
+        "--expected-coherent-manifest-digest",
+        "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+      ],
+      "case_id": "reset-coherent-coordinate-mismatch",
+      "expected_exit_code": 2,
+      "expected_stderr": "gkos watcher journal-reset: expected coordinate mismatch\n",
+      "expected_stdout": "",
+      "required_state_fixture": "reset-ready"
+    },
+    {
+      "argv_template": [
+        "watcher",
+        "journal-reset",
+        "--state",
+        "<STATE_DIRECTORY>",
+        "--expected-journal-generation-digest",
+        "sha256:76b477b2be27e4c446f89072424ea7a52aec90e80fb3295e26e18deffddc4572",
+        "--expected-coherent-manifest-digest",
+        "sha256:177a81756885092e564c04051ebdd51b00f82060e50c1e5e938e5230b319cbec",
+        "unexpected"
+      ],
+      "case_id": "reset-extra-argument",
+      "expected_exit_code": 2,
+      "expected_stderr": "gkos watcher journal-reset: invalid arguments\n",
+      "expected_stdout": "",
+      "required_state_fixture": null
+    },
+    {
+      "argv_template": [
+        "watcher",
+        "journal-reset",
+        "--help"
+      ],
+      "case_id": "reset-help",
+      "expected_exit_code": 0,
+      "expected_stderr": "",
+      "expected_stdout": "Usage: gkos watcher journal-reset --state <state-directory> --expected-journal-generation-digest <sha256> --expected-coherent-manifest-digest <sha256> [--json]\n",
+      "required_state_fixture": null
+    },
+    {
+      "argv_template": [
+        "watcher",
+        "journal-reset",
+        "--state",
+        "<STATE_DIRECTORY>",
+        "--expected-journal-generation-digest",
+        "sha256:76b477b2be27e4c446f89072424ea7a52aec90e80fb3295e26e18deffddc4572",
+        "--expected-coherent-manifest-digest",
+        "sha256:177a81756885092e564c04051ebdd51b00f82060e50c1e5e938e5230b319cbec"
+      ],
+      "case_id": "reset-invalid-state",
+      "expected_exit_code": 2,
+      "expected_stderr": "gkos watcher journal-reset: invalid state capability\n",
+      "expected_stdout": "",
+      "required_state_fixture": "state-invalid"
+    },
+    {
+      "argv_template": [
+        "watcher",
+        "journal-reset",
+        "--state",
+        "<STATE_DIRECTORY>",
+        "--expected-journal-generation-digest",
+        "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+        "--expected-coherent-manifest-digest",
+        "sha256:177a81756885092e564c04051ebdd51b00f82060e50c1e5e938e5230b319cbec"
+      ],
+      "case_id": "reset-journal-coordinate-mismatch",
+      "expected_exit_code": 2,
+      "expected_stderr": "gkos watcher journal-reset: expected coordinate mismatch\n",
+      "expected_stdout": "",
+      "required_state_fixture": "reset-ready"
+    },
+    {
+      "argv_template": [
+        "watcher",
+        "journal-reset",
+        "--json",
+        "--state",
+        "<STATE_DIRECTORY>",
+        "--expected-journal-generation-digest",
+        "sha256:76b477b2be27e4c446f89072424ea7a52aec90e80fb3295e26e18deffddc4572",
+        "--expected-coherent-manifest-digest",
+        "sha256:177a81756885092e564c04051ebdd51b00f82060e50c1e5e938e5230b319cbec"
+      ],
+      "case_id": "reset-json-reordered",
+      "expected_exit_code": 2,
+      "expected_stderr": "gkos watcher journal-reset: invalid arguments\n",
+      "expected_stdout": "",
+      "required_state_fixture": null
+    },
+    {
+      "argv_template": [
+        "watcher",
+        "journal-reset",
+        "--state",
+        "<STATE_DIRECTORY>",
+        "--expected-journal-generation-digest",
+        "sha256:76b477b2be27e4c446f89072424ea7a52aec90e80fb3295e26e18deffddc4572"
+      ],
+      "case_id": "reset-missing-coherent-coordinate",
+      "expected_exit_code": 2,
+      "expected_stderr": "gkos watcher journal-reset: invalid arguments\n",
+      "expected_stdout": "",
+      "required_state_fixture": null
+    },
+    {
+      "argv_template": [
+        "watcher",
+        "journal-reset",
+        "--state",
+        "<STATE_DIRECTORY>",
+        "--expected-coherent-manifest-digest",
+        "sha256:177a81756885092e564c04051ebdd51b00f82060e50c1e5e938e5230b319cbec"
+      ],
+      "case_id": "reset-missing-journal-coordinate",
+      "expected_exit_code": 2,
+      "expected_stderr": "gkos watcher journal-reset: invalid arguments\n",
+      "expected_stdout": "",
+      "required_state_fixture": null
+    },
+    {
+      "argv_template": [
+        "watcher",
+        "journal-reset",
+        "--expected-journal-generation-digest",
+        "sha256:76b477b2be27e4c446f89072424ea7a52aec90e80fb3295e26e18deffddc4572",
+        "--expected-coherent-manifest-digest",
+        "sha256:177a81756885092e564c04051ebdd51b00f82060e50c1e5e938e5230b319cbec"
+      ],
+      "case_id": "reset-missing-state",
+      "expected_exit_code": 2,
+      "expected_stderr": "gkos watcher journal-reset: invalid arguments\n",
+      "expected_stdout": "",
+      "required_state_fixture": null
+    },
+    {
+      "argv_template": [
+        "watcher",
+        "journal-reset",
+        "--state",
+        "<STATE_DIRECTORY>",
+        "--expected-journal-generation-digest",
+        "sha256:76b477b2be27e4c446f89072424ea7a52aec90e80fb3295e26e18deffddc4572",
+        "--expected-coherent-manifest-digest",
+        "sha256:177a81756885092e564c04051ebdd51b00f82060e50c1e5e938e5230b319cbec"
+      ],
+      "case_id": "reset-operational-failure",
+      "expected_exit_code": 3,
+      "expected_stderr": "gkos watcher journal-reset: operational failure\n",
+      "expected_stdout": "",
+      "required_state_fixture": "state-operational-failure"
+    },
+    {
+      "argv_template": [
+        "watcher",
+        "journal-reset",
+        "--expected-journal-generation-digest",
+        "sha256:76b477b2be27e4c446f89072424ea7a52aec90e80fb3295e26e18deffddc4572",
+        "--state",
+        "<STATE_DIRECTORY>",
+        "--expected-coherent-manifest-digest",
+        "sha256:177a81756885092e564c04051ebdd51b00f82060e50c1e5e938e5230b319cbec"
+      ],
+      "case_id": "reset-reordered-flags",
+      "expected_exit_code": 2,
+      "expected_stderr": "gkos watcher journal-reset: invalid arguments\n",
+      "expected_stdout": "",
+      "required_state_fixture": null
+    },
+    {
+      "argv_template": [
+        "watcher",
+        "journal-reset",
+        "--state",
+        "<STATE_DIRECTORY>",
+        "--expected-coherent-manifest-digest",
+        "sha256:177a81756885092e564c04051ebdd51b00f82060e50c1e5e938e5230b319cbec",
+        "--expected-coherent-manifest-digest",
+        "sha256:177a81756885092e564c04051ebdd51b00f82060e50c1e5e938e5230b319cbec"
+      ],
+      "case_id": "reset-repeated-coherent-coordinate",
+      "expected_exit_code": 2,
+      "expected_stderr": "gkos watcher journal-reset: invalid arguments\n",
+      "expected_stdout": "",
+      "required_state_fixture": null
+    },
+    {
+      "argv_template": [
+        "watcher",
+        "journal-reset",
+        "--state",
+        "<STATE_DIRECTORY>",
+        "--expected-journal-generation-digest",
+        "sha256:76b477b2be27e4c446f89072424ea7a52aec90e80fb3295e26e18deffddc4572",
+        "--expected-journal-generation-digest",
+        "sha256:76b477b2be27e4c446f89072424ea7a52aec90e80fb3295e26e18deffddc4572"
+      ],
+      "case_id": "reset-repeated-journal-coordinate",
+      "expected_exit_code": 2,
+      "expected_stderr": "gkos watcher journal-reset: invalid arguments\n",
+      "expected_stdout": "",
+      "required_state_fixture": null
+    },
+    {
+      "argv_template": [
+        "watcher",
+        "journal-reset",
+        "--state",
+        "<STATE_DIRECTORY>",
+        "--state",
+        "<STATE_DIRECTORY>"
+      ],
+      "case_id": "reset-repeated-state",
+      "expected_exit_code": 2,
+      "expected_stderr": "gkos watcher journal-reset: invalid arguments\n",
+      "expected_stdout": "",
+      "required_state_fixture": null
+    },
+    {
+      "argv_template": [
+        "watcher",
+        "journal-reset",
+        "-h"
+      ],
+      "case_id": "reset-short-help-rejected",
+      "expected_exit_code": 2,
+      "expected_stderr": "gkos watcher journal-reset: invalid arguments\n",
+      "expected_stdout": "",
+      "required_state_fixture": null
+    },
+    {
+      "argv_template": [
+        "watcher",
+        "journal-reset",
+        "--state",
+        "<STATE_DIRECTORY>",
+        "--expected-journal-generation-digest",
+        "sha256:76b477b2be27e4c446f89072424ea7a52aec90e80fb3295e26e18deffddc4572",
+        "--expected-coherent-manifest-digest",
+        "sha256:177a81756885092e564c04051ebdd51b00f82060e50c1e5e938e5230b319cbec",
+        "--json"
+      ],
+      "case_id": "reset-success-json",
+      "expected_exit_code": 0,
+      "expected_stderr": "",
+      "expected_stdout": "{\n  \"archive_manifest_digest\": \"sha256:ce1bc537e0be99539e852fe523e0abf3dd95cf60f6168624a236fdf9f922f3f5\",\n  \"contract_version\": \"gkos-watcher-journal-reset-result/1.0.0-draft.1\",\n  \"new_journal_generation_digest\": \"sha256:8e13d1545f2a24c95ae76ba6173a8a8cc2d097165b4d5de3b52fb5c6723f1ef9\",\n  \"outer_coherent_manifest_digest\": \"sha256:177a81756885092e564c04051ebdd51b00f82060e50c1e5e938e5230b319cbec\",\n  \"prior_journal_generation_digest\": \"sha256:76b477b2be27e4c446f89072424ea7a52aec90e80fb3295e26e18deffddc4572\",\n  \"requires_reconciliation\": true,\n  \"reset_digest\": \"sha256:9144772bf08f6d3c6d51e8f7c49d74e3be8a945cdb07727dbd74e90a464f842b\",\n  \"result_digest\": \"sha256:4b8d4ba693da89a877523325febc6b7f8b84382ab9121ed38b5481aa2fc286b9\",\n  \"status\": \"reset\"\n}\n",
+      "required_state_fixture": "reset-ready"
+    },
+    {
+      "argv_template": [
+        "watcher",
+        "journal-reset",
+        "--state",
+        "<STATE_DIRECTORY>",
+        "--expected-journal-generation-digest",
+        "sha256:76b477b2be27e4c446f89072424ea7a52aec90e80fb3295e26e18deffddc4572",
+        "--expected-coherent-manifest-digest",
+        "sha256:177a81756885092e564c04051ebdd51b00f82060e50c1e5e938e5230b319cbec"
+      ],
+      "case_id": "reset-success-text",
+      "expected_exit_code": 0,
+      "expected_stderr": "",
+      "expected_stdout": "gkos watcher journal-reset\nstatus: reset\nprior_journal_generation_digest: sha256:76b477b2be27e4c446f89072424ea7a52aec90e80fb3295e26e18deffddc4572\narchive_manifest_digest: sha256:ce1bc537e0be99539e852fe523e0abf3dd95cf60f6168624a236fdf9f922f3f5\nnew_journal_generation_digest: sha256:8e13d1545f2a24c95ae76ba6173a8a8cc2d097165b4d5de3b52fb5c6723f1ef9\nouter_coherent_manifest_digest: sha256:177a81756885092e564c04051ebdd51b00f82060e50c1e5e938e5230b319cbec\nreset_digest: sha256:9144772bf08f6d3c6d51e8f7c49d74e3be8a945cdb07727dbd74e90a464f842b\nrequires_reconciliation: true\nresult_digest: sha256:4b8d4ba693da89a877523325febc6b7f8b84382ab9121ed38b5481aa2fc286b9\n",
+      "required_state_fixture": "reset-ready"
+    },
+    {
+      "argv_template": [
+        "watcher",
+        "journal-reset",
+        "--vault",
+        "vault"
+      ],
+      "case_id": "reset-vault-rejected",
+      "expected_exit_code": 2,
+      "expected_stderr": "gkos watcher journal-reset: invalid arguments\n",
+      "expected_stdout": "",
+      "required_state_fixture": null
+    },
+    {
+      "argv_template": [
+        "status",
+        "--state",
+        "<STATE_DIRECTORY>",
+        "unexpected"
+      ],
+      "case_id": "status-extra-argument",
+      "expected_exit_code": 2,
+      "expected_stderr": "gkos status: invalid arguments\n",
+      "expected_stdout": "",
+      "required_state_fixture": null
+    },
+    {
+      "argv_template": [
+        "status",
+        "--help"
+      ],
+      "case_id": "status-help",
+      "expected_exit_code": 0,
+      "expected_stderr": "",
+      "expected_stdout": "Usage: gkos status --state <state-directory> [--json]\n",
+      "required_state_fixture": null
+    },
+    {
+      "argv_template": [
+        "status",
+        "--state",
+        "<STATE_DIRECTORY>"
+      ],
+      "case_id": "status-invalid-state",
+      "expected_exit_code": 2,
+      "expected_stderr": "gkos status: invalid state capability\n",
+      "expected_stdout": "",
+      "required_state_fixture": "state-invalid"
+    },
+    {
+      "argv_template": [
+        "status",
+        "--json",
+        "--state",
+        "<STATE_DIRECTORY>"
+      ],
+      "case_id": "status-json-reordered",
+      "expected_exit_code": 2,
+      "expected_stderr": "gkos status: invalid arguments\n",
+      "expected_stdout": "",
+      "required_state_fixture": null
+    },
+    {
+      "argv_template": [
+        "status"
+      ],
+      "case_id": "status-missing-state",
+      "expected_exit_code": 2,
+      "expected_stderr": "gkos status: invalid arguments\n",
+      "expected_stdout": "",
+      "required_state_fixture": null
+    },
+    {
+      "argv_template": [
+        "status",
+        "--state",
+        "<STATE_DIRECTORY>"
+      ],
+      "case_id": "status-operational-failure",
+      "expected_exit_code": 3,
+      "expected_stderr": "gkos status: operational failure\n",
+      "expected_stdout": "",
+      "required_state_fixture": "state-operational-failure"
+    },
+    {
+      "argv_template": [
+        "status",
+        "--state",
+        "<STATE_DIRECTORY>",
+        "--json"
+      ],
+      "case_id": "status-pre-genesis-json",
+      "expected_exit_code": 1,
+      "expected_stderr": "",
+      "expected_stdout": "{\n  \"chunk_count\": 0,\n  \"coherent_manifest_digest\": null,\n  \"configuration_digest\": null,\n  \"contract_version\": \"gkos-watcher-status/1.0.0-draft.1\",\n  \"document_count\": 0,\n  \"embedding_model\": null,\n  \"freshness\": \"stale\",\n  \"last_sync\": null,\n  \"pid\": 4242,\n  \"policy_digest\": null,\n  \"reason_codes\": [\n    \"WATCHER_NO_COHERENT_GENERATION\"\n  ],\n  \"service_instance_id\": \"019b2d14-4233-7db7-87d4-7d81cfaec932\",\n  \"source_snapshot_digest\": null,\n  \"status_digest\": \"sha256:885b533837b109cff2a22fe442911d0158f1b7711eb355f02fe62148580bb19e\",\n  \"uptime_ms\": 1234,\n  \"watcher_state\": \"starting\"\n}\n",
+      "required_state_fixture": "status-pre-genesis"
+    },
+    {
+      "argv_template": [
+        "status",
+        "--state",
+        "<STATE_DIRECTORY>"
+      ],
+      "case_id": "status-pre-genesis-text",
+      "expected_exit_code": 1,
+      "expected_stderr": "",
+      "expected_stdout": "gkos status\ndocuments: 0\nchunks: 0\nembedding_model: null\nwatcher_state: starting\nfreshness: stale\nlast_sync: null\nuptime_ms: 1234\npid: 4242\nreasons: [\"WATCHER_NO_COHERENT_GENERATION\"]\n",
+      "required_state_fixture": "status-pre-genesis"
+    },
+    {
+      "argv_template": [
+        "status",
+        "--state",
+        "<STATE_DIRECTORY>",
+        "--json"
+      ],
+      "case_id": "status-reconciling-json",
+      "expected_exit_code": 1,
+      "expected_stderr": "",
+      "expected_stdout": "{\n  \"chunk_count\": 0,\n  \"coherent_manifest_digest\": \"sha256:177a81756885092e564c04051ebdd51b00f82060e50c1e5e938e5230b319cbec\",\n  \"configuration_digest\": \"sha256:e389f35b91314acba93bb6a0d955af34a0df11b524701b6d9409e245d8f55c11\",\n  \"contract_version\": \"gkos-watcher-status/1.0.0-draft.1\",\n  \"document_count\": 0,\n  \"embedding_model\": null,\n  \"freshness\": \"stale\",\n  \"last_sync\": \"2026-08-20T00:00:01.000Z\",\n  \"pid\": 4242,\n  \"policy_digest\": \"sha256:2faf013ded756636adc22edad62312c225c8258ef61ba2e492a2de639c152790\",\n  \"reason_codes\": [\n    \"WATCHER_STARTUP_RECONCILIATION\"\n  ],\n  \"service_instance_id\": \"019b2d14-4233-7db7-87d4-7d81cfaec932\",\n  \"source_snapshot_digest\": \"sha256:3333333333333333333333333333333333333333333333333333333333333333\",\n  \"status_digest\": \"sha256:f7d8621f31b2d03d61f4f018887adf1a058cac9b593b021a054a5cb4f55fa629\",\n  \"uptime_ms\": 1234,\n  \"watcher_state\": \"reconciling\"\n}\n",
+      "required_state_fixture": "status-reconciling-stale"
+    },
+    {
+      "argv_template": [
+        "status",
+        "--state",
+        "<STATE_DIRECTORY>"
+      ],
+      "case_id": "status-reconciling-text",
+      "expected_exit_code": 1,
+      "expected_stderr": "",
+      "expected_stdout": "gkos status\ndocuments: 0\nchunks: 0\nembedding_model: null\nwatcher_state: reconciling\nfreshness: stale\nlast_sync: 2026-08-20T00:00:01.000Z\nuptime_ms: 1234\npid: 4242\nreasons: [\"WATCHER_STARTUP_RECONCILIATION\"]\n",
+      "required_state_fixture": "status-reconciling-stale"
+    },
+    {
+      "argv_template": [
+        "status",
+        "--state",
+        "<STATE_DIRECTORY>",
+        "--state",
+        "<STATE_DIRECTORY>"
+      ],
+      "case_id": "status-repeated-state",
+      "expected_exit_code": 2,
+      "expected_stderr": "gkos status: invalid arguments\n",
+      "expected_stdout": "",
+      "required_state_fixture": null
+    },
+    {
+      "argv_template": [
+        "status",
+        "--state",
+        "<STATE_DIRECTORY>",
+        "--json"
+      ],
+      "case_id": "status-serving-degraded-json",
+      "expected_exit_code": 1,
+      "expected_stderr": "",
+      "expected_stdout": "{\n  \"chunk_count\": 0,\n  \"coherent_manifest_digest\": \"sha256:177a81756885092e564c04051ebdd51b00f82060e50c1e5e938e5230b319cbec\",\n  \"configuration_digest\": \"sha256:e389f35b91314acba93bb6a0d955af34a0df11b524701b6d9409e245d8f55c11\",\n  \"contract_version\": \"gkos-watcher-status/1.0.0-draft.1\",\n  \"document_count\": 0,\n  \"embedding_model\": null,\n  \"freshness\": \"degraded\",\n  \"last_sync\": \"2026-08-20T00:00:01.000Z\",\n  \"pid\": 4242,\n  \"policy_digest\": \"sha256:2faf013ded756636adc22edad62312c225c8258ef61ba2e492a2de639c152790\",\n  \"reason_codes\": [\n    \"WATCHER_SOURCE_REJECTED\"\n  ],\n  \"service_instance_id\": \"019b2d14-4233-7db7-87d4-7d81cfaec932\",\n  \"source_snapshot_digest\": \"sha256:3333333333333333333333333333333333333333333333333333333333333333\",\n  \"status_digest\": \"sha256:1e7b6d86a5269867c7ab886c428d36aada99ea42058ee657fbc0c4438a082bf4\",\n  \"uptime_ms\": 1234,\n  \"watcher_state\": \"serving\"\n}\n",
+      "required_state_fixture": "status-serving-degraded"
+    },
+    {
+      "argv_template": [
+        "status",
+        "--state",
+        "<STATE_DIRECTORY>"
+      ],
+      "case_id": "status-serving-degraded-text",
+      "expected_exit_code": 1,
+      "expected_stderr": "",
+      "expected_stdout": "gkos status\ndocuments: 0\nchunks: 0\nembedding_model: null\nwatcher_state: serving\nfreshness: degraded\nlast_sync: 2026-08-20T00:00:01.000Z\nuptime_ms: 1234\npid: 4242\nreasons: [\"WATCHER_SOURCE_REJECTED\"]\n",
+      "required_state_fixture": "status-serving-degraded"
+    },
+    {
+      "argv_template": [
+        "status",
+        "--state",
+        "<STATE_DIRECTORY>",
+        "--json"
+      ],
+      "case_id": "status-serving-fresh-json",
+      "expected_exit_code": 0,
+      "expected_stderr": "",
+      "expected_stdout": "{\n  \"chunk_count\": 0,\n  \"coherent_manifest_digest\": \"sha256:177a81756885092e564c04051ebdd51b00f82060e50c1e5e938e5230b319cbec\",\n  \"configuration_digest\": \"sha256:e389f35b91314acba93bb6a0d955af34a0df11b524701b6d9409e245d8f55c11\",\n  \"contract_version\": \"gkos-watcher-status/1.0.0-draft.1\",\n  \"document_count\": 0,\n  \"embedding_model\": null,\n  \"freshness\": \"fresh\",\n  \"last_sync\": \"2026-08-20T00:00:01.000Z\",\n  \"pid\": 4242,\n  \"policy_digest\": \"sha256:2faf013ded756636adc22edad62312c225c8258ef61ba2e492a2de639c152790\",\n  \"reason_codes\": [],\n  \"service_instance_id\": \"019b2d14-4233-7db7-87d4-7d81cfaec932\",\n  \"source_snapshot_digest\": \"sha256:3333333333333333333333333333333333333333333333333333333333333333\",\n  \"status_digest\": \"sha256:03e288c99b60e1bba37d769bdda864c5e53cfb6f1adbf0ff385e0a790291380b\",\n  \"uptime_ms\": 1234,\n  \"watcher_state\": \"serving\"\n}\n",
+      "required_state_fixture": "status-serving-fresh"
+    },
+    {
+      "argv_template": [
+        "status",
+        "--state",
+        "<STATE_DIRECTORY>"
+      ],
+      "case_id": "status-serving-fresh-text",
+      "expected_exit_code": 0,
+      "expected_stderr": "",
+      "expected_stdout": "gkos status\ndocuments: 0\nchunks: 0\nembedding_model: null\nwatcher_state: serving\nfreshness: fresh\nlast_sync: 2026-08-20T00:00:01.000Z\nuptime_ms: 1234\npid: 4242\nreasons: []\n",
+      "required_state_fixture": "status-serving-fresh"
+    },
+    {
+      "argv_template": [
+        "status",
+        "-h"
+      ],
+      "case_id": "status-short-help-rejected",
+      "expected_exit_code": 2,
+      "expected_stderr": "gkos status: invalid arguments\n",
+      "expected_stdout": "",
+      "required_state_fixture": null
+    },
+    {
+      "argv_template": [
+        "status",
+        "--vault",
+        "vault"
+      ],
+      "case_id": "status-vault-rejected",
+      "expected_exit_code": 2,
+      "expected_stderr": "gkos status: invalid arguments\n",
+      "expected_stdout": "",
+      "required_state_fixture": null
+    }
+  ],
+  "contract_version": "gkos-watcher-cli-fixture/1.0.0-draft.1",
+  "fixture_digest": "sha256:0e05988ff481b58c9f9ec8262b75a8d642012aa3325121e1f3ff259ee593f96d",
+  "state_fixtures": [
+    {
+      "active_coherent": {
+        "activated_at": "2026-08-20T00:00:01.000Z",
+        "active_digest": "sha256:9f495a92b6e64b3086a127872e93a2944d348daad008c4125c719c7050854492",
+        "coherent_manifest_digest": "sha256:177a81756885092e564c04051ebdd51b00f82060e50c1e5e938e5230b319cbec",
+        "contract_version": "gkos-watcher-active-coherent/1.0.0-draft.1",
+        "intent_digest": "sha256:3eb07354e37c9840d31822583813f8742b7794873f327c4374aac651d5fbba7e",
+        "pointer_digest": "sha256:a4c9231bff3bb97b57d23938ca17e6d50b48f78fc2dd92d103d29d45574b3c10",
+        "service_generation_id": "watcher:019b2d14-4234-7db7-87d4-7d81cfaec932"
+      },
+      "capability_state": "valid",
+      "coherent_manifest": {
+        "coherent_manifest_digest": "sha256:177a81756885092e564c04051ebdd51b00f82060e50c1e5e938e5230b319cbec",
+        "completed_batch_id": "019b2d14-4234-7db7-87d4-7d81cfaec932",
+        "completed_transition_digest": "sha256:014b59801d35093a4b2b336b7ed089d68e94ee99dc6de7ea986b042623fd3234",
+        "configuration_digest": "sha256:e389f35b91314acba93bb6a0d955af34a0df11b524701b6d9409e245d8f55c11",
+        "contract_version": "gkos-watcher-coherent-manifest/1.0.0-draft.1",
+        "created_at": "2026-08-20T00:00:01.000Z",
+        "effective_profile_digest": "sha256:d1155515ce03a7449821e1e14eb80256b70eae0d5048d9f5d1978863b201560e",
+        "gkx_snapshot_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        "graph_projection_state": {
+          "canonical_graph_digest": "sha256:551cfe82f7b39efe4e58bd3ba83dea738b25956283c171d3f20890c2a76c0d49",
+          "gkx_delta_digest": "sha256:99b3aa9e5945fe8e10fa6d482c4c49bef6deac7f868d8fc0880167fccd463070",
+          "graph_artifact_digest": "sha256:532820e0a26eac83bdc08fb0edff40ffb9f4fbe2241383a08bd51c8de9c15f25",
+          "graph_artifact_file": "watcher-graph-532820e0a26eac83bdc08fb0edff40ffb9f4fbe2241383a08bd51c8de9c15f25.json",
+          "graph_contract_version": "gkos-watcher-canonical-gkx-graph/1.0.0-draft.1",
+          "graphiti_projection_digest": "sha256:d91c8b4a2e3772516a15a554d4c7c874be7693c0cba8a0751e223f69984a4ee5",
+          "reason_codes": [],
+          "sink_receipts": [],
+          "sink_state": "not_applicable",
+          "state": "ready"
+        },
+        "policy_digest": "sha256:2faf013ded756636adc22edad62312c225c8258ef61ba2e492a2de639c152790",
+        "rejection_journal_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+        "retrieval_projection_state": {
+          "database_file": "retrieval-9999999999999999999999999999999999999999999999999999999999999999.sqlite",
+          "dimensions": null,
+          "lexical_backend": "sqlite_fts5",
+          "manifest_digest": "sha256:8888888888888888888888888888888888888888888888888888888888888888",
+          "model_id": null,
+          "owner_generation_id": "ingest:777777777777777777777777",
+          "owner_manifest_digest": "sha256:7777777777777777777777777777777777777777777777777777777777777777",
+          "projection_digest": "sha256:9999999999999999999999999999999999999999999999999999999999999999",
+          "projection_id": "retrieval:999999999999999999999999",
+          "provider_id": null,
+          "provider_kind": null,
+          "reason_codes": [],
+          "state": "ready",
+          "vector_stage_state": "disabled"
+        },
+        "service_generation_id": "watcher:019b2d14-4234-7db7-87d4-7d81cfaec932",
+        "source_observation_snapshot_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+        "source_removal_event_count": 1,
+        "source_removal_event_set_digest": "sha256:2db012f01b22717007865a3cf9e4d1cd2d097611dab0143df6ed0b20e3e0b77a",
+        "topology_artifact_file": "watcher-topology-134fba9b6af89c9836d8f484935770f6092055e71bc9953eee7de7e14e6d27c2.json",
+        "topology_artifact_raw_sha256": "sha256:d27229a7d0aa6add14fe4df2c4c9c6915a98e96eabf43221d564e5d7216472ed",
+        "topology_snapshot_digest": "sha256:134fba9b6af89c9836d8f484935770f6092055e71bc9953eee7de7e14e6d27c2",
+        "validation_result_digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "vault_id": "phase5-watcher-convergence-v1"
+      },
+      "fixture_id": "reset-ready",
+      "journal_generation": {
+        "anchor_coherent_manifest_digest": "sha256:177a81756885092e564c04051ebdd51b00f82060e50c1e5e938e5230b319cbec",
+        "contract_version": "gkos-watcher-journal-generation/1.0.0-draft.1",
+        "created_at": "2026-08-20T00:00:01.000Z",
+        "database_file": "watcher-journal.sqlite",
+        "directory_leaf": "journal-019b2d14-4232-7db7-87d4-7d81cfaec932",
+        "journal_generation_digest": "sha256:76b477b2be27e4c446f89072424ea7a52aec90e80fb3295e26e18deffddc4572",
+        "journal_instance_id": "019b2d14-4232-7db7-87d4-7d81cfaec932",
+        "meta_digest": "sha256:6d12c70486b20b0c222fb7cdbf8f77cb8a06dfe61666175f0ba75d400e1d6879"
+      },
+      "journal_pointer": {
+        "contract_version": "gkos-watcher-journal-active-pointer/1.0.0-draft.1",
+        "journal_generation_digest": "sha256:76b477b2be27e4c446f89072424ea7a52aec90e80fb3295e26e18deffddc4572",
+        "journal_generation_file": "watcher-journal-generation-76b477b2be27e4c446f89072424ea7a52aec90e80fb3295e26e18deffddc4572.json",
+        "kind": "watcher_journal",
+        "pointer_digest": "sha256:a960bf6f67aa4886c449a7be60b1ecc65462f7a694d05f8e236b1bb5c6c3e7f5",
+        "prior_pointer_digest": null
+      },
+      "locator": null,
+      "reset_result": {
+        "archive_manifest_digest": "sha256:ce1bc537e0be99539e852fe523e0abf3dd95cf60f6168624a236fdf9f922f3f5",
+        "contract_version": "gkos-watcher-journal-reset-result/1.0.0-draft.1",
+        "new_journal_generation_digest": "sha256:8e13d1545f2a24c95ae76ba6173a8a8cc2d097165b4d5de3b52fb5c6723f1ef9",
+        "outer_coherent_manifest_digest": "sha256:177a81756885092e564c04051ebdd51b00f82060e50c1e5e938e5230b319cbec",
+        "prior_journal_generation_digest": "sha256:76b477b2be27e4c446f89072424ea7a52aec90e80fb3295e26e18deffddc4572",
+        "requires_reconciliation": true,
+        "reset_digest": "sha256:9144772bf08f6d3c6d51e8f7c49d74e3be8a945cdb07727dbd74e90a464f842b",
+        "result_digest": "sha256:4b8d4ba693da89a877523325febc6b7f8b84382ab9121ed38b5481aa2fc286b9",
+        "status": "reset"
+      },
+      "status": null
+    },
+    {
+      "active_coherent": null,
+      "capability_state": "invalid",
+      "coherent_manifest": null,
+      "fixture_id": "state-invalid",
+      "journal_generation": null,
+      "journal_pointer": null,
+      "locator": null,
+      "reset_result": null,
+      "status": null
+    },
+    {
+      "active_coherent": null,
+      "capability_state": "operational_failure",
+      "coherent_manifest": null,
+      "fixture_id": "state-operational-failure",
+      "journal_generation": null,
+      "journal_pointer": null,
+      "locator": null,
+      "reset_result": null,
+      "status": null
+    },
+    {
+      "active_coherent": null,
+      "capability_state": "valid",
+      "coherent_manifest": null,
+      "fixture_id": "status-pre-genesis",
+      "journal_generation": {
+        "anchor_coherent_manifest_digest": "sha256:177a81756885092e564c04051ebdd51b00f82060e50c1e5e938e5230b319cbec",
+        "contract_version": "gkos-watcher-journal-generation/1.0.0-draft.1",
+        "created_at": "2026-08-20T00:00:01.000Z",
+        "database_file": "watcher-journal.sqlite",
+        "directory_leaf": "journal-019b2d14-4232-7db7-87d4-7d81cfaec932",
+        "journal_generation_digest": "sha256:76b477b2be27e4c446f89072424ea7a52aec90e80fb3295e26e18deffddc4572",
+        "journal_instance_id": "019b2d14-4232-7db7-87d4-7d81cfaec932",
+        "meta_digest": "sha256:6d12c70486b20b0c222fb7cdbf8f77cb8a06dfe61666175f0ba75d400e1d6879"
+      },
+      "journal_pointer": {
+        "contract_version": "gkos-watcher-journal-active-pointer/1.0.0-draft.1",
+        "journal_generation_digest": "sha256:76b477b2be27e4c446f89072424ea7a52aec90e80fb3295e26e18deffddc4572",
+        "journal_generation_file": "watcher-journal-generation-76b477b2be27e4c446f89072424ea7a52aec90e80fb3295e26e18deffddc4572.json",
+        "kind": "watcher_journal",
+        "pointer_digest": "sha256:a960bf6f67aa4886c449a7be60b1ecc65462f7a694d05f8e236b1bb5c6c3e7f5",
+        "prior_pointer_digest": null
+      },
+      "locator": {
+        "contract_version": "gkos-watcher-service-locator/1.0.0-draft.1",
+        "control_route": "/control/shutdown",
+        "locator_digest": "sha256:2257377a1768a3cc8181d3429a73722fb748d593472189f295e274f7f552ac0b",
+        "loopback_host": "127.0.0.1",
+        "pid": 4242,
+        "port": 4317,
+        "service_instance_id": "019b2d14-4233-7db7-87d4-7d81cfaec932",
+        "started_at": "2026-08-20T00:00:00.000Z",
+        "status_route": "/status"
+      },
+      "reset_result": null,
+      "status": {
+        "chunk_count": 0,
+        "coherent_manifest_digest": null,
+        "configuration_digest": null,
+        "contract_version": "gkos-watcher-status/1.0.0-draft.1",
+        "document_count": 0,
+        "embedding_model": null,
+        "freshness": "stale",
+        "last_sync": null,
+        "pid": 4242,
+        "policy_digest": null,
+        "reason_codes": [
+          "WATCHER_NO_COHERENT_GENERATION"
+        ],
+        "service_instance_id": "019b2d14-4233-7db7-87d4-7d81cfaec932",
+        "source_snapshot_digest": null,
+        "status_digest": "sha256:885b533837b109cff2a22fe442911d0158f1b7711eb355f02fe62148580bb19e",
+        "uptime_ms": 1234,
+        "watcher_state": "starting"
+      }
+    },
+    {
+      "active_coherent": {
+        "activated_at": "2026-08-20T00:00:01.000Z",
+        "active_digest": "sha256:9f495a92b6e64b3086a127872e93a2944d348daad008c4125c719c7050854492",
+        "coherent_manifest_digest": "sha256:177a81756885092e564c04051ebdd51b00f82060e50c1e5e938e5230b319cbec",
+        "contract_version": "gkos-watcher-active-coherent/1.0.0-draft.1",
+        "intent_digest": "sha256:3eb07354e37c9840d31822583813f8742b7794873f327c4374aac651d5fbba7e",
+        "pointer_digest": "sha256:a4c9231bff3bb97b57d23938ca17e6d50b48f78fc2dd92d103d29d45574b3c10",
+        "service_generation_id": "watcher:019b2d14-4234-7db7-87d4-7d81cfaec932"
+      },
+      "capability_state": "valid",
+      "coherent_manifest": {
+        "coherent_manifest_digest": "sha256:177a81756885092e564c04051ebdd51b00f82060e50c1e5e938e5230b319cbec",
+        "completed_batch_id": "019b2d14-4234-7db7-87d4-7d81cfaec932",
+        "completed_transition_digest": "sha256:014b59801d35093a4b2b336b7ed089d68e94ee99dc6de7ea986b042623fd3234",
+        "configuration_digest": "sha256:e389f35b91314acba93bb6a0d955af34a0df11b524701b6d9409e245d8f55c11",
+        "contract_version": "gkos-watcher-coherent-manifest/1.0.0-draft.1",
+        "created_at": "2026-08-20T00:00:01.000Z",
+        "effective_profile_digest": "sha256:d1155515ce03a7449821e1e14eb80256b70eae0d5048d9f5d1978863b201560e",
+        "gkx_snapshot_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        "graph_projection_state": {
+          "canonical_graph_digest": "sha256:551cfe82f7b39efe4e58bd3ba83dea738b25956283c171d3f20890c2a76c0d49",
+          "gkx_delta_digest": "sha256:99b3aa9e5945fe8e10fa6d482c4c49bef6deac7f868d8fc0880167fccd463070",
+          "graph_artifact_digest": "sha256:532820e0a26eac83bdc08fb0edff40ffb9f4fbe2241383a08bd51c8de9c15f25",
+          "graph_artifact_file": "watcher-graph-532820e0a26eac83bdc08fb0edff40ffb9f4fbe2241383a08bd51c8de9c15f25.json",
+          "graph_contract_version": "gkos-watcher-canonical-gkx-graph/1.0.0-draft.1",
+          "graphiti_projection_digest": "sha256:d91c8b4a2e3772516a15a554d4c7c874be7693c0cba8a0751e223f69984a4ee5",
+          "reason_codes": [],
+          "sink_receipts": [],
+          "sink_state": "not_applicable",
+          "state": "ready"
+        },
+        "policy_digest": "sha256:2faf013ded756636adc22edad62312c225c8258ef61ba2e492a2de639c152790",
+        "rejection_journal_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+        "retrieval_projection_state": {
+          "database_file": "retrieval-9999999999999999999999999999999999999999999999999999999999999999.sqlite",
+          "dimensions": null,
+          "lexical_backend": "sqlite_fts5",
+          "manifest_digest": "sha256:8888888888888888888888888888888888888888888888888888888888888888",
+          "model_id": null,
+          "owner_generation_id": "ingest:777777777777777777777777",
+          "owner_manifest_digest": "sha256:7777777777777777777777777777777777777777777777777777777777777777",
+          "projection_digest": "sha256:9999999999999999999999999999999999999999999999999999999999999999",
+          "projection_id": "retrieval:999999999999999999999999",
+          "provider_id": null,
+          "provider_kind": null,
+          "reason_codes": [],
+          "state": "ready",
+          "vector_stage_state": "disabled"
+        },
+        "service_generation_id": "watcher:019b2d14-4234-7db7-87d4-7d81cfaec932",
+        "source_observation_snapshot_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+        "source_removal_event_count": 1,
+        "source_removal_event_set_digest": "sha256:2db012f01b22717007865a3cf9e4d1cd2d097611dab0143df6ed0b20e3e0b77a",
+        "topology_artifact_file": "watcher-topology-134fba9b6af89c9836d8f484935770f6092055e71bc9953eee7de7e14e6d27c2.json",
+        "topology_artifact_raw_sha256": "sha256:d27229a7d0aa6add14fe4df2c4c9c6915a98e96eabf43221d564e5d7216472ed",
+        "topology_snapshot_digest": "sha256:134fba9b6af89c9836d8f484935770f6092055e71bc9953eee7de7e14e6d27c2",
+        "validation_result_digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "vault_id": "phase5-watcher-convergence-v1"
+      },
+      "fixture_id": "status-reconciling-stale",
+      "journal_generation": {
+        "anchor_coherent_manifest_digest": "sha256:177a81756885092e564c04051ebdd51b00f82060e50c1e5e938e5230b319cbec",
+        "contract_version": "gkos-watcher-journal-generation/1.0.0-draft.1",
+        "created_at": "2026-08-20T00:00:01.000Z",
+        "database_file": "watcher-journal.sqlite",
+        "directory_leaf": "journal-019b2d14-4232-7db7-87d4-7d81cfaec932",
+        "journal_generation_digest": "sha256:76b477b2be27e4c446f89072424ea7a52aec90e80fb3295e26e18deffddc4572",
+        "journal_instance_id": "019b2d14-4232-7db7-87d4-7d81cfaec932",
+        "meta_digest": "sha256:6d12c70486b20b0c222fb7cdbf8f77cb8a06dfe61666175f0ba75d400e1d6879"
+      },
+      "journal_pointer": {
+        "contract_version": "gkos-watcher-journal-active-pointer/1.0.0-draft.1",
+        "journal_generation_digest": "sha256:76b477b2be27e4c446f89072424ea7a52aec90e80fb3295e26e18deffddc4572",
+        "journal_generation_file": "watcher-journal-generation-76b477b2be27e4c446f89072424ea7a52aec90e80fb3295e26e18deffddc4572.json",
+        "kind": "watcher_journal",
+        "pointer_digest": "sha256:a960bf6f67aa4886c449a7be60b1ecc65462f7a694d05f8e236b1bb5c6c3e7f5",
+        "prior_pointer_digest": null
+      },
+      "locator": {
+        "contract_version": "gkos-watcher-service-locator/1.0.0-draft.1",
+        "control_route": "/control/shutdown",
+        "locator_digest": "sha256:2257377a1768a3cc8181d3429a73722fb748d593472189f295e274f7f552ac0b",
+        "loopback_host": "127.0.0.1",
+        "pid": 4242,
+        "port": 4317,
+        "service_instance_id": "019b2d14-4233-7db7-87d4-7d81cfaec932",
+        "started_at": "2026-08-20T00:00:00.000Z",
+        "status_route": "/status"
+      },
+      "reset_result": null,
+      "status": {
+        "chunk_count": 0,
+        "coherent_manifest_digest": "sha256:177a81756885092e564c04051ebdd51b00f82060e50c1e5e938e5230b319cbec",
+        "configuration_digest": "sha256:e389f35b91314acba93bb6a0d955af34a0df11b524701b6d9409e245d8f55c11",
+        "contract_version": "gkos-watcher-status/1.0.0-draft.1",
+        "document_count": 0,
+        "embedding_model": null,
+        "freshness": "stale",
+        "last_sync": "2026-08-20T00:00:01.000Z",
+        "pid": 4242,
+        "policy_digest": "sha256:2faf013ded756636adc22edad62312c225c8258ef61ba2e492a2de639c152790",
+        "reason_codes": [
+          "WATCHER_STARTUP_RECONCILIATION"
+        ],
+        "service_instance_id": "019b2d14-4233-7db7-87d4-7d81cfaec932",
+        "source_snapshot_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+        "status_digest": "sha256:f7d8621f31b2d03d61f4f018887adf1a058cac9b593b021a054a5cb4f55fa629",
+        "uptime_ms": 1234,
+        "watcher_state": "reconciling"
+      }
+    },
+    {
+      "active_coherent": {
+        "activated_at": "2026-08-20T00:00:01.000Z",
+        "active_digest": "sha256:9f495a92b6e64b3086a127872e93a2944d348daad008c4125c719c7050854492",
+        "coherent_manifest_digest": "sha256:177a81756885092e564c04051ebdd51b00f82060e50c1e5e938e5230b319cbec",
+        "contract_version": "gkos-watcher-active-coherent/1.0.0-draft.1",
+        "intent_digest": "sha256:3eb07354e37c9840d31822583813f8742b7794873f327c4374aac651d5fbba7e",
+        "pointer_digest": "sha256:a4c9231bff3bb97b57d23938ca17e6d50b48f78fc2dd92d103d29d45574b3c10",
+        "service_generation_id": "watcher:019b2d14-4234-7db7-87d4-7d81cfaec932"
+      },
+      "capability_state": "valid",
+      "coherent_manifest": {
+        "coherent_manifest_digest": "sha256:177a81756885092e564c04051ebdd51b00f82060e50c1e5e938e5230b319cbec",
+        "completed_batch_id": "019b2d14-4234-7db7-87d4-7d81cfaec932",
+        "completed_transition_digest": "sha256:014b59801d35093a4b2b336b7ed089d68e94ee99dc6de7ea986b042623fd3234",
+        "configuration_digest": "sha256:e389f35b91314acba93bb6a0d955af34a0df11b524701b6d9409e245d8f55c11",
+        "contract_version": "gkos-watcher-coherent-manifest/1.0.0-draft.1",
+        "created_at": "2026-08-20T00:00:01.000Z",
+        "effective_profile_digest": "sha256:d1155515ce03a7449821e1e14eb80256b70eae0d5048d9f5d1978863b201560e",
+        "gkx_snapshot_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        "graph_projection_state": {
+          "canonical_graph_digest": "sha256:551cfe82f7b39efe4e58bd3ba83dea738b25956283c171d3f20890c2a76c0d49",
+          "gkx_delta_digest": "sha256:99b3aa9e5945fe8e10fa6d482c4c49bef6deac7f868d8fc0880167fccd463070",
+          "graph_artifact_digest": "sha256:532820e0a26eac83bdc08fb0edff40ffb9f4fbe2241383a08bd51c8de9c15f25",
+          "graph_artifact_file": "watcher-graph-532820e0a26eac83bdc08fb0edff40ffb9f4fbe2241383a08bd51c8de9c15f25.json",
+          "graph_contract_version": "gkos-watcher-canonical-gkx-graph/1.0.0-draft.1",
+          "graphiti_projection_digest": "sha256:d91c8b4a2e3772516a15a554d4c7c874be7693c0cba8a0751e223f69984a4ee5",
+          "reason_codes": [],
+          "sink_receipts": [],
+          "sink_state": "not_applicable",
+          "state": "ready"
+        },
+        "policy_digest": "sha256:2faf013ded756636adc22edad62312c225c8258ef61ba2e492a2de639c152790",
+        "rejection_journal_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+        "retrieval_projection_state": {
+          "database_file": "retrieval-9999999999999999999999999999999999999999999999999999999999999999.sqlite",
+          "dimensions": null,
+          "lexical_backend": "sqlite_fts5",
+          "manifest_digest": "sha256:8888888888888888888888888888888888888888888888888888888888888888",
+          "model_id": null,
+          "owner_generation_id": "ingest:777777777777777777777777",
+          "owner_manifest_digest": "sha256:7777777777777777777777777777777777777777777777777777777777777777",
+          "projection_digest": "sha256:9999999999999999999999999999999999999999999999999999999999999999",
+          "projection_id": "retrieval:999999999999999999999999",
+          "provider_id": null,
+          "provider_kind": null,
+          "reason_codes": [],
+          "state": "ready",
+          "vector_stage_state": "disabled"
+        },
+        "service_generation_id": "watcher:019b2d14-4234-7db7-87d4-7d81cfaec932",
+        "source_observation_snapshot_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+        "source_removal_event_count": 1,
+        "source_removal_event_set_digest": "sha256:2db012f01b22717007865a3cf9e4d1cd2d097611dab0143df6ed0b20e3e0b77a",
+        "topology_artifact_file": "watcher-topology-134fba9b6af89c9836d8f484935770f6092055e71bc9953eee7de7e14e6d27c2.json",
+        "topology_artifact_raw_sha256": "sha256:d27229a7d0aa6add14fe4df2c4c9c6915a98e96eabf43221d564e5d7216472ed",
+        "topology_snapshot_digest": "sha256:134fba9b6af89c9836d8f484935770f6092055e71bc9953eee7de7e14e6d27c2",
+        "validation_result_digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "vault_id": "phase5-watcher-convergence-v1"
+      },
+      "fixture_id": "status-serving-degraded",
+      "journal_generation": {
+        "anchor_coherent_manifest_digest": "sha256:177a81756885092e564c04051ebdd51b00f82060e50c1e5e938e5230b319cbec",
+        "contract_version": "gkos-watcher-journal-generation/1.0.0-draft.1",
+        "created_at": "2026-08-20T00:00:01.000Z",
+        "database_file": "watcher-journal.sqlite",
+        "directory_leaf": "journal-019b2d14-4232-7db7-87d4-7d81cfaec932",
+        "journal_generation_digest": "sha256:76b477b2be27e4c446f89072424ea7a52aec90e80fb3295e26e18deffddc4572",
+        "journal_instance_id": "019b2d14-4232-7db7-87d4-7d81cfaec932",
+        "meta_digest": "sha256:6d12c70486b20b0c222fb7cdbf8f77cb8a06dfe61666175f0ba75d400e1d6879"
+      },
+      "journal_pointer": {
+        "contract_version": "gkos-watcher-journal-active-pointer/1.0.0-draft.1",
+        "journal_generation_digest": "sha256:76b477b2be27e4c446f89072424ea7a52aec90e80fb3295e26e18deffddc4572",
+        "journal_generation_file": "watcher-journal-generation-76b477b2be27e4c446f89072424ea7a52aec90e80fb3295e26e18deffddc4572.json",
+        "kind": "watcher_journal",
+        "pointer_digest": "sha256:a960bf6f67aa4886c449a7be60b1ecc65462f7a694d05f8e236b1bb5c6c3e7f5",
+        "prior_pointer_digest": null
+      },
+      "locator": {
+        "contract_version": "gkos-watcher-service-locator/1.0.0-draft.1",
+        "control_route": "/control/shutdown",
+        "locator_digest": "sha256:2257377a1768a3cc8181d3429a73722fb748d593472189f295e274f7f552ac0b",
+        "loopback_host": "127.0.0.1",
+        "pid": 4242,
+        "port": 4317,
+        "service_instance_id": "019b2d14-4233-7db7-87d4-7d81cfaec932",
+        "started_at": "2026-08-20T00:00:00.000Z",
+        "status_route": "/status"
+      },
+      "reset_result": null,
+      "status": {
+        "chunk_count": 0,
+        "coherent_manifest_digest": "sha256:177a81756885092e564c04051ebdd51b00f82060e50c1e5e938e5230b319cbec",
+        "configuration_digest": "sha256:e389f35b91314acba93bb6a0d955af34a0df11b524701b6d9409e245d8f55c11",
+        "contract_version": "gkos-watcher-status/1.0.0-draft.1",
+        "document_count": 0,
+        "embedding_model": null,
+        "freshness": "degraded",
+        "last_sync": "2026-08-20T00:00:01.000Z",
+        "pid": 4242,
+        "policy_digest": "sha256:2faf013ded756636adc22edad62312c225c8258ef61ba2e492a2de639c152790",
+        "reason_codes": [
+          "WATCHER_SOURCE_REJECTED"
+        ],
+        "service_instance_id": "019b2d14-4233-7db7-87d4-7d81cfaec932",
+        "source_snapshot_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+        "status_digest": "sha256:1e7b6d86a5269867c7ab886c428d36aada99ea42058ee657fbc0c4438a082bf4",
+        "uptime_ms": 1234,
+        "watcher_state": "serving"
+      }
+    },
+    {
+      "active_coherent": {
+        "activated_at": "2026-08-20T00:00:01.000Z",
+        "active_digest": "sha256:9f495a92b6e64b3086a127872e93a2944d348daad008c4125c719c7050854492",
+        "coherent_manifest_digest": "sha256:177a81756885092e564c04051ebdd51b00f82060e50c1e5e938e5230b319cbec",
+        "contract_version": "gkos-watcher-active-coherent/1.0.0-draft.1",
+        "intent_digest": "sha256:3eb07354e37c9840d31822583813f8742b7794873f327c4374aac651d5fbba7e",
+        "pointer_digest": "sha256:a4c9231bff3bb97b57d23938ca17e6d50b48f78fc2dd92d103d29d45574b3c10",
+        "service_generation_id": "watcher:019b2d14-4234-7db7-87d4-7d81cfaec932"
+      },
+      "capability_state": "valid",
+      "coherent_manifest": {
+        "coherent_manifest_digest": "sha256:177a81756885092e564c04051ebdd51b00f82060e50c1e5e938e5230b319cbec",
+        "completed_batch_id": "019b2d14-4234-7db7-87d4-7d81cfaec932",
+        "completed_transition_digest": "sha256:014b59801d35093a4b2b336b7ed089d68e94ee99dc6de7ea986b042623fd3234",
+        "configuration_digest": "sha256:e389f35b91314acba93bb6a0d955af34a0df11b524701b6d9409e245d8f55c11",
+        "contract_version": "gkos-watcher-coherent-manifest/1.0.0-draft.1",
+        "created_at": "2026-08-20T00:00:01.000Z",
+        "effective_profile_digest": "sha256:d1155515ce03a7449821e1e14eb80256b70eae0d5048d9f5d1978863b201560e",
+        "gkx_snapshot_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        "graph_projection_state": {
+          "canonical_graph_digest": "sha256:551cfe82f7b39efe4e58bd3ba83dea738b25956283c171d3f20890c2a76c0d49",
+          "gkx_delta_digest": "sha256:99b3aa9e5945fe8e10fa6d482c4c49bef6deac7f868d8fc0880167fccd463070",
+          "graph_artifact_digest": "sha256:532820e0a26eac83bdc08fb0edff40ffb9f4fbe2241383a08bd51c8de9c15f25",
+          "graph_artifact_file": "watcher-graph-532820e0a26eac83bdc08fb0edff40ffb9f4fbe2241383a08bd51c8de9c15f25.json",
+          "graph_contract_version": "gkos-watcher-canonical-gkx-graph/1.0.0-draft.1",
+          "graphiti_projection_digest": "sha256:d91c8b4a2e3772516a15a554d4c7c874be7693c0cba8a0751e223f69984a4ee5",
+          "reason_codes": [],
+          "sink_receipts": [],
+          "sink_state": "not_applicable",
+          "state": "ready"
+        },
+        "policy_digest": "sha256:2faf013ded756636adc22edad62312c225c8258ef61ba2e492a2de639c152790",
+        "rejection_journal_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+        "retrieval_projection_state": {
+          "database_file": "retrieval-9999999999999999999999999999999999999999999999999999999999999999.sqlite",
+          "dimensions": null,
+          "lexical_backend": "sqlite_fts5",
+          "manifest_digest": "sha256:8888888888888888888888888888888888888888888888888888888888888888",
+          "model_id": null,
+          "owner_generation_id": "ingest:777777777777777777777777",
+          "owner_manifest_digest": "sha256:7777777777777777777777777777777777777777777777777777777777777777",
+          "projection_digest": "sha256:9999999999999999999999999999999999999999999999999999999999999999",
+          "projection_id": "retrieval:999999999999999999999999",
+          "provider_id": null,
+          "provider_kind": null,
+          "reason_codes": [],
+          "state": "ready",
+          "vector_stage_state": "disabled"
+        },
+        "service_generation_id": "watcher:019b2d14-4234-7db7-87d4-7d81cfaec932",
+        "source_observation_snapshot_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+        "source_removal_event_count": 1,
+        "source_removal_event_set_digest": "sha256:2db012f01b22717007865a3cf9e4d1cd2d097611dab0143df6ed0b20e3e0b77a",
+        "topology_artifact_file": "watcher-topology-134fba9b6af89c9836d8f484935770f6092055e71bc9953eee7de7e14e6d27c2.json",
+        "topology_artifact_raw_sha256": "sha256:d27229a7d0aa6add14fe4df2c4c9c6915a98e96eabf43221d564e5d7216472ed",
+        "topology_snapshot_digest": "sha256:134fba9b6af89c9836d8f484935770f6092055e71bc9953eee7de7e14e6d27c2",
+        "validation_result_digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "vault_id": "phase5-watcher-convergence-v1"
+      },
+      "fixture_id": "status-serving-fresh",
+      "journal_generation": {
+        "anchor_coherent_manifest_digest": "sha256:177a81756885092e564c04051ebdd51b00f82060e50c1e5e938e5230b319cbec",
+        "contract_version": "gkos-watcher-journal-generation/1.0.0-draft.1",
+        "created_at": "2026-08-20T00:00:01.000Z",
+        "database_file": "watcher-journal.sqlite",
+        "directory_leaf": "journal-019b2d14-4232-7db7-87d4-7d81cfaec932",
+        "journal_generation_digest": "sha256:76b477b2be27e4c446f89072424ea7a52aec90e80fb3295e26e18deffddc4572",
+        "journal_instance_id": "019b2d14-4232-7db7-87d4-7d81cfaec932",
+        "meta_digest": "sha256:6d12c70486b20b0c222fb7cdbf8f77cb8a06dfe61666175f0ba75d400e1d6879"
+      },
+      "journal_pointer": {
+        "contract_version": "gkos-watcher-journal-active-pointer/1.0.0-draft.1",
+        "journal_generation_digest": "sha256:76b477b2be27e4c446f89072424ea7a52aec90e80fb3295e26e18deffddc4572",
+        "journal_generation_file": "watcher-journal-generation-76b477b2be27e4c446f89072424ea7a52aec90e80fb3295e26e18deffddc4572.json",
+        "kind": "watcher_journal",
+        "pointer_digest": "sha256:a960bf6f67aa4886c449a7be60b1ecc65462f7a694d05f8e236b1bb5c6c3e7f5",
+        "prior_pointer_digest": null
+      },
+      "locator": {
+        "contract_version": "gkos-watcher-service-locator/1.0.0-draft.1",
+        "control_route": "/control/shutdown",
+        "locator_digest": "sha256:2257377a1768a3cc8181d3429a73722fb748d593472189f295e274f7f552ac0b",
+        "loopback_host": "127.0.0.1",
+        "pid": 4242,
+        "port": 4317,
+        "service_instance_id": "019b2d14-4233-7db7-87d4-7d81cfaec932",
+        "started_at": "2026-08-20T00:00:00.000Z",
+        "status_route": "/status"
+      },
+      "reset_result": null,
+      "status": {
+        "chunk_count": 0,
+        "coherent_manifest_digest": "sha256:177a81756885092e564c04051ebdd51b00f82060e50c1e5e938e5230b319cbec",
+        "configuration_digest": "sha256:e389f35b91314acba93bb6a0d955af34a0df11b524701b6d9409e245d8f55c11",
+        "contract_version": "gkos-watcher-status/1.0.0-draft.1",
+        "document_count": 0,
+        "embedding_model": null,
+        "freshness": "fresh",
+        "last_sync": "2026-08-20T00:00:01.000Z",
+        "pid": 4242,
+        "policy_digest": "sha256:2faf013ded756636adc22edad62312c225c8258ef61ba2e492a2de639c152790",
+        "reason_codes": [],
+        "service_instance_id": "019b2d14-4233-7db7-87d4-7d81cfaec932",
+        "source_snapshot_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+        "status_digest": "sha256:03e288c99b60e1bba37d769bdda864c5e53cfb6f1adbf0ff385e0a790291380b",
+        "uptime_ms": 1234,
+        "watcher_state": "serving"
+      }
+    }
+  ]
+}

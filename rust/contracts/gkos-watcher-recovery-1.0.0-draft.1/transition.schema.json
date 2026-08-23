@@ -1,0 +1,5274 @@
+{
+  "$defs": {
+    "graphProjectionState": {
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "else": {
+            "properties": {
+              "canonical_graph_digest": {
+                "pattern": "^sha256:[0-9a-f]{64}$",
+                "type": "string"
+              },
+              "gkx_delta_digest": {
+                "pattern": "^sha256:[0-9a-f]{64}$",
+                "type": "string"
+              },
+              "graph_artifact_digest": {
+                "pattern": "^sha256:[0-9a-f]{64}$",
+                "type": "string"
+              },
+              "graph_artifact_file": {
+                "pattern": "^watcher-graph-[0-9a-f]{64}\\.json$",
+                "type": "string"
+              },
+              "graph_contract_version": {
+                "const": "gkos-watcher-canonical-gkx-graph/1.0.0-draft.1"
+              },
+              "graphiti_projection_digest": {
+                "pattern": "^sha256:[0-9a-f]{64}$",
+                "type": "string"
+              },
+              "reason_codes": {
+                "maxItems": 0,
+                "type": "array"
+              },
+              "sink_receipts": {
+                "maxItems": 0,
+                "type": "array"
+              },
+              "sink_state": {
+                "const": "not_applicable"
+              }
+            }
+          },
+          "if": {
+            "properties": {
+              "state": {
+                "const": "not_started"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "canonical_graph_digest": {
+                "type": "null"
+              },
+              "gkx_delta_digest": {
+                "type": "null"
+              },
+              "graph_artifact_digest": {
+                "type": "null"
+              },
+              "graph_artifact_file": {
+                "type": "null"
+              },
+              "graph_contract_version": {
+                "type": "null"
+              },
+              "graphiti_projection_digest": {
+                "type": "null"
+              },
+              "reason_codes": {
+                "maxItems": 0,
+                "type": "array"
+              },
+              "sink_receipts": {
+                "maxItems": 0,
+                "type": "array"
+              },
+              "sink_state": {
+                "const": "not_applicable"
+              }
+            }
+          }
+        }
+      ],
+      "properties": {
+        "canonical_graph_digest": {
+          "anyOf": [
+            {
+              "pattern": "^sha256:[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "gkx_delta_digest": {
+          "anyOf": [
+            {
+              "pattern": "^sha256:[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "graph_artifact_digest": {
+          "anyOf": [
+            {
+              "pattern": "^sha256:[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "graph_artifact_file": {
+          "anyOf": [
+            {
+              "pattern": "^watcher-graph-[0-9a-f]{64}\\.json$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "graph_contract_version": {
+          "anyOf": [
+            {
+              "const": "gkos-watcher-canonical-gkx-graph/1.0.0-draft.1"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "graphiti_projection_digest": {
+          "anyOf": [
+            {
+              "pattern": "^sha256:[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "reason_codes": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 64,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "sink_receipts": {
+          "maxItems": 0,
+          "type": "array"
+        },
+        "sink_state": {
+          "const": "not_applicable"
+        },
+        "state": {
+          "enum": [
+            "not_started",
+            "ready"
+          ]
+        }
+      },
+      "required": [
+        "state",
+        "graph_contract_version",
+        "graph_artifact_file",
+        "graph_artifact_digest",
+        "canonical_graph_digest",
+        "gkx_delta_digest",
+        "graphiti_projection_digest",
+        "sink_state",
+        "sink_receipts",
+        "reason_codes"
+      ],
+      "type": "object",
+      "unevaluatedProperties": false
+    },
+    "normalizedGraphDelta": {
+      "additionalProperties": false,
+      "properties": {
+        "contract_version": {
+          "const": "gkos-watcher-normalized-graph-delta/1.0.0-draft.1"
+        },
+        "delta": {
+          "additionalProperties": false,
+          "properties": {
+            "addedNodes": {
+              "items": {
+                "type": "string"
+              },
+              "maxItems": 1000000,
+              "type": "array",
+              "uniqueItems": true
+            },
+            "changedNodes": {
+              "items": {
+                "type": "string"
+              },
+              "maxItems": 1000000,
+              "type": "array",
+              "uniqueItems": true
+            },
+            "fullRebuild": {
+              "type": "boolean"
+            },
+            "removedNodes": {
+              "items": {
+                "type": "string"
+              },
+              "maxItems": 1000000,
+              "type": "array",
+              "uniqueItems": true
+            },
+            "reparsed": {
+              "maximum": 9007199254740991,
+              "minimum": 0,
+              "type": "integer"
+            },
+            "topologyChanged": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "addedNodes",
+            "removedNodes",
+            "changedNodes",
+            "topologyChanged",
+            "reparsed",
+            "fullRebuild"
+          ],
+          "type": "object",
+          "unevaluatedProperties": false
+        }
+      },
+      "required": [
+        "contract_version",
+        "delta"
+      ],
+      "type": "object",
+      "unevaluatedProperties": false
+    },
+    "retrievalProjectionState": {
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "else": {
+            "properties": {
+              "database_file": {
+                "pattern": "^retrieval-[0-9a-f]{64}\\.sqlite$",
+                "type": "string"
+              },
+              "lexical_backend": {
+                "enum": [
+                  "sqlite_fts5",
+                  "sqlite_lexical_scan"
+                ]
+              },
+              "manifest_digest": {
+                "pattern": "^sha256:[0-9a-f]{64}$",
+                "type": "string"
+              },
+              "owner_generation_id": {
+                "pattern": "^ingest:[0-9a-f]{24}$",
+                "type": "string"
+              },
+              "owner_manifest_digest": {
+                "pattern": "^sha256:[0-9a-f]{64}$",
+                "type": "string"
+              },
+              "projection_digest": {
+                "pattern": "^sha256:[0-9a-f]{64}$",
+                "type": "string"
+              },
+              "projection_id": {
+                "pattern": "^retrieval:[0-9a-f]{24}$",
+                "type": "string"
+              },
+              "vector_stage_state": {
+                "enum": [
+                  "disabled",
+                  "complete",
+                  "degraded"
+                ]
+              }
+            }
+          },
+          "if": {
+            "properties": {
+              "state": {
+                "const": "not_started"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "database_file": {
+                "type": "null"
+              },
+              "dimensions": {
+                "type": "null"
+              },
+              "lexical_backend": {
+                "type": "null"
+              },
+              "manifest_digest": {
+                "type": "null"
+              },
+              "model_id": {
+                "type": "null"
+              },
+              "owner_generation_id": {
+                "type": "null"
+              },
+              "owner_manifest_digest": {
+                "type": "null"
+              },
+              "projection_digest": {
+                "type": "null"
+              },
+              "projection_id": {
+                "type": "null"
+              },
+              "provider_id": {
+                "type": "null"
+              },
+              "provider_kind": {
+                "type": "null"
+              },
+              "reason_codes": {
+                "maxItems": 0,
+                "type": "array"
+              },
+              "vector_stage_state": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "else": {
+            "if": {
+              "properties": {
+                "state": {
+                  "const": "ready"
+                }
+              },
+              "required": [
+                "state"
+              ]
+            },
+            "then": {
+              "properties": {
+                "dimensions": {
+                  "maximum": 9007199254740991,
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                "model_id": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "provider_id": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "provider_kind": {
+                  "enum": [
+                    "openai_compatible",
+                    "local_onnx",
+                    "mcp"
+                  ]
+                }
+              }
+            }
+          },
+          "if": {
+            "properties": {
+              "state": {
+                "const": "ready"
+              },
+              "vector_stage_state": {
+                "const": "disabled"
+              }
+            },
+            "required": [
+              "state",
+              "vector_stage_state"
+            ]
+          },
+          "then": {
+            "properties": {
+              "dimensions": {
+                "type": "null"
+              },
+              "model_id": {
+                "type": "null"
+              },
+              "provider_id": {
+                "type": "null"
+              },
+              "provider_kind": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ],
+      "properties": {
+        "database_file": {
+          "anyOf": [
+            {
+              "pattern": "^retrieval-[0-9a-f]{64}\\.sqlite$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "dimensions": {
+          "anyOf": [
+            {
+              "maximum": 9007199254740991,
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "lexical_backend": {
+          "anyOf": [
+            {
+              "enum": [
+                "sqlite_fts5",
+                "sqlite_lexical_scan"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "manifest_digest": {
+          "anyOf": [
+            {
+              "pattern": "^sha256:[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "model_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "owner_generation_id": {
+          "anyOf": [
+            {
+              "pattern": "^ingest:[0-9a-f]{24}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "owner_manifest_digest": {
+          "anyOf": [
+            {
+              "pattern": "^sha256:[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "projection_digest": {
+          "anyOf": [
+            {
+              "pattern": "^sha256:[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "projection_id": {
+          "anyOf": [
+            {
+              "pattern": "^retrieval:[0-9a-f]{24}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "provider_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "provider_kind": {
+          "anyOf": [
+            {
+              "enum": [
+                "openai_compatible",
+                "local_onnx",
+                "mcp"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "reason_codes": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 64,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "state": {
+          "enum": [
+            "not_started",
+            "ready"
+          ]
+        },
+        "vector_stage_state": {
+          "anyOf": [
+            {
+              "enum": [
+                "disabled",
+                "complete",
+                "degraded"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "state",
+        "owner_generation_id",
+        "owner_manifest_digest",
+        "database_file",
+        "manifest_digest",
+        "projection_id",
+        "projection_digest",
+        "lexical_backend",
+        "vector_stage_state",
+        "provider_kind",
+        "provider_id",
+        "model_id",
+        "dimensions",
+        "reason_codes"
+      ],
+      "type": "object",
+      "unevaluatedProperties": false
+    },
+    "transition": {
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "state": {
+                "const": "observed"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "completed_at": {
+                "type": "null"
+              },
+              "gkx_delta_digest": {
+                "type": "null"
+              },
+              "gkx_snapshot_digest": {
+                "type": "null"
+              },
+              "graph_projection_state": {
+                "additionalProperties": false,
+                "allOf": [
+                  {
+                    "else": {
+                      "properties": {
+                        "canonical_graph_digest": {
+                          "pattern": "^sha256:[0-9a-f]{64}$",
+                          "type": "string"
+                        },
+                        "gkx_delta_digest": {
+                          "pattern": "^sha256:[0-9a-f]{64}$",
+                          "type": "string"
+                        },
+                        "graph_artifact_digest": {
+                          "pattern": "^sha256:[0-9a-f]{64}$",
+                          "type": "string"
+                        },
+                        "graph_artifact_file": {
+                          "pattern": "^watcher-graph-[0-9a-f]{64}\\.json$",
+                          "type": "string"
+                        },
+                        "graph_contract_version": {
+                          "const": "gkos-watcher-canonical-gkx-graph/1.0.0-draft.1"
+                        },
+                        "graphiti_projection_digest": {
+                          "pattern": "^sha256:[0-9a-f]{64}$",
+                          "type": "string"
+                        },
+                        "reason_codes": {
+                          "maxItems": 0,
+                          "type": "array"
+                        },
+                        "sink_receipts": {
+                          "maxItems": 0,
+                          "type": "array"
+                        },
+                        "sink_state": {
+                          "const": "not_applicable"
+                        }
+                      }
+                    },
+                    "if": {
+                      "properties": {
+                        "state": {
+                          "const": "not_started"
+                        }
+                      }
+                    },
+                    "then": {
+                      "properties": {
+                        "canonical_graph_digest": {
+                          "type": "null"
+                        },
+                        "gkx_delta_digest": {
+                          "type": "null"
+                        },
+                        "graph_artifact_digest": {
+                          "type": "null"
+                        },
+                        "graph_artifact_file": {
+                          "type": "null"
+                        },
+                        "graph_contract_version": {
+                          "type": "null"
+                        },
+                        "graphiti_projection_digest": {
+                          "type": "null"
+                        },
+                        "reason_codes": {
+                          "maxItems": 0,
+                          "type": "array"
+                        },
+                        "sink_receipts": {
+                          "maxItems": 0,
+                          "type": "array"
+                        },
+                        "sink_state": {
+                          "const": "not_applicable"
+                        }
+                      }
+                    }
+                  }
+                ],
+                "properties": {
+                  "canonical_graph_digest": {
+                    "anyOf": [
+                      {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "gkx_delta_digest": {
+                    "anyOf": [
+                      {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "graph_artifact_digest": {
+                    "anyOf": [
+                      {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "graph_artifact_file": {
+                    "anyOf": [
+                      {
+                        "pattern": "^watcher-graph-[0-9a-f]{64}\\.json$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "graph_contract_version": {
+                    "anyOf": [
+                      {
+                        "const": "gkos-watcher-canonical-gkx-graph/1.0.0-draft.1"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "graphiti_projection_digest": {
+                    "anyOf": [
+                      {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "reason_codes": {
+                    "items": {
+                      "type": "string"
+                    },
+                    "maxItems": 64,
+                    "type": "array",
+                    "uniqueItems": true
+                  },
+                  "sink_receipts": {
+                    "maxItems": 0,
+                    "type": "array"
+                  },
+                  "sink_state": {
+                    "const": "not_applicable"
+                  },
+                  "state": {
+                    "const": "not_started"
+                  }
+                },
+                "required": [
+                  "state",
+                  "graph_contract_version",
+                  "graph_artifact_file",
+                  "graph_artifact_digest",
+                  "canonical_graph_digest",
+                  "gkx_delta_digest",
+                  "graphiti_projection_digest",
+                  "sink_state",
+                  "sink_receipts",
+                  "reason_codes"
+                ],
+                "type": "object",
+                "unevaluatedProperties": false
+              },
+              "last_reached_state": {
+                "const": "observed"
+              },
+              "plan_digest": {
+                "type": "null"
+              },
+              "reason_codes": {
+                "maxItems": 0,
+                "type": "array"
+              },
+              "retrieval_projection_state": {
+                "additionalProperties": false,
+                "allOf": [
+                  {
+                    "else": {
+                      "properties": {
+                        "database_file": {
+                          "pattern": "^retrieval-[0-9a-f]{64}\\.sqlite$",
+                          "type": "string"
+                        },
+                        "lexical_backend": {
+                          "enum": [
+                            "sqlite_fts5",
+                            "sqlite_lexical_scan"
+                          ]
+                        },
+                        "manifest_digest": {
+                          "pattern": "^sha256:[0-9a-f]{64}$",
+                          "type": "string"
+                        },
+                        "owner_generation_id": {
+                          "pattern": "^ingest:[0-9a-f]{24}$",
+                          "type": "string"
+                        },
+                        "owner_manifest_digest": {
+                          "pattern": "^sha256:[0-9a-f]{64}$",
+                          "type": "string"
+                        },
+                        "projection_digest": {
+                          "pattern": "^sha256:[0-9a-f]{64}$",
+                          "type": "string"
+                        },
+                        "projection_id": {
+                          "pattern": "^retrieval:[0-9a-f]{24}$",
+                          "type": "string"
+                        },
+                        "vector_stage_state": {
+                          "enum": [
+                            "disabled",
+                            "complete",
+                            "degraded"
+                          ]
+                        }
+                      }
+                    },
+                    "if": {
+                      "properties": {
+                        "state": {
+                          "const": "not_started"
+                        }
+                      }
+                    },
+                    "then": {
+                      "properties": {
+                        "database_file": {
+                          "type": "null"
+                        },
+                        "dimensions": {
+                          "type": "null"
+                        },
+                        "lexical_backend": {
+                          "type": "null"
+                        },
+                        "manifest_digest": {
+                          "type": "null"
+                        },
+                        "model_id": {
+                          "type": "null"
+                        },
+                        "owner_generation_id": {
+                          "type": "null"
+                        },
+                        "owner_manifest_digest": {
+                          "type": "null"
+                        },
+                        "projection_digest": {
+                          "type": "null"
+                        },
+                        "projection_id": {
+                          "type": "null"
+                        },
+                        "provider_id": {
+                          "type": "null"
+                        },
+                        "provider_kind": {
+                          "type": "null"
+                        },
+                        "reason_codes": {
+                          "maxItems": 0,
+                          "type": "array"
+                        },
+                        "vector_stage_state": {
+                          "type": "null"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "else": {
+                      "if": {
+                        "properties": {
+                          "state": {
+                            "const": "ready"
+                          }
+                        },
+                        "required": [
+                          "state"
+                        ]
+                      },
+                      "then": {
+                        "properties": {
+                          "dimensions": {
+                            "maximum": 9007199254740991,
+                            "minimum": 1,
+                            "type": "integer"
+                          },
+                          "model_id": {
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "provider_id": {
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "provider_kind": {
+                            "enum": [
+                              "openai_compatible",
+                              "local_onnx",
+                              "mcp"
+                            ]
+                          }
+                        }
+                      }
+                    },
+                    "if": {
+                      "properties": {
+                        "state": {
+                          "const": "ready"
+                        },
+                        "vector_stage_state": {
+                          "const": "disabled"
+                        }
+                      },
+                      "required": [
+                        "state",
+                        "vector_stage_state"
+                      ]
+                    },
+                    "then": {
+                      "properties": {
+                        "dimensions": {
+                          "type": "null"
+                        },
+                        "model_id": {
+                          "type": "null"
+                        },
+                        "provider_id": {
+                          "type": "null"
+                        },
+                        "provider_kind": {
+                          "type": "null"
+                        }
+                      }
+                    }
+                  }
+                ],
+                "properties": {
+                  "database_file": {
+                    "anyOf": [
+                      {
+                        "pattern": "^retrieval-[0-9a-f]{64}\\.sqlite$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "dimensions": {
+                    "anyOf": [
+                      {
+                        "maximum": 9007199254740991,
+                        "minimum": 1,
+                        "type": "integer"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "lexical_backend": {
+                    "anyOf": [
+                      {
+                        "enum": [
+                          "sqlite_fts5",
+                          "sqlite_lexical_scan"
+                        ]
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "manifest_digest": {
+                    "anyOf": [
+                      {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "model_id": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "owner_generation_id": {
+                    "anyOf": [
+                      {
+                        "pattern": "^ingest:[0-9a-f]{24}$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "owner_manifest_digest": {
+                    "anyOf": [
+                      {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "projection_digest": {
+                    "anyOf": [
+                      {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "projection_id": {
+                    "anyOf": [
+                      {
+                        "pattern": "^retrieval:[0-9a-f]{24}$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "provider_id": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "provider_kind": {
+                    "anyOf": [
+                      {
+                        "enum": [
+                          "openai_compatible",
+                          "local_onnx",
+                          "mcp"
+                        ]
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "reason_codes": {
+                    "items": {
+                      "type": "string"
+                    },
+                    "maxItems": 64,
+                    "type": "array",
+                    "uniqueItems": true
+                  },
+                  "state": {
+                    "const": "not_started"
+                  },
+                  "vector_stage_state": {
+                    "anyOf": [
+                      {
+                        "enum": [
+                          "disabled",
+                          "complete",
+                          "degraded"
+                        ]
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "state",
+                  "owner_generation_id",
+                  "owner_manifest_digest",
+                  "database_file",
+                  "manifest_digest",
+                  "projection_id",
+                  "projection_digest",
+                  "lexical_backend",
+                  "vector_stage_state",
+                  "provider_kind",
+                  "provider_id",
+                  "model_id",
+                  "dimensions",
+                  "reason_codes"
+                ],
+                "type": "object",
+                "unevaluatedProperties": false
+              },
+              "terminal_state": {
+                "const": "open"
+              },
+              "transition_ordinal": {
+                "const": 0
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "state": {
+                "const": "normalized"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "completed_at": {
+                "type": "null"
+              },
+              "gkx_delta_digest": {
+                "type": "null"
+              },
+              "gkx_snapshot_digest": {
+                "type": "null"
+              },
+              "graph_projection_state": {
+                "additionalProperties": false,
+                "allOf": [
+                  {
+                    "else": {
+                      "properties": {
+                        "canonical_graph_digest": {
+                          "pattern": "^sha256:[0-9a-f]{64}$",
+                          "type": "string"
+                        },
+                        "gkx_delta_digest": {
+                          "pattern": "^sha256:[0-9a-f]{64}$",
+                          "type": "string"
+                        },
+                        "graph_artifact_digest": {
+                          "pattern": "^sha256:[0-9a-f]{64}$",
+                          "type": "string"
+                        },
+                        "graph_artifact_file": {
+                          "pattern": "^watcher-graph-[0-9a-f]{64}\\.json$",
+                          "type": "string"
+                        },
+                        "graph_contract_version": {
+                          "const": "gkos-watcher-canonical-gkx-graph/1.0.0-draft.1"
+                        },
+                        "graphiti_projection_digest": {
+                          "pattern": "^sha256:[0-9a-f]{64}$",
+                          "type": "string"
+                        },
+                        "reason_codes": {
+                          "maxItems": 0,
+                          "type": "array"
+                        },
+                        "sink_receipts": {
+                          "maxItems": 0,
+                          "type": "array"
+                        },
+                        "sink_state": {
+                          "const": "not_applicable"
+                        }
+                      }
+                    },
+                    "if": {
+                      "properties": {
+                        "state": {
+                          "const": "not_started"
+                        }
+                      }
+                    },
+                    "then": {
+                      "properties": {
+                        "canonical_graph_digest": {
+                          "type": "null"
+                        },
+                        "gkx_delta_digest": {
+                          "type": "null"
+                        },
+                        "graph_artifact_digest": {
+                          "type": "null"
+                        },
+                        "graph_artifact_file": {
+                          "type": "null"
+                        },
+                        "graph_contract_version": {
+                          "type": "null"
+                        },
+                        "graphiti_projection_digest": {
+                          "type": "null"
+                        },
+                        "reason_codes": {
+                          "maxItems": 0,
+                          "type": "array"
+                        },
+                        "sink_receipts": {
+                          "maxItems": 0,
+                          "type": "array"
+                        },
+                        "sink_state": {
+                          "const": "not_applicable"
+                        }
+                      }
+                    }
+                  }
+                ],
+                "properties": {
+                  "canonical_graph_digest": {
+                    "anyOf": [
+                      {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "gkx_delta_digest": {
+                    "anyOf": [
+                      {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "graph_artifact_digest": {
+                    "anyOf": [
+                      {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "graph_artifact_file": {
+                    "anyOf": [
+                      {
+                        "pattern": "^watcher-graph-[0-9a-f]{64}\\.json$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "graph_contract_version": {
+                    "anyOf": [
+                      {
+                        "const": "gkos-watcher-canonical-gkx-graph/1.0.0-draft.1"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "graphiti_projection_digest": {
+                    "anyOf": [
+                      {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "reason_codes": {
+                    "items": {
+                      "type": "string"
+                    },
+                    "maxItems": 64,
+                    "type": "array",
+                    "uniqueItems": true
+                  },
+                  "sink_receipts": {
+                    "maxItems": 0,
+                    "type": "array"
+                  },
+                  "sink_state": {
+                    "const": "not_applicable"
+                  },
+                  "state": {
+                    "const": "not_started"
+                  }
+                },
+                "required": [
+                  "state",
+                  "graph_contract_version",
+                  "graph_artifact_file",
+                  "graph_artifact_digest",
+                  "canonical_graph_digest",
+                  "gkx_delta_digest",
+                  "graphiti_projection_digest",
+                  "sink_state",
+                  "sink_receipts",
+                  "reason_codes"
+                ],
+                "type": "object",
+                "unevaluatedProperties": false
+              },
+              "last_reached_state": {
+                "const": "normalized"
+              },
+              "plan_digest": {
+                "pattern": "^sha256:[0-9a-f]{64}$",
+                "type": "string"
+              },
+              "reason_codes": {
+                "maxItems": 0,
+                "type": "array"
+              },
+              "retrieval_projection_state": {
+                "additionalProperties": false,
+                "allOf": [
+                  {
+                    "else": {
+                      "properties": {
+                        "database_file": {
+                          "pattern": "^retrieval-[0-9a-f]{64}\\.sqlite$",
+                          "type": "string"
+                        },
+                        "lexical_backend": {
+                          "enum": [
+                            "sqlite_fts5",
+                            "sqlite_lexical_scan"
+                          ]
+                        },
+                        "manifest_digest": {
+                          "pattern": "^sha256:[0-9a-f]{64}$",
+                          "type": "string"
+                        },
+                        "owner_generation_id": {
+                          "pattern": "^ingest:[0-9a-f]{24}$",
+                          "type": "string"
+                        },
+                        "owner_manifest_digest": {
+                          "pattern": "^sha256:[0-9a-f]{64}$",
+                          "type": "string"
+                        },
+                        "projection_digest": {
+                          "pattern": "^sha256:[0-9a-f]{64}$",
+                          "type": "string"
+                        },
+                        "projection_id": {
+                          "pattern": "^retrieval:[0-9a-f]{24}$",
+                          "type": "string"
+                        },
+                        "vector_stage_state": {
+                          "enum": [
+                            "disabled",
+                            "complete",
+                            "degraded"
+                          ]
+                        }
+                      }
+                    },
+                    "if": {
+                      "properties": {
+                        "state": {
+                          "const": "not_started"
+                        }
+                      }
+                    },
+                    "then": {
+                      "properties": {
+                        "database_file": {
+                          "type": "null"
+                        },
+                        "dimensions": {
+                          "type": "null"
+                        },
+                        "lexical_backend": {
+                          "type": "null"
+                        },
+                        "manifest_digest": {
+                          "type": "null"
+                        },
+                        "model_id": {
+                          "type": "null"
+                        },
+                        "owner_generation_id": {
+                          "type": "null"
+                        },
+                        "owner_manifest_digest": {
+                          "type": "null"
+                        },
+                        "projection_digest": {
+                          "type": "null"
+                        },
+                        "projection_id": {
+                          "type": "null"
+                        },
+                        "provider_id": {
+                          "type": "null"
+                        },
+                        "provider_kind": {
+                          "type": "null"
+                        },
+                        "reason_codes": {
+                          "maxItems": 0,
+                          "type": "array"
+                        },
+                        "vector_stage_state": {
+                          "type": "null"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "else": {
+                      "if": {
+                        "properties": {
+                          "state": {
+                            "const": "ready"
+                          }
+                        },
+                        "required": [
+                          "state"
+                        ]
+                      },
+                      "then": {
+                        "properties": {
+                          "dimensions": {
+                            "maximum": 9007199254740991,
+                            "minimum": 1,
+                            "type": "integer"
+                          },
+                          "model_id": {
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "provider_id": {
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "provider_kind": {
+                            "enum": [
+                              "openai_compatible",
+                              "local_onnx",
+                              "mcp"
+                            ]
+                          }
+                        }
+                      }
+                    },
+                    "if": {
+                      "properties": {
+                        "state": {
+                          "const": "ready"
+                        },
+                        "vector_stage_state": {
+                          "const": "disabled"
+                        }
+                      },
+                      "required": [
+                        "state",
+                        "vector_stage_state"
+                      ]
+                    },
+                    "then": {
+                      "properties": {
+                        "dimensions": {
+                          "type": "null"
+                        },
+                        "model_id": {
+                          "type": "null"
+                        },
+                        "provider_id": {
+                          "type": "null"
+                        },
+                        "provider_kind": {
+                          "type": "null"
+                        }
+                      }
+                    }
+                  }
+                ],
+                "properties": {
+                  "database_file": {
+                    "anyOf": [
+                      {
+                        "pattern": "^retrieval-[0-9a-f]{64}\\.sqlite$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "dimensions": {
+                    "anyOf": [
+                      {
+                        "maximum": 9007199254740991,
+                        "minimum": 1,
+                        "type": "integer"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "lexical_backend": {
+                    "anyOf": [
+                      {
+                        "enum": [
+                          "sqlite_fts5",
+                          "sqlite_lexical_scan"
+                        ]
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "manifest_digest": {
+                    "anyOf": [
+                      {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "model_id": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "owner_generation_id": {
+                    "anyOf": [
+                      {
+                        "pattern": "^ingest:[0-9a-f]{24}$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "owner_manifest_digest": {
+                    "anyOf": [
+                      {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "projection_digest": {
+                    "anyOf": [
+                      {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "projection_id": {
+                    "anyOf": [
+                      {
+                        "pattern": "^retrieval:[0-9a-f]{24}$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "provider_id": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "provider_kind": {
+                    "anyOf": [
+                      {
+                        "enum": [
+                          "openai_compatible",
+                          "local_onnx",
+                          "mcp"
+                        ]
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "reason_codes": {
+                    "items": {
+                      "type": "string"
+                    },
+                    "maxItems": 64,
+                    "type": "array",
+                    "uniqueItems": true
+                  },
+                  "state": {
+                    "const": "not_started"
+                  },
+                  "vector_stage_state": {
+                    "anyOf": [
+                      {
+                        "enum": [
+                          "disabled",
+                          "complete",
+                          "degraded"
+                        ]
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "state",
+                  "owner_generation_id",
+                  "owner_manifest_digest",
+                  "database_file",
+                  "manifest_digest",
+                  "projection_id",
+                  "projection_digest",
+                  "lexical_backend",
+                  "vector_stage_state",
+                  "provider_kind",
+                  "provider_id",
+                  "model_id",
+                  "dimensions",
+                  "reason_codes"
+                ],
+                "type": "object",
+                "unevaluatedProperties": false
+              },
+              "terminal_state": {
+                "const": "open"
+              },
+              "transition_ordinal": {
+                "const": 1
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "state": {
+                "const": "gkx_applied"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "completed_at": {
+                "type": "null"
+              },
+              "gkx_delta_digest": {
+                "pattern": "^sha256:[0-9a-f]{64}$",
+                "type": "string"
+              },
+              "gkx_snapshot_digest": {
+                "pattern": "^sha256:[0-9a-f]{64}$",
+                "type": "string"
+              },
+              "graph_projection_state": {
+                "additionalProperties": false,
+                "allOf": [
+                  {
+                    "else": {
+                      "properties": {
+                        "canonical_graph_digest": {
+                          "pattern": "^sha256:[0-9a-f]{64}$",
+                          "type": "string"
+                        },
+                        "gkx_delta_digest": {
+                          "pattern": "^sha256:[0-9a-f]{64}$",
+                          "type": "string"
+                        },
+                        "graph_artifact_digest": {
+                          "pattern": "^sha256:[0-9a-f]{64}$",
+                          "type": "string"
+                        },
+                        "graph_artifact_file": {
+                          "pattern": "^watcher-graph-[0-9a-f]{64}\\.json$",
+                          "type": "string"
+                        },
+                        "graph_contract_version": {
+                          "const": "gkos-watcher-canonical-gkx-graph/1.0.0-draft.1"
+                        },
+                        "graphiti_projection_digest": {
+                          "pattern": "^sha256:[0-9a-f]{64}$",
+                          "type": "string"
+                        },
+                        "reason_codes": {
+                          "maxItems": 0,
+                          "type": "array"
+                        },
+                        "sink_receipts": {
+                          "maxItems": 0,
+                          "type": "array"
+                        },
+                        "sink_state": {
+                          "const": "not_applicable"
+                        }
+                      }
+                    },
+                    "if": {
+                      "properties": {
+                        "state": {
+                          "const": "not_started"
+                        }
+                      }
+                    },
+                    "then": {
+                      "properties": {
+                        "canonical_graph_digest": {
+                          "type": "null"
+                        },
+                        "gkx_delta_digest": {
+                          "type": "null"
+                        },
+                        "graph_artifact_digest": {
+                          "type": "null"
+                        },
+                        "graph_artifact_file": {
+                          "type": "null"
+                        },
+                        "graph_contract_version": {
+                          "type": "null"
+                        },
+                        "graphiti_projection_digest": {
+                          "type": "null"
+                        },
+                        "reason_codes": {
+                          "maxItems": 0,
+                          "type": "array"
+                        },
+                        "sink_receipts": {
+                          "maxItems": 0,
+                          "type": "array"
+                        },
+                        "sink_state": {
+                          "const": "not_applicable"
+                        }
+                      }
+                    }
+                  }
+                ],
+                "properties": {
+                  "canonical_graph_digest": {
+                    "anyOf": [
+                      {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "gkx_delta_digest": {
+                    "anyOf": [
+                      {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "graph_artifact_digest": {
+                    "anyOf": [
+                      {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "graph_artifact_file": {
+                    "anyOf": [
+                      {
+                        "pattern": "^watcher-graph-[0-9a-f]{64}\\.json$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "graph_contract_version": {
+                    "anyOf": [
+                      {
+                        "const": "gkos-watcher-canonical-gkx-graph/1.0.0-draft.1"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "graphiti_projection_digest": {
+                    "anyOf": [
+                      {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "reason_codes": {
+                    "items": {
+                      "type": "string"
+                    },
+                    "maxItems": 64,
+                    "type": "array",
+                    "uniqueItems": true
+                  },
+                  "sink_receipts": {
+                    "maxItems": 0,
+                    "type": "array"
+                  },
+                  "sink_state": {
+                    "const": "not_applicable"
+                  },
+                  "state": {
+                    "const": "not_started"
+                  }
+                },
+                "required": [
+                  "state",
+                  "graph_contract_version",
+                  "graph_artifact_file",
+                  "graph_artifact_digest",
+                  "canonical_graph_digest",
+                  "gkx_delta_digest",
+                  "graphiti_projection_digest",
+                  "sink_state",
+                  "sink_receipts",
+                  "reason_codes"
+                ],
+                "type": "object",
+                "unevaluatedProperties": false
+              },
+              "last_reached_state": {
+                "const": "gkx_applied"
+              },
+              "plan_digest": {
+                "pattern": "^sha256:[0-9a-f]{64}$",
+                "type": "string"
+              },
+              "reason_codes": {
+                "maxItems": 0,
+                "type": "array"
+              },
+              "retrieval_projection_state": {
+                "additionalProperties": false,
+                "allOf": [
+                  {
+                    "else": {
+                      "properties": {
+                        "database_file": {
+                          "pattern": "^retrieval-[0-9a-f]{64}\\.sqlite$",
+                          "type": "string"
+                        },
+                        "lexical_backend": {
+                          "enum": [
+                            "sqlite_fts5",
+                            "sqlite_lexical_scan"
+                          ]
+                        },
+                        "manifest_digest": {
+                          "pattern": "^sha256:[0-9a-f]{64}$",
+                          "type": "string"
+                        },
+                        "owner_generation_id": {
+                          "pattern": "^ingest:[0-9a-f]{24}$",
+                          "type": "string"
+                        },
+                        "owner_manifest_digest": {
+                          "pattern": "^sha256:[0-9a-f]{64}$",
+                          "type": "string"
+                        },
+                        "projection_digest": {
+                          "pattern": "^sha256:[0-9a-f]{64}$",
+                          "type": "string"
+                        },
+                        "projection_id": {
+                          "pattern": "^retrieval:[0-9a-f]{24}$",
+                          "type": "string"
+                        },
+                        "vector_stage_state": {
+                          "enum": [
+                            "disabled",
+                            "complete",
+                            "degraded"
+                          ]
+                        }
+                      }
+                    },
+                    "if": {
+                      "properties": {
+                        "state": {
+                          "const": "not_started"
+                        }
+                      }
+                    },
+                    "then": {
+                      "properties": {
+                        "database_file": {
+                          "type": "null"
+                        },
+                        "dimensions": {
+                          "type": "null"
+                        },
+                        "lexical_backend": {
+                          "type": "null"
+                        },
+                        "manifest_digest": {
+                          "type": "null"
+                        },
+                        "model_id": {
+                          "type": "null"
+                        },
+                        "owner_generation_id": {
+                          "type": "null"
+                        },
+                        "owner_manifest_digest": {
+                          "type": "null"
+                        },
+                        "projection_digest": {
+                          "type": "null"
+                        },
+                        "projection_id": {
+                          "type": "null"
+                        },
+                        "provider_id": {
+                          "type": "null"
+                        },
+                        "provider_kind": {
+                          "type": "null"
+                        },
+                        "reason_codes": {
+                          "maxItems": 0,
+                          "type": "array"
+                        },
+                        "vector_stage_state": {
+                          "type": "null"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "else": {
+                      "if": {
+                        "properties": {
+                          "state": {
+                            "const": "ready"
+                          }
+                        },
+                        "required": [
+                          "state"
+                        ]
+                      },
+                      "then": {
+                        "properties": {
+                          "dimensions": {
+                            "maximum": 9007199254740991,
+                            "minimum": 1,
+                            "type": "integer"
+                          },
+                          "model_id": {
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "provider_id": {
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "provider_kind": {
+                            "enum": [
+                              "openai_compatible",
+                              "local_onnx",
+                              "mcp"
+                            ]
+                          }
+                        }
+                      }
+                    },
+                    "if": {
+                      "properties": {
+                        "state": {
+                          "const": "ready"
+                        },
+                        "vector_stage_state": {
+                          "const": "disabled"
+                        }
+                      },
+                      "required": [
+                        "state",
+                        "vector_stage_state"
+                      ]
+                    },
+                    "then": {
+                      "properties": {
+                        "dimensions": {
+                          "type": "null"
+                        },
+                        "model_id": {
+                          "type": "null"
+                        },
+                        "provider_id": {
+                          "type": "null"
+                        },
+                        "provider_kind": {
+                          "type": "null"
+                        }
+                      }
+                    }
+                  }
+                ],
+                "properties": {
+                  "database_file": {
+                    "anyOf": [
+                      {
+                        "pattern": "^retrieval-[0-9a-f]{64}\\.sqlite$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "dimensions": {
+                    "anyOf": [
+                      {
+                        "maximum": 9007199254740991,
+                        "minimum": 1,
+                        "type": "integer"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "lexical_backend": {
+                    "anyOf": [
+                      {
+                        "enum": [
+                          "sqlite_fts5",
+                          "sqlite_lexical_scan"
+                        ]
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "manifest_digest": {
+                    "anyOf": [
+                      {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "model_id": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "owner_generation_id": {
+                    "anyOf": [
+                      {
+                        "pattern": "^ingest:[0-9a-f]{24}$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "owner_manifest_digest": {
+                    "anyOf": [
+                      {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "projection_digest": {
+                    "anyOf": [
+                      {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "projection_id": {
+                    "anyOf": [
+                      {
+                        "pattern": "^retrieval:[0-9a-f]{24}$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "provider_id": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "provider_kind": {
+                    "anyOf": [
+                      {
+                        "enum": [
+                          "openai_compatible",
+                          "local_onnx",
+                          "mcp"
+                        ]
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "reason_codes": {
+                    "items": {
+                      "type": "string"
+                    },
+                    "maxItems": 64,
+                    "type": "array",
+                    "uniqueItems": true
+                  },
+                  "state": {
+                    "const": "not_started"
+                  },
+                  "vector_stage_state": {
+                    "anyOf": [
+                      {
+                        "enum": [
+                          "disabled",
+                          "complete",
+                          "degraded"
+                        ]
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "state",
+                  "owner_generation_id",
+                  "owner_manifest_digest",
+                  "database_file",
+                  "manifest_digest",
+                  "projection_id",
+                  "projection_digest",
+                  "lexical_backend",
+                  "vector_stage_state",
+                  "provider_kind",
+                  "provider_id",
+                  "model_id",
+                  "dimensions",
+                  "reason_codes"
+                ],
+                "type": "object",
+                "unevaluatedProperties": false
+              },
+              "terminal_state": {
+                "const": "open"
+              },
+              "transition_ordinal": {
+                "const": 2
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "state": {
+                "const": "retrieval_applied"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "completed_at": {
+                "type": "null"
+              },
+              "gkx_delta_digest": {
+                "pattern": "^sha256:[0-9a-f]{64}$",
+                "type": "string"
+              },
+              "gkx_snapshot_digest": {
+                "pattern": "^sha256:[0-9a-f]{64}$",
+                "type": "string"
+              },
+              "graph_projection_state": {
+                "additionalProperties": false,
+                "allOf": [
+                  {
+                    "else": {
+                      "properties": {
+                        "canonical_graph_digest": {
+                          "pattern": "^sha256:[0-9a-f]{64}$",
+                          "type": "string"
+                        },
+                        "gkx_delta_digest": {
+                          "pattern": "^sha256:[0-9a-f]{64}$",
+                          "type": "string"
+                        },
+                        "graph_artifact_digest": {
+                          "pattern": "^sha256:[0-9a-f]{64}$",
+                          "type": "string"
+                        },
+                        "graph_artifact_file": {
+                          "pattern": "^watcher-graph-[0-9a-f]{64}\\.json$",
+                          "type": "string"
+                        },
+                        "graph_contract_version": {
+                          "const": "gkos-watcher-canonical-gkx-graph/1.0.0-draft.1"
+                        },
+                        "graphiti_projection_digest": {
+                          "pattern": "^sha256:[0-9a-f]{64}$",
+                          "type": "string"
+                        },
+                        "reason_codes": {
+                          "maxItems": 0,
+                          "type": "array"
+                        },
+                        "sink_receipts": {
+                          "maxItems": 0,
+                          "type": "array"
+                        },
+                        "sink_state": {
+                          "const": "not_applicable"
+                        }
+                      }
+                    },
+                    "if": {
+                      "properties": {
+                        "state": {
+                          "const": "not_started"
+                        }
+                      }
+                    },
+                    "then": {
+                      "properties": {
+                        "canonical_graph_digest": {
+                          "type": "null"
+                        },
+                        "gkx_delta_digest": {
+                          "type": "null"
+                        },
+                        "graph_artifact_digest": {
+                          "type": "null"
+                        },
+                        "graph_artifact_file": {
+                          "type": "null"
+                        },
+                        "graph_contract_version": {
+                          "type": "null"
+                        },
+                        "graphiti_projection_digest": {
+                          "type": "null"
+                        },
+                        "reason_codes": {
+                          "maxItems": 0,
+                          "type": "array"
+                        },
+                        "sink_receipts": {
+                          "maxItems": 0,
+                          "type": "array"
+                        },
+                        "sink_state": {
+                          "const": "not_applicable"
+                        }
+                      }
+                    }
+                  }
+                ],
+                "properties": {
+                  "canonical_graph_digest": {
+                    "anyOf": [
+                      {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "gkx_delta_digest": {
+                    "anyOf": [
+                      {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "graph_artifact_digest": {
+                    "anyOf": [
+                      {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "graph_artifact_file": {
+                    "anyOf": [
+                      {
+                        "pattern": "^watcher-graph-[0-9a-f]{64}\\.json$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "graph_contract_version": {
+                    "anyOf": [
+                      {
+                        "const": "gkos-watcher-canonical-gkx-graph/1.0.0-draft.1"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "graphiti_projection_digest": {
+                    "anyOf": [
+                      {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "reason_codes": {
+                    "items": {
+                      "type": "string"
+                    },
+                    "maxItems": 64,
+                    "type": "array",
+                    "uniqueItems": true
+                  },
+                  "sink_receipts": {
+                    "maxItems": 0,
+                    "type": "array"
+                  },
+                  "sink_state": {
+                    "const": "not_applicable"
+                  },
+                  "state": {
+                    "const": "not_started"
+                  }
+                },
+                "required": [
+                  "state",
+                  "graph_contract_version",
+                  "graph_artifact_file",
+                  "graph_artifact_digest",
+                  "canonical_graph_digest",
+                  "gkx_delta_digest",
+                  "graphiti_projection_digest",
+                  "sink_state",
+                  "sink_receipts",
+                  "reason_codes"
+                ],
+                "type": "object",
+                "unevaluatedProperties": false
+              },
+              "last_reached_state": {
+                "const": "retrieval_applied"
+              },
+              "plan_digest": {
+                "pattern": "^sha256:[0-9a-f]{64}$",
+                "type": "string"
+              },
+              "reason_codes": {
+                "maxItems": 0,
+                "type": "array"
+              },
+              "retrieval_projection_state": {
+                "additionalProperties": false,
+                "allOf": [
+                  {
+                    "else": {
+                      "properties": {
+                        "database_file": {
+                          "pattern": "^retrieval-[0-9a-f]{64}\\.sqlite$",
+                          "type": "string"
+                        },
+                        "lexical_backend": {
+                          "enum": [
+                            "sqlite_fts5",
+                            "sqlite_lexical_scan"
+                          ]
+                        },
+                        "manifest_digest": {
+                          "pattern": "^sha256:[0-9a-f]{64}$",
+                          "type": "string"
+                        },
+                        "owner_generation_id": {
+                          "pattern": "^ingest:[0-9a-f]{24}$",
+                          "type": "string"
+                        },
+                        "owner_manifest_digest": {
+                          "pattern": "^sha256:[0-9a-f]{64}$",
+                          "type": "string"
+                        },
+                        "projection_digest": {
+                          "pattern": "^sha256:[0-9a-f]{64}$",
+                          "type": "string"
+                        },
+                        "projection_id": {
+                          "pattern": "^retrieval:[0-9a-f]{24}$",
+                          "type": "string"
+                        },
+                        "vector_stage_state": {
+                          "enum": [
+                            "disabled",
+                            "complete",
+                            "degraded"
+                          ]
+                        }
+                      }
+                    },
+                    "if": {
+                      "properties": {
+                        "state": {
+                          "const": "not_started"
+                        }
+                      }
+                    },
+                    "then": {
+                      "properties": {
+                        "database_file": {
+                          "type": "null"
+                        },
+                        "dimensions": {
+                          "type": "null"
+                        },
+                        "lexical_backend": {
+                          "type": "null"
+                        },
+                        "manifest_digest": {
+                          "type": "null"
+                        },
+                        "model_id": {
+                          "type": "null"
+                        },
+                        "owner_generation_id": {
+                          "type": "null"
+                        },
+                        "owner_manifest_digest": {
+                          "type": "null"
+                        },
+                        "projection_digest": {
+                          "type": "null"
+                        },
+                        "projection_id": {
+                          "type": "null"
+                        },
+                        "provider_id": {
+                          "type": "null"
+                        },
+                        "provider_kind": {
+                          "type": "null"
+                        },
+                        "reason_codes": {
+                          "maxItems": 0,
+                          "type": "array"
+                        },
+                        "vector_stage_state": {
+                          "type": "null"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "else": {
+                      "if": {
+                        "properties": {
+                          "state": {
+                            "const": "ready"
+                          }
+                        },
+                        "required": [
+                          "state"
+                        ]
+                      },
+                      "then": {
+                        "properties": {
+                          "dimensions": {
+                            "maximum": 9007199254740991,
+                            "minimum": 1,
+                            "type": "integer"
+                          },
+                          "model_id": {
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "provider_id": {
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "provider_kind": {
+                            "enum": [
+                              "openai_compatible",
+                              "local_onnx",
+                              "mcp"
+                            ]
+                          }
+                        }
+                      }
+                    },
+                    "if": {
+                      "properties": {
+                        "state": {
+                          "const": "ready"
+                        },
+                        "vector_stage_state": {
+                          "const": "disabled"
+                        }
+                      },
+                      "required": [
+                        "state",
+                        "vector_stage_state"
+                      ]
+                    },
+                    "then": {
+                      "properties": {
+                        "dimensions": {
+                          "type": "null"
+                        },
+                        "model_id": {
+                          "type": "null"
+                        },
+                        "provider_id": {
+                          "type": "null"
+                        },
+                        "provider_kind": {
+                          "type": "null"
+                        }
+                      }
+                    }
+                  }
+                ],
+                "properties": {
+                  "database_file": {
+                    "anyOf": [
+                      {
+                        "pattern": "^retrieval-[0-9a-f]{64}\\.sqlite$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "dimensions": {
+                    "anyOf": [
+                      {
+                        "maximum": 9007199254740991,
+                        "minimum": 1,
+                        "type": "integer"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "lexical_backend": {
+                    "anyOf": [
+                      {
+                        "enum": [
+                          "sqlite_fts5",
+                          "sqlite_lexical_scan"
+                        ]
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "manifest_digest": {
+                    "anyOf": [
+                      {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "model_id": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "owner_generation_id": {
+                    "anyOf": [
+                      {
+                        "pattern": "^ingest:[0-9a-f]{24}$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "owner_manifest_digest": {
+                    "anyOf": [
+                      {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "projection_digest": {
+                    "anyOf": [
+                      {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "projection_id": {
+                    "anyOf": [
+                      {
+                        "pattern": "^retrieval:[0-9a-f]{24}$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "provider_id": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "provider_kind": {
+                    "anyOf": [
+                      {
+                        "enum": [
+                          "openai_compatible",
+                          "local_onnx",
+                          "mcp"
+                        ]
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "reason_codes": {
+                    "items": {
+                      "type": "string"
+                    },
+                    "maxItems": 64,
+                    "type": "array",
+                    "uniqueItems": true
+                  },
+                  "state": {
+                    "enum": [
+                      "not_started",
+                      "ready"
+                    ]
+                  },
+                  "vector_stage_state": {
+                    "anyOf": [
+                      {
+                        "enum": [
+                          "disabled",
+                          "complete",
+                          "degraded"
+                        ]
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "state",
+                  "owner_generation_id",
+                  "owner_manifest_digest",
+                  "database_file",
+                  "manifest_digest",
+                  "projection_id",
+                  "projection_digest",
+                  "lexical_backend",
+                  "vector_stage_state",
+                  "provider_kind",
+                  "provider_id",
+                  "model_id",
+                  "dimensions",
+                  "reason_codes"
+                ],
+                "type": "object",
+                "unevaluatedProperties": false
+              },
+              "terminal_state": {
+                "const": "open"
+              },
+              "transition_ordinal": {
+                "const": 3
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "state": {
+                "const": "graph_applied"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "completed_at": {
+                "type": "null"
+              },
+              "gkx_delta_digest": {
+                "pattern": "^sha256:[0-9a-f]{64}$",
+                "type": "string"
+              },
+              "gkx_snapshot_digest": {
+                "pattern": "^sha256:[0-9a-f]{64}$",
+                "type": "string"
+              },
+              "graph_projection_state": {
+                "additionalProperties": false,
+                "allOf": [
+                  {
+                    "else": {
+                      "properties": {
+                        "canonical_graph_digest": {
+                          "pattern": "^sha256:[0-9a-f]{64}$",
+                          "type": "string"
+                        },
+                        "gkx_delta_digest": {
+                          "pattern": "^sha256:[0-9a-f]{64}$",
+                          "type": "string"
+                        },
+                        "graph_artifact_digest": {
+                          "pattern": "^sha256:[0-9a-f]{64}$",
+                          "type": "string"
+                        },
+                        "graph_artifact_file": {
+                          "pattern": "^watcher-graph-[0-9a-f]{64}\\.json$",
+                          "type": "string"
+                        },
+                        "graph_contract_version": {
+                          "const": "gkos-watcher-canonical-gkx-graph/1.0.0-draft.1"
+                        },
+                        "graphiti_projection_digest": {
+                          "pattern": "^sha256:[0-9a-f]{64}$",
+                          "type": "string"
+                        },
+                        "reason_codes": {
+                          "maxItems": 0,
+                          "type": "array"
+                        },
+                        "sink_receipts": {
+                          "maxItems": 0,
+                          "type": "array"
+                        },
+                        "sink_state": {
+                          "const": "not_applicable"
+                        }
+                      }
+                    },
+                    "if": {
+                      "properties": {
+                        "state": {
+                          "const": "not_started"
+                        }
+                      }
+                    },
+                    "then": {
+                      "properties": {
+                        "canonical_graph_digest": {
+                          "type": "null"
+                        },
+                        "gkx_delta_digest": {
+                          "type": "null"
+                        },
+                        "graph_artifact_digest": {
+                          "type": "null"
+                        },
+                        "graph_artifact_file": {
+                          "type": "null"
+                        },
+                        "graph_contract_version": {
+                          "type": "null"
+                        },
+                        "graphiti_projection_digest": {
+                          "type": "null"
+                        },
+                        "reason_codes": {
+                          "maxItems": 0,
+                          "type": "array"
+                        },
+                        "sink_receipts": {
+                          "maxItems": 0,
+                          "type": "array"
+                        },
+                        "sink_state": {
+                          "const": "not_applicable"
+                        }
+                      }
+                    }
+                  }
+                ],
+                "properties": {
+                  "canonical_graph_digest": {
+                    "anyOf": [
+                      {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "gkx_delta_digest": {
+                    "anyOf": [
+                      {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "graph_artifact_digest": {
+                    "anyOf": [
+                      {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "graph_artifact_file": {
+                    "anyOf": [
+                      {
+                        "pattern": "^watcher-graph-[0-9a-f]{64}\\.json$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "graph_contract_version": {
+                    "anyOf": [
+                      {
+                        "const": "gkos-watcher-canonical-gkx-graph/1.0.0-draft.1"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "graphiti_projection_digest": {
+                    "anyOf": [
+                      {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "reason_codes": {
+                    "items": {
+                      "type": "string"
+                    },
+                    "maxItems": 64,
+                    "type": "array",
+                    "uniqueItems": true
+                  },
+                  "sink_receipts": {
+                    "maxItems": 0,
+                    "type": "array"
+                  },
+                  "sink_state": {
+                    "const": "not_applicable"
+                  },
+                  "state": {
+                    "enum": [
+                      "not_started",
+                      "ready"
+                    ]
+                  }
+                },
+                "required": [
+                  "state",
+                  "graph_contract_version",
+                  "graph_artifact_file",
+                  "graph_artifact_digest",
+                  "canonical_graph_digest",
+                  "gkx_delta_digest",
+                  "graphiti_projection_digest",
+                  "sink_state",
+                  "sink_receipts",
+                  "reason_codes"
+                ],
+                "type": "object",
+                "unevaluatedProperties": false
+              },
+              "last_reached_state": {
+                "const": "graph_applied"
+              },
+              "plan_digest": {
+                "pattern": "^sha256:[0-9a-f]{64}$",
+                "type": "string"
+              },
+              "reason_codes": {
+                "maxItems": 0,
+                "type": "array"
+              },
+              "retrieval_projection_state": {
+                "additionalProperties": false,
+                "allOf": [
+                  {
+                    "else": {
+                      "properties": {
+                        "database_file": {
+                          "pattern": "^retrieval-[0-9a-f]{64}\\.sqlite$",
+                          "type": "string"
+                        },
+                        "lexical_backend": {
+                          "enum": [
+                            "sqlite_fts5",
+                            "sqlite_lexical_scan"
+                          ]
+                        },
+                        "manifest_digest": {
+                          "pattern": "^sha256:[0-9a-f]{64}$",
+                          "type": "string"
+                        },
+                        "owner_generation_id": {
+                          "pattern": "^ingest:[0-9a-f]{24}$",
+                          "type": "string"
+                        },
+                        "owner_manifest_digest": {
+                          "pattern": "^sha256:[0-9a-f]{64}$",
+                          "type": "string"
+                        },
+                        "projection_digest": {
+                          "pattern": "^sha256:[0-9a-f]{64}$",
+                          "type": "string"
+                        },
+                        "projection_id": {
+                          "pattern": "^retrieval:[0-9a-f]{24}$",
+                          "type": "string"
+                        },
+                        "vector_stage_state": {
+                          "enum": [
+                            "disabled",
+                            "complete",
+                            "degraded"
+                          ]
+                        }
+                      }
+                    },
+                    "if": {
+                      "properties": {
+                        "state": {
+                          "const": "not_started"
+                        }
+                      }
+                    },
+                    "then": {
+                      "properties": {
+                        "database_file": {
+                          "type": "null"
+                        },
+                        "dimensions": {
+                          "type": "null"
+                        },
+                        "lexical_backend": {
+                          "type": "null"
+                        },
+                        "manifest_digest": {
+                          "type": "null"
+                        },
+                        "model_id": {
+                          "type": "null"
+                        },
+                        "owner_generation_id": {
+                          "type": "null"
+                        },
+                        "owner_manifest_digest": {
+                          "type": "null"
+                        },
+                        "projection_digest": {
+                          "type": "null"
+                        },
+                        "projection_id": {
+                          "type": "null"
+                        },
+                        "provider_id": {
+                          "type": "null"
+                        },
+                        "provider_kind": {
+                          "type": "null"
+                        },
+                        "reason_codes": {
+                          "maxItems": 0,
+                          "type": "array"
+                        },
+                        "vector_stage_state": {
+                          "type": "null"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "else": {
+                      "if": {
+                        "properties": {
+                          "state": {
+                            "const": "ready"
+                          }
+                        },
+                        "required": [
+                          "state"
+                        ]
+                      },
+                      "then": {
+                        "properties": {
+                          "dimensions": {
+                            "maximum": 9007199254740991,
+                            "minimum": 1,
+                            "type": "integer"
+                          },
+                          "model_id": {
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "provider_id": {
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "provider_kind": {
+                            "enum": [
+                              "openai_compatible",
+                              "local_onnx",
+                              "mcp"
+                            ]
+                          }
+                        }
+                      }
+                    },
+                    "if": {
+                      "properties": {
+                        "state": {
+                          "const": "ready"
+                        },
+                        "vector_stage_state": {
+                          "const": "disabled"
+                        }
+                      },
+                      "required": [
+                        "state",
+                        "vector_stage_state"
+                      ]
+                    },
+                    "then": {
+                      "properties": {
+                        "dimensions": {
+                          "type": "null"
+                        },
+                        "model_id": {
+                          "type": "null"
+                        },
+                        "provider_id": {
+                          "type": "null"
+                        },
+                        "provider_kind": {
+                          "type": "null"
+                        }
+                      }
+                    }
+                  }
+                ],
+                "properties": {
+                  "database_file": {
+                    "anyOf": [
+                      {
+                        "pattern": "^retrieval-[0-9a-f]{64}\\.sqlite$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "dimensions": {
+                    "anyOf": [
+                      {
+                        "maximum": 9007199254740991,
+                        "minimum": 1,
+                        "type": "integer"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "lexical_backend": {
+                    "anyOf": [
+                      {
+                        "enum": [
+                          "sqlite_fts5",
+                          "sqlite_lexical_scan"
+                        ]
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "manifest_digest": {
+                    "anyOf": [
+                      {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "model_id": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "owner_generation_id": {
+                    "anyOf": [
+                      {
+                        "pattern": "^ingest:[0-9a-f]{24}$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "owner_manifest_digest": {
+                    "anyOf": [
+                      {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "projection_digest": {
+                    "anyOf": [
+                      {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "projection_id": {
+                    "anyOf": [
+                      {
+                        "pattern": "^retrieval:[0-9a-f]{24}$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "provider_id": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "provider_kind": {
+                    "anyOf": [
+                      {
+                        "enum": [
+                          "openai_compatible",
+                          "local_onnx",
+                          "mcp"
+                        ]
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "reason_codes": {
+                    "items": {
+                      "type": "string"
+                    },
+                    "maxItems": 64,
+                    "type": "array",
+                    "uniqueItems": true
+                  },
+                  "state": {
+                    "enum": [
+                      "not_started",
+                      "ready"
+                    ]
+                  },
+                  "vector_stage_state": {
+                    "anyOf": [
+                      {
+                        "enum": [
+                          "disabled",
+                          "complete",
+                          "degraded"
+                        ]
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "state",
+                  "owner_generation_id",
+                  "owner_manifest_digest",
+                  "database_file",
+                  "manifest_digest",
+                  "projection_id",
+                  "projection_digest",
+                  "lexical_backend",
+                  "vector_stage_state",
+                  "provider_kind",
+                  "provider_id",
+                  "model_id",
+                  "dimensions",
+                  "reason_codes"
+                ],
+                "type": "object",
+                "unevaluatedProperties": false
+              },
+              "terminal_state": {
+                "const": "open"
+              },
+              "transition_ordinal": {
+                "const": 4
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "state": {
+                "const": "activation_prepared"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "completed_at": {
+                "type": "null"
+              },
+              "gkx_delta_digest": {
+                "pattern": "^sha256:[0-9a-f]{64}$",
+                "type": "string"
+              },
+              "gkx_snapshot_digest": {
+                "pattern": "^sha256:[0-9a-f]{64}$",
+                "type": "string"
+              },
+              "graph_projection_state": {
+                "additionalProperties": false,
+                "allOf": [
+                  {
+                    "else": {
+                      "properties": {
+                        "canonical_graph_digest": {
+                          "pattern": "^sha256:[0-9a-f]{64}$",
+                          "type": "string"
+                        },
+                        "gkx_delta_digest": {
+                          "pattern": "^sha256:[0-9a-f]{64}$",
+                          "type": "string"
+                        },
+                        "graph_artifact_digest": {
+                          "pattern": "^sha256:[0-9a-f]{64}$",
+                          "type": "string"
+                        },
+                        "graph_artifact_file": {
+                          "pattern": "^watcher-graph-[0-9a-f]{64}\\.json$",
+                          "type": "string"
+                        },
+                        "graph_contract_version": {
+                          "const": "gkos-watcher-canonical-gkx-graph/1.0.0-draft.1"
+                        },
+                        "graphiti_projection_digest": {
+                          "pattern": "^sha256:[0-9a-f]{64}$",
+                          "type": "string"
+                        },
+                        "reason_codes": {
+                          "maxItems": 0,
+                          "type": "array"
+                        },
+                        "sink_receipts": {
+                          "maxItems": 0,
+                          "type": "array"
+                        },
+                        "sink_state": {
+                          "const": "not_applicable"
+                        }
+                      }
+                    },
+                    "if": {
+                      "properties": {
+                        "state": {
+                          "const": "not_started"
+                        }
+                      }
+                    },
+                    "then": {
+                      "properties": {
+                        "canonical_graph_digest": {
+                          "type": "null"
+                        },
+                        "gkx_delta_digest": {
+                          "type": "null"
+                        },
+                        "graph_artifact_digest": {
+                          "type": "null"
+                        },
+                        "graph_artifact_file": {
+                          "type": "null"
+                        },
+                        "graph_contract_version": {
+                          "type": "null"
+                        },
+                        "graphiti_projection_digest": {
+                          "type": "null"
+                        },
+                        "reason_codes": {
+                          "maxItems": 0,
+                          "type": "array"
+                        },
+                        "sink_receipts": {
+                          "maxItems": 0,
+                          "type": "array"
+                        },
+                        "sink_state": {
+                          "const": "not_applicable"
+                        }
+                      }
+                    }
+                  }
+                ],
+                "properties": {
+                  "canonical_graph_digest": {
+                    "anyOf": [
+                      {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "gkx_delta_digest": {
+                    "anyOf": [
+                      {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "graph_artifact_digest": {
+                    "anyOf": [
+                      {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "graph_artifact_file": {
+                    "anyOf": [
+                      {
+                        "pattern": "^watcher-graph-[0-9a-f]{64}\\.json$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "graph_contract_version": {
+                    "anyOf": [
+                      {
+                        "const": "gkos-watcher-canonical-gkx-graph/1.0.0-draft.1"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "graphiti_projection_digest": {
+                    "anyOf": [
+                      {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "reason_codes": {
+                    "items": {
+                      "type": "string"
+                    },
+                    "maxItems": 64,
+                    "type": "array",
+                    "uniqueItems": true
+                  },
+                  "sink_receipts": {
+                    "maxItems": 0,
+                    "type": "array"
+                  },
+                  "sink_state": {
+                    "const": "not_applicable"
+                  },
+                  "state": {
+                    "enum": [
+                      "not_started",
+                      "ready"
+                    ]
+                  }
+                },
+                "required": [
+                  "state",
+                  "graph_contract_version",
+                  "graph_artifact_file",
+                  "graph_artifact_digest",
+                  "canonical_graph_digest",
+                  "gkx_delta_digest",
+                  "graphiti_projection_digest",
+                  "sink_state",
+                  "sink_receipts",
+                  "reason_codes"
+                ],
+                "type": "object",
+                "unevaluatedProperties": false
+              },
+              "last_reached_state": {
+                "const": "activation_prepared"
+              },
+              "plan_digest": {
+                "pattern": "^sha256:[0-9a-f]{64}$",
+                "type": "string"
+              },
+              "reason_codes": {
+                "maxItems": 0,
+                "type": "array"
+              },
+              "retrieval_projection_state": {
+                "additionalProperties": false,
+                "allOf": [
+                  {
+                    "else": {
+                      "properties": {
+                        "database_file": {
+                          "pattern": "^retrieval-[0-9a-f]{64}\\.sqlite$",
+                          "type": "string"
+                        },
+                        "lexical_backend": {
+                          "enum": [
+                            "sqlite_fts5",
+                            "sqlite_lexical_scan"
+                          ]
+                        },
+                        "manifest_digest": {
+                          "pattern": "^sha256:[0-9a-f]{64}$",
+                          "type": "string"
+                        },
+                        "owner_generation_id": {
+                          "pattern": "^ingest:[0-9a-f]{24}$",
+                          "type": "string"
+                        },
+                        "owner_manifest_digest": {
+                          "pattern": "^sha256:[0-9a-f]{64}$",
+                          "type": "string"
+                        },
+                        "projection_digest": {
+                          "pattern": "^sha256:[0-9a-f]{64}$",
+                          "type": "string"
+                        },
+                        "projection_id": {
+                          "pattern": "^retrieval:[0-9a-f]{24}$",
+                          "type": "string"
+                        },
+                        "vector_stage_state": {
+                          "enum": [
+                            "disabled",
+                            "complete",
+                            "degraded"
+                          ]
+                        }
+                      }
+                    },
+                    "if": {
+                      "properties": {
+                        "state": {
+                          "const": "not_started"
+                        }
+                      }
+                    },
+                    "then": {
+                      "properties": {
+                        "database_file": {
+                          "type": "null"
+                        },
+                        "dimensions": {
+                          "type": "null"
+                        },
+                        "lexical_backend": {
+                          "type": "null"
+                        },
+                        "manifest_digest": {
+                          "type": "null"
+                        },
+                        "model_id": {
+                          "type": "null"
+                        },
+                        "owner_generation_id": {
+                          "type": "null"
+                        },
+                        "owner_manifest_digest": {
+                          "type": "null"
+                        },
+                        "projection_digest": {
+                          "type": "null"
+                        },
+                        "projection_id": {
+                          "type": "null"
+                        },
+                        "provider_id": {
+                          "type": "null"
+                        },
+                        "provider_kind": {
+                          "type": "null"
+                        },
+                        "reason_codes": {
+                          "maxItems": 0,
+                          "type": "array"
+                        },
+                        "vector_stage_state": {
+                          "type": "null"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "else": {
+                      "if": {
+                        "properties": {
+                          "state": {
+                            "const": "ready"
+                          }
+                        },
+                        "required": [
+                          "state"
+                        ]
+                      },
+                      "then": {
+                        "properties": {
+                          "dimensions": {
+                            "maximum": 9007199254740991,
+                            "minimum": 1,
+                            "type": "integer"
+                          },
+                          "model_id": {
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "provider_id": {
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "provider_kind": {
+                            "enum": [
+                              "openai_compatible",
+                              "local_onnx",
+                              "mcp"
+                            ]
+                          }
+                        }
+                      }
+                    },
+                    "if": {
+                      "properties": {
+                        "state": {
+                          "const": "ready"
+                        },
+                        "vector_stage_state": {
+                          "const": "disabled"
+                        }
+                      },
+                      "required": [
+                        "state",
+                        "vector_stage_state"
+                      ]
+                    },
+                    "then": {
+                      "properties": {
+                        "dimensions": {
+                          "type": "null"
+                        },
+                        "model_id": {
+                          "type": "null"
+                        },
+                        "provider_id": {
+                          "type": "null"
+                        },
+                        "provider_kind": {
+                          "type": "null"
+                        }
+                      }
+                    }
+                  }
+                ],
+                "properties": {
+                  "database_file": {
+                    "anyOf": [
+                      {
+                        "pattern": "^retrieval-[0-9a-f]{64}\\.sqlite$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "dimensions": {
+                    "anyOf": [
+                      {
+                        "maximum": 9007199254740991,
+                        "minimum": 1,
+                        "type": "integer"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "lexical_backend": {
+                    "anyOf": [
+                      {
+                        "enum": [
+                          "sqlite_fts5",
+                          "sqlite_lexical_scan"
+                        ]
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "manifest_digest": {
+                    "anyOf": [
+                      {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "model_id": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "owner_generation_id": {
+                    "anyOf": [
+                      {
+                        "pattern": "^ingest:[0-9a-f]{24}$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "owner_manifest_digest": {
+                    "anyOf": [
+                      {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "projection_digest": {
+                    "anyOf": [
+                      {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "projection_id": {
+                    "anyOf": [
+                      {
+                        "pattern": "^retrieval:[0-9a-f]{24}$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "provider_id": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "provider_kind": {
+                    "anyOf": [
+                      {
+                        "enum": [
+                          "openai_compatible",
+                          "local_onnx",
+                          "mcp"
+                        ]
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "reason_codes": {
+                    "items": {
+                      "type": "string"
+                    },
+                    "maxItems": 64,
+                    "type": "array",
+                    "uniqueItems": true
+                  },
+                  "state": {
+                    "enum": [
+                      "not_started",
+                      "ready"
+                    ]
+                  },
+                  "vector_stage_state": {
+                    "anyOf": [
+                      {
+                        "enum": [
+                          "disabled",
+                          "complete",
+                          "degraded"
+                        ]
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "state",
+                  "owner_generation_id",
+                  "owner_manifest_digest",
+                  "database_file",
+                  "manifest_digest",
+                  "projection_id",
+                  "projection_digest",
+                  "lexical_backend",
+                  "vector_stage_state",
+                  "provider_kind",
+                  "provider_id",
+                  "model_id",
+                  "dimensions",
+                  "reason_codes"
+                ],
+                "type": "object",
+                "unevaluatedProperties": false
+              },
+              "terminal_state": {
+                "const": "open"
+              },
+              "transition_ordinal": {
+                "const": 5
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "state": {
+                "const": "complete"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "completed_at": {
+                "format": "date-time",
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$",
+                "type": "string"
+              },
+              "gkx_delta_digest": {
+                "pattern": "^sha256:[0-9a-f]{64}$",
+                "type": "string"
+              },
+              "gkx_snapshot_digest": {
+                "pattern": "^sha256:[0-9a-f]{64}$",
+                "type": "string"
+              },
+              "graph_projection_state": {
+                "additionalProperties": false,
+                "allOf": [
+                  {
+                    "else": {
+                      "properties": {
+                        "canonical_graph_digest": {
+                          "pattern": "^sha256:[0-9a-f]{64}$",
+                          "type": "string"
+                        },
+                        "gkx_delta_digest": {
+                          "pattern": "^sha256:[0-9a-f]{64}$",
+                          "type": "string"
+                        },
+                        "graph_artifact_digest": {
+                          "pattern": "^sha256:[0-9a-f]{64}$",
+                          "type": "string"
+                        },
+                        "graph_artifact_file": {
+                          "pattern": "^watcher-graph-[0-9a-f]{64}\\.json$",
+                          "type": "string"
+                        },
+                        "graph_contract_version": {
+                          "const": "gkos-watcher-canonical-gkx-graph/1.0.0-draft.1"
+                        },
+                        "graphiti_projection_digest": {
+                          "pattern": "^sha256:[0-9a-f]{64}$",
+                          "type": "string"
+                        },
+                        "reason_codes": {
+                          "maxItems": 0,
+                          "type": "array"
+                        },
+                        "sink_receipts": {
+                          "maxItems": 0,
+                          "type": "array"
+                        },
+                        "sink_state": {
+                          "const": "not_applicable"
+                        }
+                      }
+                    },
+                    "if": {
+                      "properties": {
+                        "state": {
+                          "const": "not_started"
+                        }
+                      }
+                    },
+                    "then": {
+                      "properties": {
+                        "canonical_graph_digest": {
+                          "type": "null"
+                        },
+                        "gkx_delta_digest": {
+                          "type": "null"
+                        },
+                        "graph_artifact_digest": {
+                          "type": "null"
+                        },
+                        "graph_artifact_file": {
+                          "type": "null"
+                        },
+                        "graph_contract_version": {
+                          "type": "null"
+                        },
+                        "graphiti_projection_digest": {
+                          "type": "null"
+                        },
+                        "reason_codes": {
+                          "maxItems": 0,
+                          "type": "array"
+                        },
+                        "sink_receipts": {
+                          "maxItems": 0,
+                          "type": "array"
+                        },
+                        "sink_state": {
+                          "const": "not_applicable"
+                        }
+                      }
+                    }
+                  }
+                ],
+                "properties": {
+                  "canonical_graph_digest": {
+                    "anyOf": [
+                      {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "gkx_delta_digest": {
+                    "anyOf": [
+                      {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "graph_artifact_digest": {
+                    "anyOf": [
+                      {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "graph_artifact_file": {
+                    "anyOf": [
+                      {
+                        "pattern": "^watcher-graph-[0-9a-f]{64}\\.json$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "graph_contract_version": {
+                    "anyOf": [
+                      {
+                        "const": "gkos-watcher-canonical-gkx-graph/1.0.0-draft.1"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "graphiti_projection_digest": {
+                    "anyOf": [
+                      {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "reason_codes": {
+                    "items": {
+                      "type": "string"
+                    },
+                    "maxItems": 64,
+                    "type": "array",
+                    "uniqueItems": true
+                  },
+                  "sink_receipts": {
+                    "maxItems": 0,
+                    "type": "array"
+                  },
+                  "sink_state": {
+                    "const": "not_applicable"
+                  },
+                  "state": {
+                    "enum": [
+                      "not_started",
+                      "ready"
+                    ]
+                  }
+                },
+                "required": [
+                  "state",
+                  "graph_contract_version",
+                  "graph_artifact_file",
+                  "graph_artifact_digest",
+                  "canonical_graph_digest",
+                  "gkx_delta_digest",
+                  "graphiti_projection_digest",
+                  "sink_state",
+                  "sink_receipts",
+                  "reason_codes"
+                ],
+                "type": "object",
+                "unevaluatedProperties": false
+              },
+              "last_reached_state": {
+                "const": "complete"
+              },
+              "plan_digest": {
+                "pattern": "^sha256:[0-9a-f]{64}$",
+                "type": "string"
+              },
+              "reason_codes": {
+                "maxItems": 0,
+                "type": "array"
+              },
+              "retrieval_projection_state": {
+                "additionalProperties": false,
+                "allOf": [
+                  {
+                    "else": {
+                      "properties": {
+                        "database_file": {
+                          "pattern": "^retrieval-[0-9a-f]{64}\\.sqlite$",
+                          "type": "string"
+                        },
+                        "lexical_backend": {
+                          "enum": [
+                            "sqlite_fts5",
+                            "sqlite_lexical_scan"
+                          ]
+                        },
+                        "manifest_digest": {
+                          "pattern": "^sha256:[0-9a-f]{64}$",
+                          "type": "string"
+                        },
+                        "owner_generation_id": {
+                          "pattern": "^ingest:[0-9a-f]{24}$",
+                          "type": "string"
+                        },
+                        "owner_manifest_digest": {
+                          "pattern": "^sha256:[0-9a-f]{64}$",
+                          "type": "string"
+                        },
+                        "projection_digest": {
+                          "pattern": "^sha256:[0-9a-f]{64}$",
+                          "type": "string"
+                        },
+                        "projection_id": {
+                          "pattern": "^retrieval:[0-9a-f]{24}$",
+                          "type": "string"
+                        },
+                        "vector_stage_state": {
+                          "enum": [
+                            "disabled",
+                            "complete",
+                            "degraded"
+                          ]
+                        }
+                      }
+                    },
+                    "if": {
+                      "properties": {
+                        "state": {
+                          "const": "not_started"
+                        }
+                      }
+                    },
+                    "then": {
+                      "properties": {
+                        "database_file": {
+                          "type": "null"
+                        },
+                        "dimensions": {
+                          "type": "null"
+                        },
+                        "lexical_backend": {
+                          "type": "null"
+                        },
+                        "manifest_digest": {
+                          "type": "null"
+                        },
+                        "model_id": {
+                          "type": "null"
+                        },
+                        "owner_generation_id": {
+                          "type": "null"
+                        },
+                        "owner_manifest_digest": {
+                          "type": "null"
+                        },
+                        "projection_digest": {
+                          "type": "null"
+                        },
+                        "projection_id": {
+                          "type": "null"
+                        },
+                        "provider_id": {
+                          "type": "null"
+                        },
+                        "provider_kind": {
+                          "type": "null"
+                        },
+                        "reason_codes": {
+                          "maxItems": 0,
+                          "type": "array"
+                        },
+                        "vector_stage_state": {
+                          "type": "null"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "else": {
+                      "if": {
+                        "properties": {
+                          "state": {
+                            "const": "ready"
+                          }
+                        },
+                        "required": [
+                          "state"
+                        ]
+                      },
+                      "then": {
+                        "properties": {
+                          "dimensions": {
+                            "maximum": 9007199254740991,
+                            "minimum": 1,
+                            "type": "integer"
+                          },
+                          "model_id": {
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "provider_id": {
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "provider_kind": {
+                            "enum": [
+                              "openai_compatible",
+                              "local_onnx",
+                              "mcp"
+                            ]
+                          }
+                        }
+                      }
+                    },
+                    "if": {
+                      "properties": {
+                        "state": {
+                          "const": "ready"
+                        },
+                        "vector_stage_state": {
+                          "const": "disabled"
+                        }
+                      },
+                      "required": [
+                        "state",
+                        "vector_stage_state"
+                      ]
+                    },
+                    "then": {
+                      "properties": {
+                        "dimensions": {
+                          "type": "null"
+                        },
+                        "model_id": {
+                          "type": "null"
+                        },
+                        "provider_id": {
+                          "type": "null"
+                        },
+                        "provider_kind": {
+                          "type": "null"
+                        }
+                      }
+                    }
+                  }
+                ],
+                "properties": {
+                  "database_file": {
+                    "anyOf": [
+                      {
+                        "pattern": "^retrieval-[0-9a-f]{64}\\.sqlite$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "dimensions": {
+                    "anyOf": [
+                      {
+                        "maximum": 9007199254740991,
+                        "minimum": 1,
+                        "type": "integer"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "lexical_backend": {
+                    "anyOf": [
+                      {
+                        "enum": [
+                          "sqlite_fts5",
+                          "sqlite_lexical_scan"
+                        ]
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "manifest_digest": {
+                    "anyOf": [
+                      {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "model_id": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "owner_generation_id": {
+                    "anyOf": [
+                      {
+                        "pattern": "^ingest:[0-9a-f]{24}$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "owner_manifest_digest": {
+                    "anyOf": [
+                      {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "projection_digest": {
+                    "anyOf": [
+                      {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "projection_id": {
+                    "anyOf": [
+                      {
+                        "pattern": "^retrieval:[0-9a-f]{24}$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "provider_id": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "provider_kind": {
+                    "anyOf": [
+                      {
+                        "enum": [
+                          "openai_compatible",
+                          "local_onnx",
+                          "mcp"
+                        ]
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "reason_codes": {
+                    "items": {
+                      "type": "string"
+                    },
+                    "maxItems": 64,
+                    "type": "array",
+                    "uniqueItems": true
+                  },
+                  "state": {
+                    "enum": [
+                      "not_started",
+                      "ready"
+                    ]
+                  },
+                  "vector_stage_state": {
+                    "anyOf": [
+                      {
+                        "enum": [
+                          "disabled",
+                          "complete",
+                          "degraded"
+                        ]
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "state",
+                  "owner_generation_id",
+                  "owner_manifest_digest",
+                  "database_file",
+                  "manifest_digest",
+                  "projection_id",
+                  "projection_digest",
+                  "lexical_backend",
+                  "vector_stage_state",
+                  "provider_kind",
+                  "provider_id",
+                  "model_id",
+                  "dimensions",
+                  "reason_codes"
+                ],
+                "type": "object",
+                "unevaluatedProperties": false
+              },
+              "terminal_state": {
+                "const": "complete"
+              },
+              "transition_ordinal": {
+                "const": 6
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "state": {
+                "enum": [
+                  "failed",
+                  "superseded"
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "completed_at": {
+                "format": "date-time",
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$",
+                "type": "string"
+              },
+              "prior_transition_digest": {
+                "pattern": "^sha256:[0-9a-f]{64}$",
+                "type": "string"
+              },
+              "reason_codes": {
+                "minItems": 1,
+                "type": "array"
+              },
+              "transition_ordinal": {
+                "maximum": 6,
+                "minimum": 1,
+                "type": "integer"
+              }
+            }
+          }
+        }
+      ],
+      "properties": {
+        "batch_id": {
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "type": "string"
+        },
+        "completed_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "contract_version": {
+          "const": "gkos-watcher-transition/1.0.0-draft.1"
+        },
+        "gkx_delta_digest": {
+          "anyOf": [
+            {
+              "pattern": "^sha256:[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "gkx_snapshot_digest": {
+          "anyOf": [
+            {
+              "pattern": "^sha256:[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "graph_projection_state": {
+          "additionalProperties": false,
+          "allOf": [
+            {
+              "else": {
+                "properties": {
+                  "canonical_graph_digest": {
+                    "pattern": "^sha256:[0-9a-f]{64}$",
+                    "type": "string"
+                  },
+                  "gkx_delta_digest": {
+                    "pattern": "^sha256:[0-9a-f]{64}$",
+                    "type": "string"
+                  },
+                  "graph_artifact_digest": {
+                    "pattern": "^sha256:[0-9a-f]{64}$",
+                    "type": "string"
+                  },
+                  "graph_artifact_file": {
+                    "pattern": "^watcher-graph-[0-9a-f]{64}\\.json$",
+                    "type": "string"
+                  },
+                  "graph_contract_version": {
+                    "const": "gkos-watcher-canonical-gkx-graph/1.0.0-draft.1"
+                  },
+                  "graphiti_projection_digest": {
+                    "pattern": "^sha256:[0-9a-f]{64}$",
+                    "type": "string"
+                  },
+                  "reason_codes": {
+                    "maxItems": 0,
+                    "type": "array"
+                  },
+                  "sink_receipts": {
+                    "maxItems": 0,
+                    "type": "array"
+                  },
+                  "sink_state": {
+                    "const": "not_applicable"
+                  }
+                }
+              },
+              "if": {
+                "properties": {
+                  "state": {
+                    "const": "not_started"
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "canonical_graph_digest": {
+                    "type": "null"
+                  },
+                  "gkx_delta_digest": {
+                    "type": "null"
+                  },
+                  "graph_artifact_digest": {
+                    "type": "null"
+                  },
+                  "graph_artifact_file": {
+                    "type": "null"
+                  },
+                  "graph_contract_version": {
+                    "type": "null"
+                  },
+                  "graphiti_projection_digest": {
+                    "type": "null"
+                  },
+                  "reason_codes": {
+                    "maxItems": 0,
+                    "type": "array"
+                  },
+                  "sink_receipts": {
+                    "maxItems": 0,
+                    "type": "array"
+                  },
+                  "sink_state": {
+                    "const": "not_applicable"
+                  }
+                }
+              }
+            }
+          ],
+          "properties": {
+            "canonical_graph_digest": {
+              "anyOf": [
+                {
+                  "pattern": "^sha256:[0-9a-f]{64}$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "gkx_delta_digest": {
+              "anyOf": [
+                {
+                  "pattern": "^sha256:[0-9a-f]{64}$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "graph_artifact_digest": {
+              "anyOf": [
+                {
+                  "pattern": "^sha256:[0-9a-f]{64}$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "graph_artifact_file": {
+              "anyOf": [
+                {
+                  "pattern": "^watcher-graph-[0-9a-f]{64}\\.json$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "graph_contract_version": {
+              "anyOf": [
+                {
+                  "const": "gkos-watcher-canonical-gkx-graph/1.0.0-draft.1"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "graphiti_projection_digest": {
+              "anyOf": [
+                {
+                  "pattern": "^sha256:[0-9a-f]{64}$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "reason_codes": {
+              "items": {
+                "type": "string"
+              },
+              "maxItems": 64,
+              "type": "array",
+              "uniqueItems": true
+            },
+            "sink_receipts": {
+              "maxItems": 0,
+              "type": "array"
+            },
+            "sink_state": {
+              "const": "not_applicable"
+            },
+            "state": {
+              "enum": [
+                "not_started",
+                "ready"
+              ]
+            }
+          },
+          "required": [
+            "state",
+            "graph_contract_version",
+            "graph_artifact_file",
+            "graph_artifact_digest",
+            "canonical_graph_digest",
+            "gkx_delta_digest",
+            "graphiti_projection_digest",
+            "sink_state",
+            "sink_receipts",
+            "reason_codes"
+          ],
+          "type": "object",
+          "unevaluatedProperties": false
+        },
+        "last_reached_state": {
+          "enum": [
+            "observed",
+            "normalized",
+            "gkx_applied",
+            "retrieval_applied",
+            "graph_applied",
+            "activation_prepared",
+            "complete"
+          ]
+        },
+        "observation_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "plan_digest": {
+          "anyOf": [
+            {
+              "pattern": "^sha256:[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "prior_transition_digest": {
+          "anyOf": [
+            {
+              "pattern": "^sha256:[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "reason_codes": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 64,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "recorded_at": {
+          "format": "date-time",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$",
+          "type": "string"
+        },
+        "retrieval_projection_state": {
+          "additionalProperties": false,
+          "allOf": [
+            {
+              "else": {
+                "properties": {
+                  "database_file": {
+                    "pattern": "^retrieval-[0-9a-f]{64}\\.sqlite$",
+                    "type": "string"
+                  },
+                  "lexical_backend": {
+                    "enum": [
+                      "sqlite_fts5",
+                      "sqlite_lexical_scan"
+                    ]
+                  },
+                  "manifest_digest": {
+                    "pattern": "^sha256:[0-9a-f]{64}$",
+                    "type": "string"
+                  },
+                  "owner_generation_id": {
+                    "pattern": "^ingest:[0-9a-f]{24}$",
+                    "type": "string"
+                  },
+                  "owner_manifest_digest": {
+                    "pattern": "^sha256:[0-9a-f]{64}$",
+                    "type": "string"
+                  },
+                  "projection_digest": {
+                    "pattern": "^sha256:[0-9a-f]{64}$",
+                    "type": "string"
+                  },
+                  "projection_id": {
+                    "pattern": "^retrieval:[0-9a-f]{24}$",
+                    "type": "string"
+                  },
+                  "vector_stage_state": {
+                    "enum": [
+                      "disabled",
+                      "complete",
+                      "degraded"
+                    ]
+                  }
+                }
+              },
+              "if": {
+                "properties": {
+                  "state": {
+                    "const": "not_started"
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "database_file": {
+                    "type": "null"
+                  },
+                  "dimensions": {
+                    "type": "null"
+                  },
+                  "lexical_backend": {
+                    "type": "null"
+                  },
+                  "manifest_digest": {
+                    "type": "null"
+                  },
+                  "model_id": {
+                    "type": "null"
+                  },
+                  "owner_generation_id": {
+                    "type": "null"
+                  },
+                  "owner_manifest_digest": {
+                    "type": "null"
+                  },
+                  "projection_digest": {
+                    "type": "null"
+                  },
+                  "projection_id": {
+                    "type": "null"
+                  },
+                  "provider_id": {
+                    "type": "null"
+                  },
+                  "provider_kind": {
+                    "type": "null"
+                  },
+                  "reason_codes": {
+                    "maxItems": 0,
+                    "type": "array"
+                  },
+                  "vector_stage_state": {
+                    "type": "null"
+                  }
+                }
+              }
+            },
+            {
+              "else": {
+                "if": {
+                  "properties": {
+                    "state": {
+                      "const": "ready"
+                    }
+                  },
+                  "required": [
+                    "state"
+                  ]
+                },
+                "then": {
+                  "properties": {
+                    "dimensions": {
+                      "maximum": 9007199254740991,
+                      "minimum": 1,
+                      "type": "integer"
+                    },
+                    "model_id": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "provider_id": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "provider_kind": {
+                      "enum": [
+                        "openai_compatible",
+                        "local_onnx",
+                        "mcp"
+                      ]
+                    }
+                  }
+                }
+              },
+              "if": {
+                "properties": {
+                  "state": {
+                    "const": "ready"
+                  },
+                  "vector_stage_state": {
+                    "const": "disabled"
+                  }
+                },
+                "required": [
+                  "state",
+                  "vector_stage_state"
+                ]
+              },
+              "then": {
+                "properties": {
+                  "dimensions": {
+                    "type": "null"
+                  },
+                  "model_id": {
+                    "type": "null"
+                  },
+                  "provider_id": {
+                    "type": "null"
+                  },
+                  "provider_kind": {
+                    "type": "null"
+                  }
+                }
+              }
+            }
+          ],
+          "properties": {
+            "database_file": {
+              "anyOf": [
+                {
+                  "pattern": "^retrieval-[0-9a-f]{64}\\.sqlite$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "dimensions": {
+              "anyOf": [
+                {
+                  "maximum": 9007199254740991,
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "lexical_backend": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "sqlite_fts5",
+                    "sqlite_lexical_scan"
+                  ]
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "manifest_digest": {
+              "anyOf": [
+                {
+                  "pattern": "^sha256:[0-9a-f]{64}$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "model_id": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "owner_generation_id": {
+              "anyOf": [
+                {
+                  "pattern": "^ingest:[0-9a-f]{24}$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "owner_manifest_digest": {
+              "anyOf": [
+                {
+                  "pattern": "^sha256:[0-9a-f]{64}$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "projection_digest": {
+              "anyOf": [
+                {
+                  "pattern": "^sha256:[0-9a-f]{64}$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "projection_id": {
+              "anyOf": [
+                {
+                  "pattern": "^retrieval:[0-9a-f]{24}$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "provider_id": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "provider_kind": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "openai_compatible",
+                    "local_onnx",
+                    "mcp"
+                  ]
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "reason_codes": {
+              "items": {
+                "type": "string"
+              },
+              "maxItems": 64,
+              "type": "array",
+              "uniqueItems": true
+            },
+            "state": {
+              "enum": [
+                "not_started",
+                "ready"
+              ]
+            },
+            "vector_stage_state": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "disabled",
+                    "complete",
+                    "degraded"
+                  ]
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "state",
+            "owner_generation_id",
+            "owner_manifest_digest",
+            "database_file",
+            "manifest_digest",
+            "projection_id",
+            "projection_digest",
+            "lexical_backend",
+            "vector_stage_state",
+            "provider_kind",
+            "provider_id",
+            "model_id",
+            "dimensions",
+            "reason_codes"
+          ],
+          "type": "object",
+          "unevaluatedProperties": false
+        },
+        "state": {
+          "enum": [
+            "observed",
+            "normalized",
+            "gkx_applied",
+            "retrieval_applied",
+            "graph_applied",
+            "activation_prepared",
+            "complete",
+            "failed",
+            "superseded"
+          ]
+        },
+        "terminal_state": {
+          "enum": [
+            "open",
+            "complete",
+            "failed",
+            "superseded"
+          ]
+        },
+        "transition_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "transition_ordinal": {
+          "maximum": 6,
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "contract_version",
+        "batch_id",
+        "transition_ordinal",
+        "state",
+        "last_reached_state",
+        "terminal_state",
+        "observation_digest",
+        "plan_digest",
+        "prior_transition_digest",
+        "gkx_delta_digest",
+        "gkx_snapshot_digest",
+        "retrieval_projection_state",
+        "graph_projection_state",
+        "reason_codes",
+        "recorded_at",
+        "completed_at",
+        "transition_digest"
+      ],
+      "type": "object",
+      "unevaluatedProperties": false
+    }
+  },
+  "$id": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/transition.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "oneOf": [
+    {
+      "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/transition.schema.json#/$defs/retrievalProjectionState"
+    },
+    {
+      "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/transition.schema.json#/$defs/graphProjectionState"
+    },
+    {
+      "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/transition.schema.json#/$defs/transition"
+    },
+    {
+      "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/transition.schema.json#/$defs/normalizedGraphDelta"
+    }
+  ],
+  "title": "transition.schema.json"
+}

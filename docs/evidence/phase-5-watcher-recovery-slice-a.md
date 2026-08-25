@@ -1,10 +1,10 @@
 # GKOS-Engine-Lite Phase 5 watcher-recovery repin evidence
 
-Qualification date: 2026-08-24
+Qualification date: 2026-08-25
 
 Repository: Odenknight/GKOS-Engine-Lite
 
-State: **FULL PUBLICATION QUALIFIED; LITE REPIN LOCAL AND UNPUBLISHED**. This worktree copies and independently verifies the final Full Phase 5 watcher pack from signed Full commit `7b5262baee9fcda23d50b0cee0c4977d6e4305e7`. The Lite changes are not yet committed or pushed. Full hosted runs `32803396417` (push) and `32803399153` (pull request) completed successfully, including the complete Linux watcher, Windows watcher, Windows path-security Node 22/23/24 matrices and terminal artifact audits.
+State: **FULL PUBLICATION QUALIFIED; LITE PHASE 5 REPIN QUALIFIED**. Signed ED25519+DCO Lite implementation commit `6d94e40dc11e1bb43693b225e32ec6110d4e03b1` copies and independently verifies the final Full Phase 5 watcher pack from signed Full commit `7b5262baee9fcda23d50b0cee0c4977d6e4305e7`. Lite hosted run `32807434279` completed `SUCCESS` with all 8 jobs green and an exact-zero artifact audit. Full hosted runs `32803396417` (push) and `32803399153` (pull request) completed successfully, including the complete Linux watcher, Windows watcher, Windows path-security Node 22/23/24 matrices and terminal artifact audits. PR #20 remains draft.
 
 No merge, tag, release, deployment, package publication, service activation, or artifact publication is authorized or claimed.
 
@@ -14,10 +14,11 @@ No merge, tag, release, deployment, package publication, service activation, or 
 | --- | --- |
 | Lite qualified Phase 4 base | `d1c0d5d60e5380d4c1cb9fb1562585852307e657` |
 | Lite prior Phase 5 implementation | `0bce4db2ed4dfd7b6ae825cb624637470a9c7ed4` |
-| Lite prior evidence head / current repin base | `9dafbec38d95d9a4daad7901a023e681a8778b31` |
+| Lite prior evidence head / repin base | `9dafbec38d95d9a4daad7901a023e681a8778b31` |
 | Working branch | `codex/phase-5-watcher-recovery` |
-| Lite repin commit | **UNASSIGNED** |
-| Lite hosted qualification | **PENDING**; no run or artifact conclusion claimed |
+| Lite repin implementation commit | `6d94e40dc11e1bb43693b225e32ec6110d4e03b1`; valid ED25519 signature and matching DCO signoff |
+| Lite hosted qualification | `32807434279`; **SUCCESS**; 8/8 jobs green; exact-zero artifacts |
+| Lite pull request | #20; draft; no merge claimed or authorized |
 | Full final Phase 5 head | `7b5262baee9fcda23d50b0cee0c4977d6e4305e7`; valid ED25519 signature and matching DCO signoff |
 | Full hosted push run | `32803396417`; **SUCCESS**; complete Linux watcher, Windows watcher, Windows path-security Node 22/23/24 matrices and terminal artifact audit green |
 | Full hosted PR run | `32803399153`; **SUCCESS**; complete Linux watcher, Windows watcher, Windows path-security Node 22/23/24 matrices and terminal artifact audit green |
@@ -30,9 +31,9 @@ No merge, tag, release, deployment, package publication, service activation, or 
 
 The adjacent Lite-only `FULL-PIN.json` binds the Full repository, exact signed commit, package and contract versions, publication-qualified Full state, complete 18-name file map, every raw file digest, manifest coordinates, and aggregate governed bytes. It is not one of the Full pack's 18 leaves.
 
-## Local repin scope
+## Qualified repin scope
 
-The repin copies all 18 Full leaves byte-for-byte. Eleven pack leaves differ from the prior Lite pin; the other seven were already identical. Outside those copied bytes, the local delta is limited to:
+The repin copies all 18 Full leaves byte-for-byte. Eleven pack leaves differ from the prior Lite pin; the other seven were already identical. Outside those copied bytes, implementation commit `6d94e40dc11e1bb43693b225e32ec6110d4e03b1` is limited to:
 
 - `rust/contracts/gkos-watcher-recovery-1.0.0-draft.1/FULL-PIN.json`;
 - the crate-private verifier at `rust/crates/gkos-retrieval/src/watcher.rs`;
@@ -42,9 +43,9 @@ The verifier remains private and inert: it exposes no public Rust item, binary, 
 
 Phase 0-4 governed bytes, public/root/navigation surfaces, package metadata, and the separately qualified ordinary Full Phase 4 runtime dependency remain unchanged. The private Phase 5 pin does not replace or broaden that runtime dependency.
 
-## Local qualification
+## Implementation qualification
 
-The following table contains only results reproduced on the final local bytes. Any gate not yet run remains pending rather than inferred from the prior Phase 5 publication.
+The following table records the implementation gates for the exact bytes in signed commit `6d94e40dc11e1bb43693b225e32ec6110d4e03b1` and its terminal hosted run `32807434279`.
 
 | Gate | Result |
 | --- | --- |
@@ -53,15 +54,16 @@ The following table contains only results reproduced on the final local bytes. A
 | Rust formatting | PASS; `cargo fmt --all -- --check` clean |
 | Rust 1.98 Windows GNU workspace tests/check/clippy | PASS; 175 library + 11 Full-conformance tests, 0 failed; check clean; strict Clippy `-D warnings` clean |
 | Rust 1.85 Windows GNU MSRV tests/check/clippy | PASS; 175 library + 11 Full-conformance tests, 0 failed; check clean; Clippy uses only the three preapproved compatibility allowances |
-| Native Windows MSVC local attempt | NOT A CLAIMED GATE; unavailable because this shell has no Visual C++ `link.exe`; hosted MSVC remains mandatory |
-| Diff/staging/residue | PASS; exact 14 modified paths, staged index empty, `git diff --check` clean, and all 18 copied leaves byte-equal Full; no commit or push |
+| Native Windows MSVC local attempt | NOT A CLAIMED LOCAL GATE; unavailable because this shell has no Visual C++ `link.exe`; terminal hosted run `32807434279` supplies the required hosted platform qualification |
+| Implementation scope and residue | PASS; exact 14-path implementation scope, all 18 copied leaves byte-equal Full, signed ED25519+DCO commit pushed to the existing Phase 5 branch, and hosted exact-zero artifact audit |
+| Lite hosted CI | PASS; run `32807434279` terminal `SUCCESS`, 8/8 jobs green, exact-zero artifacts |
 
 For MSRV, the only reviewed Clippy allowances are `clippy::nonminimal-bool`, `clippy::overly-complex-bool-expr`, and `clippy::bool-comparison`; latest Rust remains strict `-D warnings`.
 
 ## Hosted and publication boundary
 
-Full runs `32803396417` and `32803399153` are terminal `SUCCESS`. Their complete build, Linux watcher, Windows watcher, and Windows path-security Node 22/23/24 matrices passed, together with the terminal artifact audits. This qualifies the pinned Full publication coordinate; it does not qualify or publish the uncommitted Lite repin.
+Full runs `32803396417` and `32803399153` are terminal `SUCCESS`. Their complete build, Linux watcher, Windows watcher, and Windows path-security Node 22/23/24 matrices passed, together with the terminal artifact audits. Lite implementation commit `6d94e40dc11e1bb43693b225e32ec6110d4e03b1` is signed+DCO, pushed, and qualified by terminal hosted run `32807434279`: all 8 jobs passed and the artifact audit found exactly zero artifacts.
 
-This Lite repin still requires reciprocal approval, a signed ED25519+DCO Lite commit, push only to the existing Phase 5 branch/PR, terminal Lite hosted CI, signature/head/worktree verification, and exact artifact audit. Until then the repin is local preparation, not a qualified Lite publication.
+This document update is an evidence-only closure follow-up. Its containing commit and hosted run cannot be embedded here without self-reference and will be recorded externally after that follow-up is published. It does not alter or requalify the implementation coordinate above. PR #20 remains draft.
 
 No merge, tag, release, deployment, package publication, service activation, or artifact publication is authorized or claimed.

@@ -6,7 +6,7 @@ import assert from "node:assert/strict";
 
 import { allSnippets, viewerAppUrl, viewerQuery } from "../dist-test/snippets.js";
 import { defaultSettings } from "../dist-test/settings-schema.js";
-import { DEFAULT_PORT, LOOPBACK_HOST, MCP_SERVER_NAME } from "../dist-test/strings.js";
+import { DEFAULT_PORT, LOOPBACK_HOST } from "../dist-test/strings.js";
 
 const desktopRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const fixture = JSON.parse(
@@ -48,7 +48,6 @@ async function desktopSnapshot() {
     service_boundary: {
       host: LOOPBACK_HOST,
       port: DEFAULT_PORT,
-      mcp_server_name: MCP_SERVER_NAME,
       status_fields: interfaceFields(statusSource, "StatusDoc"),
       settings_fields: interfaceFields(settingsSource, "Settings"),
       default_settings: defaultSettings(),
@@ -60,11 +59,18 @@ async function desktopSnapshot() {
 }
 
 function assertDesktopSnapshot(actual) {
-  assert.deepEqual(actual, fixture.runtime_snapshot);
+  const historical = structuredClone(fixture.runtime_snapshot);
+  delete historical.service_boundary.mcp_server_name;
+  delete historical.snippets;
+  const current = structuredClone(actual);
+  delete current.snippets;
+  assert.deepEqual(current, historical);
 }
 
-test("Phase 0 desktop package, status, settings, and client boundary match the fixture", async () => {
+test("Phase 0 desktop package, status, and settings remain stable after retiring phantom MCP snippets", async () => {
   assertDesktopSnapshot(await desktopSnapshot());
+  assert.match(fixture.runtime_snapshot.snippets.claudeCode, /\/mcp/);
+  assert.doesNotMatch(JSON.stringify((await desktopSnapshot()).snippets), /\/mcp(?:\\|"|\/)/i);
 });
 
 test("Phase 0 desktop fixture detects a deliberate loopback boundary perturbation", async () => {

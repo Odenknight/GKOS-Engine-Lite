@@ -1,6 +1,10 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { prepareDelegatedCommand, validateLiteCommand } from "../bin/okf-lite.mjs";
+import {
+  prepareDelegatedCommand,
+  validateDelegatedCommand,
+  validateLiteCommand,
+} from "../bin/okf-lite.mjs";
 
 test("allows the eight delegated Lite command paths", () => {
   for (const argv of [
@@ -46,6 +50,17 @@ test("preserves the pinned search as-of flag and value byte-for-byte at the dele
     "search", "historical policy", "--kb-path", ".", "--as-of", asOf, "--limit", "5",
   ]);
   assert.equal(prepared.argv[prepared.argv.indexOf("--as-of") + 1], asOf);
+});
+
+test("recognizes the local assist path without delegating it to Engine", () => {
+  for (const task of [
+    "explain", "improve", "repair", "find-links", "find-claims", "check-conflicts", "check-privacy",
+  ]) {
+    const argv = ["assist", task, "note.md"];
+    assert.deepEqual(validateLiteCommand(argv), { allowed: true });
+    assert.equal(validateDelegatedCommand(argv).allowed, false);
+    assert.equal(prepareDelegatedCommand(argv).allowed, false);
+  }
 });
 
 test("preserves the pinned Full retrieval namespace and original argv object byte-for-byte", () => {

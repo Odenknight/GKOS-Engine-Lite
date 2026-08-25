@@ -4,9 +4,9 @@
 
 You write notes because thinking on paper (or in Obsidian, or a plain folder of markdown files) helps you think. Increasingly, you also want to talk to an AI assistant about those notes — ask it questions, have it find connections, let it help you write. The usual way to do that means uploading your notes to someone else's server. GKOS Engine Desktop is a different way.
 
-This app runs quietly on your own computer. It watches a notes folder you choose, and builds a live "map" of what's inside it — including a connections view called Graphiti, which shows how your notes relate to each other, like a web of related ideas. AI assistants that also run on your computer, such as Claude Desktop, can then look at that map through a small local doorway the app opens for them.
+This app runs quietly on your own computer. It watches a notes folder you choose and builds a live "map" of what's inside it, including a connections view called Graphiti. When enabled, a bearer-token-protected, GET-only REST API lets local programs read that map.
 
-The key difference is privacy. Before any assistant can see anything, you choose a default privacy level for your notes, and any note without an explicit label is treated as your most private setting by default — not the most open. The app also physically cannot accept a connection from anywhere except your own computer: there is no cloud feature, no remote access, and no tunnel of any kind. Your notes never leave the machine they're on.
+The built-in server binds directly to loopback and GKOS provides no upload, remote-bind, proxy, or tunnel feature. Sensitivity labels still matter as governance metadata and missing labels fail closed, but they do not filter this API. Any program that receives the bearer token can read, copy, or export every indexed note and projection. Separately configured proxy or tunnel software can relay those responses beyond this computer.
 
 ## Optional intelligence assistance
 
@@ -17,9 +17,9 @@ and cannot edit files automatically. The desktop app works without it.
 
 The everyday controls use plain language:
 
-- **Share with local AI apps** turns the protected, read-only connection on or
+- **Enable local Agent API** turns the bearer-protected, read-only connection on or
   off.
-- **Copy setup** gives you ready-to-paste setup for the AI app you choose.
+- **Copy command** gives you an authenticated command for an implemented REST route.
 - Ports, endpoints, and access keys are hidden under **Advanced connection
   settings** and **Show technical details**. Leave them unchanged unless an
   app specifically asks for them.
@@ -42,11 +42,11 @@ The everyday controls use plain language:
 | phi | Health information | Medical history, therapy notes |
 | secret | Your most private notes | Passwords, deeply personal journal entries |
 
-**Fail-closed** — if a note has no privacy label at all, the app never guesses something open. It treats the note as being at your chosen default level, and that default starts at **secret** until you change it. Nothing is exposed by accident.
+**Fail-closed classification** — if a note has no sensitivity label, the app uses your chosen default, which starts at **secret**. This prevents accidental low classification; it does not hide records from a bearer-authenticated Agent API caller.
 
-**Raise-only** — the app can decide a note deserves a stricter (more private) label than your default, but it can never loosen a label to make a note more open than what you or the note itself declared. Privacy only ever tightens automatically, never relaxes.
+**Raise-only** — the app can decide a note deserves a stricter label than your default, but it cannot automatically loosen a label. This is a metadata rule, not caller authorization.
 
-**Loopback / local-only** — the app's connection to AI assistants only works between programs on the same computer (this is what "loopback" means). It cannot accept a connection from the internet, another computer, or your phone. Your notes never leave this computer.
+**Loopback binding** — GKOS binds its built-in server directly to `127.0.0.1` and does not include a remote-bind, proxy, or tunnel feature. Loopback does not prevent a token-holding client from copying responses or separately configured software from relaying them elsewhere.
 
 **Graphiti projections** — a knowledge-graph view: a web of connections between your notes (this note cites that one, this idea contradicts that one, and so on) that an AI assistant can follow when answering your questions.
 
@@ -84,12 +84,12 @@ On macOS Ventura and newer, if step 3 doesn't show a dialog:
 
 ## The first-run wizard, step by step
 
-The wizard runs once, the first time you open the app, and enforces one important order: you must choose a privacy default **before** the app can ever talk to an assistant.
+The wizard runs once, the first time you open the app, and requires a default sensitivity classification before the Agent API can be enabled.
 
 1. **Welcome.** A one-paragraph explanation of why the app exists (the same pitch as above).
 2. **Notes-folder picker.** A native file dialog. Choose the folder your notes live in. You can change this later in Settings.
-3. **Default-sensitivity chooser.** The seven levels appear as a list, each with a one-line description (see the table above). **secret** is preselected. You must actively confirm your choice to move on — nothing proceeds silently. Remember the raise-only rule: this is a floor for unlabeled notes, and the app can only make a note *more* private automatically, never less.
-4. **Enable the local agent connection.** Only now does this toggle appear, and it starts **off**. Turning it on shows a network notice: your notes become reachable to other programs running on this same computer (never the internet), and the default sensitivity you just set governs any unlabeled note. Leave it off if you're not ready to connect an assistant yet — you can turn it on anytime from Settings.
+3. **Default-sensitivity chooser.** The seven levels appear as a list, each with a one-line description (see the table above). **secret** is preselected. You must actively confirm your choice to move on. The choice classifies unlabeled notes but does not filter authenticated API responses.
+4. **Enable the local Agent API.** Only now does this toggle appear, and it starts **off**. Turning it on makes every indexed note reachable to programs on this computer that have the bearer token. Leave it off if that is not acceptable.
 5. **Finish.** The wizard closes and the app moves into your system tray (Mac: menu bar; Windows: system tray).
 
 You can revisit every one of these choices later in the Settings window.
@@ -99,55 +99,50 @@ You can revisit every one of these choices later in the Settings window.
 Open Settings from the tray icon.
 
 - **Notes folder** — shows your current folder; click to change it.
-- **Sensitivity dropdown** — your default privacy level. Changing it **re-scans your notes** and restarts the local connection, because the new default has to be applied from scratch.
+- **Sensitivity dropdown** — your default classification for unlabeled notes. Changing it **re-scans your notes** and restarts the local API. It does not grant or deny API access.
 - **Enable toggle** — turns the local agent connection on or off.
 - **Port** — the local network port the app listens on (default `4814`). Leave it alone unless another app complains about a conflict.
-- **Status panel** — shows how many notes are indexed, when the last scan happened, and the local address assistants connect to.
-- **Token** — a long random code the app generates for itself, like a password it uses to prove a connecting program is allowed in. You never need to type it yourself — the connect snippets below include it automatically.
+- **Status panel** — shows how many notes are indexed, when the last scan happened, and the local API address.
+- **Token** — a long random bearer credential. Any program with it can read every implemented Agent API route, so treat copied commands as secrets.
 
-## Connecting agents
+## Using the local Agent API
 
-### Claude Desktop (recommended path)
+The pinned sidecar does not expose MCP. Configuring Claude Desktop, Claude Code, Cursor, or another MCP client against `/mcp` will return `404`.
 
-1. Open the tray icon and choose **Copy MCP connect snippet**.
-2. In Claude Desktop, open its settings and add a new MCP server using the snippet you copied. It looks like:
+Open the tray icon and choose **Copy Agent API health command**, or copy one of the commands in Settings. The implemented routes are `/health`, `/notes`, `/graph`, and `/graphiti/episodes`. For example:
    ```
-   claude mcp add kosmos-oden http://127.0.0.1:4814/mcp
+   # Windows PowerShell
+   curl.exe -H "Authorization: Bearer <token>" "http://127.0.0.1:4814/health"
+
+   # macOS or Linux
+   curl -H "Authorization: Bearer <token>" "http://127.0.0.1:4814/health"
    ```
-3. Restart Claude Desktop if it asks you to.
-
-### Cursor
-
-The tray menu's connect panel also offers a Cursor-formatted snippet — copy it into Cursor's MCP settings the same way.
-
-### Other tools (generic)
-
-A generic TOML snippet is also available from the same panel, for any other MCP-compatible tool that accepts a local server address and token.
+All four routes are GET-only and return JSON. No source-note mutation route exists.
 
 ## The 3D view
 
-The tray menu can open a **3D view** of your notes: a read-only, rotatable map of your notes and the connections between them, the same Graphiti projection an assistant would follow. It reads from the same local engine your assistants use — nothing leaves this computer, and, like everything else in the app, it can only look at your notes, never change them.
+The tray menu can open a **3D view** of your notes: a read-only, rotatable map of your notes and the connections between them, using the same loopback API. The GKOS view does not upload responses or change source notes. Software holding the bearer token can still copy or relay API responses.
 
 There are two ways to open it from the tray:
 
 - **Open 3D View** shows the map in its own app window.
 - **Open 3D View (browser)** opens the same map in your default web browser instead. Use this if the in-app window comes up blank.
 
-Either way, if the local Agent API is switched off, the view still opens — it just shows a small connect form instead of a map. Turn the API on in Settings (and pick a notes folder) to populate it. The view connects to the loopback address automatically and carries the access token for you, exactly like the connect snippets do.
+Either way, if the local Agent API is switched off, the view still opens — it just shows a small connect form instead of a map. Turn the API on in Settings (and pick a notes folder) to populate it. The view connects to the loopback address automatically and carries the access token for you.
 
 ## Privacy & safety FAQ
 
-**Is anything uploaded anywhere?**
-No. The app only listens on "loopback" — a technical term for connections that stay inside your own computer. It cannot accept a connection from the internet, another device, or anywhere else. There is no cloud feature in this app at all.
+**Does GKOS upload anything?**
+GKOS has no built-in upload feature and its server binds directly to loopback. That does not control what another token-holding program does with a response, and it does not prevent separately configured proxy or tunnel software from exposing the local service.
 
-**What can agents see?**
-Only what your sensitivity settings allow. Each note has an effective privacy level — either the level it declares, or your chosen default if it declares none — and an assistant only sees notes at or below the ceiling your setup allows.
+**What can API clients see?**
+Every indexed note and projection. Sensitivity is included as metadata but is not an access-control filter. The bearer token authorizes the whole current read API.
 
 **What can agents change?**
 Nothing. The connection is read-only. Assistants can look at your notes and the map built from them, but nothing they do can edit, delete, or create files in your notes folder.
 
-**What if I have private notes I don't want any assistant to see?**
-Label them with a stricter sensitivity level yourself, or simply rely on fail-closed: any note with no label at all defaults to your chosen default, which starts at the strictest setting (secret) until you change it.
+**What if I have notes I do not want an API client to see?**
+Do not enable the Agent API for that corpus, do not share its bearer token, or use a separate notes directory. A stricter sensitivity label alone does not hide a note from this API.
 
 **Why is the app unsigned right now?**
 Digital signing is a separate step the developer is completing later. An unsigned app still runs the same code — the warnings you see are your operating system's standard caution for any app that hasn't been through that process yet, not a sign of a problem with this specific app.
@@ -160,11 +155,11 @@ Make sure you used right-click → Open (not double-click) the first time, or ch
 **The app won't open on Windows.**
 Make sure you clicked "More info" then "Run anyway" on the SmartScreen warning. If Windows blocks it entirely, check whether antivirus software is quarantining the file.
 
-**An assistant can't connect.**
-Check three things in order: is the enable toggle switched on in Settings; did you paste the current connect snippet (regenerate it from the tray if you're not sure); and have you restarted the assistant app after connecting it.
+**An API client can't connect.**
+Check that the API is enabled, the client targets `127.0.0.1` and an implemented route, and the request carries the current `Authorization: Bearer <token>` header. `/mcp` is not implemented.
 
 **My notes aren't showing up.**
-First check that the notes folder path in Settings actually points to where your notes live. If the folder is correct but notes still seem to be missing, check your default sensitivity setting: if it's set very strict (like secret) and your notes have no privacy labels of their own, they'll all resolve to that strict level — and an assistant's request may not be allowed to see anything at that level. This is by design, not a bug: the app would rather hide too much than expose too much. Lower your default sensitivity in Settings if you want more unlabeled notes visible.
+First check that the notes folder path in Settings points to where your notes live and inspect `/health` for the indexed count. Changing sensitivity will not make a record appear or disappear from the current API because sensitivity is not its access-control boundary.
 
 ## Uninstall
 

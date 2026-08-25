@@ -17,6 +17,7 @@ if (!commitMatch && !tagMatch) problems.push("Engine dependency must use a revie
 if (pkg.version !== expectedVersion || resolved?.version !== expectedVersion) problems.push("Lite version must match the selected Engine package version");
 if (!resolvedSha) problems.push("Engine lockfile resolution must end in an immutable SHA");
 if (expectedSha && resolvedSha !== expectedSha) problems.push("Engine lockfile resolution must match the declared immutable SHA");
+if (resolved?.bin?.gkx !== "bin/gkx.mjs") problems.push("Engine lockfile must expose the reviewed 2.x gkx CLI at bin/gkx.mjs");
 const documentedReference = expectedSha ?? `#v${expectedVersion}`;
 if (!readme.includes(documentedReference) || !readme.includes(`package ${expectedVersion}`) || !versioning.includes("engine-verbatim")) {
   problems.push("README/VERSIONING must describe the active Engine commit and package version");

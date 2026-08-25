@@ -1,0 +1,384 @@
+{
+  "$defs": {
+    "acceptedSource": {
+      "additionalProperties": false,
+      "properties": {
+        "parser_descriptor_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "source_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "source_id": {
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$",
+          "type": "string"
+        },
+        "source_observation_ordinal": {
+          "maximum": 999999,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "source_path": {
+          "maxLength": 1024,
+          "minLength": 1,
+          "pattern": "^(?!/)(?![A-Za-z]:)(?![A-Za-z][A-Za-z0-9+.-]*:)(?!.*:)(?!.*\\\\)(?!.*(?:^|/)\\.\\.?(?:/|$))(?!.*//)[^\\u0000-\\u001f<>:\"|?*\\u007f]+$",
+          "type": "string"
+        },
+        "source_size_bytes": {
+          "maximum": 67108864,
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "source_path",
+        "source_id",
+        "source_observation_ordinal",
+        "source_digest",
+        "source_size_bytes",
+        "parser_descriptor_digest"
+      ],
+      "type": "object",
+      "unevaluatedProperties": false
+    },
+    "rejectedSource": {
+      "additionalProperties": false,
+      "properties": {
+        "parser_descriptor_digest": {
+          "anyOf": [
+            {
+              "pattern": "^sha256:[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "rejection_class": {
+          "enum": [
+            "validation",
+            "scan_rejection"
+          ]
+        },
+        "rejection_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "source_digest": {
+          "anyOf": [
+            {
+              "pattern": "^sha256:[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "source_id": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "source_observation_ordinal": {
+          "maximum": 999999,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "source_path": {
+          "maxLength": 1024,
+          "minLength": 1,
+          "pattern": "^(?!/)(?![A-Za-z]:)(?![A-Za-z][A-Za-z0-9+.-]*:)(?!.*:)(?!.*\\\\)(?!.*(?:^|/)\\.\\.?(?:/|$))(?!.*//)[^\\u0000-\\u001f<>:\"|?*\\u007f]+$",
+          "type": "string"
+        },
+        "source_size_bytes": {
+          "anyOf": [
+            {
+              "maximum": 67108864,
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "source_path",
+        "source_id",
+        "source_observation_ordinal",
+        "source_digest",
+        "source_size_bytes",
+        "parser_descriptor_digest",
+        "rejection_digest",
+        "rejection_class"
+      ],
+      "type": "object",
+      "unevaluatedProperties": false
+    },
+    "topologyArtifact": {
+      "additionalProperties": false,
+      "properties": {
+        "byte_size": {
+          "maximum": 536870912,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "file": {
+          "pattern": "^watcher-topology-[0-9a-f]{64}\\.json$",
+          "type": "string"
+        },
+        "raw_sha256": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "file",
+        "byte_size",
+        "raw_sha256"
+      ],
+      "type": "object",
+      "unevaluatedProperties": false
+    },
+    "topologySnapshot": {
+      "additionalProperties": false,
+      "properties": {
+        "accepted_source_set_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "accepted_sources": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "parser_descriptor_digest": {
+                "pattern": "^sha256:[0-9a-f]{64}$",
+                "type": "string"
+              },
+              "source_digest": {
+                "pattern": "^sha256:[0-9a-f]{64}$",
+                "type": "string"
+              },
+              "source_id": {
+                "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$",
+                "type": "string"
+              },
+              "source_observation_ordinal": {
+                "maximum": 999999,
+                "minimum": 0,
+                "type": "integer"
+              },
+              "source_path": {
+                "maxLength": 1024,
+                "minLength": 1,
+                "pattern": "^(?!/)(?![A-Za-z]:)(?![A-Za-z][A-Za-z0-9+.-]*:)(?!.*:)(?!.*\\\\)(?!.*(?:^|/)\\.\\.?(?:/|$))(?!.*//)[^\\u0000-\\u001f<>:\"|?*\\u007f]+$",
+                "type": "string"
+              },
+              "source_size_bytes": {
+                "maximum": 67108864,
+                "minimum": 0,
+                "type": "integer"
+              }
+            },
+            "required": [
+              "source_path",
+              "source_id",
+              "source_observation_ordinal",
+              "source_digest",
+              "source_size_bytes",
+              "parser_descriptor_digest"
+            ],
+            "type": "object",
+            "unevaluatedProperties": false
+          },
+          "maxItems": 1000000,
+          "type": "array"
+        },
+        "attachment_paths": {
+          "items": {
+            "maxLength": 1024,
+            "minLength": 1,
+            "pattern": "^(?!/)(?![A-Za-z]:)(?![A-Za-z][A-Za-z0-9+.-]*:)(?!.*:)(?!.*\\\\)(?!.*(?:^|/)\\.\\.?(?:/|$))(?!.*//)[^\\u0000-\\u001f<>:\"|?*\\u007f]+$",
+            "type": "string"
+          },
+          "maxItems": 1000000,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "attachment_set_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "contract_version": {
+          "const": "gkos-watcher-topology-snapshot/1.0.0-draft.1"
+        },
+        "folder_paths": {
+          "items": {
+            "maxLength": 1024,
+            "minLength": 1,
+            "pattern": "^(?!/)(?![A-Za-z]:)(?![A-Za-z][A-Za-z0-9+.-]*:)(?!.*:)(?!.*\\\\)(?!.*(?:^|/)\\.\\.?(?:/|$))(?!.*//)[^\\u0000-\\u001f<>:\"|?*\\u007f]+$",
+            "type": "string"
+          },
+          "maxItems": 1000000,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "folder_set_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "rejected_source_set_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "rejected_sources": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "parser_descriptor_digest": {
+                "anyOf": [
+                  {
+                    "pattern": "^sha256:[0-9a-f]{64}$",
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "rejection_class": {
+                "enum": [
+                  "validation",
+                  "scan_rejection"
+                ]
+              },
+              "rejection_digest": {
+                "pattern": "^sha256:[0-9a-f]{64}$",
+                "type": "string"
+              },
+              "source_digest": {
+                "anyOf": [
+                  {
+                    "pattern": "^sha256:[0-9a-f]{64}$",
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "source_id": {
+                "anyOf": [
+                  {
+                    "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$",
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "source_observation_ordinal": {
+                "maximum": 999999,
+                "minimum": 0,
+                "type": "integer"
+              },
+              "source_path": {
+                "maxLength": 1024,
+                "minLength": 1,
+                "pattern": "^(?!/)(?![A-Za-z]:)(?![A-Za-z][A-Za-z0-9+.-]*:)(?!.*:)(?!.*\\\\)(?!.*(?:^|/)\\.\\.?(?:/|$))(?!.*//)[^\\u0000-\\u001f<>:\"|?*\\u007f]+$",
+                "type": "string"
+              },
+              "source_size_bytes": {
+                "anyOf": [
+                  {
+                    "maximum": 67108864,
+                    "minimum": 0,
+                    "type": "integer"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "source_path",
+              "source_id",
+              "source_observation_ordinal",
+              "source_digest",
+              "source_size_bytes",
+              "parser_descriptor_digest",
+              "rejection_digest",
+              "rejection_class"
+            ],
+            "type": "object",
+            "unevaluatedProperties": false
+          },
+          "maxItems": 1000000,
+          "type": "array"
+        },
+        "rejection_journal_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "source_observation_snapshot_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "topology_snapshot_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "validation_result_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "vault_id": {
+          "pattern": "^[a-z0-9](?:[a-z0-9._:-]{0,127})$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "contract_version",
+        "vault_id",
+        "source_observation_snapshot_digest",
+        "validation_result_digest",
+        "rejection_journal_digest",
+        "accepted_sources",
+        "rejected_sources",
+        "folder_paths",
+        "attachment_paths",
+        "accepted_source_set_digest",
+        "rejected_source_set_digest",
+        "folder_set_digest",
+        "attachment_set_digest",
+        "topology_snapshot_digest"
+      ],
+      "type": "object",
+      "unevaluatedProperties": false
+    }
+  },
+  "$id": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/topology.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "oneOf": [
+    {
+      "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/topology.schema.json#/$defs/topologySnapshot"
+    },
+    {
+      "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/topology.schema.json#/$defs/topologyArtifact"
+    }
+  ],
+  "title": "topology.schema.json"
+}

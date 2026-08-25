@@ -1,0 +1,1164 @@
+{
+  "$defs": {
+    "cliCommand": {
+      "additionalProperties": false,
+      "properties": {
+        "argv_template": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 9,
+          "minItems": 1,
+          "type": "array"
+        },
+        "case_id": {
+          "enum": [
+            "reset-coherent-coordinate-mismatch",
+            "reset-extra-argument",
+            "reset-help",
+            "reset-invalid-state",
+            "reset-journal-coordinate-mismatch",
+            "reset-json-reordered",
+            "reset-missing-coherent-coordinate",
+            "reset-missing-journal-coordinate",
+            "reset-missing-state",
+            "reset-operational-failure",
+            "reset-reordered-flags",
+            "reset-repeated-coherent-coordinate",
+            "reset-repeated-journal-coordinate",
+            "reset-repeated-state",
+            "reset-short-help-rejected",
+            "reset-success-json",
+            "reset-success-text",
+            "reset-vault-rejected",
+            "status-extra-argument",
+            "status-help",
+            "status-invalid-state",
+            "status-json-reordered",
+            "status-missing-state",
+            "status-operational-failure",
+            "status-pre-genesis-json",
+            "status-pre-genesis-text",
+            "status-reconciling-json",
+            "status-reconciling-text",
+            "status-repeated-state",
+            "status-serving-degraded-json",
+            "status-serving-degraded-text",
+            "status-serving-fresh-json",
+            "status-serving-fresh-text",
+            "status-short-help-rejected",
+            "status-vault-rejected"
+          ]
+        },
+        "expected_exit_code": {
+          "maximum": 3,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "expected_stderr": {
+          "type": "string"
+        },
+        "expected_stdout": {
+          "type": "string"
+        },
+        "required_state_fixture": {
+          "anyOf": [
+            {
+              "enum": [
+                "reset-ready",
+                "state-invalid",
+                "state-operational-failure",
+                "status-pre-genesis",
+                "status-reconciling-stale",
+                "status-serving-degraded",
+                "status-serving-fresh"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "case_id",
+        "argv_template",
+        "expected_stdout",
+        "expected_stderr",
+        "expected_exit_code",
+        "required_state_fixture"
+      ],
+      "type": "object",
+      "unevaluatedProperties": false
+    },
+    "cliFixture": {
+      "additionalProperties": false,
+      "properties": {
+        "commands": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "argv_template": {
+                "items": {
+                  "type": "string"
+                },
+                "maxItems": 9,
+                "minItems": 1,
+                "type": "array"
+              },
+              "case_id": {
+                "enum": [
+                  "reset-coherent-coordinate-mismatch",
+                  "reset-extra-argument",
+                  "reset-help",
+                  "reset-invalid-state",
+                  "reset-journal-coordinate-mismatch",
+                  "reset-json-reordered",
+                  "reset-missing-coherent-coordinate",
+                  "reset-missing-journal-coordinate",
+                  "reset-missing-state",
+                  "reset-operational-failure",
+                  "reset-reordered-flags",
+                  "reset-repeated-coherent-coordinate",
+                  "reset-repeated-journal-coordinate",
+                  "reset-repeated-state",
+                  "reset-short-help-rejected",
+                  "reset-success-json",
+                  "reset-success-text",
+                  "reset-vault-rejected",
+                  "status-extra-argument",
+                  "status-help",
+                  "status-invalid-state",
+                  "status-json-reordered",
+                  "status-missing-state",
+                  "status-operational-failure",
+                  "status-pre-genesis-json",
+                  "status-pre-genesis-text",
+                  "status-reconciling-json",
+                  "status-reconciling-text",
+                  "status-repeated-state",
+                  "status-serving-degraded-json",
+                  "status-serving-degraded-text",
+                  "status-serving-fresh-json",
+                  "status-serving-fresh-text",
+                  "status-short-help-rejected",
+                  "status-vault-rejected"
+                ]
+              },
+              "expected_exit_code": {
+                "maximum": 3,
+                "minimum": 0,
+                "type": "integer"
+              },
+              "expected_stderr": {
+                "type": "string"
+              },
+              "expected_stdout": {
+                "type": "string"
+              },
+              "required_state_fixture": {
+                "anyOf": [
+                  {
+                    "enum": [
+                      "reset-ready",
+                      "state-invalid",
+                      "state-operational-failure",
+                      "status-pre-genesis",
+                      "status-reconciling-stale",
+                      "status-serving-degraded",
+                      "status-serving-fresh"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "case_id",
+              "argv_template",
+              "expected_stdout",
+              "expected_stderr",
+              "expected_exit_code",
+              "required_state_fixture"
+            ],
+            "type": "object",
+            "unevaluatedProperties": false
+          },
+          "maxItems": 35,
+          "minItems": 35,
+          "type": "array"
+        },
+        "contract_version": {
+          "const": "gkos-watcher-cli-fixture/1.0.0-draft.1"
+        },
+        "fixture_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "state_fixtures": {
+          "items": {
+            "oneOf": [
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "active_coherent": {
+                    "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/journal.schema.json#/$defs/activeCoherent"
+                  },
+                  "capability_state": {
+                    "const": "valid"
+                  },
+                  "coherent_manifest": {
+                    "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/coherent-manifest.schema.json#/$defs/coherentManifest"
+                  },
+                  "fixture_id": {
+                    "const": "reset-ready"
+                  },
+                  "journal_generation": {
+                    "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/journal.schema.json#/$defs/journalGeneration"
+                  },
+                  "journal_pointer": {
+                    "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/journal.schema.json#/$defs/journalPointer"
+                  },
+                  "locator": {
+                    "type": "null"
+                  },
+                  "reset_result": {
+                    "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/status.schema.json#/$defs/resetResult"
+                  },
+                  "status": {
+                    "type": "null"
+                  }
+                },
+                "required": [
+                  "fixture_id",
+                  "capability_state",
+                  "locator",
+                  "status",
+                  "active_coherent",
+                  "coherent_manifest",
+                  "journal_generation",
+                  "journal_pointer",
+                  "reset_result"
+                ],
+                "type": "object",
+                "unevaluatedProperties": false
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "active_coherent": {
+                    "type": "null"
+                  },
+                  "capability_state": {
+                    "const": "invalid"
+                  },
+                  "coherent_manifest": {
+                    "type": "null"
+                  },
+                  "fixture_id": {
+                    "const": "state-invalid"
+                  },
+                  "journal_generation": {
+                    "type": "null"
+                  },
+                  "journal_pointer": {
+                    "type": "null"
+                  },
+                  "locator": {
+                    "type": "null"
+                  },
+                  "reset_result": {
+                    "type": "null"
+                  },
+                  "status": {
+                    "type": "null"
+                  }
+                },
+                "required": [
+                  "fixture_id",
+                  "capability_state",
+                  "locator",
+                  "status",
+                  "active_coherent",
+                  "coherent_manifest",
+                  "journal_generation",
+                  "journal_pointer",
+                  "reset_result"
+                ],
+                "type": "object",
+                "unevaluatedProperties": false
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "active_coherent": {
+                    "type": "null"
+                  },
+                  "capability_state": {
+                    "const": "operational_failure"
+                  },
+                  "coherent_manifest": {
+                    "type": "null"
+                  },
+                  "fixture_id": {
+                    "const": "state-operational-failure"
+                  },
+                  "journal_generation": {
+                    "type": "null"
+                  },
+                  "journal_pointer": {
+                    "type": "null"
+                  },
+                  "locator": {
+                    "type": "null"
+                  },
+                  "reset_result": {
+                    "type": "null"
+                  },
+                  "status": {
+                    "type": "null"
+                  }
+                },
+                "required": [
+                  "fixture_id",
+                  "capability_state",
+                  "locator",
+                  "status",
+                  "active_coherent",
+                  "coherent_manifest",
+                  "journal_generation",
+                  "journal_pointer",
+                  "reset_result"
+                ],
+                "type": "object",
+                "unevaluatedProperties": false
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "active_coherent": {
+                    "type": "null"
+                  },
+                  "capability_state": {
+                    "const": "valid"
+                  },
+                  "coherent_manifest": {
+                    "type": "null"
+                  },
+                  "fixture_id": {
+                    "const": "status-pre-genesis"
+                  },
+                  "journal_generation": {
+                    "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/journal.schema.json#/$defs/journalGeneration"
+                  },
+                  "journal_pointer": {
+                    "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/journal.schema.json#/$defs/journalPointer"
+                  },
+                  "locator": {
+                    "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/status.schema.json#/$defs/serviceLocator"
+                  },
+                  "reset_result": {
+                    "type": "null"
+                  },
+                  "status": {
+                    "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/status.schema.json#/$defs/watcherStatus"
+                  }
+                },
+                "required": [
+                  "fixture_id",
+                  "capability_state",
+                  "locator",
+                  "status",
+                  "active_coherent",
+                  "coherent_manifest",
+                  "journal_generation",
+                  "journal_pointer",
+                  "reset_result"
+                ],
+                "type": "object",
+                "unevaluatedProperties": false
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "active_coherent": {
+                    "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/journal.schema.json#/$defs/activeCoherent"
+                  },
+                  "capability_state": {
+                    "const": "valid"
+                  },
+                  "coherent_manifest": {
+                    "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/coherent-manifest.schema.json#/$defs/coherentManifest"
+                  },
+                  "fixture_id": {
+                    "const": "status-reconciling-stale"
+                  },
+                  "journal_generation": {
+                    "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/journal.schema.json#/$defs/journalGeneration"
+                  },
+                  "journal_pointer": {
+                    "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/journal.schema.json#/$defs/journalPointer"
+                  },
+                  "locator": {
+                    "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/status.schema.json#/$defs/serviceLocator"
+                  },
+                  "reset_result": {
+                    "type": "null"
+                  },
+                  "status": {
+                    "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/status.schema.json#/$defs/watcherStatus"
+                  }
+                },
+                "required": [
+                  "fixture_id",
+                  "capability_state",
+                  "locator",
+                  "status",
+                  "active_coherent",
+                  "coherent_manifest",
+                  "journal_generation",
+                  "journal_pointer",
+                  "reset_result"
+                ],
+                "type": "object",
+                "unevaluatedProperties": false
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "active_coherent": {
+                    "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/journal.schema.json#/$defs/activeCoherent"
+                  },
+                  "capability_state": {
+                    "const": "valid"
+                  },
+                  "coherent_manifest": {
+                    "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/coherent-manifest.schema.json#/$defs/coherentManifest"
+                  },
+                  "fixture_id": {
+                    "const": "status-serving-degraded"
+                  },
+                  "journal_generation": {
+                    "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/journal.schema.json#/$defs/journalGeneration"
+                  },
+                  "journal_pointer": {
+                    "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/journal.schema.json#/$defs/journalPointer"
+                  },
+                  "locator": {
+                    "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/status.schema.json#/$defs/serviceLocator"
+                  },
+                  "reset_result": {
+                    "type": "null"
+                  },
+                  "status": {
+                    "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/status.schema.json#/$defs/watcherStatus"
+                  }
+                },
+                "required": [
+                  "fixture_id",
+                  "capability_state",
+                  "locator",
+                  "status",
+                  "active_coherent",
+                  "coherent_manifest",
+                  "journal_generation",
+                  "journal_pointer",
+                  "reset_result"
+                ],
+                "type": "object",
+                "unevaluatedProperties": false
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "active_coherent": {
+                    "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/journal.schema.json#/$defs/activeCoherent"
+                  },
+                  "capability_state": {
+                    "const": "valid"
+                  },
+                  "coherent_manifest": {
+                    "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/coherent-manifest.schema.json#/$defs/coherentManifest"
+                  },
+                  "fixture_id": {
+                    "const": "status-serving-fresh"
+                  },
+                  "journal_generation": {
+                    "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/journal.schema.json#/$defs/journalGeneration"
+                  },
+                  "journal_pointer": {
+                    "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/journal.schema.json#/$defs/journalPointer"
+                  },
+                  "locator": {
+                    "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/status.schema.json#/$defs/serviceLocator"
+                  },
+                  "reset_result": {
+                    "type": "null"
+                  },
+                  "status": {
+                    "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/status.schema.json#/$defs/watcherStatus"
+                  }
+                },
+                "required": [
+                  "fixture_id",
+                  "capability_state",
+                  "locator",
+                  "status",
+                  "active_coherent",
+                  "coherent_manifest",
+                  "journal_generation",
+                  "journal_pointer",
+                  "reset_result"
+                ],
+                "type": "object",
+                "unevaluatedProperties": false
+              }
+            ]
+          },
+          "maxItems": 7,
+          "minItems": 7,
+          "type": "array"
+        }
+      },
+      "required": [
+        "contract_version",
+        "state_fixtures",
+        "commands",
+        "fixture_digest"
+      ],
+      "type": "object",
+      "unevaluatedProperties": false
+    },
+    "cliStateFixture": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "active_coherent": {
+              "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/journal.schema.json#/$defs/activeCoherent"
+            },
+            "capability_state": {
+              "const": "valid"
+            },
+            "coherent_manifest": {
+              "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/coherent-manifest.schema.json#/$defs/coherentManifest"
+            },
+            "fixture_id": {
+              "const": "reset-ready"
+            },
+            "journal_generation": {
+              "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/journal.schema.json#/$defs/journalGeneration"
+            },
+            "journal_pointer": {
+              "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/journal.schema.json#/$defs/journalPointer"
+            },
+            "locator": {
+              "type": "null"
+            },
+            "reset_result": {
+              "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/status.schema.json#/$defs/resetResult"
+            },
+            "status": {
+              "type": "null"
+            }
+          },
+          "required": [
+            "fixture_id",
+            "capability_state",
+            "locator",
+            "status",
+            "active_coherent",
+            "coherent_manifest",
+            "journal_generation",
+            "journal_pointer",
+            "reset_result"
+          ],
+          "type": "object",
+          "unevaluatedProperties": false
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "active_coherent": {
+              "type": "null"
+            },
+            "capability_state": {
+              "const": "invalid"
+            },
+            "coherent_manifest": {
+              "type": "null"
+            },
+            "fixture_id": {
+              "const": "state-invalid"
+            },
+            "journal_generation": {
+              "type": "null"
+            },
+            "journal_pointer": {
+              "type": "null"
+            },
+            "locator": {
+              "type": "null"
+            },
+            "reset_result": {
+              "type": "null"
+            },
+            "status": {
+              "type": "null"
+            }
+          },
+          "required": [
+            "fixture_id",
+            "capability_state",
+            "locator",
+            "status",
+            "active_coherent",
+            "coherent_manifest",
+            "journal_generation",
+            "journal_pointer",
+            "reset_result"
+          ],
+          "type": "object",
+          "unevaluatedProperties": false
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "active_coherent": {
+              "type": "null"
+            },
+            "capability_state": {
+              "const": "operational_failure"
+            },
+            "coherent_manifest": {
+              "type": "null"
+            },
+            "fixture_id": {
+              "const": "state-operational-failure"
+            },
+            "journal_generation": {
+              "type": "null"
+            },
+            "journal_pointer": {
+              "type": "null"
+            },
+            "locator": {
+              "type": "null"
+            },
+            "reset_result": {
+              "type": "null"
+            },
+            "status": {
+              "type": "null"
+            }
+          },
+          "required": [
+            "fixture_id",
+            "capability_state",
+            "locator",
+            "status",
+            "active_coherent",
+            "coherent_manifest",
+            "journal_generation",
+            "journal_pointer",
+            "reset_result"
+          ],
+          "type": "object",
+          "unevaluatedProperties": false
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "active_coherent": {
+              "type": "null"
+            },
+            "capability_state": {
+              "const": "valid"
+            },
+            "coherent_manifest": {
+              "type": "null"
+            },
+            "fixture_id": {
+              "const": "status-pre-genesis"
+            },
+            "journal_generation": {
+              "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/journal.schema.json#/$defs/journalGeneration"
+            },
+            "journal_pointer": {
+              "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/journal.schema.json#/$defs/journalPointer"
+            },
+            "locator": {
+              "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/status.schema.json#/$defs/serviceLocator"
+            },
+            "reset_result": {
+              "type": "null"
+            },
+            "status": {
+              "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/status.schema.json#/$defs/watcherStatus"
+            }
+          },
+          "required": [
+            "fixture_id",
+            "capability_state",
+            "locator",
+            "status",
+            "active_coherent",
+            "coherent_manifest",
+            "journal_generation",
+            "journal_pointer",
+            "reset_result"
+          ],
+          "type": "object",
+          "unevaluatedProperties": false
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "active_coherent": {
+              "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/journal.schema.json#/$defs/activeCoherent"
+            },
+            "capability_state": {
+              "const": "valid"
+            },
+            "coherent_manifest": {
+              "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/coherent-manifest.schema.json#/$defs/coherentManifest"
+            },
+            "fixture_id": {
+              "const": "status-reconciling-stale"
+            },
+            "journal_generation": {
+              "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/journal.schema.json#/$defs/journalGeneration"
+            },
+            "journal_pointer": {
+              "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/journal.schema.json#/$defs/journalPointer"
+            },
+            "locator": {
+              "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/status.schema.json#/$defs/serviceLocator"
+            },
+            "reset_result": {
+              "type": "null"
+            },
+            "status": {
+              "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/status.schema.json#/$defs/watcherStatus"
+            }
+          },
+          "required": [
+            "fixture_id",
+            "capability_state",
+            "locator",
+            "status",
+            "active_coherent",
+            "coherent_manifest",
+            "journal_generation",
+            "journal_pointer",
+            "reset_result"
+          ],
+          "type": "object",
+          "unevaluatedProperties": false
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "active_coherent": {
+              "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/journal.schema.json#/$defs/activeCoherent"
+            },
+            "capability_state": {
+              "const": "valid"
+            },
+            "coherent_manifest": {
+              "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/coherent-manifest.schema.json#/$defs/coherentManifest"
+            },
+            "fixture_id": {
+              "const": "status-serving-degraded"
+            },
+            "journal_generation": {
+              "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/journal.schema.json#/$defs/journalGeneration"
+            },
+            "journal_pointer": {
+              "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/journal.schema.json#/$defs/journalPointer"
+            },
+            "locator": {
+              "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/status.schema.json#/$defs/serviceLocator"
+            },
+            "reset_result": {
+              "type": "null"
+            },
+            "status": {
+              "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/status.schema.json#/$defs/watcherStatus"
+            }
+          },
+          "required": [
+            "fixture_id",
+            "capability_state",
+            "locator",
+            "status",
+            "active_coherent",
+            "coherent_manifest",
+            "journal_generation",
+            "journal_pointer",
+            "reset_result"
+          ],
+          "type": "object",
+          "unevaluatedProperties": false
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "active_coherent": {
+              "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/journal.schema.json#/$defs/activeCoherent"
+            },
+            "capability_state": {
+              "const": "valid"
+            },
+            "coherent_manifest": {
+              "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/coherent-manifest.schema.json#/$defs/coherentManifest"
+            },
+            "fixture_id": {
+              "const": "status-serving-fresh"
+            },
+            "journal_generation": {
+              "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/journal.schema.json#/$defs/journalGeneration"
+            },
+            "journal_pointer": {
+              "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/journal.schema.json#/$defs/journalPointer"
+            },
+            "locator": {
+              "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/status.schema.json#/$defs/serviceLocator"
+            },
+            "reset_result": {
+              "type": "null"
+            },
+            "status": {
+              "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/status.schema.json#/$defs/watcherStatus"
+            }
+          },
+          "required": [
+            "fixture_id",
+            "capability_state",
+            "locator",
+            "status",
+            "active_coherent",
+            "coherent_manifest",
+            "journal_generation",
+            "journal_pointer",
+            "reset_result"
+          ],
+          "type": "object",
+          "unevaluatedProperties": false
+        }
+      ]
+    },
+    "resetResult": {
+      "additionalProperties": false,
+      "properties": {
+        "archive_manifest_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "contract_version": {
+          "const": "gkos-watcher-journal-reset-result/1.0.0-draft.1"
+        },
+        "new_journal_generation_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "outer_coherent_manifest_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "prior_journal_generation_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "requires_reconciliation": {
+          "const": true
+        },
+        "reset_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "result_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "status": {
+          "const": "reset"
+        }
+      },
+      "required": [
+        "contract_version",
+        "status",
+        "prior_journal_generation_digest",
+        "archive_manifest_digest",
+        "new_journal_generation_digest",
+        "outer_coherent_manifest_digest",
+        "reset_digest",
+        "requires_reconciliation",
+        "result_digest"
+      ],
+      "type": "object",
+      "unevaluatedProperties": false
+    },
+    "serviceLocator": {
+      "additionalProperties": false,
+      "properties": {
+        "contract_version": {
+          "const": "gkos-watcher-service-locator/1.0.0-draft.1"
+        },
+        "control_route": {
+          "const": "/control/shutdown"
+        },
+        "locator_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "loopback_host": {
+          "const": "127.0.0.1"
+        },
+        "pid": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "port": {
+          "maximum": 65535,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "service_instance_id": {
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "type": "string"
+        },
+        "started_at": {
+          "format": "date-time",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$",
+          "type": "string"
+        },
+        "status_route": {
+          "const": "/status"
+        }
+      },
+      "required": [
+        "contract_version",
+        "service_instance_id",
+        "pid",
+        "loopback_host",
+        "port",
+        "status_route",
+        "control_route",
+        "started_at",
+        "locator_digest"
+      ],
+      "type": "object",
+      "unevaluatedProperties": false
+    },
+    "watcherStatus": {
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "else": {
+            "properties": {
+              "reason_codes": {
+                "minItems": 1,
+                "type": "array"
+              }
+            }
+          },
+          "if": {
+            "properties": {
+              "freshness": {
+                "const": "fresh"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "coherent_manifest_digest": {
+                "pattern": "^sha256:[0-9a-f]{64}$",
+                "type": "string"
+              },
+              "last_sync": {
+                "format": "date-time",
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$",
+                "type": "string"
+              },
+              "reason_codes": {
+                "maxItems": 0,
+                "type": "array"
+              },
+              "source_snapshot_digest": {
+                "pattern": "^sha256:[0-9a-f]{64}$",
+                "type": "string"
+              }
+            }
+          }
+        }
+      ],
+      "properties": {
+        "chunk_count": {
+          "maximum": 9007199254740991,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "coherent_manifest_digest": {
+          "anyOf": [
+            {
+              "pattern": "^sha256:[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "configuration_digest": {
+          "anyOf": [
+            {
+              "pattern": "^sha256:[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "contract_version": {
+          "const": "gkos-watcher-status/1.0.0-draft.1"
+        },
+        "document_count": {
+          "maximum": 9007199254740991,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "embedding_model": {
+          "anyOf": [
+            {
+              "maxLength": 512,
+              "minLength": 1,
+              "pattern": "^[^\\u0000-\\u001f\\u007f]+$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "freshness": {
+          "enum": [
+            "fresh",
+            "stale",
+            "degraded"
+          ]
+        },
+        "last_sync": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "pid": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "policy_digest": {
+          "anyOf": [
+            {
+              "pattern": "^sha256:[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "reason_codes": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 32,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "service_instance_id": {
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "type": "string"
+        },
+        "source_snapshot_digest": {
+          "anyOf": [
+            {
+              "pattern": "^sha256:[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "status_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "uptime_ms": {
+          "maximum": 9007199254740991,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "watcher_state": {
+          "enum": [
+            "starting",
+            "reconciling",
+            "serving",
+            "stopping",
+            "error"
+          ]
+        }
+      },
+      "required": [
+        "contract_version",
+        "service_instance_id",
+        "watcher_state",
+        "freshness",
+        "reason_codes",
+        "document_count",
+        "chunk_count",
+        "embedding_model",
+        "last_sync",
+        "uptime_ms",
+        "pid",
+        "source_snapshot_digest",
+        "coherent_manifest_digest",
+        "configuration_digest",
+        "policy_digest",
+        "status_digest"
+      ],
+      "type": "object",
+      "unevaluatedProperties": false
+    }
+  },
+  "$id": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/status.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "oneOf": [
+    {
+      "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/status.schema.json#/$defs/serviceLocator"
+    },
+    {
+      "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/status.schema.json#/$defs/watcherStatus"
+    },
+    {
+      "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/status.schema.json#/$defs/resetResult"
+    },
+    {
+      "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/status.schema.json#/$defs/cliFixture"
+    }
+  ],
+  "title": "status.schema.json"
+}

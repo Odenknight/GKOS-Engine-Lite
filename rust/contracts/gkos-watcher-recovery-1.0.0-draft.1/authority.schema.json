@@ -1,0 +1,540 @@
+{
+  "$defs": {
+    "journalResetGuard": {
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "else": {
+            "properties": {
+              "reset_carry_activation_digest": {
+                "pattern": "^sha256:[0-9a-f]{64}$",
+                "type": "string"
+              },
+              "reset_carry_event_set_digest": {
+                "pattern": "^sha256:[0-9a-f]{64}$",
+                "type": "string"
+              }
+            }
+          },
+          "if": {
+            "properties": {
+              "ready_event_count": {
+                "const": 0
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "reset_carry_activation_digest": {
+                "type": "null"
+              },
+              "reset_carry_event_set_digest": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ],
+      "properties": {
+        "archive_manifest_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "contract_version": {
+          "const": "gkos-watcher-journal-reset-guard/1.0.0-draft.1"
+        },
+        "guard_basename": {
+          "const": ".gkos-watcher-journal-reset.guard"
+        },
+        "guard_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "guard_stage_basename": {
+          "const": ".gkos-watcher-journal-reset.guard-stage"
+        },
+        "new_journal_directory_leaf": {
+          "pattern": "^journal-[0-9a-f-]{36}$",
+          "type": "string"
+        },
+        "new_journal_generation_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "new_journal_instance_id": {
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "type": "string"
+        },
+        "new_journal_meta_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "old_journal_generation_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "old_journal_pointer_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "operation": {
+          "const": "watcher_journal_reset"
+        },
+        "outer_coherent_manifest_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "owner_nonce": {
+          "pattern": "^[0-9a-f]{32}$",
+          "type": "string"
+        },
+        "parent_device": {
+          "pattern": "^(?:0|[1-9][0-9]*)$",
+          "type": "string"
+        },
+        "parent_inode": {
+          "pattern": "^(?:0|[1-9][0-9]*)$",
+          "type": "string"
+        },
+        "parent_mode": {
+          "const": 448
+        },
+        "ready_event_count": {
+          "maximum": 1000000,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "reset_carry_activation_digest": {
+          "anyOf": [
+            {
+              "pattern": "^sha256:[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "reset_carry_event_set_digest": {
+          "anyOf": [
+            {
+              "pattern": "^sha256:[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "reset_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "target_journal_pointer_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "contract_version",
+        "operation",
+        "owner_nonce",
+        "parent_device",
+        "parent_inode",
+        "parent_mode",
+        "guard_basename",
+        "guard_stage_basename",
+        "old_journal_pointer_digest",
+        "old_journal_generation_digest",
+        "outer_coherent_manifest_digest",
+        "archive_manifest_digest",
+        "new_journal_instance_id",
+        "new_journal_directory_leaf",
+        "new_journal_meta_digest",
+        "new_journal_generation_digest",
+        "reset_digest",
+        "target_journal_pointer_digest",
+        "ready_event_count",
+        "reset_carry_event_set_digest",
+        "reset_carry_activation_digest",
+        "guard_digest"
+      ],
+      "type": "object",
+      "unevaluatedProperties": false
+    },
+    "pointerGuard": {
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "else": {
+            "properties": {
+              "final_basename": {
+                "const": "watcher-journal-active.json"
+              },
+              "guard_basename": {
+                "const": ".watcher-journal-active.json.gkos-watcher.guard"
+              },
+              "guard_stage_basename": {
+                "const": ".watcher-journal-active.json.gkos-watcher.guard-stage"
+              },
+              "old_final_device": {
+                "pattern": "^(?:0|[1-9][0-9]*)$",
+                "type": "string"
+              },
+              "old_final_inode": {
+                "pattern": "^(?:0|[1-9][0-9]*)$",
+                "type": "string"
+              },
+              "old_pointer_byte_size": {
+                "maximum": 9007199254740991,
+                "minimum": 1,
+                "type": "integer"
+              },
+              "old_pointer_digest": {
+                "pattern": "^sha256:[0-9a-f]{64}$",
+                "type": "string"
+              },
+              "old_pointer_file": {
+                "type": "string"
+              },
+              "old_pointer_raw_sha256": {
+                "pattern": "^sha256:[0-9a-f]{64}$",
+                "type": "string"
+              },
+              "temp_basename": {
+                "const": ".watcher-journal-active.json.gkos-watcher.tmp"
+              }
+            }
+          },
+          "if": {
+            "properties": {
+              "operation": {
+                "const": "replace_watcher_active_pointer"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "final_basename": {
+                "const": "watcher-active.json"
+              },
+              "guard_basename": {
+                "const": ".watcher-active.json.gkos-watcher.guard"
+              },
+              "guard_stage_basename": {
+                "const": ".watcher-active.json.gkos-watcher.guard-stage"
+              },
+              "temp_basename": {
+                "const": ".watcher-active.json.gkos-watcher.tmp"
+              }
+            }
+          }
+        }
+      ],
+      "properties": {
+        "contract_version": {
+          "const": "gkos-watcher-pointer-replace-guard/1.0.0-draft.1"
+        },
+        "final_basename": {
+          "maxLength": 255,
+          "minLength": 1,
+          "type": "string"
+        },
+        "guard_basename": {
+          "maxLength": 255,
+          "minLength": 1,
+          "type": "string"
+        },
+        "guard_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "guard_stage_basename": {
+          "maxLength": 255,
+          "minLength": 1,
+          "type": "string"
+        },
+        "new_pointer_byte_size": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "new_pointer_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "new_pointer_file": {
+          "type": "string"
+        },
+        "new_pointer_raw_sha256": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "old_final_device": {
+          "anyOf": [
+            {
+              "pattern": "^(?:0|[1-9][0-9]*)$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "old_final_inode": {
+          "anyOf": [
+            {
+              "pattern": "^(?:0|[1-9][0-9]*)$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "old_pointer_byte_size": {
+          "anyOf": [
+            {
+              "maximum": 9007199254740991,
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "old_pointer_digest": {
+          "anyOf": [
+            {
+              "pattern": "^sha256:[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "old_pointer_file": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "old_pointer_raw_sha256": {
+          "anyOf": [
+            {
+              "pattern": "^sha256:[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "operation": {
+          "enum": [
+            "replace_watcher_active_pointer",
+            "replace_watcher_journal_pointer"
+          ]
+        },
+        "operation_intent_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "owner_nonce": {
+          "pattern": "^[0-9a-f]{32}$",
+          "type": "string"
+        },
+        "parent_device": {
+          "pattern": "^(?:0|[1-9][0-9]*)$",
+          "type": "string"
+        },
+        "parent_inode": {
+          "pattern": "^(?:0|[1-9][0-9]*)$",
+          "type": "string"
+        },
+        "parent_mode": {
+          "const": 448
+        },
+        "target_commit_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "temp_basename": {
+          "maxLength": 255,
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "contract_version",
+        "operation",
+        "owner_nonce",
+        "parent_device",
+        "parent_inode",
+        "parent_mode",
+        "final_basename",
+        "guard_basename",
+        "guard_stage_basename",
+        "temp_basename",
+        "old_pointer_file",
+        "old_pointer_digest",
+        "old_pointer_raw_sha256",
+        "old_pointer_byte_size",
+        "old_final_device",
+        "old_final_inode",
+        "new_pointer_file",
+        "new_pointer_digest",
+        "new_pointer_raw_sha256",
+        "new_pointer_byte_size",
+        "operation_intent_digest",
+        "target_commit_digest",
+        "guard_digest"
+      ],
+      "type": "object",
+      "unevaluatedProperties": false
+    },
+    "pointerRecoveryDecision": {
+      "additionalProperties": false,
+      "properties": {
+        "contract_version": {
+          "const": "gkos-watcher-pointer-recovery-decision/1.0.0-draft.1"
+        },
+        "decision_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "evidence_disposition": {
+          "enum": [
+            "continue",
+            "serve",
+            "retain_and_fail"
+          ]
+        },
+        "reader_authority": {
+          "enum": [
+            "fixed_old",
+            "guard_bound_old",
+            "fixed_new",
+            "genesis_none",
+            "fail_closed"
+          ]
+        },
+        "reader_pointer_digest": {
+          "anyOf": [
+            {
+              "pattern": "^sha256:[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "selected_action": {
+          "enum": [
+            "link_stage_to_guard",
+            "discard_incomplete_stage",
+            "unlink_stage_after_link",
+            "create_temp",
+            "replace_temp_to_fixed",
+            "discard_incomplete_temp",
+            "finalize_committed_target",
+            "serve_guard_bound_old",
+            "serve_fixed_new",
+            "retain_and_fail"
+          ]
+        }
+      },
+      "required": [
+        "contract_version",
+        "selected_action",
+        "reader_authority",
+        "reader_pointer_digest",
+        "evidence_disposition",
+        "decision_digest"
+      ],
+      "type": "object",
+      "unevaluatedProperties": false
+    },
+    "watcherAuthority": {
+      "additionalProperties": false,
+      "properties": {
+        "authority_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "configuration_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "contract_version": {
+          "const": "gkos-watcher-authority/1.0.0-draft.1"
+        },
+        "effective_profile_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "first_coherent_manifest_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "first_pointer_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "first_service_generation_id": {
+          "pattern": "^watcher:[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "type": "string"
+        },
+        "kind": {
+          "const": "watcher_coherent_authority"
+        },
+        "policy_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "vault_id": {
+          "pattern": "^[a-z0-9](?:[a-z0-9._:-]{0,127})$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "contract_version",
+        "kind",
+        "vault_id",
+        "configuration_digest",
+        "policy_digest",
+        "effective_profile_digest",
+        "first_service_generation_id",
+        "first_coherent_manifest_digest",
+        "first_pointer_digest",
+        "authority_digest"
+      ],
+      "type": "object",
+      "unevaluatedProperties": false
+    }
+  },
+  "$id": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/authority.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "oneOf": [
+    {
+      "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/authority.schema.json#/$defs/watcherAuthority"
+    },
+    {
+      "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/authority.schema.json#/$defs/pointerGuard"
+    },
+    {
+      "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/authority.schema.json#/$defs/pointerRecoveryDecision"
+    },
+    {
+      "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/authority.schema.json#/$defs/journalResetGuard"
+    }
+  ],
+  "title": "authority.schema.json"
+}

@@ -1,0 +1,2072 @@
+{
+  "$defs": {
+    "conformanceFixture": {
+      "additionalProperties": false,
+      "properties": {
+        "companion_files": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 3,
+          "minItems": 3,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "conformance_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "contract_version": {
+          "const": "gkos-watcher-recovery-conformance/1.0.0-draft.1"
+        },
+        "frozen": {
+          "const": true
+        },
+        "pack_contract_version": {
+          "const": "gkos-watcher-recovery/1.0.0-draft.1"
+        },
+        "sample_plan_digest": {
+          "const": "sha256:75b011dc253a445ec9c5fc192f600f57ec62411e8125dfa20c74a08f5faf301b"
+        },
+        "sample_plan_file": {
+          "const": "watcher-sample-plan.json"
+        },
+        "schema_cases": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "case_id": {
+                "pattern": "^[a-z0-9](?:[a-z0-9._:-]{0,127})$",
+                "type": "string"
+              },
+              "expected_valid": {
+                "type": "boolean"
+              },
+              "schema_file": {
+                "type": "string"
+              },
+              "value": {}
+            },
+            "required": [
+              "case_id",
+              "schema_file",
+              "expected_valid",
+              "value"
+            ],
+            "type": "object",
+            "unevaluatedProperties": false
+          },
+          "maxItems": 512,
+          "minItems": 1,
+          "type": "array"
+        },
+        "semantic_cases": {
+          "items": {
+            "additionalProperties": false,
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "operation": {
+                      "const": "derive_graphiti_projection"
+                    }
+                  },
+                  "required": [
+                    "operation"
+                  ],
+                  "type": "object"
+                },
+                "then": {
+                  "properties": {
+                    "input": {
+                      "properties": {
+                        "arguments": {
+                          "maxItems": 2,
+                          "minItems": 2,
+                          "type": "array"
+                        }
+                      },
+                      "type": "object"
+                    }
+                  }
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "operation": {
+                      "const": "normalize_canonical_graph"
+                    }
+                  },
+                  "required": [
+                    "operation"
+                  ],
+                  "type": "object"
+                },
+                "then": {
+                  "properties": {
+                    "input": {
+                      "properties": {
+                        "arguments": {
+                          "maxItems": 1,
+                          "minItems": 1,
+                          "type": "array"
+                        }
+                      },
+                      "type": "object"
+                    }
+                  }
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "operation": {
+                      "const": "normalize_graph_delta"
+                    }
+                  },
+                  "required": [
+                    "operation"
+                  ],
+                  "type": "object"
+                },
+                "then": {
+                  "properties": {
+                    "input": {
+                      "properties": {
+                        "arguments": {
+                          "maxItems": 1,
+                          "minItems": 1,
+                          "type": "array"
+                        }
+                      },
+                      "type": "object"
+                    }
+                  }
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "operation": {
+                      "const": "seal_coherent_activation_bundle"
+                    }
+                  },
+                  "required": [
+                    "operation"
+                  ],
+                  "type": "object"
+                },
+                "then": {
+                  "properties": {
+                    "input": {
+                      "properties": {
+                        "arguments": {
+                          "maxItems": 2,
+                          "minItems": 2,
+                          "type": "array"
+                        }
+                      },
+                      "type": "object"
+                    }
+                  }
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "operation": {
+                      "const": "seal_failure_retry_bundle"
+                    }
+                  },
+                  "required": [
+                    "operation"
+                  ],
+                  "type": "object"
+                },
+                "then": {
+                  "properties": {
+                    "input": {
+                      "properties": {
+                        "arguments": {
+                          "maxItems": 1,
+                          "minItems": 1,
+                          "type": "array"
+                        }
+                      },
+                      "type": "object"
+                    }
+                  }
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "operation": {
+                      "const": "seal_failure_retry_noop_bundle"
+                    }
+                  },
+                  "required": [
+                    "operation"
+                  ],
+                  "type": "object"
+                },
+                "then": {
+                  "properties": {
+                    "input": {
+                      "properties": {
+                        "arguments": {
+                          "maxItems": 1,
+                          "minItems": 1,
+                          "type": "array"
+                        }
+                      },
+                      "type": "object"
+                    }
+                  }
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "operation": {
+                      "const": "seal_journal_reset_bundle"
+                    }
+                  },
+                  "required": [
+                    "operation"
+                  ],
+                  "type": "object"
+                },
+                "then": {
+                  "properties": {
+                    "input": {
+                      "properties": {
+                        "arguments": {
+                          "maxItems": 3,
+                          "minItems": 3,
+                          "type": "array"
+                        }
+                      },
+                      "type": "object"
+                    }
+                  }
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "operation": {
+                      "const": "seal_journal_reset_reconciliation_adoption_bundle"
+                    }
+                  },
+                  "required": [
+                    "operation"
+                  ],
+                  "type": "object"
+                },
+                "then": {
+                  "properties": {
+                    "input": {
+                      "properties": {
+                        "arguments": {
+                          "maxItems": 1,
+                          "minItems": 1,
+                          "type": "array"
+                        }
+                      },
+                      "type": "object"
+                    }
+                  }
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "operation": {
+                      "const": "seal_measurement"
+                    }
+                  },
+                  "required": [
+                    "operation"
+                  ],
+                  "type": "object"
+                },
+                "then": {
+                  "properties": {
+                    "input": {
+                      "properties": {
+                        "arguments": {
+                          "maxItems": 1,
+                          "minItems": 1,
+                          "type": "array"
+                        }
+                      },
+                      "type": "object"
+                    }
+                  }
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "operation": {
+                      "const": "seal_pointer_recovery"
+                    }
+                  },
+                  "required": [
+                    "operation"
+                  ],
+                  "type": "object"
+                },
+                "then": {
+                  "properties": {
+                    "input": {
+                      "properties": {
+                        "arguments": {
+                          "maxItems": 2,
+                          "minItems": 2,
+                          "type": "array"
+                        }
+                      },
+                      "type": "object"
+                    }
+                  }
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "operation": {
+                      "const": "seal_record"
+                    }
+                  },
+                  "required": [
+                    "operation"
+                  ],
+                  "type": "object"
+                },
+                "then": {
+                  "properties": {
+                    "input": {
+                      "properties": {
+                        "arguments": {
+                          "maxItems": 1,
+                          "minItems": 1,
+                          "type": "array"
+                        }
+                      },
+                      "type": "object"
+                    }
+                  }
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "operation": {
+                      "const": "seal_source_removal_adapter_verification_bundle"
+                    }
+                  },
+                  "required": [
+                    "operation"
+                  ],
+                  "type": "object"
+                },
+                "then": {
+                  "properties": {
+                    "input": {
+                      "properties": {
+                        "arguments": {
+                          "maxItems": 1,
+                          "minItems": 1,
+                          "type": "array"
+                        }
+                      },
+                      "type": "object"
+                    }
+                  }
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "operation": {
+                      "const": "seal_source_removal_event_set_bundle"
+                    }
+                  },
+                  "required": [
+                    "operation"
+                  ],
+                  "type": "object"
+                },
+                "then": {
+                  "properties": {
+                    "input": {
+                      "properties": {
+                        "arguments": {
+                          "maxItems": 1,
+                          "minItems": 1,
+                          "type": "array"
+                        }
+                      },
+                      "type": "object"
+                    }
+                  }
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "operation": {
+                      "const": "seal_source_removal_receipt_bundle"
+                    }
+                  },
+                  "required": [
+                    "operation"
+                  ],
+                  "type": "object"
+                },
+                "then": {
+                  "properties": {
+                    "input": {
+                      "properties": {
+                        "arguments": {
+                          "maxItems": 1,
+                          "minItems": 1,
+                          "type": "array"
+                        }
+                      },
+                      "type": "object"
+                    }
+                  }
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "operation": {
+                      "const": "seal_status_bundle"
+                    }
+                  },
+                  "required": [
+                    "operation"
+                  ],
+                  "type": "object"
+                },
+                "then": {
+                  "properties": {
+                    "input": {
+                      "properties": {
+                        "arguments": {
+                          "maxItems": 1,
+                          "minItems": 1,
+                          "type": "array"
+                        }
+                      },
+                      "type": "object"
+                    }
+                  }
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "operation": {
+                      "const": "seal_transition_chain"
+                    }
+                  },
+                  "required": [
+                    "operation"
+                  ],
+                  "type": "object"
+                },
+                "then": {
+                  "properties": {
+                    "input": {
+                      "properties": {
+                        "arguments": {
+                          "maxItems": 1,
+                          "minItems": 1,
+                          "type": "array"
+                        }
+                      },
+                      "type": "object"
+                    }
+                  }
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "operation": {
+                      "const": "validate_cli_fixture"
+                    }
+                  },
+                  "required": [
+                    "operation"
+                  ],
+                  "type": "object"
+                },
+                "then": {
+                  "properties": {
+                    "input": {
+                      "properties": {
+                        "arguments": {
+                          "maxItems": 1,
+                          "minItems": 1,
+                          "type": "array"
+                        }
+                      },
+                      "type": "object"
+                    }
+                  }
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "operation": {
+                      "const": "validate_pack"
+                    }
+                  },
+                  "required": [
+                    "operation"
+                  ],
+                  "type": "object"
+                },
+                "then": {
+                  "properties": {
+                    "input": {
+                      "properties": {
+                        "arguments": {
+                          "maxItems": 1,
+                          "minItems": 1,
+                          "type": "array"
+                        }
+                      },
+                      "type": "object"
+                    }
+                  }
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "operation": {
+                      "const": "validate_path"
+                    }
+                  },
+                  "required": [
+                    "operation"
+                  ],
+                  "type": "object"
+                },
+                "then": {
+                  "properties": {
+                    "input": {
+                      "properties": {
+                        "arguments": {
+                          "maxItems": 1,
+                          "minItems": 1,
+                          "type": "array"
+                        }
+                      },
+                      "type": "object"
+                    }
+                  }
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "operation": {
+                      "const": "validate_sql_authority"
+                    }
+                  },
+                  "required": [
+                    "operation"
+                  ],
+                  "type": "object"
+                },
+                "then": {
+                  "properties": {
+                    "input": {
+                      "properties": {
+                        "arguments": {
+                          "maxItems": 1,
+                          "minItems": 1,
+                          "type": "array"
+                        }
+                      },
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            ],
+            "properties": {
+              "case_id": {
+                "pattern": "^[a-z0-9](?:[a-z0-9._:-]{0,127})$",
+                "type": "string"
+              },
+              "expectation": {
+                "additionalProperties": false,
+                "properties": {
+                  "accepted": {
+                    "type": "boolean"
+                  },
+                  "error_class": {
+                    "anyOf": [
+                      {
+                        "const": "WatcherRecoveryContractError"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "error_code": {
+                    "anyOf": [
+                      {
+                        "enum": [
+                          "GKX_WATCHER_CONTRACT_CLI_INVALID",
+                          "GKX_WATCHER_CONTRACT_DIGEST_INVALID",
+                          "GKX_WATCHER_CONTRACT_GRAPH_INVALID",
+                          "GKX_WATCHER_CONTRACT_KEYS_INVALID",
+                          "GKX_WATCHER_CONTRACT_MEASUREMENT_INVALID",
+                          "GKX_WATCHER_CONTRACT_PACK_INVALID",
+                          "GKX_WATCHER_CONTRACT_PATH_INVALID",
+                          "GKX_WATCHER_CONTRACT_POINTER_INVALID",
+                          "GKX_WATCHER_CONTRACT_RECORD_INVALID",
+                          "GKX_WATCHER_CONTRACT_RELATION_INVALID",
+                          "GKX_WATCHER_CONTRACT_RESET_INVALID",
+                          "GKX_WATCHER_CONTRACT_RETRY_INVALID",
+                          "GKX_WATCHER_CONTRACT_SAMPLE_PLAN_INVALID",
+                          "GKX_WATCHER_CONTRACT_SOURCE_REMOVAL_INVALID",
+                          "GKX_WATCHER_CONTRACT_SQL_INVALID",
+                          "GKX_WATCHER_CONTRACT_TRANSITION_INVALID",
+                          "GKX_WATCHER_CONTRACT_VERSION_INVALID"
+                        ]
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "output_digest": {
+                    "anyOf": [
+                      {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "accepted",
+                  "output_digest",
+                  "error_class",
+                  "error_code"
+                ],
+                "type": "object",
+                "unevaluatedProperties": false
+              },
+              "input": {
+                "additionalProperties": false,
+                "properties": {
+                  "arguments": {
+                    "maxItems": 3,
+                    "type": "array"
+                  }
+                },
+                "required": [
+                  "arguments"
+                ],
+                "type": "object",
+                "unevaluatedProperties": false
+              },
+              "operation": {
+                "enum": [
+                  "derive_graphiti_projection",
+                  "normalize_canonical_graph",
+                  "normalize_graph_delta",
+                  "seal_coherent_activation_bundle",
+                  "seal_failure_retry_bundle",
+                  "seal_failure_retry_noop_bundle",
+                  "seal_journal_reset_bundle",
+                  "seal_journal_reset_reconciliation_adoption_bundle",
+                  "seal_measurement",
+                  "seal_pointer_recovery",
+                  "seal_record",
+                  "seal_source_removal_adapter_verification_bundle",
+                  "seal_source_removal_event_set_bundle",
+                  "seal_source_removal_receipt_bundle",
+                  "seal_status_bundle",
+                  "seal_transition_chain",
+                  "validate_cli_fixture",
+                  "validate_pack",
+                  "validate_path",
+                  "validate_sql_authority"
+                ]
+              }
+            },
+            "required": [
+              "case_id",
+              "operation",
+              "input",
+              "expectation"
+            ],
+            "type": "object",
+            "unevaluatedProperties": false
+          },
+          "maxItems": 512,
+          "minItems": 1,
+          "type": "array"
+        },
+        "status": {
+          "const": "frozen"
+        }
+      },
+      "required": [
+        "contract_version",
+        "pack_contract_version",
+        "status",
+        "frozen",
+        "sample_plan_file",
+        "sample_plan_digest",
+        "schema_cases",
+        "semantic_cases",
+        "companion_files",
+        "conformance_digest"
+      ],
+      "type": "object",
+      "unevaluatedProperties": false
+    },
+    "recoveryFixture": {
+      "additionalProperties": false,
+      "properties": {
+        "contract_version": {
+          "const": "gkos-watcher-recovery-fixture/1.0.0-draft.1"
+        },
+        "crash_cases": {
+          "items": false,
+          "maxItems": 77,
+          "minItems": 77,
+          "prefixItems": [
+            {
+              "const": "failure-retry-configuration-splice"
+            },
+            {
+              "const": "failure-retry-failed-only"
+            },
+            {
+              "const": "failure-retry-noop-complete"
+            },
+            {
+              "const": "failure-retry-noop-current-topology-splice"
+            },
+            {
+              "const": "failure-retry-noop-envelope-extra-key"
+            },
+            {
+              "const": "failure-retry-noop-failed-batch-execution-splice"
+            },
+            {
+              "const": "failure-retry-noop-failed-batch-started-at-splice"
+            },
+            {
+              "const": "failure-retry-noop-plan-mutation-splice"
+            },
+            {
+              "const": "failure-retry-noop-receipt-bundle-digest-splice"
+            },
+            {
+              "const": "failure-retry-noop-retry-batch-started-at-splice"
+            },
+            {
+              "const": "failure-retry-superseded-forbidden"
+            },
+            {
+              "const": "journal-bootstrap-host-lock-witness-planned-reference-substitution"
+            },
+            {
+              "const": "journal-bootstrap-host-lock-witness-seals"
+            },
+            {
+              "const": "journal-bootstrap-planned-target-pointer-prior-substitution"
+            },
+            {
+              "const": "journal-bootstrap-planned-target-seals"
+            },
+            {
+              "const": "journal-reset-all-and-only"
+            },
+            {
+              "const": "journal-reset-anchored-anchor-mismatch"
+            },
+            {
+              "const": "journal-reset-anchored-bootstrap-authority-forbidden"
+            },
+            {
+              "const": "journal-reset-anchored-historical-authority"
+            },
+            {
+              "const": "journal-reset-bootstrap-target-substitution"
+            },
+            {
+              "const": "journal-reset-current-active-substitution"
+            },
+            {
+              "const": "journal-reset-current-outer-manifest-substitution"
+            },
+            {
+              "const": "journal-reset-current-outer-reset-substitution"
+            },
+            {
+              "const": "journal-reset-genesis-bootstrap-authority-missing"
+            },
+            {
+              "const": "journal-reset-genesis-generation-anchor-nonnull"
+            },
+            {
+              "const": "journal-reset-genesis-meta-anchor-nonnull"
+            },
+            {
+              "const": "journal-reset-guard-digest-mismatch"
+            },
+            {
+              "const": "journal-reset-new-generation-historical-anchor"
+            },
+            {
+              "const": "journal-reset-new-meta-null-anchor"
+            },
+            {
+              "const": "journal-reset-pointer-target-mismatch"
+            },
+            {
+              "const": "journal-reset-reconciliation-adoption-extra-key"
+            },
+            {
+              "const": "journal-reset-reconciliation-adoption-flattened-repeat"
+            },
+            {
+              "const": "journal-reset-reconciliation-adoption-gkx-raw-domain-substitution"
+            },
+            {
+              "const": "journal-reset-reconciliation-adoption-missing-key"
+            },
+            {
+              "const": "journal-reset-reconciliation-adoption-nonempty-plan"
+            },
+            {
+              "const": "journal-reset-reconciliation-adoption-raw-graph-splice"
+            },
+            {
+              "const": "journal-reset-reconciliation-adoption-reset-splice"
+            },
+            {
+              "const": "journal-reset-reconciliation-adoption-retrieval-coordinate-splice"
+            },
+            {
+              "const": "journal-reset-reconciliation-adoption-source-branch-partial"
+            },
+            {
+              "const": "journal-reset-reconciliation-adoption-transition-splice"
+            },
+            {
+              "const": "journal-reset-reconciliation-adoption-valid"
+            },
+            {
+              "const": "journal-reset-recovery-plan-extra-key"
+            },
+            {
+              "const": "journal-reset-recovery-plan-host-lock-coordinate-substitution"
+            },
+            {
+              "const": "journal-reset-recovery-plan-pointer-guard-substitution"
+            },
+            {
+              "const": "journal-reset-recovery-plan-seals"
+            },
+            {
+              "const": "sql-body-scalar-digest"
+            },
+            {
+              "const": "sql-body-scalar-noncanonical"
+            },
+            {
+              "const": "sql-canonical-authority"
+            },
+            {
+              "const": "sql-column-affinity"
+            },
+            {
+              "const": "sql-column-notnull"
+            },
+            {
+              "const": "sql-column-order"
+            },
+            {
+              "const": "sql-column-primary-key"
+            },
+            {
+              "const": "sql-foreign-key-drift"
+            },
+            {
+              "const": "sql-identity-alias"
+            },
+            {
+              "const": "sql-identity-hardlink"
+            },
+            {
+              "const": "sql-identity-mode-widened"
+            },
+            {
+              "const": "sql-identity-parent-swap"
+            },
+            {
+              "const": "sql-identity-reparse"
+            },
+            {
+              "const": "sql-identity-sqlite-replacement"
+            },
+            {
+              "const": "sql-index-missing"
+            },
+            {
+              "const": "sql-integrity-corrupt"
+            },
+            {
+              "const": "sql-integrity-failure"
+            },
+            {
+              "const": "sql-outbox-unreadable"
+            },
+            {
+              "const": "sql-post-reopen-aggregate-exact"
+            },
+            {
+              "const": "sql-post-reopen-aggregate-plus-one"
+            },
+            {
+              "const": "sql-pragma-drift"
+            },
+            {
+              "const": "sql-pre-transaction-blob-exact"
+            },
+            {
+              "const": "sql-pre-transaction-blob-plus-one"
+            },
+            {
+              "const": "sql-pre-transaction-projected-database-exact"
+            },
+            {
+              "const": "sql-pre-transaction-projected-database-plus-one"
+            },
+            {
+              "const": "sql-pre-transaction-rows-exact"
+            },
+            {
+              "const": "sql-pre-transaction-rows-plus-one"
+            },
+            {
+              "const": "sql-reset-unknown-leaf"
+            },
+            {
+              "const": "sql-sqlite-master-extra"
+            },
+            {
+              "const": "sql-sqlite-master-trigger"
+            },
+            {
+              "const": "sql-sqlite-master-view"
+            },
+            {
+              "const": "sql-sqlite-master-virtual-table"
+            }
+          ],
+          "type": "array"
+        },
+        "event_cases": {
+          "items": false,
+          "maxItems": 24,
+          "minItems": 24,
+          "prefixItems": [
+            {
+              "const": "ambiguous-rename-delete-add"
+            },
+            {
+              "const": "attachment-add-delete-rename"
+            },
+            {
+              "const": "burst-coalesced-last-snapshot"
+            },
+            {
+              "const": "case-only-rename-supported"
+            },
+            {
+              "const": "case-only-rename-unsupported-reconcile"
+            },
+            {
+              "const": "delete-recreate-same-path"
+            },
+            {
+              "const": "duplicate-events-idempotent"
+            },
+            {
+              "const": "empty-filename-unscoped-reconcile"
+            },
+            {
+              "const": "folder-add-delete-rename"
+            },
+            {
+              "const": "git-pull-mass-change"
+            },
+            {
+              "const": "ignored-state-archive-feedback"
+            },
+            {
+              "const": "navigation-run-archive-ignored"
+            },
+            {
+              "const": "obsidian-atomic-save-replace"
+            },
+            {
+              "const": "ordinary-archive-retained"
+            },
+            {
+              "const": "out-of-order-events-reconcile"
+            },
+            {
+              "const": "queue-overflow-full-reconcile"
+            },
+            {
+              "const": "single-add"
+            },
+            {
+              "const": "single-content-change"
+            },
+            {
+              "const": "single-delete"
+            },
+            {
+              "const": "single-metadata-change"
+            },
+            {
+              "const": "stable-attachment-content-change-no-semantic-batch"
+            },
+            {
+              "const": "validation-reacceptance"
+            },
+            {
+              "const": "validation-rejection-removes-projection-not-ledger"
+            },
+            {
+              "const": "verified-one-to-one-rename"
+            }
+          ],
+          "type": "array"
+        },
+        "fixture_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "path_identity_cases": {
+          "items": false,
+          "maxItems": 14,
+          "minItems": 14,
+          "prefixItems": [
+            {
+              "const": "path-ads-rejected"
+            },
+            {
+              "const": "path-backslash-rejected"
+            },
+            {
+              "const": "path-control-rejected"
+            },
+            {
+              "const": "path-device-rejected"
+            },
+            {
+              "const": "path-dot-segment-rejected"
+            },
+            {
+              "const": "path-double-slash-rejected"
+            },
+            {
+              "const": "path-drive-absolute-rejected"
+            },
+            {
+              "const": "path-empty-rejected"
+            },
+            {
+              "const": "path-parent-rejected"
+            },
+            {
+              "const": "path-portable-valid"
+            },
+            {
+              "const": "path-posix-absolute-rejected"
+            },
+            {
+              "const": "path-timestamp-calendar-invalid"
+            },
+            {
+              "const": "path-unc-rejected"
+            },
+            {
+              "const": "path-uri-rejected"
+            }
+          ],
+          "type": "array"
+        },
+        "pointer_cases": {
+          "items": false,
+          "maxItems": 117,
+          "minItems": 117,
+          "prefixItems": [
+            {
+              "const": "journal-pointer-guard-operation-mismatch"
+            },
+            {
+              "const": "pointer-artifact-byte-size-substitution-retain"
+            },
+            {
+              "const": "pointer-artifact-fd-path-swap-retain"
+            },
+            {
+              "const": "pointer-artifact-hardlink-retain"
+            },
+            {
+              "const": "pointer-fixed-case-alias-retain"
+            },
+            {
+              "const": "pointer-fixed-new-temp-coexist-retain"
+            },
+            {
+              "const": "pointer-fixed-other-retain"
+            },
+            {
+              "const": "pointer-fixed-short-path-alias-retain"
+            },
+            {
+              "const": "pointer-fixed-symlink-reparse-retain"
+            },
+            {
+              "const": "pointer-genesis-activation-intent-authority"
+            },
+            {
+              "const": "pointer-genesis-active-pointer-authority"
+            },
+            {
+              "const": "pointer-genesis-empty-ambiguous-retain"
+            },
+            {
+              "const": "pointer-genesis-empty-committed-retain"
+            },
+            {
+              "const": "pointer-genesis-empty-old-serve"
+            },
+            {
+              "const": "pointer-genesis-empty-prepared-serve"
+            },
+            {
+              "const": "pointer-genesis-fixed-mismatch-prepared-retain"
+            },
+            {
+              "const": "pointer-genesis-fixed-new-ambiguous-retain"
+            },
+            {
+              "const": "pointer-genesis-fixed-new-committed-serve"
+            },
+            {
+              "const": "pointer-genesis-fixed-new-old-retain"
+            },
+            {
+              "const": "pointer-genesis-fixed-new-prepared-retain"
+            },
+            {
+              "const": "pointer-genesis-fixed-new-temp-coexist-ambiguous-retain"
+            },
+            {
+              "const": "pointer-genesis-fixed-new-temp-coexist-committed-retain"
+            },
+            {
+              "const": "pointer-genesis-fixed-new-temp-coexist-old-retain"
+            },
+            {
+              "const": "pointer-genesis-fixed-new-temp-coexist-prepared-retain"
+            },
+            {
+              "const": "pointer-genesis-guard-empty-ambiguous-retain"
+            },
+            {
+              "const": "pointer-genesis-guard-empty-committed-retain"
+            },
+            {
+              "const": "pointer-genesis-guard-empty-old-retain"
+            },
+            {
+              "const": "pointer-genesis-guard-empty-prepared-create-temp"
+            },
+            {
+              "const": "pointer-genesis-guard-fixed-new-ambiguous-retain"
+            },
+            {
+              "const": "pointer-genesis-guard-fixed-new-committed-finalize"
+            },
+            {
+              "const": "pointer-genesis-guard-fixed-new-old-retain"
+            },
+            {
+              "const": "pointer-genesis-guard-fixed-new-prepared-finalize"
+            },
+            {
+              "const": "pointer-genesis-guard-leaf-canonical-mismatch-prepared-retain"
+            },
+            {
+              "const": "pointer-genesis-guard-temp-canonical-mismatch-prepared-retain"
+            },
+            {
+              "const": "pointer-genesis-guard-temp-exact-ambiguous-retain"
+            },
+            {
+              "const": "pointer-genesis-guard-temp-exact-committed-retain"
+            },
+            {
+              "const": "pointer-genesis-guard-temp-exact-old-retain"
+            },
+            {
+              "const": "pointer-genesis-guard-temp-exact-prepared-replace"
+            },
+            {
+              "const": "pointer-genesis-guard-temp-incomplete-ambiguous-retain"
+            },
+            {
+              "const": "pointer-genesis-guard-temp-incomplete-committed-retain"
+            },
+            {
+              "const": "pointer-genesis-guard-temp-incomplete-old-retain"
+            },
+            {
+              "const": "pointer-genesis-guard-temp-incomplete-prepared-discard"
+            },
+            {
+              "const": "pointer-genesis-new-artifact-null-invalid"
+            },
+            {
+              "const": "pointer-genesis-no-guard-temp-present-ambiguous-retain"
+            },
+            {
+              "const": "pointer-genesis-no-guard-temp-present-committed-retain"
+            },
+            {
+              "const": "pointer-genesis-no-guard-temp-present-old-retain"
+            },
+            {
+              "const": "pointer-genesis-no-guard-temp-present-prepared-retain"
+            },
+            {
+              "const": "pointer-genesis-old-artifact-nonnull-invalid"
+            },
+            {
+              "const": "pointer-genesis-old-group-partial-byte-size-invalid"
+            },
+            {
+              "const": "pointer-genesis-old-group-partial-device-invalid"
+            },
+            {
+              "const": "pointer-genesis-old-group-partial-digest-invalid"
+            },
+            {
+              "const": "pointer-genesis-old-group-partial-file-invalid"
+            },
+            {
+              "const": "pointer-genesis-old-group-partial-inode-invalid"
+            },
+            {
+              "const": "pointer-genesis-old-group-partial-raw-invalid"
+            },
+            {
+              "const": "pointer-genesis-parent-wrong-owner-prepared-retain"
+            },
+            {
+              "const": "pointer-genesis-stage-canonical-mismatch-prepared-retain"
+            },
+            {
+              "const": "pointer-genesis-stage-exact-ambiguous-retain"
+            },
+            {
+              "const": "pointer-genesis-stage-exact-committed-retain"
+            },
+            {
+              "const": "pointer-genesis-stage-exact-old-retain"
+            },
+            {
+              "const": "pointer-genesis-stage-exact-prepared-link"
+            },
+            {
+              "const": "pointer-genesis-stage-guard-distinct-inode-prepared-retain"
+            },
+            {
+              "const": "pointer-genesis-stage-guard-same-inode-ambiguous-retain"
+            },
+            {
+              "const": "pointer-genesis-stage-guard-same-inode-committed-retain"
+            },
+            {
+              "const": "pointer-genesis-stage-guard-same-inode-old-retain"
+            },
+            {
+              "const": "pointer-genesis-stage-guard-same-inode-prepared-unlink"
+            },
+            {
+              "const": "pointer-genesis-stage-guard-third-link-prepared-retain"
+            },
+            {
+              "const": "pointer-genesis-stage-incomplete-ambiguous-retain"
+            },
+            {
+              "const": "pointer-genesis-stage-incomplete-committed-retain"
+            },
+            {
+              "const": "pointer-genesis-stage-incomplete-old-retain"
+            },
+            {
+              "const": "pointer-genesis-stage-incomplete-prepared-discard"
+            },
+            {
+              "const": "pointer-guard-absent-fixed-new-serve"
+            },
+            {
+              "const": "pointer-guard-absent-fixed-old-serve"
+            },
+            {
+              "const": "pointer-guard-absent-temp-present-retain"
+            },
+            {
+              "const": "pointer-guard-basename-substitution"
+            },
+            {
+              "const": "pointer-guard-intent-substitution"
+            },
+            {
+              "const": "pointer-guard-new-file-substitution"
+            },
+            {
+              "const": "pointer-guard-new-finalize"
+            },
+            {
+              "const": "pointer-guard-new-raw-substitution"
+            },
+            {
+              "const": "pointer-guard-new-size-substitution"
+            },
+            {
+              "const": "pointer-guard-old-create-temp"
+            },
+            {
+              "const": "pointer-guard-old-device-leading-zero-invalid"
+            },
+            {
+              "const": "pointer-guard-old-inode-leading-zero-invalid"
+            },
+            {
+              "const": "pointer-guard-old-temp-exact-replace"
+            },
+            {
+              "const": "pointer-guard-old-temp-incomplete-discard"
+            },
+            {
+              "const": "pointer-guard-raw-digest-substitution-retain"
+            },
+            {
+              "const": "pointer-guard-target-commit-substitution"
+            },
+            {
+              "const": "pointer-journal-genesis-old-group-invalid"
+            },
+            {
+              "const": "pointer-journal-old-device-leading-zero-invalid"
+            },
+            {
+              "const": "pointer-journal-old-inode-leading-zero-invalid"
+            },
+            {
+              "const": "pointer-parent-alias-retain"
+            },
+            {
+              "const": "pointer-parent-non-directory-retain"
+            },
+            {
+              "const": "pointer-parent-reparse-retain"
+            },
+            {
+              "const": "pointer-parent-windows-identity-unstable-retain"
+            },
+            {
+              "const": "pointer-parent-wrong-owner-retain"
+            },
+            {
+              "const": "pointer-recovery-decision-continue-disposition-serve-invalid"
+            },
+            {
+              "const": "pointer-recovery-decision-fail-closed-digest-invalid"
+            },
+            {
+              "const": "pointer-recovery-decision-fail-closed-nonretain-action-invalid"
+            },
+            {
+              "const": "pointer-recovery-decision-fixed-new-null-invalid"
+            },
+            {
+              "const": "pointer-recovery-decision-fixed-old-null-invalid"
+            },
+            {
+              "const": "pointer-recovery-decision-genesis-none-digest-invalid"
+            },
+            {
+              "const": "pointer-recovery-decision-genesis-none-valid"
+            },
+            {
+              "const": "pointer-recovery-decision-guard-old-null-invalid"
+            },
+            {
+              "const": "pointer-recovery-decision-guard-old-valid"
+            },
+            {
+              "const": "pointer-recovery-decision-retain-authority-fixed-old-invalid"
+            },
+            {
+              "const": "pointer-recovery-decision-retain-disposition-continue-invalid"
+            },
+            {
+              "const": "pointer-recovery-decision-serve-disposition-continue-invalid"
+            },
+            {
+              "const": "pointer-recovery-decision-serve-fixed-new-authority-fixed-old-invalid"
+            },
+            {
+              "const": "pointer-recovery-decision-serve-fixed-new-authority-genesis-invalid"
+            },
+            {
+              "const": "pointer-recovery-decision-serve-guard-old-authority-fail-closed-invalid"
+            },
+            {
+              "const": "pointer-recovery-decision-serve-guard-old-authority-fixed-new-invalid"
+            },
+            {
+              "const": "pointer-stage-guard-distinct-inode-retain"
+            },
+            {
+              "const": "pointer-stage-guard-same-inode-unlink"
+            },
+            {
+              "const": "pointer-stage-incomplete-discard"
+            },
+            {
+              "const": "pointer-stage-only-link"
+            },
+            {
+              "const": "pointer-stage-third-link-retain"
+            },
+            {
+              "const": "pointer-stage-wrong-owner-retain"
+            },
+            {
+              "const": "pointer-temp-canonical-mismatch-retain"
+            }
+          ],
+          "type": "array"
+        },
+        "provider_cases": {
+          "items": false,
+          "maxItems": 23,
+          "minItems": 23,
+          "prefixItems": [
+            {
+              "const": "measurement-convergence-domain-substitution"
+            },
+            {
+              "const": "measurement-environment-domain-substitution"
+            },
+            {
+              "const": "measurement-environment-mismatch"
+            },
+            {
+              "const": "measurement-failed-no-partial-evidence"
+            },
+            {
+              "const": "measurement-failed-partial-child"
+            },
+            {
+              "const": "measurement-fts-reference-unavailable-branch-swap"
+            },
+            {
+              "const": "measurement-graph-ready-reason-forbidden"
+            },
+            {
+              "const": "measurement-latency-threshold-plus-one"
+            },
+            {
+              "const": "measurement-percentile-index-swap"
+            },
+            {
+              "const": "measurement-provider-family-local-onnx"
+            },
+            {
+              "const": "measurement-provider-family-substitution"
+            },
+            {
+              "const": "measurement-qualified"
+            },
+            {
+              "const": "measurement-sample-count"
+            },
+            {
+              "const": "measurement-sample-count-cap-plus-one"
+            },
+            {
+              "const": "measurement-source-count-drift"
+            },
+            {
+              "const": "measurement-unavailable-partial-child"
+            },
+            {
+              "const": "measurement-unavailable-zero-work"
+            },
+            {
+              "const": "pack-all-seventeen-canonical-bytes"
+            },
+            {
+              "const": "pack-file-omitted"
+            },
+            {
+              "const": "pack-file-reordered"
+            },
+            {
+              "const": "pack-raw-byte-substitution"
+            },
+            {
+              "const": "pack-schema-ownership-duplicate"
+            },
+            {
+              "const": "pack-self-row-forbidden"
+            }
+          ],
+          "type": "array"
+        },
+        "shutdown_cases": {
+          "items": false,
+          "maxItems": 1,
+          "minItems": 1,
+          "prefixItems": [
+            {
+              "const": "shutdown-status-stopping"
+            }
+          ],
+          "type": "array"
+        },
+        "source_removal_cases": {
+          "items": false,
+          "maxItems": 45,
+          "minItems": 45,
+          "prefixItems": [
+            {
+              "const": "adapter-binding-capability-substitution"
+            },
+            {
+              "const": "adapter-challenge-capability-order-substitution"
+            },
+            {
+              "const": "adapter-challenge-nonce-substitution"
+            },
+            {
+              "const": "adapter-event-id-path-like"
+            },
+            {
+              "const": "adapter-id-cap-plus-one"
+            },
+            {
+              "const": "adapter-id-path-like"
+            },
+            {
+              "const": "adapter-id-uppercase"
+            },
+            {
+              "const": "adapter-json-self-provision-without-verification"
+            },
+            {
+              "const": "adapter-namespace-control"
+            },
+            {
+              "const": "adapter-proof-authorization-substitution"
+            },
+            {
+              "const": "adapter-scope-operation-substitution"
+            },
+            {
+              "const": "adapter-verification"
+            },
+            {
+              "const": "adapter-verification-binding-mismatch"
+            },
+            {
+              "const": "adapter-verification-challenge-substitution"
+            },
+            {
+              "const": "event-count-cap-plus-one"
+            },
+            {
+              "const": "event-mode-binding-mismatch"
+            },
+            {
+              "const": "event-stale-target-column-forbidden"
+            },
+            {
+              "const": "journal-reset-carry-immediate-membership-omitted"
+            },
+            {
+              "const": "journal-reset-carry-occurrence-omitted"
+            },
+            {
+              "const": "journal-reset-delivered-event-not-ready"
+            },
+            {
+              "const": "journal-reset-lost-response-without-receipt"
+            },
+            {
+              "const": "journal-reset-prior-membership-not-activated"
+            },
+            {
+              "const": "journal-reset-ready-event-omitted"
+            },
+            {
+              "const": "journal-reset-response-binding-mismatch"
+            },
+            {
+              "const": "journal-reset-unactivated-event-selected"
+            },
+            {
+              "const": "receipt-binding-change-on-retry"
+            },
+            {
+              "const": "receipt-request-idempotency-key-substitution"
+            },
+            {
+              "const": "receipt-request-source-mismatch"
+            },
+            {
+              "const": "receipt-response-event-id-substitution"
+            },
+            {
+              "const": "receipt-response-result-substitution"
+            },
+            {
+              "const": "receipt-response-status-substitution"
+            },
+            {
+              "const": "receipt-without-durable-response"
+            },
+            {
+              "const": "reset-carry-prior-mismatch"
+            },
+            {
+              "const": "source-removal-activation-manifest-mismatch"
+            },
+            {
+              "const": "source-removal-event-body-swap"
+            },
+            {
+              "const": "source-removal-event-set"
+            },
+            {
+              "const": "source-removal-membership-body-missing"
+            },
+            {
+              "const": "source-removal-membership-order-splice"
+            },
+            {
+              "const": "source-removal-occurrence-body-swap"
+            },
+            {
+              "const": "source-removal-occurrence-forged-duplicate"
+            },
+            {
+              "const": "source-removal-receipt"
+            },
+            {
+              "const": "source-removal-reset-carry"
+            },
+            {
+              "const": "source-removal-reset-carry-immediate-chain"
+            },
+            {
+              "const": "source-removal-reset-carry-root-shortcut"
+            },
+            {
+              "const": "source-removal-two-member-ordered"
+            }
+          ],
+          "type": "array"
+        },
+        "status_control_cases": {
+          "items": false,
+          "maxItems": 10,
+          "minItems": 10,
+          "prefixItems": [
+            {
+              "const": "cli-command-duplicate"
+            },
+            {
+              "const": "cli-command-missing"
+            },
+            {
+              "const": "cli-fixture-all-and-only"
+            },
+            {
+              "const": "cli-locator-pid-substitution"
+            },
+            {
+              "const": "cli-state-presence-substitution"
+            },
+            {
+              "const": "cli-stdout-substitution"
+            },
+            {
+              "const": "status-coherent-locator"
+            },
+            {
+              "const": "status-fresh-reason"
+            },
+            {
+              "const": "status-locator-pid-mismatch"
+            },
+            {
+              "const": "status-pre-genesis-bundle"
+            }
+          ],
+          "type": "array"
+        },
+        "topology_cases": {
+          "items": false,
+          "maxItems": 43,
+          "minItems": 43,
+          "prefixItems": [
+            {
+              "const": "canonical-graph-diagnostics-extra-key"
+            },
+            {
+              "const": "canonical-graph-diagnostics-missing-key"
+            },
+            {
+              "const": "canonical-graph-production-normalization"
+            },
+            {
+              "const": "canonical-graph-raw-mismatch"
+            },
+            {
+              "const": "canonical-graph-semantic-array-reorder"
+            },
+            {
+              "const": "canonical-graph-stats-extra-key"
+            },
+            {
+              "const": "canonical-graph-stats-missing-files"
+            },
+            {
+              "const": "canonical-graph-top-extra-key"
+            },
+            {
+              "const": "canonical-graph-top-missing-key"
+            },
+            {
+              "const": "canonical-graph-top-node-by-id-ignored"
+            },
+            {
+              "const": "graph-delta-invented-field"
+            },
+            {
+              "const": "graph-delta-production-normalization"
+            },
+            {
+              "const": "graphiti-body-noncanonical"
+            },
+            {
+              "const": "graphiti-episode-order-substitution"
+            },
+            {
+              "const": "graphiti-processing-time-substitution"
+            },
+            {
+              "const": "graphiti-production-projection"
+            },
+            {
+              "const": "graphiti-vault-substitution"
+            },
+            {
+              "const": "normalized-delta-transition-mismatch"
+            },
+            {
+              "const": "plan-validation-rejection-not-ledger-removal"
+            },
+            {
+              "const": "raw-graph-artifact-stats-extra-key"
+            },
+            {
+              "const": "raw-graph-diagnostics-extra-key"
+            },
+            {
+              "const": "raw-graph-stats-extra-key"
+            },
+            {
+              "const": "raw-graph-stats-missing-files"
+            },
+            {
+              "const": "raw-graph-top-extra-key"
+            },
+            {
+              "const": "raw-graph-top-missing-key"
+            },
+            {
+              "const": "raw-graph-topology-mismatch"
+            },
+            {
+              "const": "topology-accepted-order-substitution"
+            },
+            {
+              "const": "topology-accepted-rejected-coordinate-splice"
+            },
+            {
+              "const": "topology-accepted-rejected-overlap"
+            },
+            {
+              "const": "topology-attachment-add-operation"
+            },
+            {
+              "const": "topology-attachment-delete-operation"
+            },
+            {
+              "const": "topology-attachment-order-substitution"
+            },
+            {
+              "const": "topology-attachment-rename-operation"
+            },
+            {
+              "const": "topology-child-set-mismatch"
+            },
+            {
+              "const": "topology-distinct-path-ordinal-zero-accepted"
+            },
+            {
+              "const": "topology-folder-add-operation"
+            },
+            {
+              "const": "topology-folder-delete-operation"
+            },
+            {
+              "const": "topology-folder-order-substitution"
+            },
+            {
+              "const": "topology-folder-rename-operation"
+            },
+            {
+              "const": "topology-graph-sink-receipt-forbidden"
+            },
+            {
+              "const": "topology-parser-vector-digest-substitution"
+            },
+            {
+              "const": "topology-same-path-ordinal-duplicate"
+            },
+            {
+              "const": "topology-source-size-phase3-cap-plus-one"
+            }
+          ],
+          "type": "array"
+        },
+        "transition_cases": {
+          "items": false,
+          "maxItems": 47,
+          "minItems": 47,
+          "prefixItems": [
+            {
+              "const": "batch-id-not-uuidv7"
+            },
+            {
+              "const": "coherent-activation-complete"
+            },
+            {
+              "const": "coherent-activation-observation-artifact-cap-plus-one"
+            },
+            {
+              "const": "coherent-activation-observation-artifact-file-substitution"
+            },
+            {
+              "const": "coherent-activation-observation-artifact-raw-substitution"
+            },
+            {
+              "const": "coherent-activation-observation-artifact-size-substitution"
+            },
+            {
+              "const": "coherent-activation-observation-missing"
+            },
+            {
+              "const": "coherent-activation-observation-self-resealed-substitution"
+            },
+            {
+              "const": "coherent-activation-observation-swapped"
+            },
+            {
+              "const": "coherent-activation-plan-artifact-cap-plus-one"
+            },
+            {
+              "const": "coherent-activation-plan-artifact-file-substitution"
+            },
+            {
+              "const": "coherent-activation-plan-artifact-raw-substitution"
+            },
+            {
+              "const": "coherent-activation-plan-artifact-size-substitution"
+            },
+            {
+              "const": "coherent-activation-plan-missing"
+            },
+            {
+              "const": "coherent-activation-plan-self-resealed-substitution"
+            },
+            {
+              "const": "coherent-activation-targets-prepared-not-complete"
+            },
+            {
+              "const": "coherent-manifest-stage-mismatch"
+            },
+            {
+              "const": "execution-kind-scoped-set-files-forbidden"
+            },
+            {
+              "const": "execution-kind-unscoped-apply-changes-forbidden"
+            },
+            {
+              "const": "transition-chain-complete"
+            },
+            {
+              "const": "transition-cross-batch-splice"
+            },
+            {
+              "const": "transition-exceptional-before-observed"
+            },
+            {
+              "const": "transition-failed-after-activation_prepared"
+            },
+            {
+              "const": "transition-failed-after-gkx_applied"
+            },
+            {
+              "const": "transition-failed-after-graph_applied"
+            },
+            {
+              "const": "transition-failed-after-normalized"
+            },
+            {
+              "const": "transition-failed-after-observed"
+            },
+            {
+              "const": "transition-failed-after-retrieval_applied"
+            },
+            {
+              "const": "transition-graph-artifact-file-substitution"
+            },
+            {
+              "const": "transition-post-complete-terminal"
+            },
+            {
+              "const": "transition-prior-stale"
+            },
+            {
+              "const": "transition-recorded-time-provenance-splice"
+            },
+            {
+              "const": "transition-reordered"
+            },
+            {
+              "const": "transition-repeat-observed"
+            },
+            {
+              "const": "transition-retrieval-database-file-substitution"
+            },
+            {
+              "const": "transition-retrieval-owner-prefix-substitution"
+            },
+            {
+              "const": "transition-retrieval-projection-prefix-substitution"
+            },
+            {
+              "const": "transition-skip-normalized"
+            },
+            {
+              "const": "transition-stage-payload-early"
+            },
+            {
+              "const": "transition-superseded-after-activation_prepared"
+            },
+            {
+              "const": "transition-superseded-after-gkx_applied"
+            },
+            {
+              "const": "transition-superseded-after-graph_applied"
+            },
+            {
+              "const": "transition-superseded-after-normalized"
+            },
+            {
+              "const": "transition-superseded-after-observed"
+            },
+            {
+              "const": "transition-superseded-after-retrieval_applied"
+            },
+            {
+              "const": "transition-terminal-reopened"
+            },
+            {
+              "const": "transition-unknown-key"
+            }
+          ],
+          "type": "array"
+        }
+      },
+      "required": [
+        "contract_version",
+        "event_cases",
+        "transition_cases",
+        "topology_cases",
+        "pointer_cases",
+        "crash_cases",
+        "source_removal_cases",
+        "status_control_cases",
+        "provider_cases",
+        "path_identity_cases",
+        "shutdown_cases",
+        "fixture_digest"
+      ],
+      "type": "object",
+      "unevaluatedProperties": false
+    }
+  },
+  "$id": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/conformance.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "oneOf": [
+    {
+      "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/conformance.schema.json#/$defs/conformanceFixture"
+    },
+    {
+      "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/conformance.schema.json#/$defs/recoveryFixture"
+    }
+  ],
+  "title": "conformance.schema.json"
+}

@@ -586,7 +586,7 @@
           ]
         },
         "sample_plan_digest": {
-          "const": "sha256:6ab764aad47cbb072469f19760b772df90b2138acaf6a9f022041d38094bb695"
+          "const": "sha256:75b011dc253a445ec9c5fc192f600f57ec62411e8125dfa20c74a08f5faf301b"
         },
         "source_work": {
           "anyOf": [
@@ -709,7 +709,7 @@
     },
     "samplePlan": {
       "const": {
-        "contract_version": "gkos-watcher-convergence-sample-plan/1.0.0-draft.1",
+        "contract_version": "gkos-watcher-convergence-sample-plan/1.0.0-draft.2",
         "execution": {
           "as_of": "2026-08-20T00:00:00Z",
           "external_reader": "gkx_search_outer_coherent_authority",
@@ -793,22 +793,48 @@
           "start_boundary": "immediately_after_phase3_atomic_replace_durability_sequence_returns"
         },
         "watcher": {
-          "configuration_digest": "sha256:e389f35b91314acba93bb6a0d955af34a0df11b524701b6d9409e245d8f55c11",
+          "configuration_digest": "sha256:082dffdb5390813e9d4e0b43097f730ccb98ac2f18ebd3549e03986a860fcdba",
           "configuration_preimage": {
-            "contract_version": "gkos-watcher-convergence-configuration/1.0.0-draft.1",
-            "debounce_ms": 500,
-            "embedding_role": "disabled",
-            "lexical_backend": "sqlite_fts5",
-            "reranker_role": "disabled",
-            "validation_mode": "non_strict"
+            "canonical_authority": {
+              "projection_profile": "gkx-2.3-validating-projection",
+              "standard_commit": "a2a2a6ca5c4dac32c6d9dc985ed7460f5f4350c6"
+            },
+            "chunker": {
+              "max_tokens": 400,
+              "overlap_tokens": 0,
+              "tokenizer": "gkos-ascii-whitespace/1",
+              "version": "gkos-heading-chunker/1"
+            },
+            "configured_host": null,
+            "diversity": {
+              "enabled": false,
+              "mmr_lambda": 0.7
+            },
+            "fusion": {
+              "rrf_k": 60
+            },
+            "lexical": {
+              "boosts": {
+                "category": 2,
+                "heading_path": 2,
+                "tags": 1.5,
+                "text": 1,
+                "title": 3,
+                "topic": 2
+              },
+              "provider": "sqlite_fts5",
+              "tokenizer": "unicode61 remove_diacritics 2"
+            },
+            "mode": "fts",
+            "parent_expansion": true,
+            "parent_expansion_max_child_tokens": 80
           },
           "debounce_ms": 500,
-          "policy_digest": "sha256:2faf013ded756636adc22edad62312c225c8258ef61ba2e492a2de639c152790",
+          "effective_profile_digest": "sha256:9ab3b07da4cdfb584c2766762a32dc71653dffd87537ad0a4c9190e3a69015c5",
+          "policy_digest": "sha256:2a24f03ee235def9d6de500b8144f3660814be9aa3c8bf3d104b3fb57e808317",
           "policy_preimage": {
-            "contract_version": "gkos-watcher-convergence-policy/1.0.0-draft.1",
-            "discoverability": "allow",
-            "sensitivity": "public",
-            "vault_id": "phase5-watcher-convergence-v1"
+            "id": "engine.cli.public-only-discoverability",
+            "version": "1.0.0"
           },
           "retrieval_mode": "sqlite_fts5",
           "validation_mode": "non_strict"

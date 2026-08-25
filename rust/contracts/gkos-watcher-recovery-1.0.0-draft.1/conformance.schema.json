@@ -26,7 +26,7 @@
           "const": "gkos-watcher-recovery/1.0.0-draft.1"
         },
         "sample_plan_digest": {
-          "const": "sha256:6ab764aad47cbb072469f19760b772df90b2138acaf6a9f022041d38094bb695"
+          "const": "sha256:75b011dc253a445ec9c5fc192f600f57ec62411e8125dfa20c74a08f5faf301b"
         },
         "sample_plan_file": {
           "const": "watcher-sample-plan.json"
@@ -203,6 +203,33 @@
                 "if": {
                   "properties": {
                     "operation": {
+                      "const": "seal_failure_retry_noop_bundle"
+                    }
+                  },
+                  "required": [
+                    "operation"
+                  ],
+                  "type": "object"
+                },
+                "then": {
+                  "properties": {
+                    "input": {
+                      "properties": {
+                        "arguments": {
+                          "maxItems": 1,
+                          "minItems": 1,
+                          "type": "array"
+                        }
+                      },
+                      "type": "object"
+                    }
+                  }
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "operation": {
                       "const": "seal_journal_reset_bundle"
                     }
                   },
@@ -218,6 +245,33 @@
                         "arguments": {
                           "maxItems": 3,
                           "minItems": 3,
+                          "type": "array"
+                        }
+                      },
+                      "type": "object"
+                    }
+                  }
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "operation": {
+                      "const": "seal_journal_reset_reconciliation_adoption_bundle"
+                    }
+                  },
+                  "required": [
+                    "operation"
+                  ],
+                  "type": "object"
+                },
+                "then": {
+                  "properties": {
+                    "input": {
+                      "properties": {
+                        "arguments": {
+                          "maxItems": 1,
+                          "minItems": 1,
                           "type": "array"
                         }
                       },
@@ -642,7 +696,9 @@
                   "normalize_graph_delta",
                   "seal_coherent_activation_bundle",
                   "seal_failure_retry_bundle",
+                  "seal_failure_retry_noop_bundle",
                   "seal_journal_reset_bundle",
+                  "seal_journal_reset_reconciliation_adoption_bundle",
                   "seal_measurement",
                   "seal_pointer_recovery",
                   "seal_record",
@@ -698,8 +754,8 @@
         },
         "crash_cases": {
           "items": false,
-          "maxItems": 38,
-          "minItems": 38,
+          "maxItems": 77,
+          "minItems": 77,
           "prefixItems": [
             {
               "const": "failure-retry-configuration-splice"
@@ -708,16 +764,133 @@
               "const": "failure-retry-failed-only"
             },
             {
+              "const": "failure-retry-noop-complete"
+            },
+            {
+              "const": "failure-retry-noop-current-topology-splice"
+            },
+            {
+              "const": "failure-retry-noop-envelope-extra-key"
+            },
+            {
+              "const": "failure-retry-noop-failed-batch-execution-splice"
+            },
+            {
+              "const": "failure-retry-noop-failed-batch-started-at-splice"
+            },
+            {
+              "const": "failure-retry-noop-plan-mutation-splice"
+            },
+            {
+              "const": "failure-retry-noop-receipt-bundle-digest-splice"
+            },
+            {
+              "const": "failure-retry-noop-retry-batch-started-at-splice"
+            },
+            {
               "const": "failure-retry-superseded-forbidden"
+            },
+            {
+              "const": "journal-bootstrap-host-lock-witness-planned-reference-substitution"
+            },
+            {
+              "const": "journal-bootstrap-host-lock-witness-seals"
+            },
+            {
+              "const": "journal-bootstrap-planned-target-pointer-prior-substitution"
+            },
+            {
+              "const": "journal-bootstrap-planned-target-seals"
             },
             {
               "const": "journal-reset-all-and-only"
             },
             {
+              "const": "journal-reset-anchored-anchor-mismatch"
+            },
+            {
+              "const": "journal-reset-anchored-bootstrap-authority-forbidden"
+            },
+            {
+              "const": "journal-reset-anchored-historical-authority"
+            },
+            {
+              "const": "journal-reset-bootstrap-target-substitution"
+            },
+            {
+              "const": "journal-reset-current-active-substitution"
+            },
+            {
+              "const": "journal-reset-current-outer-manifest-substitution"
+            },
+            {
+              "const": "journal-reset-current-outer-reset-substitution"
+            },
+            {
+              "const": "journal-reset-genesis-bootstrap-authority-missing"
+            },
+            {
+              "const": "journal-reset-genesis-generation-anchor-nonnull"
+            },
+            {
+              "const": "journal-reset-genesis-meta-anchor-nonnull"
+            },
+            {
               "const": "journal-reset-guard-digest-mismatch"
             },
             {
+              "const": "journal-reset-new-generation-historical-anchor"
+            },
+            {
+              "const": "journal-reset-new-meta-null-anchor"
+            },
+            {
               "const": "journal-reset-pointer-target-mismatch"
+            },
+            {
+              "const": "journal-reset-reconciliation-adoption-extra-key"
+            },
+            {
+              "const": "journal-reset-reconciliation-adoption-flattened-repeat"
+            },
+            {
+              "const": "journal-reset-reconciliation-adoption-gkx-raw-domain-substitution"
+            },
+            {
+              "const": "journal-reset-reconciliation-adoption-missing-key"
+            },
+            {
+              "const": "journal-reset-reconciliation-adoption-nonempty-plan"
+            },
+            {
+              "const": "journal-reset-reconciliation-adoption-raw-graph-splice"
+            },
+            {
+              "const": "journal-reset-reconciliation-adoption-reset-splice"
+            },
+            {
+              "const": "journal-reset-reconciliation-adoption-retrieval-coordinate-splice"
+            },
+            {
+              "const": "journal-reset-reconciliation-adoption-source-branch-partial"
+            },
+            {
+              "const": "journal-reset-reconciliation-adoption-transition-splice"
+            },
+            {
+              "const": "journal-reset-reconciliation-adoption-valid"
+            },
+            {
+              "const": "journal-reset-recovery-plan-extra-key"
+            },
+            {
+              "const": "journal-reset-recovery-plan-host-lock-coordinate-substitution"
+            },
+            {
+              "const": "journal-reset-recovery-plan-pointer-guard-substitution"
+            },
+            {
+              "const": "journal-reset-recovery-plan-seals"
             },
             {
               "const": "sql-body-scalar-digest"
@@ -1582,8 +1755,8 @@
         },
         "topology_cases": {
           "items": false,
-          "maxItems": 41,
-          "minItems": 41,
+          "maxItems": 43,
+          "minItems": 43,
           "prefixItems": [
             {
               "const": "canonical-graph-diagnostics-extra-key"
@@ -1667,6 +1840,9 @@
               "const": "topology-accepted-order-substitution"
             },
             {
+              "const": "topology-accepted-rejected-coordinate-splice"
+            },
+            {
               "const": "topology-accepted-rejected-overlap"
             },
             {
@@ -1683,6 +1859,9 @@
             },
             {
               "const": "topology-child-set-mismatch"
+            },
+            {
+              "const": "topology-distinct-path-ordinal-zero-accepted"
             },
             {
               "const": "topology-folder-add-operation"
@@ -1703,7 +1882,7 @@
               "const": "topology-parser-vector-digest-substitution"
             },
             {
-              "const": "topology-source-ordinal-duplicate"
+              "const": "topology-same-path-ordinal-duplicate"
             },
             {
               "const": "topology-source-size-phase3-cap-plus-one"

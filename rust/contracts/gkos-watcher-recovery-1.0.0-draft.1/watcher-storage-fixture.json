@@ -143,41 +143,155 @@
     "CREATE INDEX batches_terminal_idx ON batches (terminal_state, batch_id);",
     "CREATE INDEX source_removal_ready_idx ON source_removal_events (delivery_mode, adapter_binding_digest, event_digest);"
   ],
-  "fixture_digest": "sha256:9fe6cbc34ca7368a28fb0d9c980c24139402dc945fa4bdb53d6e91b4a67f748a",
+  "fixture_digest": "sha256:72f27926dafd2853b48eeeb967320e06423d69dc28f13ca29215cf08309d7456",
   "journal_reset_recovery": {
     "anchored_new_database": "meta_present_no_active_coherent_no_batches_only_until_mandatory_startup_reconciliation",
-    "guard_publication_protocol": "exact_reserved_reset_s_to_g_then_three_reset_states",
+    "authority_predicates": [
+      "dead_owner_recovered",
+      "live_original",
+      "stable_cleanup"
+    ],
+    "bridge": {
+      "contract_version": "gkos-watcher-journal-reset-recovery-bridge/1.0.0-draft.1",
+      "executor_attempt_limit": 4096,
+      "field_count": 14,
+      "kinds": [
+        "journal_reset_live_cleanup",
+        "journal_reset_recovery"
+      ],
+      "maximum_byte_size": 1073741824,
+      "publication": "content_addressed_stage_hardlink_no_replace_final_unlink_stage_permanent"
+    },
+    "executor": {
+      "contract_version": "gkos-watcher-journal-reset-recovery-executor/1.0.0-draft.1",
+      "field_count": 10,
+      "handoff": "linear_stage_to_immutable_to_selected_no_authority_gap",
+      "maximum_ordinal": 4095,
+      "selected_file": "watcher-journal-reset-recovery-executor.json",
+      "stage_file": ".watcher-journal-reset-recovery-executor.json.gkos-watcher.stage"
+    },
+    "guard_publication_protocol": "plan_before_exact_reserved_reset_s_to_g_then_nested_pointer_f4",
     "mismatch_action": "retain_everything_and_exit3",
     "old_sqlite_files": "immutable_never_moved_deleted_or_recursively_cleaned",
+    "plan": {
+      "contract_version": "gkos-watcher-journal-reset-recovery-plan/1.0.0-draft.1",
+      "field_count": 17,
+      "fixed_file": "watcher-journal-reset-recovery-plan.json",
+      "maximum_byte_size": 536870912,
+      "publication": "stage_hardlink_no_replace_final_unlink_stage",
+      "stage_file": ".watcher-journal-reset-recovery-plan.json.gkos-watcher.stage"
+    },
     "recoverable_states": [
       {
-        "action": "verify_every_present_item_then_resume_guarded_creation_or_finalization",
+        "action": "publish_exact_embedded_reset_guard",
         "journal_pointer": "old_exact",
-        "new_generation": "absent_or_partial_or_exact_guard_bound",
+        "new_generation": "absent",
         "ordinal": 1,
+        "pointer_guard": "absent",
+        "reset_guard": "absent"
+      },
+      {
+        "action": "verify_every_present_item_then_resume_guarded_creation",
+        "journal_pointer": "old_exact",
+        "new_generation": "absent_or_finite_incomplete_or_exact",
+        "ordinal": 2,
         "pointer_guard": "absent",
         "reset_guard": "exact"
       },
       {
-        "action": "start_or_resume_exact_nested_pointer_replacement",
+        "action": "publish_exact_prepared_pointer_guard",
         "journal_pointer": "old_exact",
         "new_generation": "complete_exact",
-        "ordinal": 2,
-        "pointer_guard": "absent_or_any_exact_recoverable_nested_old_pointer_branch",
+        "ordinal": 3,
+        "pointer_guard": "absent",
         "reset_guard": "exact"
       },
       {
-        "action": "verify_new_pointer_and_database_finalize_nested_pointer_guard_then_remove_reset_guard_last",
+        "action": "resume_nested_pointer_f4",
+        "journal_pointer": "old_exact",
+        "new_generation": "complete_exact",
+        "ordinal": 4,
+        "pointer_guard": "any_exact_recoverable_old_branch",
+        "reset_guard": "exact"
+      },
+      {
+        "action": "finalize_nested_pointer_guard",
         "journal_pointer": "new_exact",
         "new_generation": "complete_exact",
-        "ordinal": 3,
-        "pointer_guard": "absent_or_exact_nested_new_pointer_branch",
+        "ordinal": 5,
+        "pointer_guard": "any_exact_recoverable_new_branch",
         "reset_guard": "exact"
+      },
+      {
+        "action": "remove_reset_guard",
+        "journal_pointer": "new_exact",
+        "new_generation": "complete_exact",
+        "ordinal": 6,
+        "pointer_guard": "absent",
+        "reset_guard": "exact"
+      },
+      {
+        "action": "selected_terminal_lock_handoff_and_cleanup",
+        "journal_pointer": "new_exact",
+        "new_generation": "complete_exact",
+        "ordinal": 7,
+        "pointer_guard": "absent",
+        "reset_guard": "absent"
+      },
+      {
+        "action": "terminal",
+        "journal_pointer": "new_exact",
+        "new_generation": "complete_exact",
+        "ordinal": 8,
+        "pointer_guard": "absent",
+        "reset_guard": "absent"
       }
     ],
     "removal_order": [
       "nested_pointer_guard",
-      "reset_guard"
+      "reset_guard",
+      "terminal_host_lock_transition",
+      "root_claim_if_any",
+      "recovery_plan",
+      "executor_selector",
+      "current_host_lock"
+    ],
+    "sqlite_states": [
+      {
+        "action": "create_secure_child",
+        "authority": "child_absent",
+        "state": "C0"
+      },
+      {
+        "action": "create_database_wx",
+        "authority": "exact_empty_child",
+        "state": "C1"
+      },
+      {
+        "action": "secure_remove_child_and_restart",
+        "authority": "database_0_through_99_bytes_no_sidecars",
+        "state": "C2a"
+      },
+      {
+        "action": "secure_remove_child_and_restart",
+        "authority": "database_100_through_4095_exact_sqlite_header_prefix_eof_only",
+        "state": "C2b"
+      },
+      {
+        "action": "secure_remove_child_and_restart",
+        "authority": "parseable_zero_application_object_database",
+        "state": "C3"
+      },
+      {
+        "action": "atomic_reset_and_optional_carry_seed",
+        "authority": "ddl19_plus_exact_meta_all_other_tables_empty",
+        "state": "C4"
+      },
+      {
+        "action": "continue_pointer_publication",
+        "authority": "ddl19_meta_and_exact_reset_optional_carry",
+        "state": "C5"
+      }
     ]
   },
   "limits": {

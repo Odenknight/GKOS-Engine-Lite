@@ -9,13 +9,15 @@ use std::collections::{BTreeMap, BTreeSet};
 
 use serde_json::{json, Map, Value};
 
-use crate::contract::{is_valid_authored_uid, is_valid_retrieval_source_path};
+use crate::contract::{
+    is_valid_authored_uid, is_valid_retrieval_source_path, GkxRetrievalProjectionManifest,
+};
 use crate::digest::{canonical_digest, canonical_json, sha256};
 
 const PACK_VERSION: &str = "gkos-watcher-recovery/1.0.0-draft.1";
-const SAMPLE_PLAN_VERSION: &str = "gkos-watcher-convergence-sample-plan/1.0.0-draft.1";
+const SAMPLE_PLAN_VERSION: &str = "gkos-watcher-convergence-sample-plan/1.0.0-draft.2";
 const SAMPLE_PLAN_DIGEST: &str =
-    "sha256:6ab764aad47cbb072469f19760b772df90b2138acaf6a9f022041d38094bb695";
+    "sha256:75b011dc253a445ec9c5fc192f600f57ec62411e8125dfa20c74a08f5faf301b";
 
 const PACK_FILES: [&str; 17] = [
     "README.md",
@@ -361,6 +363,15 @@ fn descriptor_for(version: &str) -> Option<Descriptor> {
         "gkos-watcher-journal-active-pointer/1.0.0-draft.1" => {
             descriptor!(Some("pointer_digest"); "contract_version","kind","journal_generation_file","journal_generation_digest","prior_pointer_digest","pointer_digest")
         }
+        "gkos-watcher-journal-bootstrap-planned-target/1.0.0-draft.1" => {
+            descriptor!(Some("planned_target_digest"); "contract_version","watcher_host_lock_digest","journal_meta","journal_generation","target_journal_pointer","planned_target_digest")
+        }
+        "gkos-watcher-journal-bootstrap-host-lock-witness/1.0.0-draft.2" => {
+            descriptor!(Some("witness_digest"); "contract_version","watcher_host_lock","watcher_host_lock_digest","planned_target","journal_instance_id","journal_meta_digest","journal_generation_digest","target_journal_pointer_digest","witness_digest")
+        }
+        "gkos-watcher-journal-bootstrap-authority/1.0.0-draft.2" => {
+            descriptor!(Some("authority_digest"); "contract_version","host_lock_witness","journal_meta_digest","journal_generation_digest","journal_generation_file","target_journal_pointer_digest","target_journal_pointer_file","committed_at","authority_digest")
+        }
         "gkos-watcher-journal-file-identity/1.0.0-draft.1" => {
             descriptor!(Some("identity_digest"); "contract_version","role","leaf","device","inode","mode","byte_size","raw_sha256","identity_digest")
         }
@@ -369,6 +380,21 @@ fn descriptor_for(version: &str) -> Option<Descriptor> {
         }
         "gkos-watcher-journal-reset/1.0.0-draft.1" => {
             descriptor!(Some("reset_digest"); "contract_version","reset_id","prior_journal_generation_digest","archive_manifest_digest","new_journal_meta_digest","new_journal_generation_digest","target_journal_pointer_digest","outer_coherent_manifest_digest","ready_event_count","reset_carry_event_set_digest","reset_carry_activation_digest","reset_at","reset_digest")
+        }
+        "gkos-watcher-journal-reset-recovery-plan/1.0.0-draft.1" => {
+            descriptor!(Some("plan_digest"); "contract_version","watcher_host_lock","old_meta","old_generation","old_pointer","outer_pointer","outer_coherent_manifest","old_journal_authority","archive","reset","reset_guard","pointer_replace_guard","new_meta","new_generation","target_pointer","reset_carry_bundle","plan_digest")
+        }
+        "gkos-watcher-journal-reset-reconciliation-adoption/1.0.0-draft.1" => {
+            descriptor!(Some("receipt_digest"); "contract_version","batch_id","batch_kind","execution_kind","reset_digest","replacement_journal_generation_digest","source_journal_generation_digest","native_activation_journal_generation_digest","current_pointer_digest","current_coherent_manifest_digest","native_activation_intent_digest","native_activation_outcome_digest","prior_active_digest","observation_digest","observation_authority_digest","plan_digest","plan_authority_digest","topology_snapshot_digest","source_observation_snapshot_digest","gkx_snapshot_digest","retrieval_projection_digest","canonical_graph_digest","graphiti_projection_digest","started_at","receipt_digest")
+        }
+        "gkos-watcher-journal-reset-reconciliation-transition/1.0.0-draft.1" => {
+            descriptor!(Some("transition_digest"); "contract_version","batch_id","transition_ordinal","state","terminal_state","receipt_digest","reset_digest","replacement_journal_generation_digest","current_pointer_digest","current_coherent_manifest_digest","topology_snapshot_digest","prior_active_digest","adopted_active_digest","recorded_at","completed_at","transition_digest")
+        }
+        "gkos-watcher-failure-retry-noop-receipt/1.0.0-draft.1" => {
+            descriptor!(Some("receipt_digest"); "contract_version","failed_batch_id","failed_terminal_transition_digest","retry_batch_id","retry_observation_digest","retry_observation_authority_digest","retry_pre_scan_state_digest","failure_retry_bundle_digest","retry_plan_digest","retry_plan_authority_digest","current_active_digest","current_pointer_digest","current_coherent_manifest_digest","current_intent_digest","current_outcome_digest","topology_snapshot_digest","source_observation_snapshot_digest","configuration_digest","policy_digest","effective_profile_digest","gkx_snapshot_digest","retrieval_projection_digest","canonical_graph_digest","graph_artifact_digest","graphiti_projection_digest","set_files_call_count","apply_changes_call_count","provider_call_count","retrieval_write_count","outer_write_count","completed_at","receipt_digest")
+        }
+        "gkos-watcher-failure-retry-noop-transition/1.0.0-draft.1" => {
+            descriptor!(Some("transition_digest"); "contract_version","batch_id","transition_ordinal","state","terminal_state","prior_transition_digest","receipt","receipt_digest","recorded_at","completed_at","transition_digest")
         }
         "gkos-watcher-journal-reset-guard/1.0.0-draft.1" => {
             descriptor!(Some("guard_digest"); "contract_version","operation","owner_nonce","parent_device","parent_inode","parent_mode","guard_basename","guard_stage_basename","old_journal_pointer_digest","old_journal_generation_digest","outer_coherent_manifest_digest","archive_manifest_digest","new_journal_instance_id","new_journal_directory_leaf","new_journal_meta_digest","new_journal_generation_digest","reset_digest","target_journal_pointer_digest","ready_event_count","reset_carry_event_set_digest","reset_carry_activation_digest","guard_digest")
@@ -466,6 +492,179 @@ fn seal_record(value: &Value) -> WatcherResult<Value> {
     }
     seal_common_relations(value)?;
     Ok(value.clone())
+}
+
+fn is_nonce(value: &Value) -> bool {
+    value.as_str().is_some_and(|text| {
+        text.len() == 32
+            && text
+                .bytes()
+                .all(|byte| byte.is_ascii_digit() || matches!(byte, b'a'..=b'f'))
+    })
+}
+
+fn seal_host_lock(value: &Value, operation: &str) -> WatcherResult<Value> {
+    let lock = object(value).map_err(|_| WatcherError("GKX_WATCHER_CONTRACT_RESET_INVALID"))?;
+    exact_keys(
+        lock,
+        &[
+            "contract_version",
+            "lock_id",
+            "process_id",
+            "operation",
+            "service_instance_id",
+            "prior_pointer_digest",
+            "prior_coherent_manifest_digest",
+            "prior_journal_pointer_digest",
+            "owner_nonce",
+            "created_at",
+            "lock_digest",
+        ],
+    )
+    .map_err(|_| WatcherError("GKX_WATCHER_CONTRACT_RESET_INVALID"))?;
+    let service_ok = if operation == "service" {
+        is_uuid7(&lock["service_instance_id"])
+            && lock["prior_journal_pointer_digest"].is_null()
+            && (lock["prior_pointer_digest"].is_null()
+                == lock["prior_coherent_manifest_digest"].is_null())
+    } else {
+        lock["service_instance_id"].is_null()
+            && is_digest(&lock["prior_pointer_digest"])
+            && is_digest(&lock["prior_coherent_manifest_digest"])
+            && is_digest(&lock["prior_journal_pointer_digest"])
+    };
+    if text(lock, "contract_version") != Some("gkos-watcher-host-lock/1.0.0-draft.1")
+        || !is_uuid7(&lock["lock_id"])
+        || !is_integer(&lock["process_id"], 1, u64::MAX)
+        || text(lock, "operation") != Some(operation)
+        || !service_ok
+        || !(lock["prior_pointer_digest"].is_null() || is_digest(&lock["prior_pointer_digest"]))
+        || !(lock["prior_coherent_manifest_digest"].is_null()
+            || is_digest(&lock["prior_coherent_manifest_digest"]))
+        || !is_nonce(&lock["owner_nonce"])
+        || !is_iso(&lock["created_at"])
+        || !is_digest(&lock["lock_digest"])
+        || text(lock, "lock_digest") != Some(digest_without(value, "lock_digest")?.as_str())
+    {
+        return fail("GKX_WATCHER_CONTRACT_RESET_INVALID");
+    }
+    Ok(value.clone())
+}
+
+fn seal_planned_target_ref(value: &Value) -> WatcherResult<Value> {
+    let reference =
+        object(value).map_err(|_| WatcherError("GKX_WATCHER_CONTRACT_RESET_INVALID"))?;
+    exact_keys(
+        reference,
+        &[
+            "planned_target_file",
+            "planned_target_digest",
+            "planned_target_raw_sha256",
+            "planned_target_byte_size",
+            "watcher_host_lock_digest",
+        ],
+    )
+    .map_err(|_| WatcherError("GKX_WATCHER_CONTRACT_RESET_INVALID"))?;
+    let digest = text(reference, "planned_target_digest").unwrap_or_default();
+    if !is_digest(&reference["planned_target_digest"])
+        || !is_digest(&reference["planned_target_raw_sha256"])
+        || !is_digest(&reference["watcher_host_lock_digest"])
+        || text(reference, "planned_target_file")
+            != Some(
+                format!(
+                    "watcher-journal-bootstrap-planned-target-{}.json",
+                    &digest[7..]
+                )
+                .as_str(),
+            )
+        || !is_integer(&reference["planned_target_byte_size"], 1, 1_048_576)
+    {
+        return fail("GKX_WATCHER_CONTRACT_RESET_INVALID");
+    }
+    Ok(value.clone())
+}
+
+fn seal_witness_ref(value: &Value) -> WatcherResult<Value> {
+    let reference =
+        object(value).map_err(|_| WatcherError("GKX_WATCHER_CONTRACT_RESET_INVALID"))?;
+    exact_keys(
+        reference,
+        &[
+            "witness_file",
+            "witness_digest",
+            "witness_raw_sha256",
+            "witness_byte_size",
+            "watcher_host_lock_digest",
+        ],
+    )
+    .map_err(|_| WatcherError("GKX_WATCHER_CONTRACT_RESET_INVALID"))?;
+    let digest = text(reference, "witness_digest").unwrap_or_default();
+    if !is_digest(&reference["witness_digest"])
+        || !is_digest(&reference["witness_raw_sha256"])
+        || !is_digest(&reference["watcher_host_lock_digest"])
+        || text(reference, "witness_file")
+            != Some(format!("watcher-journal-bootstrap-host-lock-{}.json", &digest[7..]).as_str())
+        || !is_integer(&reference["witness_byte_size"], 1, 1_048_576)
+    {
+        return fail("GKX_WATCHER_CONTRACT_RESET_INVALID");
+    }
+    Ok(value.clone())
+}
+
+fn seal_bootstrap_authority(value: &Value) -> WatcherResult<Value> {
+    let authority = seal_record(value)?;
+    let witness = seal_witness_ref(&authority["host_lock_witness"])?;
+    let generation = text(object(&authority)?, "journal_generation_digest").unwrap_or_default();
+    let pointer = text(object(&authority)?, "target_journal_pointer_digest").unwrap_or_default();
+    if !is_digest(&authority["journal_meta_digest"])
+        || !is_digest(&authority["journal_generation_digest"])
+        || authority["journal_generation_file"]
+            != format!("watcher-journal-generation-{}.json", &generation[7..])
+        || !is_digest(&authority["target_journal_pointer_digest"])
+        || authority["target_journal_pointer_file"]
+            != format!("watcher-journal-pointer-{}.json", &pointer[7..])
+        || !is_iso(&authority["committed_at"])
+        || witness["watcher_host_lock_digest"]
+            != authority["host_lock_witness"]["watcher_host_lock_digest"]
+    {
+        return fail("GKX_WATCHER_CONTRACT_RESET_INVALID");
+    }
+    Ok(authority)
+}
+
+fn seal_bootstrap_planned_target(value: &Value) -> WatcherResult<()> {
+    let target = object(value)?;
+    let meta = seal_record(&target["journal_meta"])?;
+    let generation = seal_record(&target["journal_generation"])?;
+    let pointer = seal_record(&target["target_journal_pointer"])?;
+    if !is_digest(&target["watcher_host_lock_digest"])
+        || meta["anchor_coherent_manifest_digest"] != Value::Null
+        || generation["anchor_coherent_manifest_digest"] != Value::Null
+        || generation["journal_instance_id"] != meta["journal_instance_id"]
+        || generation["meta_digest"] != meta["meta_digest"]
+        || generation["created_at"] != meta["created_at"]
+        || pointer["prior_pointer_digest"] != Value::Null
+        || pointer["journal_generation_digest"] != generation["journal_generation_digest"]
+    {
+        return fail("GKX_WATCHER_CONTRACT_RESET_INVALID");
+    }
+    Ok(())
+}
+
+fn seal_bootstrap_witness(value: &Value) -> WatcherResult<()> {
+    let witness = object(value)?;
+    let lock = seal_host_lock(&witness["watcher_host_lock"], "service")?;
+    let planned = seal_planned_target_ref(&witness["planned_target"])?;
+    if witness["watcher_host_lock_digest"] != lock["lock_digest"]
+        || planned["watcher_host_lock_digest"] != lock["lock_digest"]
+        || !is_uuid7(&witness["journal_instance_id"])
+        || !is_digest(&witness["journal_meta_digest"])
+        || !is_digest(&witness["journal_generation_digest"])
+        || !is_digest(&witness["target_journal_pointer_digest"])
+    {
+        return fail("GKX_WATCHER_CONTRACT_RESET_INVALID");
+    }
+    Ok(())
 }
 
 const ADAPTER_CAPABILITIES: [&str; 2] = [
@@ -631,9 +830,128 @@ fn seal_common_relations(value: &Value) -> WatcherResult<()> {
                 return fail("GKX_WATCHER_CONTRACT_RELATION_INVALID");
             }
         }
+        "gkos-watcher-journal-bootstrap-planned-target/1.0.0-draft.1" => {
+            seal_bootstrap_planned_target(value)?;
+        }
+        "gkos-watcher-journal-bootstrap-host-lock-witness/1.0.0-draft.2" => {
+            seal_bootstrap_witness(value)?;
+        }
         "gkos-watcher-journal-file-identity/1.0.0-draft.1" => seal_journal_file(item)?,
         "gkos-watcher-journal-archive/1.0.0-draft.1" => seal_archive(item)?,
         "gkos-watcher-journal-reset/1.0.0-draft.1" => seal_reset(item)?,
+        "gkos-watcher-journal-reset-recovery-plan/1.0.0-draft.1" => {
+            seal_reset_recovery_plan(value)?;
+        }
+        "gkos-watcher-journal-reset-reconciliation-adoption/1.0.0-draft.1" => {
+            if !is_uuid7(&item["batch_id"])
+                || item["batch_kind"] != "startup_reconciliation"
+                || item["execution_kind"] != "set_files"
+                || !is_iso(&item["started_at"])
+                || [
+                    "reset_digest",
+                    "replacement_journal_generation_digest",
+                    "source_journal_generation_digest",
+                    "native_activation_journal_generation_digest",
+                    "current_pointer_digest",
+                    "current_coherent_manifest_digest",
+                    "native_activation_intent_digest",
+                    "native_activation_outcome_digest",
+                    "prior_active_digest",
+                    "observation_digest",
+                    "observation_authority_digest",
+                    "plan_digest",
+                    "plan_authority_digest",
+                    "topology_snapshot_digest",
+                    "source_observation_snapshot_digest",
+                    "gkx_snapshot_digest",
+                    "retrieval_projection_digest",
+                    "canonical_graph_digest",
+                    "graphiti_projection_digest",
+                ]
+                .iter()
+                .any(|field| !is_digest(&item[*field]))
+            {
+                return fail("GKX_WATCHER_CONTRACT_RESET_INVALID");
+            }
+        }
+        "gkos-watcher-journal-reset-reconciliation-transition/1.0.0-draft.1" => {
+            if !is_uuid7(&item["batch_id"])
+                || item["transition_ordinal"] != 0
+                || item["state"] != "reset_reconciliation_adopted"
+                || item["terminal_state"] != "complete"
+                || !is_iso(&item["recorded_at"])
+                || item["completed_at"] != item["recorded_at"]
+                || [
+                    "receipt_digest",
+                    "reset_digest",
+                    "replacement_journal_generation_digest",
+                    "current_pointer_digest",
+                    "current_coherent_manifest_digest",
+                    "topology_snapshot_digest",
+                    "prior_active_digest",
+                    "adopted_active_digest",
+                ]
+                .iter()
+                .any(|field| !is_digest(&item[*field]))
+            {
+                return fail("GKX_WATCHER_CONTRACT_RESET_INVALID");
+            }
+        }
+        "gkos-watcher-failure-retry-noop-receipt/1.0.0-draft.1" => {
+            if !is_uuid7(&item["failed_batch_id"])
+                || !is_uuid7(&item["retry_batch_id"])
+                || !is_iso(&item["completed_at"])
+                || item["set_files_call_count"] != 1
+                || item["apply_changes_call_count"] != 0
+                || item["provider_call_count"] != 0
+                || item["retrieval_write_count"] != 0
+                || item["outer_write_count"] != 0
+                || [
+                    "failed_terminal_transition_digest",
+                    "retry_observation_digest",
+                    "retry_observation_authority_digest",
+                    "retry_pre_scan_state_digest",
+                    "failure_retry_bundle_digest",
+                    "retry_plan_digest",
+                    "retry_plan_authority_digest",
+                    "current_active_digest",
+                    "current_pointer_digest",
+                    "current_coherent_manifest_digest",
+                    "current_intent_digest",
+                    "current_outcome_digest",
+                    "topology_snapshot_digest",
+                    "source_observation_snapshot_digest",
+                    "configuration_digest",
+                    "policy_digest",
+                    "effective_profile_digest",
+                    "gkx_snapshot_digest",
+                    "retrieval_projection_digest",
+                    "canonical_graph_digest",
+                    "graph_artifact_digest",
+                    "graphiti_projection_digest",
+                ]
+                .iter()
+                .any(|field| !is_digest(&item[*field]))
+            {
+                return fail("GKX_WATCHER_CONTRACT_RETRY_INVALID");
+            }
+        }
+        "gkos-watcher-failure-retry-noop-transition/1.0.0-draft.1" => {
+            let receipt = seal_record(&item["receipt"])?;
+            if !is_uuid7(&item["batch_id"])
+                || item["transition_ordinal"] != 0
+                || item["state"] != "failure_reconciliation_noop_complete"
+                || item["terminal_state"] != "complete"
+                || !item["prior_transition_digest"].is_null()
+                || item["batch_id"] != receipt["retry_batch_id"]
+                || item["receipt_digest"] != receipt["receipt_digest"]
+                || !is_iso(&item["recorded_at"])
+                || item["recorded_at"] != receipt["completed_at"]
+                || item["completed_at"] != receipt["completed_at"]
+            {
+                return fail("GKX_WATCHER_CONTRACT_RETRY_INVALID");
+            }
+        }
         "gkos-watcher-journal-reset-guard/1.0.0-draft.1" => seal_reset_guard(item)?,
         "gkos-watcher-pointer-replace-guard/1.0.0-draft.1" => seal_pointer_guard(item)?,
         "gkos-watcher-pointer-recovery-decision/1.0.0-draft.1" => seal_pointer_decision(item)?,
@@ -1021,7 +1339,7 @@ fn seal_topology(item: &Map<String, Value>) -> WatcherResult<()> {
     {
         return fail("GKX_WATCHER_CONTRACT_RELATION_INVALID");
     }
-    let mut ordinals = BTreeSet::new();
+    let mut observation_coordinates = BTreeSet::new();
     let mut paths = BTreeSet::new();
     let mut prior: Option<String> = None;
     for raw in accepted {
@@ -1055,7 +1373,11 @@ fn seal_topology(item: &Map<String, Value>) -> WatcherResult<()> {
         if prior
             .as_deref()
             .is_some_and(|before| utf16_cmp(before, &key) != Ordering::Less)
-            || !ordinals.insert(unsigned(source, "source_observation_ordinal").unwrap())
+            || !observation_coordinates.insert(format!(
+                "{}\0{:07}",
+                text(source, "source_path").unwrap(),
+                unsigned(source, "source_observation_ordinal").unwrap()
+            ))
             || !paths.insert(text(source, "source_path").unwrap().to_owned())
         {
             return fail("GKX_WATCHER_CONTRACT_RELATION_INVALID");
@@ -1104,7 +1426,11 @@ fn seal_topology(item: &Map<String, Value>) -> WatcherResult<()> {
         if prior
             .as_deref()
             .is_some_and(|before| utf16_cmp(before, &key) != Ordering::Less)
-            || !ordinals.insert(unsigned(source, "source_observation_ordinal").unwrap())
+            || !observation_coordinates.insert(format!(
+                "{}\0{:07}",
+                text(source, "source_path").unwrap(),
+                unsigned(source, "source_observation_ordinal").unwrap()
+            ))
             || !paths.insert(text(source, "source_path").unwrap().to_owned())
         {
             return fail("GKX_WATCHER_CONTRACT_RELATION_INVALID");
@@ -1257,6 +1583,146 @@ fn seal_retrieval_state(value: &Value) -> WatcherResult<Value> {
             }
         }
         _ => return fail("GKX_WATCHER_CONTRACT_RELATION_INVALID"),
+    }
+    Ok(value.clone())
+}
+
+fn seal_current_owner_manifest(value: &Value, error: &'static str) -> WatcherResult<Value> {
+    let owner = object(value).map_err(|_| WatcherError(error))?;
+    exact_keys(
+        owner,
+        &[
+            "contract_version",
+            "owner_generation_id",
+            "owner_manifest_digest",
+            "mode",
+            "vault_id",
+            "observation_snapshot_digest",
+            "profile",
+            "normalized_profile",
+            "configuration_digest",
+            "policy_digest",
+            "chunking",
+            "validation_result",
+            "inner",
+            "rejection_journal",
+        ],
+    )
+    .map_err(|_| WatcherError(error))?;
+    let owner_digest = text(owner, "owner_manifest_digest").unwrap_or_default();
+    if text(owner, "contract_version") != Some("gkos-ingest-generation/1.0.0-draft.1")
+        || !matches!(text(owner, "mode"), Some("strict" | "non_strict"))
+        || !valid_label(&owner["vault_id"])
+        || !is_digest(&owner["observation_snapshot_digest"])
+        || !is_digest(&owner["configuration_digest"])
+        || !is_digest(&owner["policy_digest"])
+        || !is_digest(&owner["owner_manifest_digest"])
+        || text(owner, "owner_generation_id")
+            != owner_digest
+                .get(7..31)
+                .map(|suffix| format!("ingest:{suffix}"))
+                .as_deref()
+    {
+        return fail(error);
+    }
+    let chunking = object(&owner["chunking"]).map_err(|_| WatcherError(error))?;
+    let profile = object(&owner["profile"]).map_err(|_| WatcherError(error))?;
+    let normalized = object(&owner["normalized_profile"]).map_err(|_| WatcherError(error))?;
+    let validation = object(&owner["validation_result"]).map_err(|_| WatcherError(error))?;
+    let rejection = object(&owner["rejection_journal"]).map_err(|_| WatcherError(error))?;
+    exact_keys(chunking, &[]).map_err(|_| WatcherError(error))?;
+    exact_keys(profile, &["effective_profile_digest"]).map_err(|_| WatcherError(error))?;
+    exact_keys(normalized, &[]).map_err(|_| WatcherError(error))?;
+    exact_keys(validation, &["status"]).map_err(|_| WatcherError(error))?;
+    exact_keys(
+        rejection,
+        &[
+            "journal_file",
+            "rejection_count",
+            "rejection_journal_digest",
+        ],
+    )
+    .map_err(|_| WatcherError(error))?;
+    let rejection_digest = text(rejection, "rejection_journal_digest").unwrap_or_default();
+    if !is_digest(&profile["effective_profile_digest"])
+        || text(validation, "status") != Some("accepted")
+        || !is_digest(&rejection["rejection_journal_digest"])
+        || unsigned(rejection, "rejection_count") != Some(0)
+        || text(rejection, "journal_file")
+            != rejection_digest
+                .get(7..)
+                .map(|suffix| format!("ingest-rejections-{suffix}.json"))
+                .as_deref()
+    {
+        return fail(error);
+    }
+    let mut owner_material = owner.clone();
+    owner_material.remove("owner_generation_id");
+    owner_material.remove("owner_manifest_digest");
+    if canonical_digest(&Value::Object(owner_material))
+        .ok()
+        .as_deref()
+        != Some(owner_digest)
+    {
+        return fail(error);
+    }
+    let inner = object(&owner["inner"]).map_err(|_| WatcherError(error))?;
+    exact_keys(inner, &["database_file", "manifest", "manifest_digest"])
+        .map_err(|_| WatcherError(error))?;
+    let manifest = object(&inner["manifest"]).map_err(|_| WatcherError(error))?;
+    exact_keys(
+        manifest,
+        &[
+            "candidate_chunk_count",
+            "candidate_declaration_count",
+            "candidate_source_count",
+            "chunker_version",
+            "configuration_digest",
+            "contract_version",
+            "embedding_dimensions",
+            "embedding_eligible_candidate_chunk_count",
+            "embedding_model_id",
+            "embedding_provider_id",
+            "engine_version",
+            "gkx_projection_profile",
+            "gkx_standard_commit",
+            "lexical_backend",
+            "policy_digest",
+            "projection_digest",
+            "projection_id",
+            "projection_schema_version",
+            "provenance_contract_version",
+            "represented_candidate_source_count",
+            "source_snapshot_digest",
+            "tokenizer_version",
+            "vault_id",
+        ],
+    )
+    .map_err(|_| WatcherError(error))?;
+    let typed_manifest: GkxRetrievalProjectionManifest =
+        serde_json::from_value(inner["manifest"].clone()).map_err(|_| WatcherError(error))?;
+    typed_manifest.validate().map_err(|_| WatcherError(error))?;
+    let projection = text(manifest, "projection_digest").unwrap_or_default();
+    if !is_digest(&inner["manifest_digest"])
+        || !is_digest(&manifest["projection_digest"])
+        || canonical_digest(&inner["manifest"]).ok().as_deref() != inner["manifest_digest"].as_str()
+        || text(inner, "database_file")
+            != projection
+                .get(7..)
+                .map(|suffix| format!("retrieval-{suffix}.sqlite"))
+                .as_deref()
+        || manifest["source_snapshot_digest"] != owner["observation_snapshot_digest"]
+        || manifest["vault_id"] != owner["vault_id"]
+        || manifest["engine_version"] != "2.1.2"
+        || manifest["configuration_digest"] != owner["configuration_digest"]
+        || manifest["policy_digest"] != owner["policy_digest"]
+        || manifest["candidate_source_count"] != 0
+        || manifest["candidate_declaration_count"] != 0
+        || manifest["represented_candidate_source_count"] != 0
+        || manifest["candidate_chunk_count"] != 0
+        || manifest["embedding_eligible_candidate_chunk_count"] != 0
+    {
+        return fail(error);
     }
     Ok(value.clone())
 }
@@ -4515,7 +4981,7 @@ struct ReadyRemoval {
     occurrence: Value,
 }
 
-fn old_journal_ready(value: &Value, outer: &str) -> WatcherResult<Vec<ReadyRemoval>> {
+fn old_journal_ready_rows(value: &Value, outer: &str) -> WatcherResult<Vec<ReadyRemoval>> {
     let authority = object(value)?;
     exact_keys(
         authority,
@@ -4706,6 +5172,99 @@ fn old_journal_ready(value: &Value, outer: &str) -> WatcherResult<Vec<ReadyRemov
     Ok(ready)
 }
 
+struct OldResetAuthority {
+    outer_pointer: Value,
+    outer_manifest: Value,
+    active: Value,
+    ready: Vec<ReadyRemoval>,
+}
+
+fn seal_old_reset_authority(
+    value: &Value,
+    old_meta: &Value,
+    old_generation: &Value,
+    old_pointer: &Value,
+) -> WatcherResult<OldResetAuthority> {
+    let authority =
+        object(value).map_err(|_| WatcherError("GKX_WATCHER_CONTRACT_RESET_INVALID"))?;
+    exact_keys(
+        authority,
+        &[
+            "journal_bootstrap_authority",
+            "outer_pointer",
+            "outer_coherent_manifest",
+            "active_coherent",
+            "activated_event_set_bundles",
+            "responses",
+            "receipts",
+        ],
+    )
+    .map_err(|_| WatcherError("GKX_WATCHER_CONTRACT_RESET_INVALID"))?;
+    let outer_pointer = seal_record(&authority["outer_pointer"])
+        .map_err(|_| WatcherError("GKX_WATCHER_CONTRACT_RESET_INVALID"))?;
+    let outer_manifest = seal_record(&authority["outer_coherent_manifest"])
+        .map_err(|_| WatcherError("GKX_WATCHER_CONTRACT_RESET_INVALID"))?;
+    let active = seal_record(&authority["active_coherent"])
+        .map_err(|_| WatcherError("GKX_WATCHER_CONTRACT_RESET_INVALID"))?;
+    if outer_pointer["kind"] != "watcher_coherent"
+        || outer_pointer["coherent_manifest_digest"] != outer_manifest["coherent_manifest_digest"]
+        || outer_pointer["service_generation_id"] != outer_manifest["service_generation_id"]
+        || active["pointer_digest"] != outer_pointer["pointer_digest"]
+        || active["coherent_manifest_digest"] != outer_manifest["coherent_manifest_digest"]
+        || active["service_generation_id"] != outer_manifest["service_generation_id"]
+        || [
+            "vault_id",
+            "configuration_digest",
+            "policy_digest",
+            "effective_profile_digest",
+        ]
+        .iter()
+        .any(|field| outer_manifest[*field] != old_meta[*field])
+    {
+        return fail("GKX_WATCHER_CONTRACT_RESET_INVALID");
+    }
+    let genesis = old_meta["anchor_coherent_manifest_digest"].is_null()
+        && old_generation["anchor_coherent_manifest_digest"].is_null()
+        && old_pointer["prior_pointer_digest"].is_null();
+    let anchored = is_digest(&old_meta["anchor_coherent_manifest_digest"])
+        && old_meta["anchor_coherent_manifest_digest"]
+            == old_generation["anchor_coherent_manifest_digest"]
+        && is_digest(&old_pointer["prior_pointer_digest"]);
+    if genesis == anchored {
+        return fail("GKX_WATCHER_CONTRACT_RESET_INVALID");
+    }
+    if genesis {
+        if authority["journal_bootstrap_authority"].is_null() {
+            return fail("GKX_WATCHER_CONTRACT_RESET_INVALID");
+        }
+        let bootstrap = seal_bootstrap_authority(&authority["journal_bootstrap_authority"])
+            .map_err(|_| WatcherError("GKX_WATCHER_CONTRACT_RESET_INVALID"))?;
+        if bootstrap["journal_meta_digest"] != old_meta["meta_digest"]
+            || bootstrap["journal_generation_digest"] != old_generation["journal_generation_digest"]
+            || bootstrap["target_journal_pointer_digest"] != old_pointer["pointer_digest"]
+        {
+            return fail("GKX_WATCHER_CONTRACT_RESET_INVALID");
+        }
+    } else if !authority["journal_bootstrap_authority"].is_null() {
+        return fail("GKX_WATCHER_CONTRACT_RESET_INVALID");
+    }
+    let rows = json!({
+        "activated_event_set_bundles": authority["activated_event_set_bundles"],
+        "responses": authority["responses"],
+        "receipts": authority["receipts"],
+    });
+    let ready = old_journal_ready_rows(
+        &rows,
+        outer_manifest["coherent_manifest_digest"].as_str().unwrap(),
+    )?;
+    Ok(OldResetAuthority {
+        outer_pointer,
+        outer_manifest,
+        active,
+        ready,
+    })
+}
+
 fn seal_journal_reset_bundle(
     value: &Value,
     old_authority: &Value,
@@ -4737,8 +5296,12 @@ fn seal_journal_reset_bundle(
     let new_generation = seal_record(&bundle["new_generation"])?;
     let target_pointer = seal_record(&bundle["target_pointer"])?;
     let pointer_guard = seal_record(pointer_guard_value)?;
-    let outer = reset["outer_coherent_manifest_digest"].as_str().unwrap();
-    let ready = old_journal_ready(old_authority, outer)?;
+    let authority =
+        seal_old_reset_authority(old_authority, &old_meta, &old_generation, &old_pointer)?;
+    let outer = authority.outer_manifest["coherent_manifest_digest"]
+        .as_str()
+        .unwrap();
+    let ready = authority.ready;
     let mut carry_set = None;
     let mut carry_activation = None;
     if !bundle["reset_carry_bundle"].is_null() {
@@ -4772,14 +5335,23 @@ fn seal_journal_reset_bundle(
         .as_ref()
         .map(|activation| activation["activation_digest"].clone());
     let count = ready.len();
+    if reset["outer_coherent_manifest_digest"] != outer
+        || guard["outer_coherent_manifest_digest"] != outer
+        || archive["outer_coherent_manifest_digest"] != outer
+        || new_meta["anchor_coherent_manifest_digest"] != outer
+        || new_generation["anchor_coherent_manifest_digest"] != outer
+    {
+        return fail("GKX_WATCHER_CONTRACT_RESET_INVALID");
+    }
     if old_generation["journal_instance_id"] != old_meta["journal_instance_id"]
         || old_generation["meta_digest"] != old_meta["meta_digest"]
-        || old_generation["anchor_coherent_manifest_digest"] != outer
-        || old_meta["anchor_coherent_manifest_digest"] != outer
         || old_pointer["journal_generation_digest"] != old_generation["journal_generation_digest"]
         || archive["journal_instance_id"] != old_generation["journal_instance_id"]
         || archive["directory_leaf"] != old_generation["directory_leaf"]
         || archive["outer_coherent_manifest_digest"] != outer
+        || authority.outer_pointer["coherent_manifest_digest"] != outer
+        || authority.active["coherent_manifest_digest"] != outer
+        || reset["outer_coherent_manifest_digest"] != outer
         || new_generation["journal_instance_id"] != new_meta["journal_instance_id"]
         || new_generation["meta_digest"] != new_meta["meta_digest"]
         || new_generation["anchor_coherent_manifest_digest"] != outer
@@ -4856,6 +5428,581 @@ fn seal_journal_reset_bundle(
         || pointer_guard["target_commit_digest"] != reset["reset_digest"]
     {
         return fail("GKX_WATCHER_CONTRACT_RELATION_INVALID");
+    }
+    Ok(value.clone())
+}
+
+fn seal_reset_recovery_plan(value: &Value) -> WatcherResult<()> {
+    let plan = object(value)?;
+    let lock = seal_host_lock(&plan["watcher_host_lock"], "journal_reset")?;
+    let outer_pointer = seal_record(&plan["outer_pointer"])
+        .map_err(|_| WatcherError("GKX_WATCHER_CONTRACT_RESET_INVALID"))?;
+    let outer_manifest = seal_record(&plan["outer_coherent_manifest"])
+        .map_err(|_| WatcherError("GKX_WATCHER_CONTRACT_RESET_INVALID"))?;
+    let bundle = json!({
+        "old_meta": plan["old_meta"],
+        "old_generation": plan["old_generation"],
+        "old_pointer": plan["old_pointer"],
+        "archive": plan["archive"],
+        "reset": plan["reset"],
+        "guard": plan["reset_guard"],
+        "new_meta": plan["new_meta"],
+        "new_generation": plan["new_generation"],
+        "target_pointer": plan["target_pointer"],
+        "reset_carry_bundle": plan["reset_carry_bundle"],
+    });
+    if let Err(error) = seal_journal_reset_bundle(
+        &bundle,
+        &plan["old_journal_authority"],
+        &plan["pointer_replace_guard"],
+    ) {
+        return if matches!(
+            error.0,
+            "GKX_WATCHER_CONTRACT_KEYS_INVALID" | "GKX_WATCHER_CONTRACT_SOURCE_REMOVAL_INVALID"
+        ) {
+            Err(error)
+        } else {
+            fail("GKX_WATCHER_CONTRACT_RESET_INVALID")
+        };
+    }
+    let old_pointer = seal_record(&plan["old_pointer"])?;
+    if outer_pointer["coherent_manifest_digest"] != outer_manifest["coherent_manifest_digest"]
+        || lock["prior_pointer_digest"] != outer_pointer["pointer_digest"]
+        || lock["prior_coherent_manifest_digest"] != outer_manifest["coherent_manifest_digest"]
+        || lock["prior_journal_pointer_digest"] != old_pointer["pointer_digest"]
+    {
+        return fail("GKX_WATCHER_CONTRACT_RESET_INVALID");
+    }
+    Ok(())
+}
+
+fn seal_failure_retry_noop_bundle(value: &Value) -> WatcherResult<Value> {
+    let bundle = object(value)?;
+    exact_keys(
+        bundle,
+        &[
+            "failure_retry_bundle",
+            "retry_plan",
+            "retry_plan_authority",
+            "retry_topology",
+            "retry_canonical_graph",
+            "current_topology",
+            "current_outer_pointer",
+            "current_coherent_manifest",
+            "current_activation_intent",
+            "current_activation_outcome",
+            "current_active",
+            "current_owner_manifest",
+            "current_canonical_graph",
+            "current_raw_graph",
+            "current_graphiti_projection",
+            "receipt",
+            "transition",
+        ],
+    )?;
+    let retry = seal_failure_retry_bundle(&bundle["failure_retry_bundle"])
+        .map_err(|_| WatcherError("GKX_WATCHER_CONTRACT_RETRY_INVALID"))?;
+    let seal = |field: &str| {
+        seal_record(&bundle[field]).map_err(|_| WatcherError("GKX_WATCHER_CONTRACT_RETRY_INVALID"))
+    };
+    let plan = seal("retry_plan")?;
+    let plan_authority = seal("retry_plan_authority")?;
+    let retry_topology = seal("retry_topology")?;
+    let retry_canonical = seal("retry_canonical_graph")?;
+    let current_topology = seal("current_topology")?;
+    let pointer = seal("current_outer_pointer")?;
+    let manifest = seal("current_coherent_manifest")?;
+    let intent = seal("current_activation_intent")?;
+    let outcome = seal("current_activation_outcome")?;
+    let active = seal("current_active")?;
+    let current_owner = seal_current_owner_manifest(
+        &bundle["current_owner_manifest"],
+        "GKX_WATCHER_CONTRACT_RETRY_INVALID",
+    )?;
+    let current_canonical = seal("current_canonical_graph")?;
+    let raw = seal("current_raw_graph")?;
+    let graphiti = seal("current_graphiti_projection")?;
+    let receipt = seal("receipt")?;
+    let transition = seal("transition")?;
+    let failed_batch = &retry["failed_batch"];
+    let retry_batch = &retry["retry_batch"];
+    let retry_observation = &retry["retry_observation"];
+    let retry_authority = &retry["retry_observation_authority"];
+    let retry_pre_scan = &retry["retry_pre_scan_state"];
+    let failed_terminal = array(&retry["failed_transitions"])?
+        .last()
+        .ok_or(WatcherError("GKX_WATCHER_CONTRACT_RETRY_INVALID"))?;
+    let graph_state = object(&manifest["graph_projection_state"])
+        .map_err(|_| WatcherError("GKX_WATCHER_CONTRACT_RETRY_INVALID"))?;
+    let retrieval_state = object(&manifest["retrieval_projection_state"])
+        .map_err(|_| WatcherError("GKX_WATCHER_CONTRACT_RETRY_INVALID"))?;
+    let observation_coordinate = artifact_coordinate("observation", retry_observation)
+        .map_err(|_| WatcherError("GKX_WATCHER_CONTRACT_RETRY_INVALID"))?;
+    let plan_coordinate = artifact_coordinate("plan", &plan)
+        .map_err(|_| WatcherError("GKX_WATCHER_CONTRACT_RETRY_INVALID"))?;
+    let topology_coordinate = artifact_coordinate("topology", &current_topology)
+        .map_err(|_| WatcherError("GKX_WATCHER_CONTRACT_RETRY_INVALID"))?;
+    let raw_coordinate = artifact_coordinate("graph", &raw)
+        .map_err(|_| WatcherError("GKX_WATCHER_CONTRACT_RETRY_INVALID"))?;
+    let retry_pre_scan_digest = canonical_digest(retry_pre_scan).unwrap();
+    let mutation_set_digest = canonical_digest(&json!({
+        "contract_version":"gkos-watcher-mutation-set/1.0.0-draft.1",
+        "pre_scan_state_digest":retry_pre_scan_digest,
+        "topology_snapshot_digest":retry_topology["topology_snapshot_digest"],
+        "intended_source_mutations":[],
+        "folder_set_changed":false,
+        "attachment_set_changed":false,
+    }))
+    .unwrap();
+    let complete = seal_record(&intent["target_complete_transition"])
+        .map_err(|_| WatcherError("GKX_WATCHER_CONTRACT_RETRY_INVALID"))?;
+    let owner =
+        object(&current_owner).map_err(|_| WatcherError("GKX_WATCHER_CONTRACT_RETRY_INVALID"))?;
+    let owner_inner =
+        object(&owner["inner"]).map_err(|_| WatcherError("GKX_WATCHER_CONTRACT_RETRY_INVALID"))?;
+    let owner_manifest = object(&owner_inner["manifest"])
+        .map_err(|_| WatcherError("GKX_WATCHER_CONTRACT_RETRY_INVALID"))?;
+    let owner_profile = object(&owner["profile"])
+        .map_err(|_| WatcherError("GKX_WATCHER_CONTRACT_RETRY_INVALID"))?;
+    let owner_journal = object(&owner["rejection_journal"])
+        .map_err(|_| WatcherError("GKX_WATCHER_CONTRACT_RETRY_INVALID"))?;
+    let expected_canonical = normalize_raw_graph(&raw["graph"])
+        .map_err(|_| WatcherError("GKX_WATCHER_CONTRACT_RETRY_INVALID"))?;
+    let expected_graphiti = derive_graphiti(&raw["graph"], &manifest["vault_id"])
+        .map_err(|_| WatcherError("GKX_WATCHER_CONTRACT_RETRY_INVALID"))?;
+    if plan["batch_id"] != retry_batch["batch_id"]
+        || plan["observation_digest"] != retry_observation["observation_digest"]
+        || plan["topology_snapshot_digest"] != retry_topology["topology_snapshot_digest"]
+        || plan["intended_source_mutations"] != json!([])
+        || plan["folder_set_changed"] != false
+        || plan["attachment_set_changed"] != false
+        || plan["effective_profile_digest"] != manifest["effective_profile_digest"]
+        || plan["validation_result_digest"] != retry_topology["validation_result_digest"]
+        || plan["rejection_journal_digest"] != retry_topology["rejection_journal_digest"]
+        || plan["mutation_set_digest"] != mutation_set_digest
+        || plan_authority["batch_id"] != retry_batch["batch_id"]
+        || plan_authority["observation_digest"] != retry_observation["observation_digest"]
+        || plan_authority["plan_digest"] != plan["plan_digest"]
+        || plan_authority["plan_artifact_file"] != plan_coordinate["file"]
+        || plan_authority["plan_raw_sha256"] != plan_coordinate["raw_sha256"]
+        || plan_authority["plan_byte_size"] != plan_coordinate["byte_size"]
+        || plan_authority["target_topology_snapshot_digest"]
+            != retry_topology["topology_snapshot_digest"]
+        || plan_authority["source_removal_event_count"] != 0
+        || !plan_authority["source_removal_event_set_digest"].is_null()
+        || retry_authority["observation_artifact_file"] != observation_coordinate["file"]
+        || retry_authority["observation_raw_sha256"] != observation_coordinate["raw_sha256"]
+        || retry_authority["observation_byte_size"] != observation_coordinate["byte_size"]
+        || retry_topology != current_topology
+        || retry_canonical != current_canonical
+        || complete["state"] != "complete"
+        || complete["terminal_state"] != "complete"
+        || manifest["retrieval_projection_state"] != complete["retrieval_projection_state"]
+        || manifest["graph_projection_state"] != complete["graph_projection_state"]
+        || pointer["coherent_manifest_digest"] != manifest["coherent_manifest_digest"]
+        || pointer["service_generation_id"] != manifest["service_generation_id"]
+        || manifest["completed_transition_digest"] != complete["transition_digest"]
+        || manifest["completed_batch_id"] != complete["batch_id"]
+        || intent["coherent_manifest_digest"] != manifest["coherent_manifest_digest"]
+        || intent["prior_pointer_digest"] != pointer["prior_pointer_digest"]
+        || intent["target_pointer"] != pointer
+        || active["pointer_digest"] != pointer["pointer_digest"]
+        || active["coherent_manifest_digest"] != manifest["coherent_manifest_digest"]
+        || active["intent_digest"] != intent["intent_digest"]
+        || active["service_generation_id"] != manifest["service_generation_id"]
+        || outcome["intent_digest"] != intent["intent_digest"]
+        || outcome["outcome"] != "published"
+        || outcome["pointer_digest"] != pointer["pointer_digest"]
+        || outcome["coherent_manifest_digest"] != manifest["coherent_manifest_digest"]
+        || manifest["topology_snapshot_digest"] != current_topology["topology_snapshot_digest"]
+        || manifest["topology_artifact_file"] != topology_coordinate["file"]
+        || manifest["topology_artifact_raw_sha256"] != topology_coordinate["raw_sha256"]
+        || owner["owner_generation_id"] != retrieval_state["owner_generation_id"]
+        || owner["owner_manifest_digest"] != retrieval_state["owner_manifest_digest"]
+        || owner_inner["database_file"] != retrieval_state["database_file"]
+        || owner_inner["manifest_digest"] != retrieval_state["manifest_digest"]
+        || owner_manifest["projection_id"] != retrieval_state["projection_id"]
+        || owner_manifest["projection_digest"] != retrieval_state["projection_digest"]
+        || owner_manifest["lexical_backend"] != retrieval_state["lexical_backend"]
+        || owner_manifest["embedding_provider_id"] != retrieval_state["provider_id"]
+        || owner_manifest["embedding_model_id"] != retrieval_state["model_id"]
+        || owner_manifest["embedding_dimensions"] != retrieval_state["dimensions"]
+        || owner["vault_id"] != manifest["vault_id"]
+        || owner["observation_snapshot_digest"] != manifest["source_observation_snapshot_digest"]
+        || owner["configuration_digest"] != manifest["configuration_digest"]
+        || owner["policy_digest"] != manifest["policy_digest"]
+        || owner_profile["effective_profile_digest"] != manifest["effective_profile_digest"]
+        || canonical_digest(&owner["validation_result"]).unwrap()
+            != manifest["validation_result_digest"]
+        || owner_journal["rejection_journal_digest"] != manifest["rejection_journal_digest"]
+        || raw["service_generation_id"] != manifest["service_generation_id"]
+        || raw["topology_snapshot_digest"] != manifest["topology_snapshot_digest"]
+        || raw["graph_artifact_digest"] != graph_state["graph_artifact_digest"]
+        || raw_coordinate["file"] != graph_state["graph_artifact_file"]
+        || current_canonical != expected_canonical
+        || graphiti != expected_graphiti
+        || canonical_digest(&current_canonical).ok().as_deref()
+            != manifest["gkx_snapshot_digest"].as_str()
+        || canonical_digest(&current_canonical).ok().as_deref()
+            != graph_state["canonical_graph_digest"].as_str()
+        || canonical_digest(&graphiti).ok().as_deref()
+            != graph_state["graphiti_projection_digest"].as_str()
+        || receipt["failed_batch_id"] != failed_batch["batch_id"]
+        || receipt["failed_terminal_transition_digest"] != failed_terminal["transition_digest"]
+        || receipt["retry_batch_id"] != retry_batch["batch_id"]
+        || receipt["retry_observation_digest"] != retry_observation["observation_digest"]
+        || receipt["retry_observation_authority_digest"] != retry_authority["authority_digest"]
+        || receipt["retry_pre_scan_state_digest"] != retry_pre_scan_digest
+        || receipt["failure_retry_bundle_digest"] != canonical_digest(&retry).unwrap()
+        || receipt["retry_plan_digest"] != plan["plan_digest"]
+        || receipt["retry_plan_authority_digest"] != plan_authority["authority_digest"]
+        || receipt["current_active_digest"] != active["active_digest"]
+        || receipt["current_pointer_digest"] != pointer["pointer_digest"]
+        || receipt["current_coherent_manifest_digest"] != manifest["coherent_manifest_digest"]
+        || receipt["current_intent_digest"] != intent["intent_digest"]
+        || receipt["current_outcome_digest"] != outcome["outcome_digest"]
+        || receipt["topology_snapshot_digest"] != current_topology["topology_snapshot_digest"]
+        || receipt["source_observation_snapshot_digest"]
+            != current_topology["source_observation_snapshot_digest"]
+        || receipt["configuration_digest"] != manifest["configuration_digest"]
+        || receipt["policy_digest"] != manifest["policy_digest"]
+        || receipt["effective_profile_digest"] != manifest["effective_profile_digest"]
+        || receipt["gkx_snapshot_digest"] != manifest["gkx_snapshot_digest"]
+        || receipt["retrieval_projection_digest"] != retrieval_state["projection_digest"]
+        || receipt["canonical_graph_digest"] != graph_state["canonical_graph_digest"]
+        || receipt["graph_artifact_digest"] != raw["graph_artifact_digest"]
+        || receipt["graphiti_projection_digest"] != graph_state["graphiti_projection_digest"]
+        || transition["receipt"] != receipt
+        || transition["receipt_digest"] != receipt["receipt_digest"]
+        || transition["batch_id"] != retry_batch["batch_id"]
+    {
+        return fail("GKX_WATCHER_CONTRACT_RETRY_INVALID");
+    }
+    Ok(value.clone())
+}
+
+fn seal_reset_adoption_bundle(value: &Value) -> WatcherResult<Value> {
+    let bundle = object(value)?;
+    exact_keys(
+        bundle,
+        &[
+            "replacement_meta",
+            "replacement_generation",
+            "replacement_pointer",
+            "reset",
+            "source_meta",
+            "source_generation",
+            "source_pointer",
+            "native_meta",
+            "native_generation",
+            "native_pointer",
+            "current_outer_pointer",
+            "current_coherent_manifest",
+            "native_transitions",
+            "native_activation_intent",
+            "native_activation_outcome",
+            "native_active",
+            "source_adoption_receipt",
+            "source_adoption_transition",
+            "source_active",
+            "pre_scan_state",
+            "observation",
+            "observation_authority",
+            "plan",
+            "plan_authority",
+            "topology",
+            "current_owner_manifest",
+            "raw_graph",
+            "canonical_graph",
+            "graphiti_projection",
+            "adoption_receipt",
+            "adoption_transition",
+            "adopted_active",
+        ],
+    )?;
+    let seal = |field: &str| {
+        seal_record(&bundle[field]).map_err(|_| WatcherError("GKX_WATCHER_CONTRACT_RESET_INVALID"))
+    };
+    let replacement_meta = seal("replacement_meta")?;
+    let replacement_generation = seal("replacement_generation")?;
+    let replacement_pointer = seal("replacement_pointer")?;
+    let reset = seal("reset")?;
+    let source_meta = seal("source_meta")?;
+    let source_generation = seal("source_generation")?;
+    let source_pointer = seal("source_pointer")?;
+    let native_meta = seal("native_meta")?;
+    let native_generation = seal("native_generation")?;
+    let native_pointer = seal("native_pointer")?;
+    let pointer = seal("current_outer_pointer")?;
+    let manifest = seal("current_coherent_manifest")?;
+    let transitions = seal_transition_sequence(&bundle["native_transitions"], true)
+        .map_err(|_| WatcherError("GKX_WATCHER_CONTRACT_RESET_INVALID"))?;
+    let complete = array(&transitions)?
+        .last()
+        .ok_or(WatcherError("GKX_WATCHER_CONTRACT_RESET_INVALID"))?;
+    let intent = seal("native_activation_intent")?;
+    let outcome = seal("native_activation_outcome")?;
+    let native_active = seal("native_active")?;
+    let source_active = seal("source_active")?;
+    let pre_scan = seal("pre_scan_state")?;
+    let observation = seal("observation")?;
+    let observation_authority = seal("observation_authority")?;
+    let plan = seal("plan")?;
+    let plan_authority = seal("plan_authority")?;
+    let topology = seal("topology")?;
+    let current_owner = seal_current_owner_manifest(
+        &bundle["current_owner_manifest"],
+        "GKX_WATCHER_CONTRACT_RESET_INVALID",
+    )?;
+    let raw = seal_record(&bundle["raw_graph"])
+        .map_err(|_| WatcherError("GKX_WATCHER_CONTRACT_GRAPH_INVALID"))?;
+    let canonical = seal("canonical_graph")?;
+    let graphiti = seal("graphiti_projection")?;
+    let receipt = seal("adoption_receipt")?;
+    let transition = seal("adoption_transition")?;
+    let adopted_active = seal("adopted_active")?;
+    let source_native = bundle["source_adoption_receipt"].is_null()
+        && bundle["source_adoption_transition"].is_null();
+    let source_adopted = !bundle["source_adoption_receipt"].is_null()
+        && !bundle["source_adoption_transition"].is_null();
+    if source_native == source_adopted {
+        return fail("GKX_WATCHER_CONTRACT_RESET_INVALID");
+    }
+    if source_adopted {
+        let prior_receipt = seal_record(&bundle["source_adoption_receipt"])
+            .map_err(|_| WatcherError("GKX_WATCHER_CONTRACT_RESET_INVALID"))?;
+        let prior_transition = seal_record(&bundle["source_adoption_transition"])
+            .map_err(|_| WatcherError("GKX_WATCHER_CONTRACT_RESET_INVALID"))?;
+        if prior_receipt["replacement_journal_generation_digest"]
+            != source_generation["journal_generation_digest"]
+            || prior_receipt["native_activation_journal_generation_digest"]
+                != native_generation["journal_generation_digest"]
+            || prior_receipt["current_pointer_digest"] != pointer["pointer_digest"]
+            || prior_receipt["current_coherent_manifest_digest"]
+                != manifest["coherent_manifest_digest"]
+            || prior_receipt["native_activation_intent_digest"] != intent["intent_digest"]
+            || prior_receipt["native_activation_outcome_digest"] != outcome["outcome_digest"]
+            || prior_receipt["prior_active_digest"] != native_active["active_digest"]
+            || prior_receipt["topology_snapshot_digest"] != manifest["topology_snapshot_digest"]
+            || prior_receipt["source_observation_snapshot_digest"]
+                != manifest["source_observation_snapshot_digest"]
+            || prior_receipt["gkx_snapshot_digest"] != manifest["gkx_snapshot_digest"]
+            || prior_receipt["retrieval_projection_digest"]
+                != manifest["retrieval_projection_state"]["projection_digest"]
+            || prior_receipt["canonical_graph_digest"]
+                != manifest["graph_projection_state"]["canonical_graph_digest"]
+            || prior_receipt["graphiti_projection_digest"]
+                != manifest["graph_projection_state"]["graphiti_projection_digest"]
+            || prior_transition["batch_id"] != prior_receipt["batch_id"]
+            || prior_transition["receipt_digest"] != prior_receipt["receipt_digest"]
+            || prior_transition["reset_digest"] != prior_receipt["reset_digest"]
+            || prior_transition["replacement_journal_generation_digest"]
+                != source_generation["journal_generation_digest"]
+            || prior_transition["current_pointer_digest"] != pointer["pointer_digest"]
+            || prior_transition["current_coherent_manifest_digest"]
+                != manifest["coherent_manifest_digest"]
+            || prior_transition["topology_snapshot_digest"] != manifest["topology_snapshot_digest"]
+            || prior_transition["prior_active_digest"] != native_active["active_digest"]
+            || prior_transition["adopted_active_digest"] != source_active["active_digest"]
+        {
+            return fail("GKX_WATCHER_CONTRACT_RESET_INVALID");
+        }
+    } else if source_generation["journal_generation_digest"]
+        != native_generation["journal_generation_digest"]
+        || source_meta["meta_digest"] != native_meta["meta_digest"]
+        || source_pointer["pointer_digest"] != native_pointer["pointer_digest"]
+    {
+        return fail("GKX_WATCHER_CONTRACT_RESET_INVALID");
+    }
+    let graph_state = object(&manifest["graph_projection_state"])
+        .map_err(|_| WatcherError("GKX_WATCHER_CONTRACT_RESET_INVALID"))?;
+    let retrieval_state = object(&manifest["retrieval_projection_state"])
+        .map_err(|_| WatcherError("GKX_WATCHER_CONTRACT_RESET_INVALID"))?;
+    let observation_coordinate = artifact_coordinate("observation", &observation)
+        .map_err(|_| WatcherError("GKX_WATCHER_CONTRACT_RESET_INVALID"))?;
+    let plan_coordinate = artifact_coordinate("plan", &plan)
+        .map_err(|_| WatcherError("GKX_WATCHER_CONTRACT_RESET_INVALID"))?;
+    let raw_coordinate = artifact_coordinate("graph", &raw)
+        .map_err(|_| WatcherError("GKX_WATCHER_CONTRACT_GRAPH_INVALID"))?;
+    let pre_scan_digest = canonical_digest(&pre_scan).unwrap();
+    let mutation_set_digest = canonical_digest(&json!({
+        "contract_version":"gkos-watcher-mutation-set/1.0.0-draft.1",
+        "pre_scan_state_digest":pre_scan_digest,
+        "topology_snapshot_digest":topology["topology_snapshot_digest"],
+        "intended_source_mutations":plan["intended_source_mutations"],
+        "folder_set_changed":plan["folder_set_changed"],
+        "attachment_set_changed":plan["attachment_set_changed"],
+    }))
+    .unwrap();
+    let owner =
+        object(&current_owner).map_err(|_| WatcherError("GKX_WATCHER_CONTRACT_RESET_INVALID"))?;
+    let owner_inner =
+        object(&owner["inner"]).map_err(|_| WatcherError("GKX_WATCHER_CONTRACT_RESET_INVALID"))?;
+    let owner_manifest = object(&owner_inner["manifest"])
+        .map_err(|_| WatcherError("GKX_WATCHER_CONTRACT_RESET_INVALID"))?;
+    let owner_profile = object(&owner["profile"])
+        .map_err(|_| WatcherError("GKX_WATCHER_CONTRACT_RESET_INVALID"))?;
+    let owner_journal = object(&owner["rejection_journal"])
+        .map_err(|_| WatcherError("GKX_WATCHER_CONTRACT_RESET_INVALID"))?;
+    if replacement_generation["meta_digest"] != replacement_meta["meta_digest"]
+        || replacement_pointer["journal_generation_digest"]
+            != replacement_generation["journal_generation_digest"]
+        || replacement_pointer["prior_pointer_digest"] != source_pointer["pointer_digest"]
+        || replacement_generation["journal_instance_id"] != replacement_meta["journal_instance_id"]
+        || reset["new_journal_meta_digest"] != replacement_meta["meta_digest"]
+        || reset["new_journal_generation_digest"]
+            != replacement_generation["journal_generation_digest"]
+        || reset["target_journal_pointer_digest"] != replacement_pointer["pointer_digest"]
+        || reset["prior_journal_generation_digest"]
+            != source_generation["journal_generation_digest"]
+        || source_generation["journal_instance_id"] != source_meta["journal_instance_id"]
+        || source_generation["meta_digest"] != source_meta["meta_digest"]
+        || source_pointer["journal_generation_digest"]
+            != source_generation["journal_generation_digest"]
+        || native_generation["journal_instance_id"] != native_meta["journal_instance_id"]
+        || native_generation["meta_digest"] != native_meta["meta_digest"]
+        || native_pointer["journal_generation_digest"]
+            != native_generation["journal_generation_digest"]
+        || replacement_meta["anchor_coherent_manifest_digest"]
+            != manifest["coherent_manifest_digest"]
+        || replacement_generation["anchor_coherent_manifest_digest"]
+            != manifest["coherent_manifest_digest"]
+        || reset["outer_coherent_manifest_digest"] != manifest["coherent_manifest_digest"]
+        || pointer["coherent_manifest_digest"] != manifest["coherent_manifest_digest"]
+        || pointer["service_generation_id"] != manifest["service_generation_id"]
+        || complete["state"] != "complete"
+        || complete["terminal_state"] != "complete"
+        || complete["batch_id"] != manifest["completed_batch_id"]
+        || complete["transition_digest"] != manifest["completed_transition_digest"]
+        || manifest["retrieval_projection_state"] != complete["retrieval_projection_state"]
+        || manifest["graph_projection_state"] != complete["graph_projection_state"]
+        || intent["prepared_transition_digest"] != transitions[5]["transition_digest"]
+        || intent["target_complete_transition"] != *complete
+        || intent["target_pointer"] != pointer
+        || intent["coherent_manifest_digest"] != manifest["coherent_manifest_digest"]
+        || outcome["intent_digest"] != intent["intent_digest"]
+        || outcome["outcome"] != "published"
+        || outcome["pointer_digest"] != pointer["pointer_digest"]
+        || outcome["coherent_manifest_digest"] != manifest["coherent_manifest_digest"]
+        || native_active["intent_digest"] != intent["intent_digest"]
+        || native_active["pointer_digest"] != pointer["pointer_digest"]
+        || native_active["coherent_manifest_digest"] != manifest["coherent_manifest_digest"]
+        || native_active["service_generation_id"] != manifest["service_generation_id"]
+        || source_active != native_active
+        || adopted_active != native_active
+        || pre_scan["active_pointer_digest"] != pointer["pointer_digest"]
+        || pre_scan["active_coherent_manifest_digest"] != manifest["coherent_manifest_digest"]
+        || pre_scan["topology_snapshot_digest"] != manifest["topology_snapshot_digest"]
+        || pre_scan["vault_id"] != manifest["vault_id"]
+        || pre_scan["configuration_digest"] != manifest["configuration_digest"]
+        || pre_scan["policy_digest"] != manifest["policy_digest"]
+        || pre_scan["effective_profile_digest"] != manifest["effective_profile_digest"]
+        || observation["batch_kind"] != "startup_reconciliation"
+        || observation["unscoped"] != true
+        || observation["overflow"] != false
+        || observation["observed_paths"] != json!([])
+        || observation_authority["batch_id"] != observation["batch_id"]
+        || observation_authority["observation_digest"] != observation["observation_digest"]
+        || observation_authority["started_at"] != observation["started_at"]
+        || observation_authority["observation_artifact_file"] != observation_coordinate["file"]
+        || observation_authority["observation_raw_sha256"] != observation_coordinate["raw_sha256"]
+        || observation_authority["observation_byte_size"] != observation_coordinate["byte_size"]
+        || observation_authority["pre_scan_state_digest"] != pre_scan_digest
+        || plan["batch_id"] != observation["batch_id"]
+        || plan["observation_digest"] != observation["observation_digest"]
+        || plan["intended_source_mutations"] != json!([])
+        || plan["folder_set_changed"] != false
+        || plan["attachment_set_changed"] != false
+        || plan["mutation_set_digest"] != mutation_set_digest
+        || plan["topology_snapshot_digest"] != pre_scan["topology_snapshot_digest"]
+        || plan["effective_profile_digest"] != manifest["effective_profile_digest"]
+        || plan["validation_result_digest"] != topology["validation_result_digest"]
+        || plan["rejection_journal_digest"] != topology["rejection_journal_digest"]
+        || plan_authority["batch_id"] != observation["batch_id"]
+        || plan_authority["observation_digest"] != observation["observation_digest"]
+        || plan_authority["plan_digest"] != plan["plan_digest"]
+        || plan_authority["plan_artifact_file"] != plan_coordinate["file"]
+        || plan_authority["plan_raw_sha256"] != plan_coordinate["raw_sha256"]
+        || plan_authority["plan_byte_size"] != plan_coordinate["byte_size"]
+        || plan_authority["target_topology_snapshot_digest"] != topology["topology_snapshot_digest"]
+        || plan_authority["source_removal_event_count"] != 0
+        || !plan_authority["source_removal_event_set_digest"].is_null()
+        || topology["topology_snapshot_digest"] != manifest["topology_snapshot_digest"]
+        || topology["source_observation_snapshot_digest"]
+            != manifest["source_observation_snapshot_digest"]
+        || topology["validation_result_digest"] != manifest["validation_result_digest"]
+        || topology["rejection_journal_digest"] != manifest["rejection_journal_digest"]
+        || owner["owner_generation_id"] != retrieval_state["owner_generation_id"]
+        || owner["owner_manifest_digest"] != retrieval_state["owner_manifest_digest"]
+        || owner_inner["database_file"] != retrieval_state["database_file"]
+        || owner_inner["manifest_digest"] != retrieval_state["manifest_digest"]
+        || owner_manifest["projection_id"] != retrieval_state["projection_id"]
+        || owner_manifest["projection_digest"] != retrieval_state["projection_digest"]
+        || owner_manifest["lexical_backend"] != retrieval_state["lexical_backend"]
+        || owner_manifest["embedding_provider_id"] != retrieval_state["provider_id"]
+        || owner_manifest["embedding_model_id"] != retrieval_state["model_id"]
+        || owner_manifest["embedding_dimensions"] != retrieval_state["dimensions"]
+        || owner["vault_id"] != manifest["vault_id"]
+        || owner["observation_snapshot_digest"] != manifest["source_observation_snapshot_digest"]
+        || owner["configuration_digest"] != manifest["configuration_digest"]
+        || owner["policy_digest"] != manifest["policy_digest"]
+        || owner_profile["effective_profile_digest"] != manifest["effective_profile_digest"]
+        || canonical_digest(&owner["validation_result"]).unwrap()
+            != manifest["validation_result_digest"]
+        || owner_journal["rejection_journal_digest"] != manifest["rejection_journal_digest"]
+    {
+        return fail("GKX_WATCHER_CONTRACT_RESET_INVALID");
+    }
+    if raw["service_generation_id"] != manifest["service_generation_id"]
+        || raw["topology_snapshot_digest"] != manifest["topology_snapshot_digest"]
+        || raw["graph_artifact_digest"] != graph_state["graph_artifact_digest"]
+        || raw_coordinate["file"] != graph_state["graph_artifact_file"]
+    {
+        return fail("GKX_WATCHER_CONTRACT_GRAPH_INVALID");
+    }
+    let canonical_digest_value = canonical_digest(&canonical).unwrap();
+    if manifest["gkx_snapshot_digest"] != complete["gkx_snapshot_digest"]
+        || manifest["gkx_snapshot_digest"] != canonical_digest_value
+        || graph_state["canonical_graph_digest"] != canonical_digest_value
+        || graph_state["graphiti_projection_digest"] != canonical_digest(&graphiti).unwrap()
+        || receipt["batch_id"] != observation["batch_id"]
+        || receipt["reset_digest"] != reset["reset_digest"]
+        || receipt["replacement_journal_generation_digest"]
+            != replacement_generation["journal_generation_digest"]
+        || receipt["source_journal_generation_digest"]
+            != source_generation["journal_generation_digest"]
+        || receipt["native_activation_journal_generation_digest"]
+            != native_generation["journal_generation_digest"]
+        || receipt["current_pointer_digest"] != pointer["pointer_digest"]
+        || receipt["current_coherent_manifest_digest"] != manifest["coherent_manifest_digest"]
+        || receipt["prior_active_digest"] != native_active["active_digest"]
+        || receipt["native_activation_intent_digest"] != intent["intent_digest"]
+        || receipt["native_activation_outcome_digest"] != outcome["outcome_digest"]
+        || receipt["observation_digest"] != observation["observation_digest"]
+        || receipt["observation_authority_digest"] != observation_authority["authority_digest"]
+        || receipt["plan_digest"] != plan["plan_digest"]
+        || receipt["plan_authority_digest"] != plan_authority["authority_digest"]
+        || receipt["topology_snapshot_digest"] != topology["topology_snapshot_digest"]
+        || receipt["source_observation_snapshot_digest"]
+            != topology["source_observation_snapshot_digest"]
+        || receipt["retrieval_projection_digest"] != retrieval_state["projection_digest"]
+        || receipt["gkx_snapshot_digest"] != manifest["gkx_snapshot_digest"]
+        || receipt["canonical_graph_digest"] != graph_state["canonical_graph_digest"]
+        || receipt["graphiti_projection_digest"] != graph_state["graphiti_projection_digest"]
+        || receipt["started_at"] != observation["started_at"]
+        || transition["batch_id"] != receipt["batch_id"]
+        || transition["receipt_digest"] != receipt["receipt_digest"]
+        || transition["reset_digest"] != reset["reset_digest"]
+        || transition["adopted_active_digest"] != adopted_active["active_digest"]
+        || transition["replacement_journal_generation_digest"]
+            != replacement_generation["journal_generation_digest"]
+        || transition["current_pointer_digest"] != pointer["pointer_digest"]
+        || transition["current_coherent_manifest_digest"] != manifest["coherent_manifest_digest"]
+        || transition["topology_snapshot_digest"] != topology["topology_snapshot_digest"]
+        || transition["prior_active_digest"] != native_active["active_digest"]
+        || transition["recorded_at"] != receipt["started_at"]
+    {
+        return fail("GKX_WATCHER_CONTRACT_RESET_INVALID");
     }
     Ok(value.clone())
 }
@@ -5143,9 +6290,9 @@ fn validate_cli(value: &Value) -> WatcherResult<Value> {
     )?;
     if text(fixture, "contract_version") != Some("gkos-watcher-cli-fixture/1.0.0-draft.1")
         || text(fixture, "fixture_digest")
-            != Some("sha256:0e05988ff481b58c9f9ec8262b75a8d642012aa3325121e1f3ff259ee593f96d")
+            != Some("sha256:d4f0953fd0b066351bbae543742a311b0d745a894a3cd1b3cdc45e0975d11362")
         || digest_without(value, "fixture_digest")?
-            != "sha256:0e05988ff481b58c9f9ec8262b75a8d642012aa3325121e1f3ff259ee593f96d"
+            != "sha256:d4f0953fd0b066351bbae543742a311b0d745a894a3cd1b3cdc45e0975d11362"
         || array(&fixture["state_fixtures"])?.len() != 7
         || array(&fixture["commands"])?.len() != 35
     {
@@ -5251,10 +6398,16 @@ fn invoke(operation: &str, input: &Value) -> WatcherResult<String> {
         "seal_failure_retry_bundle" if arguments.len() == 1 => {
             (seal_failure_retry_bundle(&arguments[0])?, "record")
         }
+        "seal_failure_retry_noop_bundle" if arguments.len() == 1 => {
+            (seal_failure_retry_noop_bundle(&arguments[0])?, "record")
+        }
         "seal_journal_reset_bundle" if arguments.len() == 3 => (
             seal_journal_reset_bundle(&arguments[0], &arguments[1], &arguments[2])?,
             "record",
         ),
+        "seal_journal_reset_reconciliation_adoption_bundle" if arguments.len() == 1 => {
+            (seal_reset_adoption_bundle(&arguments[0])?, "record")
+        }
         "seal_measurement" if arguments.len() == 1 => (seal_record(&arguments[0])?, "record"),
         "seal_pointer_recovery" if arguments.len() == 2 => (
             classify_pointer_recovery(&arguments[0], &arguments[1])?,
@@ -5385,6 +6538,9 @@ fn schema_pattern_matches(pattern: &str, value: &str) -> bool {
         "^watcher-coherent-[0-9a-f]{64}\\.json$" => lowercase_hex_tail("watcher-coherent-", ".json", 64),
         "^watcher-graph-[0-9a-f]{64}\\.json$" => lowercase_hex_tail("watcher-graph-", ".json", 64),
         "^watcher-journal-generation-[0-9a-f]{64}\\.json$" => lowercase_hex_tail("watcher-journal-generation-", ".json", 64),
+        "^watcher-journal-bootstrap-planned-target-[0-9a-f]{64}\\.json$" => lowercase_hex_tail("watcher-journal-bootstrap-planned-target-", ".json", 64),
+        "^watcher-journal-bootstrap-host-lock-[0-9a-f]{64}\\.json$" => lowercase_hex_tail("watcher-journal-bootstrap-host-lock-", ".json", 64),
+        "^watcher-journal-pointer-[0-9a-f]{64}\\.json$" => lowercase_hex_tail("watcher-journal-pointer-", ".json", 64),
         "^watcher-observation-[0-9a-f]{64}\\.json$" => lowercase_hex_tail("watcher-observation-", ".json", 64),
         "^watcher-plan-[0-9a-f]{64}\\.json$" => lowercase_hex_tail("watcher-plan-", ".json", 64),
         "^watcher-topology-[0-9a-f]{64}\\.json$" => lowercase_hex_tail("watcher-topology-", ".json", 64),
@@ -5633,6 +6789,179 @@ mod tests {
         value[digest_key] = Value::String(digest_without(value, digest_key).unwrap());
     }
 
+    fn reseal_owner_projection_for_test(owner: &mut Value) {
+        owner["inner"]["manifest_digest"] =
+            Value::String(canonical_digest(&owner["inner"]["manifest"]).unwrap());
+        let mut material = object(owner).unwrap().clone();
+        material.remove("owner_generation_id");
+        material.remove("owner_manifest_digest");
+        let digest = canonical_digest(&Value::Object(material)).unwrap();
+        owner["owner_manifest_digest"] = Value::String(digest.clone());
+        owner["owner_generation_id"] = Value::String(format!(
+            "ingest:{}",
+            &digest["sha256:".len().."sha256:".len() + 24]
+        ));
+    }
+
+    fn reseal_retry_activation_cascade_for_test(bundle: &mut Value) {
+        reseal_for_test(
+            &mut bundle["current_coherent_manifest"],
+            "coherent_manifest_digest",
+        );
+        bundle["current_outer_pointer"]["coherent_manifest_digest"] =
+            bundle["current_coherent_manifest"]["coherent_manifest_digest"].clone();
+        reseal_for_test(&mut bundle["current_outer_pointer"], "pointer_digest");
+        bundle["current_activation_intent"]["coherent_manifest_digest"] =
+            bundle["current_coherent_manifest"]["coherent_manifest_digest"].clone();
+        bundle["current_activation_intent"]["target_pointer"] =
+            bundle["current_outer_pointer"].clone();
+        reseal_for_test(&mut bundle["current_activation_intent"], "intent_digest");
+        bundle["current_activation_outcome"]["intent_digest"] =
+            bundle["current_activation_intent"]["intent_digest"].clone();
+        bundle["current_activation_outcome"]["coherent_manifest_digest"] =
+            bundle["current_coherent_manifest"]["coherent_manifest_digest"].clone();
+        bundle["current_activation_outcome"]["pointer_digest"] =
+            bundle["current_outer_pointer"]["pointer_digest"].clone();
+        reseal_for_test(&mut bundle["current_activation_outcome"], "outcome_digest");
+        bundle["current_active"]["intent_digest"] =
+            bundle["current_activation_intent"]["intent_digest"].clone();
+        bundle["current_active"]["coherent_manifest_digest"] =
+            bundle["current_coherent_manifest"]["coherent_manifest_digest"].clone();
+        bundle["current_active"]["pointer_digest"] =
+            bundle["current_outer_pointer"]["pointer_digest"].clone();
+        reseal_for_test(&mut bundle["current_active"], "active_digest");
+        bundle["receipt"]["current_active_digest"] =
+            bundle["current_active"]["active_digest"].clone();
+        bundle["receipt"]["current_pointer_digest"] =
+            bundle["current_outer_pointer"]["pointer_digest"].clone();
+        bundle["receipt"]["current_coherent_manifest_digest"] =
+            bundle["current_coherent_manifest"]["coherent_manifest_digest"].clone();
+        bundle["receipt"]["current_intent_digest"] =
+            bundle["current_activation_intent"]["intent_digest"].clone();
+        bundle["receipt"]["current_outcome_digest"] =
+            bundle["current_activation_outcome"]["outcome_digest"].clone();
+        bundle["receipt"]["retrieval_projection_digest"] = bundle["current_coherent_manifest"]
+            ["retrieval_projection_state"]["projection_digest"]
+            .clone();
+        bundle["receipt"]["canonical_graph_digest"] = bundle["current_coherent_manifest"]
+            ["graph_projection_state"]["canonical_graph_digest"]
+            .clone();
+        bundle["receipt"]["graph_artifact_digest"] = bundle["current_coherent_manifest"]
+            ["graph_projection_state"]["graph_artifact_digest"]
+            .clone();
+        bundle["receipt"]["graphiti_projection_digest"] = bundle["current_coherent_manifest"]
+            ["graph_projection_state"]["graphiti_projection_digest"]
+            .clone();
+        reseal_for_test(&mut bundle["receipt"], "receipt_digest");
+        bundle["transition"]["receipt"] = bundle["receipt"].clone();
+        bundle["transition"]["receipt_digest"] = bundle["receipt"]["receipt_digest"].clone();
+        reseal_for_test(&mut bundle["transition"], "transition_digest");
+    }
+
+    fn reseal_reset_activation_cascade_for_test(bundle: &mut Value) {
+        reseal_for_test(
+            &mut bundle["current_coherent_manifest"],
+            "coherent_manifest_digest",
+        );
+        bundle["current_outer_pointer"]["coherent_manifest_digest"] =
+            bundle["current_coherent_manifest"]["coherent_manifest_digest"].clone();
+        reseal_for_test(&mut bundle["current_outer_pointer"], "pointer_digest");
+
+        bundle["native_activation_intent"]["coherent_manifest_digest"] =
+            bundle["current_coherent_manifest"]["coherent_manifest_digest"].clone();
+        bundle["native_activation_intent"]["target_pointer"] =
+            bundle["current_outer_pointer"].clone();
+        reseal_for_test(&mut bundle["native_activation_intent"], "intent_digest");
+        bundle["native_activation_outcome"]["intent_digest"] =
+            bundle["native_activation_intent"]["intent_digest"].clone();
+        bundle["native_activation_outcome"]["coherent_manifest_digest"] =
+            bundle["current_coherent_manifest"]["coherent_manifest_digest"].clone();
+        bundle["native_activation_outcome"]["pointer_digest"] =
+            bundle["current_outer_pointer"]["pointer_digest"].clone();
+        reseal_for_test(&mut bundle["native_activation_outcome"], "outcome_digest");
+        bundle["native_active"]["intent_digest"] =
+            bundle["native_activation_intent"]["intent_digest"].clone();
+        bundle["native_active"]["coherent_manifest_digest"] =
+            bundle["current_coherent_manifest"]["coherent_manifest_digest"].clone();
+        bundle["native_active"]["pointer_digest"] =
+            bundle["current_outer_pointer"]["pointer_digest"].clone();
+        reseal_for_test(&mut bundle["native_active"], "active_digest");
+        bundle["source_active"] = bundle["native_active"].clone();
+        bundle["adopted_active"] = bundle["native_active"].clone();
+
+        bundle["replacement_meta"]["anchor_coherent_manifest_digest"] =
+            bundle["current_coherent_manifest"]["coherent_manifest_digest"].clone();
+        reseal_for_test(&mut bundle["replacement_meta"], "meta_digest");
+        bundle["replacement_generation"]["anchor_coherent_manifest_digest"] =
+            bundle["current_coherent_manifest"]["coherent_manifest_digest"].clone();
+        bundle["replacement_generation"]["meta_digest"] =
+            bundle["replacement_meta"]["meta_digest"].clone();
+        reseal_for_test(
+            &mut bundle["replacement_generation"],
+            "journal_generation_digest",
+        );
+        bundle["replacement_pointer"]["journal_generation_digest"] =
+            bundle["replacement_generation"]["journal_generation_digest"].clone();
+        reseal_for_test(&mut bundle["replacement_pointer"], "pointer_digest");
+        bundle["reset"]["new_journal_meta_digest"] =
+            bundle["replacement_meta"]["meta_digest"].clone();
+        bundle["reset"]["new_journal_generation_digest"] =
+            bundle["replacement_generation"]["journal_generation_digest"].clone();
+        bundle["reset"]["target_journal_pointer_digest"] =
+            bundle["replacement_pointer"]["pointer_digest"].clone();
+        bundle["reset"]["outer_coherent_manifest_digest"] =
+            bundle["current_coherent_manifest"]["coherent_manifest_digest"].clone();
+        reseal_for_test(&mut bundle["reset"], "reset_digest");
+
+        bundle["pre_scan_state"]["active_pointer_digest"] =
+            bundle["current_outer_pointer"]["pointer_digest"].clone();
+        bundle["pre_scan_state"]["active_coherent_manifest_digest"] =
+            bundle["current_coherent_manifest"]["coherent_manifest_digest"].clone();
+        let pre_scan_digest = canonical_digest(&bundle["pre_scan_state"]).unwrap();
+        bundle["observation_authority"]["pre_scan_state_digest"] = Value::String(pre_scan_digest);
+        reseal_for_test(&mut bundle["observation_authority"], "authority_digest");
+
+        bundle["adoption_receipt"]["reset_digest"] = bundle["reset"]["reset_digest"].clone();
+        bundle["adoption_receipt"]["replacement_journal_generation_digest"] =
+            bundle["replacement_generation"]["journal_generation_digest"].clone();
+        bundle["adoption_receipt"]["current_pointer_digest"] =
+            bundle["current_outer_pointer"]["pointer_digest"].clone();
+        bundle["adoption_receipt"]["current_coherent_manifest_digest"] =
+            bundle["current_coherent_manifest"]["coherent_manifest_digest"].clone();
+        bundle["adoption_receipt"]["native_activation_intent_digest"] =
+            bundle["native_activation_intent"]["intent_digest"].clone();
+        bundle["adoption_receipt"]["native_activation_outcome_digest"] =
+            bundle["native_activation_outcome"]["outcome_digest"].clone();
+        bundle["adoption_receipt"]["prior_active_digest"] =
+            bundle["native_active"]["active_digest"].clone();
+        bundle["adoption_receipt"]["observation_authority_digest"] =
+            bundle["observation_authority"]["authority_digest"].clone();
+        bundle["adoption_receipt"]["retrieval_projection_digest"] = bundle
+            ["current_coherent_manifest"]["retrieval_projection_state"]["projection_digest"]
+            .clone();
+        bundle["adoption_receipt"]["canonical_graph_digest"] = bundle["current_coherent_manifest"]
+            ["graph_projection_state"]["canonical_graph_digest"]
+            .clone();
+        bundle["adoption_receipt"]["graphiti_projection_digest"] = bundle
+            ["current_coherent_manifest"]["graph_projection_state"]["graphiti_projection_digest"]
+            .clone();
+        reseal_for_test(&mut bundle["adoption_receipt"], "receipt_digest");
+        bundle["adoption_transition"]["receipt_digest"] =
+            bundle["adoption_receipt"]["receipt_digest"].clone();
+        bundle["adoption_transition"]["reset_digest"] = bundle["reset"]["reset_digest"].clone();
+        bundle["adoption_transition"]["replacement_journal_generation_digest"] =
+            bundle["replacement_generation"]["journal_generation_digest"].clone();
+        bundle["adoption_transition"]["current_pointer_digest"] =
+            bundle["current_outer_pointer"]["pointer_digest"].clone();
+        bundle["adoption_transition"]["current_coherent_manifest_digest"] =
+            bundle["current_coherent_manifest"]["coherent_manifest_digest"].clone();
+        bundle["adoption_transition"]["prior_active_digest"] =
+            bundle["native_active"]["active_digest"].clone();
+        bundle["adoption_transition"]["adopted_active_digest"] =
+            bundle["adopted_active"]["active_digest"].clone();
+        reseal_for_test(&mut bundle["adoption_transition"], "transition_digest");
+    }
+
     fn encode_base64(bytes: &[u8]) -> String {
         const ALPHABET: &[u8; 64] =
             b"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
@@ -5712,12 +7041,12 @@ mod tests {
         assert_eq!(pin["reference_repository"], "Odenknight/GKOS-Engine");
         assert_eq!(
             pin["reference_commit"],
-            "420a9d704f1fd12a6a61e4dd60abeb70757a9b2d"
+            "7b5262baee9fcda23d50b0cee0c4977d6e4305e7"
         );
         assert_eq!(pin["reference_package_version"], "2.1.2");
         assert_eq!(
             pin["reference_state"],
-            "full_phase5_slice_a_published_hosted_green"
+            "full_phase5_slice_b_signed_hosted_qualified"
         );
         assert_eq!(pin["contract_version"], PACK_VERSION);
         assert_eq!(
@@ -5727,10 +7056,10 @@ mod tests {
         assert_eq!(pin["publication_qualified"], true);
         assert_eq!(pin["pack_file_count"], 18);
         assert_eq!(pin["pack_manifest_file_count"], 17);
-        assert_eq!(pin["pack_byte_count"], 5_860_943);
+        assert_eq!(pin["pack_byte_count"], 8_907_164);
         assert_eq!(
             pin["pack_digest"],
-            "sha256:c08520c1392d6be04c71159050c0d60f5bf03afeeb915ae44920e758e35cb49a"
+            "sha256:a8e0eed2a829db8c80cede489c871f938e432a09e6f1c34aa0940fcfe381519f"
         );
         let files = object(&pin["files"]).unwrap();
         assert_eq!(files.len(), 18);
@@ -5763,7 +7092,7 @@ mod tests {
         );
         assert_eq!(manifest["pack_contract_version"], PACK_VERSION);
         assert_eq!(manifest["file_count"], 17);
-        assert_eq!(manifest["total_bytes"], 5_860_943);
+        assert_eq!(manifest["total_bytes"], 8_907_164);
         assert_eq!(manifest["pack_digest"], pin["pack_digest"]);
         let rows = array(&manifest["files"]).unwrap();
         assert_eq!(rows.len(), 17);
@@ -5776,7 +7105,7 @@ mod tests {
             assert_eq!(text(row, "raw_sha256"), files[name].as_str());
             governed_total += actual_sizes[name];
         }
-        assert_eq!(governed_total, 5_860_943);
+        assert_eq!(governed_total, 8_907_164);
         assert_eq!(fs::read_dir(pack_path("")).unwrap().count(), 19);
         let source = include_str!("watcher.rs");
         let pure = source.split("#[cfg(test)]").next().unwrap();
@@ -5791,7 +7120,7 @@ mod tests {
     #[test]
     fn sample_plan_transport_is_exact() {
         let bytes = fs::read(pack_path("watcher-sample-plan.json")).unwrap();
-        assert_eq!(bytes.len(), 3_978);
+        assert_eq!(bytes.len(), 4_363);
         assert_eq!(sha256(&bytes), SAMPLE_PLAN_DIGEST);
         assert_ne!(bytes.last(), Some(&b'\n'));
         let plan: Value = serde_json::from_slice(&bytes).unwrap();
@@ -6331,12 +7660,205 @@ mod tests {
     }
 
     #[test]
+    fn noop_and_adoption_bundles_reject_cross_authority_splices() {
+        let retry_case = semantic_case("failure-retry-noop-complete");
+        let retry_bundle = retry_case["input"]["arguments"][0].clone();
+        assert!(seal_failure_retry_noop_bundle(&retry_bundle).is_ok());
+
+        let mut owner_substitutions = Vec::new();
+        let mut engine_version = retry_bundle.clone();
+        engine_version["current_owner_manifest"]["inner"]["manifest"]["engine_version"] =
+            json!("attacker-version");
+        reseal_owner_projection_for_test(&mut engine_version["current_owner_manifest"]);
+        assert_eq!(
+            seal_current_owner_manifest(
+                &engine_version["current_owner_manifest"],
+                "GKX_WATCHER_CONTRACT_RETRY_INVALID",
+            ),
+            Err(WatcherError("GKX_WATCHER_CONTRACT_RETRY_INVALID")),
+            "fully resealed compact owner attacker engine version"
+        );
+        let mut chunking = retry_bundle.clone();
+        chunking["current_owner_manifest"]["chunking"]["max_tokens"] = json!(400);
+        owner_substitutions.push(("chunking", chunking));
+        let mut normalized = retry_bundle.clone();
+        normalized["current_owner_manifest"]["normalized_profile"]["contract_version"] =
+            json!("gkos-frontmatter-profile-effective/1.0.0-draft.1");
+        owner_substitutions.push(("normalized-profile", normalized));
+        let mut profile = retry_bundle.clone();
+        profile["current_owner_manifest"]["profile"]["profile_selector"] =
+            json!("gkos:frontmatter-profile/current");
+        owner_substitutions.push(("profile", profile));
+        let mut validation = retry_bundle.clone();
+        validation["current_owner_manifest"]["validation_result"]["summary"] =
+            json!({"valid_source_count":0});
+        owner_substitutions.push(("validation-result", validation));
+        let mut journal_file = retry_bundle.clone();
+        journal_file["current_owner_manifest"]["rejection_journal"]["journal_file"] =
+            json!("ingest-rejections-ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff.json");
+        owner_substitutions.push(("rejection-file", journal_file));
+        let mut journal_count = retry_bundle.clone();
+        journal_count["current_owner_manifest"]["rejection_journal"]["rejection_count"] = json!(1);
+        owner_substitutions.push(("rejection-count", journal_count));
+        let mut candidate_count = retry_bundle.clone();
+        candidate_count["current_owner_manifest"]["inner"]["manifest"]["candidate_source_count"] =
+            json!(1);
+        owner_substitutions.push(("candidate-source-count", candidate_count));
+        for (name, mut substitution) in owner_substitutions {
+            reseal_owner_projection_for_test(&mut substitution["current_owner_manifest"]);
+            assert_eq!(
+                seal_failure_retry_noop_bundle(&substitution),
+                Err(WatcherError("GKX_WATCHER_CONTRACT_RETRY_INVALID")),
+                "{name}"
+            );
+        }
+
+        for state in ["retrieval_projection_state", "graph_projection_state"] {
+            let mut cascade = retry_bundle.clone();
+            let complete = &mut cascade["current_activation_intent"]["target_complete_transition"];
+            if state == "retrieval_projection_state" {
+                complete[state]["projection_digest"] =
+                    Value::String(format!("sha256:{}", "e".repeat(64)));
+                complete[state]["projection_id"] =
+                    Value::String(format!("retrieval:{}", "e".repeat(24)));
+            } else {
+                complete[state]["graphiti_projection_digest"] =
+                    Value::String(format!("sha256:{}", "e".repeat(64)));
+            }
+            reseal_for_test(complete, "transition_digest");
+            cascade["current_coherent_manifest"]["completed_transition_digest"] =
+                complete["transition_digest"].clone();
+            reseal_retry_activation_cascade_for_test(&mut cascade);
+            assert_eq!(
+                seal_failure_retry_noop_bundle(&cascade),
+                Err(WatcherError("GKX_WATCHER_CONTRACT_RETRY_INVALID")),
+                "manifest/complete {state} cascade"
+            );
+        }
+
+        let mut plan_splice = retry_bundle.clone();
+        plan_splice["retry_plan"]["effective_profile_digest"] =
+            Value::String(format!("sha256:{}", "f".repeat(64)));
+        reseal_for_test(&mut plan_splice["retry_plan"], "plan_digest");
+        let plan_coordinate = artifact_coordinate("plan", &plan_splice["retry_plan"]).unwrap();
+        plan_splice["retry_plan_authority"]["plan_digest"] =
+            plan_splice["retry_plan"]["plan_digest"].clone();
+        plan_splice["retry_plan_authority"]["plan_artifact_file"] = plan_coordinate["file"].clone();
+        plan_splice["retry_plan_authority"]["plan_raw_sha256"] =
+            plan_coordinate["raw_sha256"].clone();
+        plan_splice["retry_plan_authority"]["plan_byte_size"] =
+            plan_coordinate["byte_size"].clone();
+        reseal_for_test(&mut plan_splice["retry_plan_authority"], "authority_digest");
+        plan_splice["receipt"]["retry_plan_digest"] =
+            plan_splice["retry_plan"]["plan_digest"].clone();
+        plan_splice["receipt"]["retry_plan_authority_digest"] =
+            plan_splice["retry_plan_authority"]["authority_digest"].clone();
+        reseal_for_test(&mut plan_splice["receipt"], "receipt_digest");
+        plan_splice["transition"]["receipt"] = plan_splice["receipt"].clone();
+        plan_splice["transition"]["receipt_digest"] =
+            plan_splice["receipt"]["receipt_digest"].clone();
+        reseal_for_test(&mut plan_splice["transition"], "transition_digest");
+        assert_eq!(
+            seal_failure_retry_noop_bundle(&plan_splice),
+            Err(WatcherError("GKX_WATCHER_CONTRACT_RETRY_INVALID"))
+        );
+
+        for field in ["current_intent_digest", "current_outcome_digest"] {
+            let mut splice = retry_bundle.clone();
+            splice["receipt"][field] = Value::String(format!("sha256:{}", "e".repeat(64)));
+            reseal_for_test(&mut splice["receipt"], "receipt_digest");
+            splice["transition"]["receipt"] = splice["receipt"].clone();
+            splice["transition"]["receipt_digest"] = splice["receipt"]["receipt_digest"].clone();
+            reseal_for_test(&mut splice["transition"], "transition_digest");
+            assert_eq!(
+                seal_failure_retry_noop_bundle(&splice),
+                Err(WatcherError("GKX_WATCHER_CONTRACT_RETRY_INVALID")),
+                "{field}"
+            );
+        }
+
+        let adoption_case = semantic_case("journal-reset-reconciliation-adoption-valid");
+        let adoption_bundle = adoption_case["input"]["arguments"][0].clone();
+        assert!(seal_reset_adoption_bundle(&adoption_bundle).is_ok());
+        let mut adoption_owner = adoption_bundle.clone();
+        adoption_owner["current_owner_manifest"] = json!({});
+        assert_eq!(
+            seal_reset_adoption_bundle(&adoption_owner),
+            Err(WatcherError("GKX_WATCHER_CONTRACT_RESET_INVALID"))
+        );
+        for field in [
+            "native_activation_intent_digest",
+            "native_activation_outcome_digest",
+        ] {
+            let mut splice = adoption_bundle.clone();
+            splice["adoption_receipt"][field] = Value::String(format!("sha256:{}", "d".repeat(64)));
+            reseal_for_test(&mut splice["adoption_receipt"], "receipt_digest");
+            splice["adoption_transition"]["receipt_digest"] =
+                splice["adoption_receipt"]["receipt_digest"].clone();
+            reseal_for_test(&mut splice["adoption_transition"], "transition_digest");
+            assert_eq!(
+                seal_reset_adoption_bundle(&splice),
+                Err(WatcherError("GKX_WATCHER_CONTRACT_RESET_INVALID")),
+                "{field}"
+            );
+        }
+
+        for state in ["retrieval_projection_state", "graph_projection_state"] {
+            let mut cascade = adoption_bundle.clone();
+            let complete = {
+                let complete = &mut cascade["native_transitions"][6];
+                if state == "retrieval_projection_state" {
+                    complete[state]["projection_digest"] =
+                        Value::String(format!("sha256:{}", "c".repeat(64)));
+                    complete[state]["projection_id"] =
+                        Value::String(format!("retrieval:{}", "c".repeat(24)));
+                } else {
+                    complete[state]["graphiti_projection_digest"] =
+                        Value::String(format!("sha256:{}", "c".repeat(64)));
+                }
+                reseal_for_test(complete, "transition_digest");
+                complete.clone()
+            };
+            cascade["native_activation_intent"]["target_complete_transition"] = complete.clone();
+            cascade["current_coherent_manifest"]["completed_transition_digest"] =
+                complete["transition_digest"].clone();
+            reseal_reset_activation_cascade_for_test(&mut cascade);
+            assert_eq!(
+                seal_reset_adoption_bundle(&cascade),
+                Err(WatcherError("GKX_WATCHER_CONTRACT_RESET_INVALID")),
+                "reset manifest/complete {state} cascade"
+            );
+        }
+
+        let mut prepared_splice = adoption_bundle.clone();
+        prepared_splice["native_activation_intent"]["prepared_transition_digest"] =
+            Value::String(format!("sha256:{}", "b".repeat(64)));
+        prepared_splice["native_activation_intent"]["target_complete_transition"]
+            ["prior_transition_digest"] =
+            prepared_splice["native_activation_intent"]["prepared_transition_digest"].clone();
+        reseal_for_test(
+            &mut prepared_splice["native_activation_intent"]["target_complete_transition"],
+            "transition_digest",
+        );
+        prepared_splice["current_coherent_manifest"]["completed_transition_digest"] =
+            prepared_splice["native_activation_intent"]["target_complete_transition"]
+                ["transition_digest"]
+                .clone();
+        reseal_reset_activation_cascade_for_test(&mut prepared_splice);
+        assert_eq!(
+            seal_reset_adoption_bundle(&prepared_splice),
+            Err(WatcherError("GKX_WATCHER_CONTRACT_RESET_INVALID")),
+            "reset prepared-transition cascade"
+        );
+    }
+
+    #[test]
     fn all_frozen_semantic_cases_match_exact_results_and_errors() {
         let conformance = fixture("watcher-conformance-fixture.json");
         assert_eq!(conformance["status"], "frozen");
         assert_eq!(conformance["frozen"], true);
         let cases = array(&conformance["semantic_cases"]).unwrap();
-        assert_eq!(cases.len(), 360);
+        assert_eq!(cases.len(), 401);
         let mut ids = BTreeSet::new();
         let mut mismatches = Vec::new();
         for case in cases {
@@ -6374,7 +7896,7 @@ mod tests {
     fn schema_and_recovery_case_catalogs_are_all_and_only() {
         let conformance = fixture("watcher-conformance-fixture.json");
         let schema_cases = array(&conformance["schema_cases"]).unwrap();
-        assert_eq!(schema_cases.len(), 85);
+        assert_eq!(schema_cases.len(), 99);
         let schemas = [
             "authority.schema.json",
             "batch.schema.json",
@@ -6403,7 +7925,7 @@ mod tests {
                 "schema case {id}"
             );
         }
-        assert_eq!(schema_ids.len(), 85);
+        assert_eq!(schema_ids.len(), 99);
         let semantic_ids = array(&conformance["semantic_cases"])
             .unwrap()
             .iter()

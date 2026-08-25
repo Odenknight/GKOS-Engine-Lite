@@ -8,9 +8,9 @@
       "raw_sha256": "sha256:4e8ffe6cc79eee0e27a3986ffc9ad8fb85814beacd561c595f04f39c4b4d5eb0"
     },
     {
-      "byte_size": 6072,
+      "byte_size": 8576,
       "file": "TECHNICAL_README.md",
-      "raw_sha256": "sha256:eb20f11ceab07bd3ed92c9e0e1549ab94b3a39d15f1ed4af5835fdec720ed0a4"
+      "raw_sha256": "sha256:2220e9d67fe7d25d41d47113a92d766985d90b134925e28067d14a089a822de9"
     },
     {
       "byte_size": 14987,
@@ -28,24 +28,24 @@
       "raw_sha256": "sha256:83eaaae8c5de736b397944e9900b179cae7822fe348d073568caf0eb90218a1a"
     },
     {
-      "byte_size": 57131,
+      "byte_size": 63094,
       "file": "conformance.schema.json",
-      "raw_sha256": "sha256:1bf0ff36b6ca5b6aa7185e75bfb381a001764ba8792e38781903318898b56067"
+      "raw_sha256": "sha256:5025fcd66b59f675f1f388d101aaf46559ff1e856735fb7f799735c3b8e10fde"
     },
     {
-      "byte_size": 240588,
+      "byte_size": 1539984,
       "file": "journal.schema.json",
-      "raw_sha256": "sha256:6e1f934b0dba5be85814408fdb7fd2c9943bdccf5ee9bee26ca94600cb5b6693"
+      "raw_sha256": "sha256:2bd05b7fce6a04a3198aac4064177f672646b1c40e350189675c87a382fc1665"
     },
     {
-      "byte_size": 25826,
+      "byte_size": 26617,
       "file": "sample-plan.schema.json",
-      "raw_sha256": "sha256:3a2dc6a25840449544354999540e2a10a9aff7847230ffca46f085042d1a10b3"
+      "raw_sha256": "sha256:5f83571ca1c7ca1881892fc71a98340d5c088775270ae70afb19d76fc9252a8d"
     },
     {
-      "byte_size": 23293,
+      "byte_size": 59857,
       "file": "source-removal.schema.json",
-      "raw_sha256": "sha256:a3de608e4ea8ba24fc1ff550952bc4c0c8a5aea45807ca5231d1a118f90e8e96"
+      "raw_sha256": "sha256:7bd111a230072722298af718f9465020eb8fff97a5dd752642d9509888c46e9b"
     },
     {
       "byte_size": 39315,
@@ -63,32 +63,32 @@
       "raw_sha256": "sha256:2071ea49575469109f83b317e5bd76e90b76f1683cb1da75267a90d4eec2406e"
     },
     {
-      "byte_size": 52045,
+      "byte_size": 51700,
       "file": "watcher-cli-fixture.json",
-      "raw_sha256": "sha256:0fa73a0f2d7ea9c73c7e4ab1fa9c0b815f048a8d8cf2a86be1c0f048e8b65675"
+      "raw_sha256": "sha256:e205301a574f7a45a2764d32c43ecb5fe3e0469000a2432f0d50745921eecc71"
     },
     {
-      "byte_size": 5130773,
+      "byte_size": 6825879,
       "file": "watcher-conformance-fixture.json",
-      "raw_sha256": "sha256:c5b45040b5d21c77af0aad109851a7b381302d812bdce0f1ea0217f692893615"
+      "raw_sha256": "sha256:b7e5c3b57d609e53f9b17989cbc27d905f9e4745d6fd1cdab9022cbc318b3072"
     },
     {
-      "byte_size": 16342,
+      "byte_size": 18608,
       "file": "watcher-recovery-fixture.json",
-      "raw_sha256": "sha256:400ed229baa32affd4dd9e784b5116dee46d725b7e33c98d0720a07c441391cb"
+      "raw_sha256": "sha256:7c2ece84e409e1c5c7bbda45a731e4a88225f1c2defbb34632179bbbe0ccaf0c"
     },
     {
-      "byte_size": 3978,
+      "byte_size": 4363,
       "file": "watcher-sample-plan.json",
-      "raw_sha256": "sha256:6ab764aad47cbb072469f19760b772df90b2138acaf6a9f022041d38094bb695"
+      "raw_sha256": "sha256:75b011dc253a445ec9c5fc192f600f57ec62411e8125dfa20c74a08f5faf301b"
     },
     {
-      "byte_size": 19769,
+      "byte_size": 23360,
       "file": "watcher-storage-fixture.json",
-      "raw_sha256": "sha256:cc4b25d5fcbabf3a5bdd7248a8e37f3221350cba3852fd053e703bc2c5c1c7e3"
+      "raw_sha256": "sha256:e8dce4e389ff486a89687cac8c620e4150545eb0fb848c7a779b726d32ef75cc"
     }
   ],
   "pack_contract_version": "gkos-watcher-recovery/1.0.0-draft.1",
-  "pack_digest": "sha256:c08520c1392d6be04c71159050c0d60f5bf03afeeb915ae44920e758e35cb49a",
-  "total_bytes": 5860943
+  "pack_digest": "sha256:a8e0eed2a829db8c80cede489c871f938e432a09e6f1c34aa0940fcfe381519f",
+  "total_bytes": 8907164
 }

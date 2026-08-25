@@ -1,5 +1,554 @@
 {
   "$defs": {
+    "activatedEventSetBundle": {
+      "additionalProperties": false,
+      "properties": {
+        "activation": {
+          "additionalProperties": false,
+          "properties": {
+            "activated_at": {
+              "format": "date-time",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$",
+              "type": "string"
+            },
+            "activation_digest": {
+              "pattern": "^sha256:[0-9a-f]{64}$",
+              "type": "string"
+            },
+            "coherent_manifest_digest": {
+              "pattern": "^sha256:[0-9a-f]{64}$",
+              "type": "string"
+            },
+            "contract_version": {
+              "const": "gkos-watcher-source-removal-event-set-activation/1.0.0-draft.1"
+            },
+            "event_set_digest": {
+              "pattern": "^sha256:[0-9a-f]{64}$",
+              "type": "string"
+            }
+          },
+          "required": [
+            "contract_version",
+            "event_set_digest",
+            "coherent_manifest_digest",
+            "activated_at",
+            "activation_digest"
+          ],
+          "type": "object",
+          "unevaluatedProperties": false
+        },
+        "event_set_bundle": {
+          "additionalProperties": false,
+          "properties": {
+            "event_set": {
+              "additionalProperties": false,
+              "allOf": [
+                {
+                  "else": {
+                    "properties": {
+                      "target_topology_snapshot_digest": {
+                        "type": "null"
+                      }
+                    }
+                  },
+                  "if": {
+                    "properties": {
+                      "set_kind": {
+                        "const": "batch"
+                      }
+                    }
+                  },
+                  "then": {
+                    "properties": {
+                      "target_topology_snapshot_digest": {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              ],
+              "properties": {
+                "contract_version": {
+                  "const": "gkos-watcher-source-removal-event-set/1.0.0-draft.1"
+                },
+                "event_count": {
+                  "maximum": 1000000,
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                "event_set_digest": {
+                  "pattern": "^sha256:[0-9a-f]{64}$",
+                  "type": "string"
+                },
+                "membership_digest_sequence_digest": {
+                  "pattern": "^sha256:[0-9a-f]{64}$",
+                  "type": "string"
+                },
+                "origin_id": {
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+                  "type": "string"
+                },
+                "prepared_at": {
+                  "format": "date-time",
+                  "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$",
+                  "type": "string"
+                },
+                "set_kind": {
+                  "enum": [
+                    "batch",
+                    "reset_carry"
+                  ]
+                },
+                "target_topology_snapshot_digest": {
+                  "anyOf": [
+                    {
+                      "pattern": "^sha256:[0-9a-f]{64}$",
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "contract_version",
+                "set_kind",
+                "origin_id",
+                "target_topology_snapshot_digest",
+                "event_count",
+                "membership_digest_sequence_digest",
+                "prepared_at",
+                "event_set_digest"
+              ],
+              "type": "object",
+              "unevaluatedProperties": false
+            },
+            "events": {
+              "items": {
+                "additionalProperties": false,
+                "allOf": [
+                  {
+                    "else": {
+                      "properties": {
+                        "adapter_binding_digest": {
+                          "pattern": "^sha256:[0-9a-f]{64}$",
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "if": {
+                      "properties": {
+                        "delivery_mode": {
+                          "const": "local_only"
+                        }
+                      }
+                    },
+                    "then": {
+                      "properties": {
+                        "adapter_binding_digest": {
+                          "type": "null"
+                        }
+                      }
+                    }
+                  }
+                ],
+                "properties": {
+                  "adapter_binding_digest": {
+                    "anyOf": [
+                      {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "contract_version": {
+                    "const": "gkos-watcher-source-removal-event/1.0.0-draft.1"
+                  },
+                  "delivery_mode": {
+                    "enum": [
+                      "local_only",
+                      "adapter"
+                    ]
+                  },
+                  "event_digest": {
+                    "pattern": "^sha256:[0-9a-f]{64}$",
+                    "type": "string"
+                  },
+                  "occurrence_digest": {
+                    "pattern": "^sha256:[0-9a-f]{64}$",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "contract_version",
+                  "occurrence_digest",
+                  "adapter_binding_digest",
+                  "delivery_mode",
+                  "event_digest"
+                ],
+                "type": "object",
+                "unevaluatedProperties": false
+              },
+              "maxItems": 1000000,
+              "type": "array"
+            },
+            "memberships": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "causal_batch_id": {
+                    "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+                    "type": "string"
+                  },
+                  "contract_version": {
+                    "const": "gkos-watcher-source-removal-event-membership/1.0.0-draft.1"
+                  },
+                  "event_digest": {
+                    "pattern": "^sha256:[0-9a-f]{64}$",
+                    "type": "string"
+                  },
+                  "event_ordinal": {
+                    "maximum": 9007199254740991,
+                    "minimum": 1,
+                    "type": "integer"
+                  },
+                  "membership_digest": {
+                    "pattern": "^sha256:[0-9a-f]{64}$",
+                    "type": "string"
+                  },
+                  "original_membership_digest": {
+                    "anyOf": [
+                      {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "prepared_at": {
+                    "format": "date-time",
+                    "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$",
+                    "type": "string"
+                  },
+                  "target_topology_snapshot_digest": {
+                    "pattern": "^sha256:[0-9a-f]{64}$",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "contract_version",
+                  "event_ordinal",
+                  "event_digest",
+                  "causal_batch_id",
+                  "target_topology_snapshot_digest",
+                  "prepared_at",
+                  "original_membership_digest",
+                  "membership_digest"
+                ],
+                "type": "object",
+                "unevaluatedProperties": false
+              },
+              "maxItems": 1000000,
+              "type": "array"
+            },
+            "occurrences": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "cause": {
+                    "const": "physical_disappearance"
+                  },
+                  "contract_version": {
+                    "const": "gkos-watcher-source-removal-occurrence/1.0.0-draft.1"
+                  },
+                  "occurrence_digest": {
+                    "pattern": "^sha256:[0-9a-f]{64}$",
+                    "type": "string"
+                  },
+                  "prior_coherent_manifest_digest": {
+                    "pattern": "^sha256:[0-9a-f]{64}$",
+                    "type": "string"
+                  },
+                  "prior_topology_snapshot_digest": {
+                    "pattern": "^sha256:[0-9a-f]{64}$",
+                    "type": "string"
+                  },
+                  "source_digest": {
+                    "pattern": "^sha256:[0-9a-f]{64}$",
+                    "type": "string"
+                  },
+                  "source_id": {
+                    "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$",
+                    "type": "string"
+                  },
+                  "source_path": {
+                    "maxLength": 1024,
+                    "minLength": 1,
+                    "pattern": "^(?!/)(?![A-Za-z]:)(?![A-Za-z][A-Za-z0-9+.-]*:)(?!.*:)(?!.*\\\\)(?!.*(?:^|/)\\.\\.?(?:/|$))(?!.*//)[^\\u0000-\\u001f<>:\"|?*\\u007f]+$",
+                    "type": "string"
+                  },
+                  "vault_id": {
+                    "pattern": "^[a-z0-9](?:[a-z0-9._:-]{0,127})$",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "contract_version",
+                  "vault_id",
+                  "prior_coherent_manifest_digest",
+                  "prior_topology_snapshot_digest",
+                  "source_id",
+                  "source_path",
+                  "source_digest",
+                  "cause",
+                  "occurrence_digest"
+                ],
+                "type": "object",
+                "unevaluatedProperties": false
+              },
+              "maxItems": 1000000,
+              "type": "array"
+            },
+            "prior_events": {
+              "items": {
+                "anyOf": [
+                  {
+                    "additionalProperties": false,
+                    "allOf": [
+                      {
+                        "else": {
+                          "properties": {
+                            "adapter_binding_digest": {
+                              "pattern": "^sha256:[0-9a-f]{64}$",
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "if": {
+                          "properties": {
+                            "delivery_mode": {
+                              "const": "local_only"
+                            }
+                          }
+                        },
+                        "then": {
+                          "properties": {
+                            "adapter_binding_digest": {
+                              "type": "null"
+                            }
+                          }
+                        }
+                      }
+                    ],
+                    "properties": {
+                      "adapter_binding_digest": {
+                        "anyOf": [
+                          {
+                            "pattern": "^sha256:[0-9a-f]{64}$",
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "contract_version": {
+                        "const": "gkos-watcher-source-removal-event/1.0.0-draft.1"
+                      },
+                      "delivery_mode": {
+                        "enum": [
+                          "local_only",
+                          "adapter"
+                        ]
+                      },
+                      "event_digest": {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                      },
+                      "occurrence_digest": {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "contract_version",
+                      "occurrence_digest",
+                      "adapter_binding_digest",
+                      "delivery_mode",
+                      "event_digest"
+                    ],
+                    "type": "object",
+                    "unevaluatedProperties": false
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "maxItems": 1000000,
+              "type": "array"
+            },
+            "prior_memberships": {
+              "items": {
+                "anyOf": [
+                  {
+                    "additionalProperties": false,
+                    "properties": {
+                      "causal_batch_id": {
+                        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+                        "type": "string"
+                      },
+                      "contract_version": {
+                        "const": "gkos-watcher-source-removal-event-membership/1.0.0-draft.1"
+                      },
+                      "event_digest": {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                      },
+                      "event_ordinal": {
+                        "maximum": 9007199254740991,
+                        "minimum": 1,
+                        "type": "integer"
+                      },
+                      "membership_digest": {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                      },
+                      "original_membership_digest": {
+                        "anyOf": [
+                          {
+                            "pattern": "^sha256:[0-9a-f]{64}$",
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "prepared_at": {
+                        "format": "date-time",
+                        "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$",
+                        "type": "string"
+                      },
+                      "target_topology_snapshot_digest": {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "contract_version",
+                      "event_ordinal",
+                      "event_digest",
+                      "causal_batch_id",
+                      "target_topology_snapshot_digest",
+                      "prepared_at",
+                      "original_membership_digest",
+                      "membership_digest"
+                    ],
+                    "type": "object",
+                    "unevaluatedProperties": false
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "maxItems": 1000000,
+              "type": "array"
+            },
+            "prior_occurrences": {
+              "items": {
+                "anyOf": [
+                  {
+                    "additionalProperties": false,
+                    "properties": {
+                      "cause": {
+                        "const": "physical_disappearance"
+                      },
+                      "contract_version": {
+                        "const": "gkos-watcher-source-removal-occurrence/1.0.0-draft.1"
+                      },
+                      "occurrence_digest": {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                      },
+                      "prior_coherent_manifest_digest": {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                      },
+                      "prior_topology_snapshot_digest": {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                      },
+                      "source_digest": {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                      },
+                      "source_id": {
+                        "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$",
+                        "type": "string"
+                      },
+                      "source_path": {
+                        "maxLength": 1024,
+                        "minLength": 1,
+                        "pattern": "^(?!/)(?![A-Za-z]:)(?![A-Za-z][A-Za-z0-9+.-]*:)(?!.*:)(?!.*\\\\)(?!.*(?:^|/)\\.\\.?(?:/|$))(?!.*//)[^\\u0000-\\u001f<>:\"|?*\\u007f]+$",
+                        "type": "string"
+                      },
+                      "vault_id": {
+                        "pattern": "^[a-z0-9](?:[a-z0-9._:-]{0,127})$",
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "contract_version",
+                      "vault_id",
+                      "prior_coherent_manifest_digest",
+                      "prior_topology_snapshot_digest",
+                      "source_id",
+                      "source_path",
+                      "source_digest",
+                      "cause",
+                      "occurrence_digest"
+                    ],
+                    "type": "object",
+                    "unevaluatedProperties": false
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "maxItems": 1000000,
+              "type": "array"
+            }
+          },
+          "required": [
+            "event_set",
+            "memberships",
+            "prior_memberships",
+            "events",
+            "prior_events",
+            "occurrences",
+            "prior_occurrences"
+          ],
+          "type": "object",
+          "unevaluatedProperties": false
+        }
+      },
+      "required": [
+        "event_set_bundle",
+        "activation"
+      ],
+      "type": "object",
+      "unevaluatedProperties": false
+    },
     "adapterBinding": {
       "additionalProperties": false,
       "properties": {
@@ -389,6 +938,510 @@
         "verified_at",
         "capability_nonce_digest",
         "verification_receipt_digest"
+      ],
+      "type": "object",
+      "unevaluatedProperties": false
+    },
+    "eventSetBundle": {
+      "additionalProperties": false,
+      "properties": {
+        "event_set": {
+          "additionalProperties": false,
+          "allOf": [
+            {
+              "else": {
+                "properties": {
+                  "target_topology_snapshot_digest": {
+                    "type": "null"
+                  }
+                }
+              },
+              "if": {
+                "properties": {
+                  "set_kind": {
+                    "const": "batch"
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "target_topology_snapshot_digest": {
+                    "pattern": "^sha256:[0-9a-f]{64}$",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          ],
+          "properties": {
+            "contract_version": {
+              "const": "gkos-watcher-source-removal-event-set/1.0.0-draft.1"
+            },
+            "event_count": {
+              "maximum": 1000000,
+              "minimum": 1,
+              "type": "integer"
+            },
+            "event_set_digest": {
+              "pattern": "^sha256:[0-9a-f]{64}$",
+              "type": "string"
+            },
+            "membership_digest_sequence_digest": {
+              "pattern": "^sha256:[0-9a-f]{64}$",
+              "type": "string"
+            },
+            "origin_id": {
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+              "type": "string"
+            },
+            "prepared_at": {
+              "format": "date-time",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$",
+              "type": "string"
+            },
+            "set_kind": {
+              "enum": [
+                "batch",
+                "reset_carry"
+              ]
+            },
+            "target_topology_snapshot_digest": {
+              "anyOf": [
+                {
+                  "pattern": "^sha256:[0-9a-f]{64}$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "contract_version",
+            "set_kind",
+            "origin_id",
+            "target_topology_snapshot_digest",
+            "event_count",
+            "membership_digest_sequence_digest",
+            "prepared_at",
+            "event_set_digest"
+          ],
+          "type": "object",
+          "unevaluatedProperties": false
+        },
+        "events": {
+          "items": {
+            "additionalProperties": false,
+            "allOf": [
+              {
+                "else": {
+                  "properties": {
+                    "adapter_binding_digest": {
+                      "pattern": "^sha256:[0-9a-f]{64}$",
+                      "type": "string"
+                    }
+                  }
+                },
+                "if": {
+                  "properties": {
+                    "delivery_mode": {
+                      "const": "local_only"
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "adapter_binding_digest": {
+                      "type": "null"
+                    }
+                  }
+                }
+              }
+            ],
+            "properties": {
+              "adapter_binding_digest": {
+                "anyOf": [
+                  {
+                    "pattern": "^sha256:[0-9a-f]{64}$",
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "contract_version": {
+                "const": "gkos-watcher-source-removal-event/1.0.0-draft.1"
+              },
+              "delivery_mode": {
+                "enum": [
+                  "local_only",
+                  "adapter"
+                ]
+              },
+              "event_digest": {
+                "pattern": "^sha256:[0-9a-f]{64}$",
+                "type": "string"
+              },
+              "occurrence_digest": {
+                "pattern": "^sha256:[0-9a-f]{64}$",
+                "type": "string"
+              }
+            },
+            "required": [
+              "contract_version",
+              "occurrence_digest",
+              "adapter_binding_digest",
+              "delivery_mode",
+              "event_digest"
+            ],
+            "type": "object",
+            "unevaluatedProperties": false
+          },
+          "maxItems": 1000000,
+          "type": "array"
+        },
+        "memberships": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "causal_batch_id": {
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+                "type": "string"
+              },
+              "contract_version": {
+                "const": "gkos-watcher-source-removal-event-membership/1.0.0-draft.1"
+              },
+              "event_digest": {
+                "pattern": "^sha256:[0-9a-f]{64}$",
+                "type": "string"
+              },
+              "event_ordinal": {
+                "maximum": 9007199254740991,
+                "minimum": 1,
+                "type": "integer"
+              },
+              "membership_digest": {
+                "pattern": "^sha256:[0-9a-f]{64}$",
+                "type": "string"
+              },
+              "original_membership_digest": {
+                "anyOf": [
+                  {
+                    "pattern": "^sha256:[0-9a-f]{64}$",
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "prepared_at": {
+                "format": "date-time",
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$",
+                "type": "string"
+              },
+              "target_topology_snapshot_digest": {
+                "pattern": "^sha256:[0-9a-f]{64}$",
+                "type": "string"
+              }
+            },
+            "required": [
+              "contract_version",
+              "event_ordinal",
+              "event_digest",
+              "causal_batch_id",
+              "target_topology_snapshot_digest",
+              "prepared_at",
+              "original_membership_digest",
+              "membership_digest"
+            ],
+            "type": "object",
+            "unevaluatedProperties": false
+          },
+          "maxItems": 1000000,
+          "type": "array"
+        },
+        "occurrences": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "cause": {
+                "const": "physical_disappearance"
+              },
+              "contract_version": {
+                "const": "gkos-watcher-source-removal-occurrence/1.0.0-draft.1"
+              },
+              "occurrence_digest": {
+                "pattern": "^sha256:[0-9a-f]{64}$",
+                "type": "string"
+              },
+              "prior_coherent_manifest_digest": {
+                "pattern": "^sha256:[0-9a-f]{64}$",
+                "type": "string"
+              },
+              "prior_topology_snapshot_digest": {
+                "pattern": "^sha256:[0-9a-f]{64}$",
+                "type": "string"
+              },
+              "source_digest": {
+                "pattern": "^sha256:[0-9a-f]{64}$",
+                "type": "string"
+              },
+              "source_id": {
+                "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$",
+                "type": "string"
+              },
+              "source_path": {
+                "maxLength": 1024,
+                "minLength": 1,
+                "pattern": "^(?!/)(?![A-Za-z]:)(?![A-Za-z][A-Za-z0-9+.-]*:)(?!.*:)(?!.*\\\\)(?!.*(?:^|/)\\.\\.?(?:/|$))(?!.*//)[^\\u0000-\\u001f<>:\"|?*\\u007f]+$",
+                "type": "string"
+              },
+              "vault_id": {
+                "pattern": "^[a-z0-9](?:[a-z0-9._:-]{0,127})$",
+                "type": "string"
+              }
+            },
+            "required": [
+              "contract_version",
+              "vault_id",
+              "prior_coherent_manifest_digest",
+              "prior_topology_snapshot_digest",
+              "source_id",
+              "source_path",
+              "source_digest",
+              "cause",
+              "occurrence_digest"
+            ],
+            "type": "object",
+            "unevaluatedProperties": false
+          },
+          "maxItems": 1000000,
+          "type": "array"
+        },
+        "prior_events": {
+          "items": {
+            "anyOf": [
+              {
+                "additionalProperties": false,
+                "allOf": [
+                  {
+                    "else": {
+                      "properties": {
+                        "adapter_binding_digest": {
+                          "pattern": "^sha256:[0-9a-f]{64}$",
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "if": {
+                      "properties": {
+                        "delivery_mode": {
+                          "const": "local_only"
+                        }
+                      }
+                    },
+                    "then": {
+                      "properties": {
+                        "adapter_binding_digest": {
+                          "type": "null"
+                        }
+                      }
+                    }
+                  }
+                ],
+                "properties": {
+                  "adapter_binding_digest": {
+                    "anyOf": [
+                      {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "contract_version": {
+                    "const": "gkos-watcher-source-removal-event/1.0.0-draft.1"
+                  },
+                  "delivery_mode": {
+                    "enum": [
+                      "local_only",
+                      "adapter"
+                    ]
+                  },
+                  "event_digest": {
+                    "pattern": "^sha256:[0-9a-f]{64}$",
+                    "type": "string"
+                  },
+                  "occurrence_digest": {
+                    "pattern": "^sha256:[0-9a-f]{64}$",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "contract_version",
+                  "occurrence_digest",
+                  "adapter_binding_digest",
+                  "delivery_mode",
+                  "event_digest"
+                ],
+                "type": "object",
+                "unevaluatedProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "maxItems": 1000000,
+          "type": "array"
+        },
+        "prior_memberships": {
+          "items": {
+            "anyOf": [
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "causal_batch_id": {
+                    "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+                    "type": "string"
+                  },
+                  "contract_version": {
+                    "const": "gkos-watcher-source-removal-event-membership/1.0.0-draft.1"
+                  },
+                  "event_digest": {
+                    "pattern": "^sha256:[0-9a-f]{64}$",
+                    "type": "string"
+                  },
+                  "event_ordinal": {
+                    "maximum": 9007199254740991,
+                    "minimum": 1,
+                    "type": "integer"
+                  },
+                  "membership_digest": {
+                    "pattern": "^sha256:[0-9a-f]{64}$",
+                    "type": "string"
+                  },
+                  "original_membership_digest": {
+                    "anyOf": [
+                      {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "prepared_at": {
+                    "format": "date-time",
+                    "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$",
+                    "type": "string"
+                  },
+                  "target_topology_snapshot_digest": {
+                    "pattern": "^sha256:[0-9a-f]{64}$",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "contract_version",
+                  "event_ordinal",
+                  "event_digest",
+                  "causal_batch_id",
+                  "target_topology_snapshot_digest",
+                  "prepared_at",
+                  "original_membership_digest",
+                  "membership_digest"
+                ],
+                "type": "object",
+                "unevaluatedProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "maxItems": 1000000,
+          "type": "array"
+        },
+        "prior_occurrences": {
+          "items": {
+            "anyOf": [
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "cause": {
+                    "const": "physical_disappearance"
+                  },
+                  "contract_version": {
+                    "const": "gkos-watcher-source-removal-occurrence/1.0.0-draft.1"
+                  },
+                  "occurrence_digest": {
+                    "pattern": "^sha256:[0-9a-f]{64}$",
+                    "type": "string"
+                  },
+                  "prior_coherent_manifest_digest": {
+                    "pattern": "^sha256:[0-9a-f]{64}$",
+                    "type": "string"
+                  },
+                  "prior_topology_snapshot_digest": {
+                    "pattern": "^sha256:[0-9a-f]{64}$",
+                    "type": "string"
+                  },
+                  "source_digest": {
+                    "pattern": "^sha256:[0-9a-f]{64}$",
+                    "type": "string"
+                  },
+                  "source_id": {
+                    "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$",
+                    "type": "string"
+                  },
+                  "source_path": {
+                    "maxLength": 1024,
+                    "minLength": 1,
+                    "pattern": "^(?!/)(?![A-Za-z]:)(?![A-Za-z][A-Za-z0-9+.-]*:)(?!.*:)(?!.*\\\\)(?!.*(?:^|/)\\.\\.?(?:/|$))(?!.*//)[^\\u0000-\\u001f<>:\"|?*\\u007f]+$",
+                    "type": "string"
+                  },
+                  "vault_id": {
+                    "pattern": "^[a-z0-9](?:[a-z0-9._:-]{0,127})$",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "contract_version",
+                  "vault_id",
+                  "prior_coherent_manifest_digest",
+                  "prior_topology_snapshot_digest",
+                  "source_id",
+                  "source_path",
+                  "source_digest",
+                  "cause",
+                  "occurrence_digest"
+                ],
+                "type": "object",
+                "unevaluatedProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "maxItems": 1000000,
+          "type": "array"
+        }
+      },
+      "required": [
+        "event_set",
+        "memberships",
+        "prior_memberships",
+        "events",
+        "prior_events",
+        "occurrences",
+        "prior_occurrences"
       ],
       "type": "object",
       "unevaluatedProperties": false
@@ -794,6 +1847,12 @@
     },
     {
       "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/source-removal.schema.json#/$defs/removalReceipt"
+    },
+    {
+      "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/source-removal.schema.json#/$defs/eventSetBundle"
+    },
+    {
+      "$ref": "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/source-removal.schema.json#/$defs/activatedEventSetBundle"
     }
   ],
   "title": "source-removal.schema.json"

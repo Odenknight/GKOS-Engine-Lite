@@ -7,7 +7,7 @@ import { fileURLToPath } from "node:url";
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { validateLiteCommand } from "../bin/okf-lite.mjs";
+import { prepareDelegatedCommand, validateLiteCommand } from "../bin/okf-lite.mjs";
 import { deterministicArtifacts, runtimeSnapshot } from "./support/phase0-snapshot.mjs";
 
 const execFileAsync = promisify(execFile);
@@ -78,11 +78,9 @@ test("Phase 1 delegated and local proposal-only boundaries match the compatibili
   }
   for (const argv of fixture.cli.local_proposal_only_argv) {
     assert.equal(argv[0], "assist", `expected a local proposal command: ${argv.join(" ")}`);
-    assert.equal(
-      validateLiteCommand(argv).allowed,
-      false,
-      `local proposal command must not cross the delegated Engine boundary: ${argv.join(" ")}`,
-    );
+    assert.equal(validateLiteCommand(argv).allowed, true, `expected local Lite command: ${argv.join(" ")}`);
+    assert.equal(prepareDelegatedCommand(argv).allowed, false,
+      `local proposal command must not cross the delegated Engine boundary: ${argv.join(" ")}`);
   }
   for (const argv of fixture.cli.blocked_argv) {
     assert.equal(validateLiteCommand(argv).allowed, false, `expected blocked: ${argv.join(" ")}`);
@@ -94,7 +92,7 @@ test("Phase 1 delegated and local proposal-only boundaries match the compatibili
   assert.deepEqual(validateLiteCommand(phase4Fixture.cli.delegated_tune_argv), { allowed: true });
 });
 
-test("Phase 4 CLI help adds only the two authorized evaluation lines atop the derived Phase 3 help", async () => {
+test("current CLI help preserves Phase 4 delegation and lists all seven local assist tasks", async () => {
   const phase1Expected = await readFile(resolve(fixtureRoot, fixture.cli.help_stdout_file));
   const phase2Expected = Buffer.from(phase1Expected.toString("utf8").replace(
     phase2Fixture.cli.phase1_help_line,
@@ -104,13 +102,20 @@ test("Phase 4 CLI help adds only the two authorized evaluation lines atop the de
     phase3Fixture.cli.phase2_validate_help_line,
     phase3Fixture.cli.phase3_validate_help_lines,
   ), "utf8");
-  const expected = Buffer.from(phase3Expected.toString("utf8").replace(
+  const phase4Expected = Buffer.from(phase3Expected.toString("utf8").replace(
     phase4Fixture.cli.phase3_retrieval_help_lines,
     phase4Fixture.cli.phase4_retrieval_help_lines,
   ), "utf8");
+  const expected = Buffer.from(phase4Expected.toString("utf8").replace(
+    "  okf-lite assist find-links <note.md>                     suggest related-note connections\n",
+    "  okf-lite assist find-links <note.md>                     suggest related-note connections\n" +
+      "  okf-lite assist find-claims <note.md>                    identify claims for human review\n" +
+      "  okf-lite assist check-conflicts <note.md>                identify possible contradictions\n",
+  ), "utf8");
   assert.notDeepEqual(phase2Expected, phase1Expected, "the Phase 1 help fixture remains immutable");
   assert.notDeepEqual(phase3Expected, phase2Expected, "the Phase 2 help is a derived immutable baseline");
-  assert.notDeepEqual(expected, phase3Expected, "the Phase 3 help is a derived immutable baseline");
+  assert.notDeepEqual(phase4Expected, phase3Expected, "the Phase 3 help is a derived immutable baseline");
+  assert.notDeepEqual(expected, phase4Expected, "the Phase 4 help remains an immutable predecessor");
   const help = await runCli(["--help"]);
   assert.equal(help.code, fixture.cli.help_exit);
   assert.deepEqual(help.stdout, expected);

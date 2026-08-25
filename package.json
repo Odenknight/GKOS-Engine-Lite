@@ -14,8 +14,10 @@
     "npm": ">=10"
   },
   "scripts": {
+    "pretest": "npm run check:engine-compat",
     "test": "node --test \"test/*.test.mjs\"",
-    "check:metadata": "node scripts/check-metadata.mjs"
+    "check:metadata": "node scripts/check-metadata.mjs",
+    "check:engine-compat": "node scripts/check-engine-compat.mjs"
   },
   "dependencies": {
     "gkos-engine": "github:Odenknight/GKOS-Engine#a57b98c00c1913f5b7ed96839b3f8effe5be9c4a"

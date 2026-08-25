@@ -29,6 +29,7 @@ async function runFixture({ dependency, version, resolvedVersion, resolvedSha, d
           "node_modules/gkos-engine": {
             version: resolvedVersion,
             resolved: `git+ssh://git@github.com/Odenknight/GKOS-Engine.git#${resolvedSha}`,
+            bin: { gkx: "bin/gkx.mjs" },
           },
         },
       }, null, 2)}\n`, "utf8"),

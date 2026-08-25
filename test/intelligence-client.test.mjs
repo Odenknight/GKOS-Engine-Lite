@@ -3,12 +3,35 @@ import assert from "node:assert/strict";
 import { writeFile, rm } from "node:fs/promises";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
-import { assistMain, intelligenceUrl, requestIntelligence, resolveTask } from "../bin/intelligence-client.mjs";
+import { INTELLIGENCE_CONTRACT_VERSION as ENGINE_INTELLIGENCE_CONTRACT_VERSION } from "gkos-engine";
+import {
+  assistMain,
+  intelligenceUrl,
+  LITE_INTELLIGENCE_CONTRACT_VERSION,
+  requestIntelligence,
+  resolveTask,
+} from "../bin/intelligence-client.mjs";
+
+test("Lite and the exact Engine pin share the v1 intelligence contract", () => {
+  assert.equal(LITE_INTELLIGENCE_CONTRACT_VERSION, "gkos.intelligence.v1");
+  assert.equal(ENGINE_INTELLIGENCE_CONTRACT_VERSION, LITE_INTELLIGENCE_CONTRACT_VERSION);
+});
 
 test("friendly assistance names hide internal task vocabulary", () => {
-  assert.equal(resolveTask("explain"), "diagnostic_explanation");
-  assert.equal(resolveTask("improve"), "documentation_improvement");
-  assert.equal(resolveTask("check-privacy"), "classification_raise");
+  assert.deepEqual(
+    Object.fromEntries([
+      "explain", "improve", "repair", "find-links", "find-claims", "check-conflicts", "check-privacy",
+    ].map((task) => [task, resolveTask(task)])),
+    {
+      explain: "diagnostic_explanation",
+      improve: "documentation_improvement",
+      repair: "metadata_repair",
+      "find-links": "relationship",
+      "find-claims": "claim_extraction",
+      "check-conflicts": "contradiction",
+      "check-privacy": "classification_raise",
+    },
+  );
 });
 
 test("missing assistance arguments produce friendly examples", async () => {
@@ -28,6 +51,7 @@ test("validates sidecar proposals before returning them", async () => {
       task: "documentation_improvement", file, targetId: "note:alpha",
       fetchImpl: async (_url, options) => {
         const request = JSON.parse(options.body);
+        assert.equal(request.contractVersion, LITE_INTELLIGENCE_CONTRACT_VERSION);
         return new Response(JSON.stringify({
           contractVersion: request.contractVersion, requestId: request.requestId,
           proposals: [{

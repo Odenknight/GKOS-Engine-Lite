@@ -74,6 +74,8 @@ Usage:
   okf-lite assist improve <note.md>                        suggest the most useful improvements
   okf-lite assist repair <note.md>                         suggest missing or corrected details
   okf-lite assist find-links <note.md>                     suggest related-note connections
+  okf-lite assist find-claims <note.md>                    identify claims for human review
+  okf-lite assist check-conflicts <note.md>                identify possible contradictions
   okf-lite assist check-privacy <note.md>                  check whether privacy should be raised
 
 AI help is optional. It must be enabled locally, every suggestion is checked
@@ -82,7 +84,7 @@ by GKOS, and your note is never changed automatically.
 See https://github.com/Odenknight/GKOS-Engine-Lite for docs, and
 https://github.com/Odenknight/GKOS-Engine for the full engine this depends on.`;
 
-export function validateLiteCommand(argv) {
+export function validateDelegatedCommand(argv) {
   const first = argv[0];
   if (["validate", "index", "assess", "search", "graph"].includes(first)) return { allowed: true };
   // The exact pinned Full parser remains the sole authority for the nested
@@ -97,8 +99,14 @@ export function validateLiteCommand(argv) {
   };
 }
 
+/** Validate every command implemented by Lite, including its local assist path. */
+export function validateLiteCommand(argv) {
+  if (argv[0] === "assist") return { allowed: true };
+  return validateDelegatedCommand(argv);
+}
+
 export function prepareDelegatedCommand(argv) {
-  const boundary = validateLiteCommand(argv);
+  const boundary = validateDelegatedCommand(argv);
   return boundary.allowed ? { allowed: true, argv } : boundary;
 }
 
@@ -110,10 +118,10 @@ export async function main(argv = process.argv.slice(2)) {
   }
   if (first === "assist") {
     try {
-      const { assistMain } = await import("./intelligence-client.mjs");
+      const { assistMain, LITE_INTELLIGENCE_CONTRACT_VERSION } = await import("./intelligence-client.mjs");
       const result = await assistMain(argv.slice(1));
       console.log(JSON.stringify({
-        contractVersion: "gkos.intelligence.v1",
+        contractVersion: LITE_INTELLIGENCE_CONTRACT_VERSION,
         authoritative: false,
         proposals: result.proposals,
         ...(result.warnings ? { warnings: result.warnings } : {}),

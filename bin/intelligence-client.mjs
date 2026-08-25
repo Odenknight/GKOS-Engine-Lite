@@ -7,6 +7,14 @@ import {
 } from "gkos-engine";
 
 const DEFAULT_URL = "http://127.0.0.1:8765";
+export const LITE_INTELLIGENCE_CONTRACT_VERSION = "gkos.intelligence.v1";
+
+if (INTELLIGENCE_CONTRACT_VERSION !== LITE_INTELLIGENCE_CONTRACT_VERSION) {
+  throw new Error(
+    `Incompatible gkos-engine intelligence contract: expected ${LITE_INTELLIGENCE_CONTRACT_VERSION}, received ${INTELLIGENCE_CONTRACT_VERSION}`,
+  );
+}
+
 export const FRIENDLY_TASKS = Object.freeze({
   explain: "diagnostic_explanation",
   improve: "documentation_improvement",
@@ -36,7 +44,7 @@ export async function requestIntelligence({
   task = resolveTask(task);
   if (!INTELLIGENCE_PROPOSAL_TYPES.includes(task)) throw new Error(`Unknown assistance task: ${task}`);
   const request = {
-    contractVersion: INTELLIGENCE_CONTRACT_VERSION,
+    contractVersion: LITE_INTELLIGENCE_CONTRACT_VERSION,
     requestId: `request:${randomUUID()}`,
     task,
     targetId,

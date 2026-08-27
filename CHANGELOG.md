@@ -1,6 +1,12 @@
 # Changelog
 
-## Unreleased — Phase 3 integration
+## 2.1.2 — functional uplift Phases 0–3
+
+- Admitted the qualified Phase 0–3 chain through PR #22 and recorded the exact
+  Full pin and authority boundaries in the current capability list and build
+  handoff.
+
+### Phase 3 integration
 
 - Pinned the delegated CLI and frozen 21-file ingest contract mirror to signed,
   hosted-green GKOS-Engine implementation commit
@@ -15,7 +21,7 @@
   schema-2 writer APIs and the internal schema-3 writer, preventing provider or
   pointer work when Phase 3 owner authority exists.
 
-## Unreleased — Phase 2 integration
+### Phase 2 integration
 
 - Pinned the five-command JavaScript delegate and the static Rust retrieval
   contract mirror to signed, hosted-green GKOS-Engine commit
@@ -25,7 +31,7 @@
 - Added Decision-A authorization-scoped lineage, temporal provenance, and
   exact citation conformance without creating a second GKX authority.
 
-## Unreleased — Phase 1 integration
+### Phase 1 integration
 
 - Pinned the delegated CLI to exact reviewed GKOS-Engine commit
   `bbc2ea874f4dde37e6376e46c080cb1c69ab1bb3` and mirrored its package version

@@ -2,12 +2,12 @@
 
 Status date: 2026-08-27
 
-This inventory describes the active functional-uplift build at
-`41912fd6db279f1b46e67cb4b88c1f1b4ba86e63`. That branch is clean, pushed,
-and ten commits ahead of public Lite `main` at
-`2ebbf77583af3e83032054f1256188dc56376907`. Phases 0–3 are qualified on the
-branch but are not merged, tagged, released, or published as a static Lite
-distribution.
+This inventory describes the functional-uplift implementation qualified at
+`41912fd6db279f1b46e67cb4b88c1f1b4ba86e63` and admitted through PR #22 from
+pre-admission Lite `main`
+`2ebbf77583af3e83032054f1256188dc56376907`. The `v2.1.2` tag identifies the
+merged JavaScript/Rust source release. It does not publish or qualify a
+one-file static Lite distribution or a Desktop installer release.
 
 ## Capability matrix
 
@@ -52,7 +52,8 @@ Lite wrapper.
 - A completed one-file static executable distribution.
 - Platform, CPU, installer, signing, notarization, or published-artifact claims
   for the future static Rust path.
-- A claim that the Phase 0–3 branch is merged into Lite `main`.
+- A claim that Phase 0–3 qualification alone establishes static artifact,
+  installer, or Desktop availability.
 - A claim that the pinned Full commit equals current Full `main` or a matching
   release tag.
 
@@ -67,4 +68,3 @@ The Phase-3 evidence records successful Node 22–24 root suites, desktop checks
 Rust Windows GNU, native Linux, MSRV, frozen-pack, metadata, package, boundary,
 and reciprocal-review gates. Refer to that evidence for exact test counts and
 signed implementation coordinates.
-

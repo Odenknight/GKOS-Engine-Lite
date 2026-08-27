@@ -18,12 +18,13 @@ dependency, plugin, or GUI: just `okf-lite validate`, `index`, `assess`,
 
 ## Current build status
 
-The active functional-uplift build is
+The qualified functional-uplift source is
 `codex/phase-3-ingest-validation` at
-`41912fd6db279f1b46e67cb4b88c1f1b4ba86e63`. It contains the qualified Phase
-0–3 chain and is ten commits ahead of public Lite `main` at
-`2ebbf77583af3e83032054f1256188dc56376907`. It has not been merged, tagged,
-released, or published as a static Lite artifact.
+`41912fd6db279f1b46e67cb4b88c1f1b4ba86e63`. PR #22 admits its Phase 0–3
+chain from pre-admission Lite `main`
+`2ebbf77583af3e83032054f1256188dc56376907` and records the `v2.1.2` source
+release. This does not publish or qualify a one-file static Lite artifact or a
+Desktop installer release.
 
 For the exact implemented/deferred matrix, read
 [Current capabilities](docs/CURRENT_CAPABILITIES.md). Builders continuing the

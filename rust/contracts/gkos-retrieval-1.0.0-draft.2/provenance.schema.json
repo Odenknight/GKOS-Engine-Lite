@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gkos.example/contracts/retrieval/gkos-retrieval-1.0.0-draft.2/provenance.schema.json",
+  "title": "GKOS authorized retrieval provenance draft 1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["contract_version", "source_id", "source_path", "source_digest", "assertion_time", "assertion_origin", "valid_from", "valid_to", "validity_origin", "lineage_id", "supersedes", "superseded_by", "temporal_state", "ledger_binding_verified", "lineage_neutral", "reason_codes", "assertion", "interval_semantics", "provenance_digest"],
+  "properties": {
+    "contract_version": { "const": "gkos-retrieval-provenance/1.0.0-draft.1" },
+    "source_id": { "$ref": "#/$defs/uid" },
+    "source_path": { "type": "string", "minLength": 1, "maxLength": 4096 },
+    "source_digest": { "$ref": "#/$defs/sha256" },
+    "assertion_time": { "$ref": "#/$defs/nullableTimestamp" },
+    "assertion_origin": { "enum": ["gkx_created_at", null] },
+    "valid_from": { "$ref": "#/$defs/nullableTimestamp" },
+    "valid_to": { "$ref": "#/$defs/nullableTimestamp" },
+    "validity_origin": { "enum": ["gkx_authored_timestamp", "source_created_time", "source_modified_time", "projection_reference_time", "unknown"] },
+    "lineage_id": { "const": null },
+    "supersedes": { "$ref": "#/$defs/uids" },
+    "superseded_by": { "$ref": "#/$defs/uids" },
+    "temporal_state": { "enum": ["current", "historical", "unknown"] },
+    "ledger_binding_verified": { "const": false },
+    "lineage_neutral": { "type": "boolean" },
+    "reason_codes": { "$ref": "#/$defs/publicReasons" },
+    "assertion": {
+      "type": "object", "additionalProperties": false,
+      "required": ["chunk_id", "content_digest"],
+      "properties": { "chunk_id": { "$ref": "#/$defs/sha256" }, "content_digest": { "$ref": "#/$defs/sha256" } }
+    },
+    "interval_semantics": { "const": "[valid_from,valid_to)" },
+    "provenance_digest": { "$ref": "#/$defs/sha256" },
+    "ledger_entry_sha256": false
+  },
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "uid": { "type": "string", "pattern": "^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[1-8][0-9A-Fa-f]{3}-[89AaBb][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$" },
+    "timestamp": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$" },
+    "nullableTimestamp": { "oneOf": [{ "$ref": "#/$defs/timestamp" }, { "type": "null" }] },
+    "uids": { "type": "array", "items": { "$ref": "#/$defs/uid" }, "uniqueItems": true },
+    "publicReasons": { "type": "array", "items": { "enum": ["ASSERTION_TIME_UNAVAILABLE", "LEDGER_BINDING_UNAVAILABLE", "LINEAGE_ID_UNAVAILABLE", "LINEAGE_NEUTRAL", "LINEAGE_PARTICIPANT", "LINEAGE_VIEW_AUTHORIZED_ONLY", "TEMPORAL_SELECTION_AS_OF", "VALIDITY_FROM_GKX_AUTHORED_TIMESTAMP", "VALIDITY_FROM_PROJECTION_REFERENCE_TIME", "VALIDITY_FROM_SOURCE_CREATED_TIME", "VALIDITY_FROM_SOURCE_MODIFIED_TIME", "VALIDITY_UNKNOWN"] }, "uniqueItems": true }
+  }
+}

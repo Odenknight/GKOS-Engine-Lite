@@ -1,0 +1,94 @@
+[
+  {
+    "uuid": "019b2d14-4230-7db7-87d4-7d81cfaec901",
+    "name": "Policy v1",
+    "episode_body": "{\"schema\":\"okf-plus-graphiti/2.3.0\",\"profile\":\"okf-plus-2.3-validating-projection\",\"adapter\":\"Kosmos Governed Context Projection\",\"title\":\"Policy v1\",\"path\":\"policy/v1.md\",\"uid\":\"019b2d14-4230-7db7-87d4-7d81cfaec901\",\"type\":\"policy\",\"description\":null,\"tags\":[\"policy\"],\"labels\":{\"authored\":[],\"derived\":[\"assessment:weakly-supported\",\"epistemic:accepted\",\"identity:stable\",\"provenance:missing\",\"sensitivity:internal\"],\"proposed\":[],\"approved\":[],\"effective\":[\"assessment:weakly-supported\",\"epistemic:accepted\",\"identity:stable\",\"provenance:missing\",\"sensitivity:internal\"]},\"event_time\":\"2026-01-01T00:00:00.000Z\",\"processing_time\":\"2026-01-03T00:00:00.000Z\",\"reference_time_source\":\"okf.created_at\",\"episode_metadata\":{\"vault_identity\":\"1e7sbla:c\",\"source_path_hash\":\"1sluhfo:c\",\"okf_version\":\"2.3\",\"uid\":\"019b2d14-4230-7db7-87d4-7d81cfaec901\",\"note_type\":\"policy\",\"sensitivity\":\"internal\",\"policy_version\":\"1.0.0\",\"corpus_id\":\"phase0\",\"workspace_id\":\"phase0\",\"event_time\":\"2026-01-01T00:00:00.000Z\",\"processing_time\":\"2026-01-03T00:00:00.000Z\"},\"authority\":{\"class\":\"authored\",\"governance_status\":\"unadjudicated\",\"projection_status\":\"non_authoritative\",\"accepted_semantics\":false,\"origin_separation_preserved\":true},\"governance\":{\"effective\":{\"sensitivity\":\"internal\",\"labels\":[\"assessment:weakly-supported\",\"epistemic:accepted\",\"identity:stable\",\"provenance:missing\",\"sensitivity:internal\"],\"relationships\":{\"superseded_by\":[\"019b2d14-4230-7db7-87d4-7d81cfaec902\"]}},\"relationships\":{\"authored\":{\"superseded_by\":[\"019b2d14-4230-7db7-87d4-7d81cfaec902\"]},\"derived\":{},\"proposed\":{},\"approved\":{},\"effective\":{\"superseded_by\":[\"019b2d14-4230-7db7-87d4-7d81cfaec902\"]}},\"effective_sensitivity\":\"internal\",\"assessment\":{\"overall\":0.4333,\"label\":\"assessment:weakly-supported\",\"interpretation\":\"documentation-and-support-quality-not-truth\",\"policy_id\":\"policy:okf23-default-v1\",\"policy_version\":\"1.0.0\",\"policy_hash\":\"sha256:c2c476ca6f847bca20477d36ddda7a443d9fb4c5a9b1c3677a4347436deb0fb2\"},\"diagnostics_count\":2},\"diagnostic_codes\":[\"OKF-EPISTEMIC-004\",\"OKF-PROVENANCE-001\"],\"evidence\":{\"authored\":{},\"derived\":{},\"proposed\":{},\"approved\":{},\"effective\":{\"supports\":[],\"contradicts\":[]}},\"integrity\":{\"content_hash\":\"vryvks:av\",\"hash_algorithm\":\"fnv1a32-with-length\",\"policy_id\":\"policy:okf23-default-v1\",\"policy_version\":\"1.0.0\",\"policy_hash\":\"sha256:c2c476ca6f847bca20477d36ddda7a443d9fb4c5a9b1c3677a4347436deb0fb2\",\"schema_id\":\"okf-plus-graphiti\",\"schema_version\":\"2.3.0\",\"schema_hash\":\"fnv1a32-with-length:mkzlqp:n\"},\"lineage\":{\"resolved_supersedes\":[],\"declared_supersedes\":[]},\"related_to\":[],\"saga\":null,\"content_char_count\":46,\"content_truncated\":false,\"content\":\"# Policy v1\\n\\nFirst policy. See [[Policy v2]].\\n\"}",
+    "source": "json",
+    "source_description": "OKF+ origin-separated source projection (authored) · KGCP non-authoritative Graphiti adapter · vault \"phase0-vault\" · policy/v1.md",
+    "reference_time": "2026-01-01T00:00:00.000Z",
+    "group_id": "phase0",
+    "episode_metadata": {
+      "vault_identity": "1e7sbla:c",
+      "source_path_hash": "1sluhfo:c",
+      "okf_version": "2.3",
+      "uid": "019b2d14-4230-7db7-87d4-7d81cfaec901",
+      "note_type": "policy",
+      "sensitivity": "internal",
+      "policy_version": "1.0.0",
+      "corpus_id": "phase0",
+      "workspace_id": "phase0",
+      "event_time": "2026-01-01T00:00:00.000Z",
+      "processing_time": "2026-01-03T00:00:00.000Z"
+    }
+  },
+  {
+    "uuid": "7435bc98-be34-540f-93a4-f5da52483b76",
+    "name": "Policy v1 superseded_by 019b2d14-4230-7db7-87d4-7d81cfaec902",
+    "episode_body": "{\"schema\":\"okf-plus-graphiti/2.3.0\",\"subject_uid\":\"019b2d14-4230-7db7-87d4-7d81cfaec901\",\"subject\":\"Policy v1\",\"predicate\":\"superseded_by\",\"object_ref\":\"019b2d14-4230-7db7-87d4-7d81cfaec902\",\"origin\":\"effective-non-proposed-projection\",\"event_time\":\"2026-01-01T00:00:00.000Z\",\"processing_time\":\"2026-01-03T00:00:00.000Z\"}",
+    "source": "fact_triple",
+    "source_description": "Effective non-proposed OKF+ relationship projection from policy/v1.md",
+    "reference_time": "2026-01-01T00:00:00.000Z",
+    "group_id": "phase0",
+    "episode_metadata": {
+      "vault_identity": "1e7sbla:c",
+      "source_path_hash": "1sluhfo:c",
+      "okf_version": "2.3",
+      "uid": "019b2d14-4230-7db7-87d4-7d81cfaec901",
+      "note_type": "policy",
+      "sensitivity": "internal",
+      "policy_version": "1.0.0",
+      "corpus_id": "phase0",
+      "workspace_id": "phase0",
+      "event_time": "2026-01-01T00:00:00.000Z",
+      "processing_time": "2026-01-03T00:00:00.000Z",
+      "episode_kind": "fact_triple",
+      "relationship": "superseded_by"
+    }
+  },
+  {
+    "uuid": "019b2d14-4230-7db7-87d4-7d81cfaec902",
+    "name": "Policy v2",
+    "episode_body": "{\"schema\":\"okf-plus-graphiti/2.3.0\",\"profile\":\"okf-plus-2.3-validating-projection\",\"adapter\":\"Kosmos Governed Context Projection\",\"title\":\"Policy v2\",\"path\":\"policy/v2.md\",\"uid\":\"019b2d14-4230-7db7-87d4-7d81cfaec902\",\"type\":\"policy\",\"description\":null,\"tags\":[\"policy\"],\"labels\":{\"authored\":[],\"derived\":[\"assessment:weakly-supported\",\"epistemic:accepted\",\"identity:stable\",\"provenance:missing\",\"sensitivity:internal\"],\"proposed\":[],\"approved\":[],\"effective\":[\"assessment:weakly-supported\",\"epistemic:accepted\",\"identity:stable\",\"provenance:missing\",\"sensitivity:internal\"]},\"event_time\":\"2026-01-02T00:00:00.000Z\",\"processing_time\":\"2026-01-03T00:00:00.000Z\",\"reference_time_source\":\"okf.created_at\",\"episode_metadata\":{\"vault_identity\":\"1e7sbla:c\",\"source_path_hash\":\"1edzib7:c\",\"okf_version\":\"2.3\",\"uid\":\"019b2d14-4230-7db7-87d4-7d81cfaec902\",\"note_type\":\"policy\",\"sensitivity\":\"internal\",\"policy_version\":\"1.0.0\",\"corpus_id\":\"phase0\",\"workspace_id\":\"phase0\",\"event_time\":\"2026-01-02T00:00:00.000Z\",\"processing_time\":\"2026-01-03T00:00:00.000Z\"},\"authority\":{\"class\":\"authored\",\"governance_status\":\"unadjudicated\",\"projection_status\":\"non_authoritative\",\"accepted_semantics\":false,\"origin_separation_preserved\":true},\"governance\":{\"effective\":{\"sensitivity\":\"internal\",\"labels\":[\"assessment:weakly-supported\",\"epistemic:accepted\",\"identity:stable\",\"provenance:missing\",\"sensitivity:internal\"],\"relationships\":{\"supersedes\":[\"019b2d14-4230-7db7-87d4-7d81cfaec901\"]}},\"relationships\":{\"authored\":{\"supersedes\":[\"019b2d14-4230-7db7-87d4-7d81cfaec901\"]},\"derived\":{},\"proposed\":{},\"approved\":{},\"effective\":{\"supersedes\":[\"019b2d14-4230-7db7-87d4-7d81cfaec901\"]}},\"effective_sensitivity\":\"internal\",\"assessment\":{\"overall\":0.4333,\"label\":\"assessment:weakly-supported\",\"interpretation\":\"documentation-and-support-quality-not-truth\",\"policy_id\":\"policy:okf23-default-v1\",\"policy_version\":\"1.0.0\",\"policy_hash\":\"sha256:c2c476ca6f847bca20477d36ddda7a443d9fb4c5a9b1c3677a4347436deb0fb2\"},\"diagnostics_count\":2},\"diagnostic_codes\":[\"OKF-EPISTEMIC-004\",\"OKF-PROVENANCE-001\"],\"evidence\":{\"authored\":{},\"derived\":{},\"proposed\":{},\"approved\":{},\"effective\":{\"supports\":[],\"contradicts\":[]}},\"integrity\":{\"content_hash\":\"1abefh9:ad\",\"hash_algorithm\":\"fnv1a32-with-length\",\"policy_id\":\"policy:okf23-default-v1\",\"policy_version\":\"1.0.0\",\"policy_hash\":\"sha256:c2c476ca6f847bca20477d36ddda7a443d9fb4c5a9b1c3677a4347436deb0fb2\",\"schema_id\":\"okf-plus-graphiti\",\"schema_version\":\"2.3.0\",\"schema_hash\":\"fnv1a32-with-length:mkzlqp:n\"},\"lineage\":{\"resolved_supersedes\":[\"v1\"],\"declared_supersedes\":[\"019b2d14-4230-7db7-87d4-7d81cfaec901\"]},\"related_to\":[],\"saga\":null,\"content_char_count\":28,\"content_truncated\":false,\"content\":\"# Policy v2\\n\\nSecond policy.\\n\"}",
+    "source": "json",
+    "source_description": "OKF+ origin-separated source projection (authored) · KGCP non-authoritative Graphiti adapter · vault \"phase0-vault\" · policy/v2.md",
+    "reference_time": "2026-01-02T00:00:00.000Z",
+    "group_id": "phase0",
+    "episode_metadata": {
+      "vault_identity": "1e7sbla:c",
+      "source_path_hash": "1edzib7:c",
+      "okf_version": "2.3",
+      "uid": "019b2d14-4230-7db7-87d4-7d81cfaec902",
+      "note_type": "policy",
+      "sensitivity": "internal",
+      "policy_version": "1.0.0",
+      "corpus_id": "phase0",
+      "workspace_id": "phase0",
+      "event_time": "2026-01-02T00:00:00.000Z",
+      "processing_time": "2026-01-03T00:00:00.000Z"
+    }
+  },
+  {
+    "uuid": "bf1e81f3-b66f-50fb-b7fb-a47c26f57854",
+    "name": "Policy v2 supersedes 019b2d14-4230-7db7-87d4-7d81cfaec901",
+    "episode_body": "{\"schema\":\"okf-plus-graphiti/2.3.0\",\"subject_uid\":\"019b2d14-4230-7db7-87d4-7d81cfaec902\",\"subject\":\"Policy v2\",\"predicate\":\"supersedes\",\"object_ref\":\"019b2d14-4230-7db7-87d4-7d81cfaec901\",\"origin\":\"effective-non-proposed-projection\",\"event_time\":\"2026-01-02T00:00:00.000Z\",\"processing_time\":\"2026-01-03T00:00:00.000Z\"}",
+    "source": "fact_triple",
+    "source_description": "Effective non-proposed OKF+ relationship projection from policy/v2.md",
+    "reference_time": "2026-01-02T00:00:00.000Z",
+    "group_id": "phase0",
+    "episode_metadata": {
+      "vault_identity": "1e7sbla:c",
+      "source_path_hash": "1edzib7:c",
+      "okf_version": "2.3",
+      "uid": "019b2d14-4230-7db7-87d4-7d81cfaec902",
+      "note_type": "policy",
+      "sensitivity": "internal",
+      "policy_version": "1.0.0",
+      "corpus_id": "phase0",
+      "workspace_id": "phase0",
+      "event_time": "2026-01-02T00:00:00.000Z",
+      "processing_time": "2026-01-03T00:00:00.000Z",
+      "episode_kind": "fact_triple",
+      "relationship": "supersedes"
+    }
+  }
+]

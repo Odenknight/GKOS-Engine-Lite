@@ -1,0 +1,2091 @@
+{
+  "contract_version": "gkos-ingest-storage-conformance/1.0.0-draft.1",
+  "status": "frozen",
+  "frozen": true,
+  "schema_files": [
+    "state-common.schema.json",
+    "rejection-journal.schema.json",
+    "owner-generation.schema.json",
+    "active-pointer.schema.json",
+    "migration.schema.json",
+    "legacy-tombstone.schema.json",
+    "activation-root.schema.json",
+    "authority-witness.schema.json",
+    "authority-lock.schema.json",
+    "attempt-status.schema.json",
+    "index-result.schema.json"
+  ],
+  "valid_envelopes": {
+    "rejection_journal": {
+      "contract_version": "gkos-ingest-rejection-journal/1.0.0-draft.1",
+      "normalized_profile": {
+        "contract_version": "gkos-frontmatter-profile-effective/1.0.0-draft.1",
+        "engine_policy_hash": "sha256:2c2d8ec1e6481cbd4476bcc544c4fd19be03d8f21e317e44d889ea46e940ec8b",
+        "engine_policy_id": "policy:gkx23-default-v1",
+        "engine_projection_profile": "gkx-2.3-validating-projection",
+        "fields": [
+          {
+            "array_item_max_length": 262144,
+            "array_max_items": 262144,
+            "enum": null,
+            "extension": false,
+            "field": "aliases",
+            "integer_maximum": null,
+            "integer_minimum": null,
+            "max_length": null,
+            "min_length": null,
+            "required": false,
+            "type": "array<string>"
+          },
+          {
+            "array_item_max_length": null,
+            "array_max_items": null,
+            "enum": [
+              "approved",
+              "authored",
+              "derived",
+              "proposed"
+            ],
+            "extension": false,
+            "field": "authorship_origin",
+            "integer_maximum": null,
+            "integer_minimum": null,
+            "max_length": 262144,
+            "min_length": null,
+            "required": false,
+            "type": "string"
+          },
+          {
+            "array_item_max_length": null,
+            "array_max_items": null,
+            "enum": null,
+            "extension": false,
+            "field": "created_at",
+            "integer_maximum": null,
+            "integer_minimum": null,
+            "max_length": 262144,
+            "min_length": null,
+            "required": true,
+            "type": "string"
+          },
+          {
+            "array_item_max_length": null,
+            "array_max_items": null,
+            "enum": [
+              "accepted",
+              "contested",
+              "hypothesis",
+              "inferred",
+              "modeled",
+              "observation",
+              "refuted",
+              "reported",
+              "retracted",
+              "superseded",
+              "supported",
+              "unknown"
+            ],
+            "extension": false,
+            "field": "epistemic_state",
+            "integer_maximum": null,
+            "integer_minimum": null,
+            "max_length": 262144,
+            "min_length": null,
+            "required": true,
+            "type": "string"
+          },
+          {
+            "array_item_max_length": null,
+            "array_max_items": null,
+            "enum": [
+              "2.3"
+            ],
+            "extension": false,
+            "field": "gkx_version",
+            "integer_maximum": null,
+            "integer_minimum": null,
+            "max_length": 262144,
+            "min_length": null,
+            "required": true,
+            "type": "string"
+          },
+          {
+            "array_item_max_length": null,
+            "array_max_items": null,
+            "enum": [
+              "confidential",
+              "internal",
+              "phi",
+              "public",
+              "regulated",
+              "restricted",
+              "secret"
+            ],
+            "extension": false,
+            "field": "sensitivity",
+            "integer_maximum": null,
+            "integer_minimum": null,
+            "max_length": 262144,
+            "min_length": null,
+            "required": false,
+            "type": "string"
+          },
+          {
+            "array_item_max_length": 262144,
+            "array_max_items": 262144,
+            "enum": null,
+            "extension": false,
+            "field": "tags",
+            "integer_maximum": null,
+            "integer_minimum": null,
+            "max_length": null,
+            "min_length": null,
+            "required": false,
+            "type": "array<string>"
+          },
+          {
+            "array_item_max_length": null,
+            "array_max_items": null,
+            "enum": null,
+            "extension": false,
+            "field": "title",
+            "integer_maximum": null,
+            "integer_minimum": null,
+            "max_length": 262144,
+            "min_length": 1,
+            "required": true,
+            "type": "string"
+          },
+          {
+            "array_item_max_length": null,
+            "array_max_items": null,
+            "enum": null,
+            "extension": false,
+            "field": "type",
+            "integer_maximum": null,
+            "integer_minimum": null,
+            "max_length": 262144,
+            "min_length": 1,
+            "required": true,
+            "type": "string"
+          },
+          {
+            "array_item_max_length": null,
+            "array_max_items": null,
+            "enum": null,
+            "extension": false,
+            "field": "uid",
+            "integer_maximum": null,
+            "integer_minimum": null,
+            "max_length": 262144,
+            "min_length": 1,
+            "required": true,
+            "type": "string"
+          },
+          {
+            "array_item_max_length": null,
+            "array_max_items": null,
+            "enum": null,
+            "extension": false,
+            "field": "updated_at",
+            "integer_maximum": null,
+            "integer_minimum": null,
+            "max_length": 262144,
+            "min_length": null,
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "identity_rules": {
+          "duplicate_uid_or_path": "cross_record_report_only",
+          "identity_mutation_or_defaulting": false,
+          "path_is_identity": false,
+          "stable_authored_uid_required": true,
+          "uid_syntax_authority": "canonical_gkx_parser"
+        },
+        "minimum_sensitivity": "public",
+        "profile_id": "gkos-current",
+        "relationship_rules": {
+          "declaration_syntax_authority": "canonical_gkx_parser_receipts",
+          "endpoint_resolution_and_topology": "cross_record_report_only",
+          "malformed_authored_reference": "intrinsic",
+          "ordinary_markdown_or_wikilink_unresolved": "non_conflicting",
+          "second_resolution_pass": false
+        },
+        "required_fields": [
+          "created_at",
+          "epistemic_state",
+          "gkx_version",
+          "title",
+          "type",
+          "uid"
+        ],
+        "severity": [
+          {
+            "code": "GKX-AUTHORITY-ROLE-001",
+            "severity": "critical"
+          },
+          {
+            "code": "GKX-AUTHORITY-ROLE-002",
+            "severity": "error"
+          },
+          {
+            "code": "GKX-EPISTEMIC-002",
+            "severity": "error"
+          },
+          {
+            "code": "GKX-EPISTEMIC-004",
+            "severity": "warning"
+          },
+          {
+            "code": "GKX-EVIDENCE-002",
+            "severity": "error"
+          },
+          {
+            "code": "GKX-EVIDENCE-003",
+            "severity": "error"
+          },
+          {
+            "code": "GKX-IDENTITY-001",
+            "severity": "warning"
+          },
+          {
+            "code": "GKX-IDENTITY-002",
+            "severity": "error"
+          },
+          {
+            "code": "GKX-PROVENANCE-001",
+            "severity": "warning"
+          },
+          {
+            "code": "GKX-PROVENANCE-002",
+            "severity": "error"
+          },
+          {
+            "code": "GKX-SCHEMA-002",
+            "severity": "info"
+          },
+          {
+            "code": "GKX-SCHEMA-003",
+            "severity": "warning"
+          },
+          {
+            "code": "GKX-SCHEMA-004",
+            "severity": "error"
+          },
+          {
+            "code": "GKX-SENSITIVITY-001",
+            "severity": "warning"
+          },
+          {
+            "code": "GKX-SENSITIVITY-005",
+            "severity": "error"
+          },
+          {
+            "code": "GKX-TEMPORAL-001",
+            "severity": "warning"
+          }
+        ],
+        "standard_commit": "a2a2a6ca5c4dac32c6d9dc985ed7460f5f4350c6",
+        "standard_common_defs_sha256": "sha256:5b58edd93a53f6b821bfc03e2e4e3955da394bfaccb72e3ff194b45115c44c98",
+        "standard_diagnostics_sha256": "sha256:178e4801d1274da60fe029d3f326b9adbdbf0e2a2033469928022fa107427403",
+        "standard_frontmatter_schema_sha256": "sha256:eb25f75b4864a9130b2e27bdba2627e561fc79ab3a2537397bf5df024aab5ca3",
+        "unknown_fields": "allow"
+      },
+      "observation_snapshot_digest": "sha256:925ab1b2109f70a9ede7417294cfe9ec219722d402780475cf2538dc7c307b39",
+      "profile": {
+        "contract_version": "gkos-frontmatter-profile-coordinate/1.0.0-draft.1",
+        "effective_profile_digest": "sha256:9ab3b07da4cdfb584c2766762a32dc71653dffd87537ad0a4c9190e3a69015c5",
+        "engine_policy_hash": "sha256:2c2d8ec1e6481cbd4476bcc544c4fd19be03d8f21e317e44d889ea46e940ec8b",
+        "engine_policy_id": "policy:gkx23-default-v1",
+        "engine_projection_profile": "gkx-2.3-validating-projection",
+        "overlay_sha256": null,
+        "profile_id": "gkos-current",
+        "selector_id": "gkos:frontmatter-profile/current",
+        "standard_commit": "a2a2a6ca5c4dac32c6d9dc985ed7460f5f4350c6",
+        "standard_common_defs_sha256": "sha256:5b58edd93a53f6b821bfc03e2e4e3955da394bfaccb72e3ff194b45115c44c98",
+        "standard_diagnostics_sha256": "sha256:178e4801d1274da60fe029d3f326b9adbdbf0e2a2033469928022fa107427403",
+        "standard_frontmatter_schema_sha256": "sha256:eb25f75b4864a9130b2e27bdba2627e561fc79ab3a2537397bf5df024aab5ca3"
+      },
+      "rejection_count": 1,
+      "rejection_journal_digest": "sha256:22be31412abb3a50b582fe1287761bc7359ba6f9d33f5e6d1fe466ce5d897f2c",
+      "rejections": [
+        {
+          "canonical_assertion_time": "2026-08-01T00:00:00.000Z",
+          "canonical_valid_from": "2026-08-01T00:00:00.000Z",
+          "contract_version": "gkos-ingest-rejection/1.0.0-draft.1",
+          "effective_sensitivity": "secret",
+          "findings": [
+            {
+              "classification": "intrinsic",
+              "code": "CANONICAL_SOURCE_UID_UNAVAILABLE",
+              "contract_version": "gkos-ingest-finding/1.0.0-draft.1",
+              "coordinate_basis": "missing_field",
+              "deterministic": true,
+              "field": "uid",
+              "finding_id": "sha256:02ab275c3ee7f73278669e79521d441ff2ce0e85c902b6ab5a3db29f98e51845",
+              "line": null,
+              "scope": "field",
+              "severity": "error",
+              "source_observation_ordinal": 0,
+              "source_path": "rejected.md"
+            },
+            {
+              "classification": "intrinsic",
+              "code": "GKX-IDENTITY-001",
+              "contract_version": "gkos-ingest-finding/1.0.0-draft.1",
+              "coordinate_basis": "missing_field",
+              "deterministic": true,
+              "field": "uid",
+              "finding_id": "sha256:2e8fd78c8ee79be1161545f59fdacb25ae83df27856658101662b2996ae64641",
+              "line": null,
+              "scope": "field",
+              "severity": "warning",
+              "source_observation_ordinal": 0,
+              "source_path": "rejected.md"
+            },
+            {
+              "classification": "intrinsic",
+              "code": "GKX-PROVENANCE-001",
+              "contract_version": "gkos-ingest-finding/1.0.0-draft.1",
+              "coordinate_basis": "missing_field",
+              "deterministic": true,
+              "field": "provenance.source_refs",
+              "finding_id": "sha256:b8279cd32f2185c22385b450aa285d2a026a9ae73b442bee7a35613a656d4807",
+              "line": null,
+              "scope": "field",
+              "severity": "warning",
+              "source_observation_ordinal": 0,
+              "source_path": "rejected.md"
+            },
+            {
+              "classification": "intrinsic",
+              "code": "GKX-SCHEMA-004",
+              "contract_version": "gkos-ingest-finding/1.0.0-draft.1",
+              "coordinate_basis": "missing_field",
+              "deterministic": true,
+              "field": "uid",
+              "finding_id": "sha256:00a5a60cdb6ed1f6401787554a4169d9cf7556aae3935db197422d3c4bb55f54",
+              "line": null,
+              "scope": "field",
+              "severity": "error",
+              "source_observation_ordinal": 0,
+              "source_path": "rejected.md"
+            },
+            {
+              "classification": "intrinsic",
+              "code": "GKX_INGEST_UID_REQUIRED",
+              "contract_version": "gkos-ingest-finding/1.0.0-draft.1",
+              "coordinate_basis": "missing_field",
+              "deterministic": true,
+              "field": "uid",
+              "finding_id": "sha256:218b73566b96628a588a2396031167b2846edfb0d3dffb7e74fdba65240088de",
+              "line": null,
+              "scope": "field",
+              "severity": "error",
+              "source_observation_ordinal": 0,
+              "source_path": "rejected.md"
+            },
+            {
+              "classification": "intrinsic",
+              "code": "GKX_PROFILE_FIELD_REQUIRED",
+              "contract_version": "gkos-ingest-finding/1.0.0-draft.1",
+              "coordinate_basis": "missing_field",
+              "deterministic": true,
+              "field": "uid",
+              "finding_id": "sha256:82f4ac0008c9176725e7f1d3da99a0ea84956376bd3c2a5eae6550afc2d91515",
+              "line": null,
+              "scope": "field",
+              "severity": "error",
+              "source_observation_ordinal": 0,
+              "source_path": "rejected.md"
+            }
+          ],
+          "profile": {
+            "contract_version": "gkos-frontmatter-profile-coordinate/1.0.0-draft.1",
+            "effective_profile_digest": "sha256:9ab3b07da4cdfb584c2766762a32dc71653dffd87537ad0a4c9190e3a69015c5",
+            "engine_policy_hash": "sha256:2c2d8ec1e6481cbd4476bcc544c4fd19be03d8f21e317e44d889ea46e940ec8b",
+            "engine_policy_id": "policy:gkx23-default-v1",
+            "engine_projection_profile": "gkx-2.3-validating-projection",
+            "overlay_sha256": null,
+            "profile_id": "gkos-current",
+            "selector_id": "gkos:frontmatter-profile/current",
+            "standard_commit": "a2a2a6ca5c4dac32c6d9dc985ed7460f5f4350c6",
+            "standard_common_defs_sha256": "sha256:5b58edd93a53f6b821bfc03e2e4e3955da394bfaccb72e3ff194b45115c44c98",
+            "standard_diagnostics_sha256": "sha256:178e4801d1274da60fe029d3f326b9adbdbf0e2a2033469928022fa107427403",
+            "standard_frontmatter_schema_sha256": "sha256:eb25f75b4864a9130b2e27bdba2627e561fc79ab3a2537397bf5df024aab5ca3"
+          },
+          "rejection_digest": "sha256:94e8fb6a83a6d11f050d392c2081f45b89b95ba4ab5497b8389cd22e1fb443aa",
+          "source_digest": "sha256:f2c03d138b7266f2bc849704062f207b4298b5bff9ff334c917403f730635869",
+          "source_observation_ordinal": 0,
+          "source_path": "rejected.md",
+          "source_size_bytes": 186
+        }
+      ]
+    },
+    "owner_generation": {
+      "contract_version": "gkos-ingest-generation/1.0.0-draft.1",
+      "owner_generation_id": "ingest:73fd40c305b63c202e9e5a7f",
+      "owner_manifest_digest": "sha256:73fd40c305b63c202e9e5a7f014c6377ad892c54326558754a067d126bb3f2fa",
+      "mode": "non_strict",
+      "vault_id": "vault:ingest-storage-fixture",
+      "observation_snapshot_digest": "sha256:925ab1b2109f70a9ede7417294cfe9ec219722d402780475cf2538dc7c307b39",
+      "profile": {
+        "contract_version": "gkos-frontmatter-profile-coordinate/1.0.0-draft.1",
+        "effective_profile_digest": "sha256:9ab3b07da4cdfb584c2766762a32dc71653dffd87537ad0a4c9190e3a69015c5",
+        "engine_policy_hash": "sha256:2c2d8ec1e6481cbd4476bcc544c4fd19be03d8f21e317e44d889ea46e940ec8b",
+        "engine_policy_id": "policy:gkx23-default-v1",
+        "engine_projection_profile": "gkx-2.3-validating-projection",
+        "overlay_sha256": null,
+        "profile_id": "gkos-current",
+        "selector_id": "gkos:frontmatter-profile/current",
+        "standard_commit": "a2a2a6ca5c4dac32c6d9dc985ed7460f5f4350c6",
+        "standard_common_defs_sha256": "sha256:5b58edd93a53f6b821bfc03e2e4e3955da394bfaccb72e3ff194b45115c44c98",
+        "standard_diagnostics_sha256": "sha256:178e4801d1274da60fe029d3f326b9adbdbf0e2a2033469928022fa107427403",
+        "standard_frontmatter_schema_sha256": "sha256:eb25f75b4864a9130b2e27bdba2627e561fc79ab3a2537397bf5df024aab5ca3"
+      },
+      "normalized_profile": {
+        "contract_version": "gkos-frontmatter-profile-effective/1.0.0-draft.1",
+        "engine_policy_hash": "sha256:2c2d8ec1e6481cbd4476bcc544c4fd19be03d8f21e317e44d889ea46e940ec8b",
+        "engine_policy_id": "policy:gkx23-default-v1",
+        "engine_projection_profile": "gkx-2.3-validating-projection",
+        "fields": [
+          {
+            "array_item_max_length": 262144,
+            "array_max_items": 262144,
+            "enum": null,
+            "extension": false,
+            "field": "aliases",
+            "integer_maximum": null,
+            "integer_minimum": null,
+            "max_length": null,
+            "min_length": null,
+            "required": false,
+            "type": "array<string>"
+          },
+          {
+            "array_item_max_length": null,
+            "array_max_items": null,
+            "enum": [
+              "approved",
+              "authored",
+              "derived",
+              "proposed"
+            ],
+            "extension": false,
+            "field": "authorship_origin",
+            "integer_maximum": null,
+            "integer_minimum": null,
+            "max_length": 262144,
+            "min_length": null,
+            "required": false,
+            "type": "string"
+          },
+          {
+            "array_item_max_length": null,
+            "array_max_items": null,
+            "enum": null,
+            "extension": false,
+            "field": "created_at",
+            "integer_maximum": null,
+            "integer_minimum": null,
+            "max_length": 262144,
+            "min_length": null,
+            "required": true,
+            "type": "string"
+          },
+          {
+            "array_item_max_length": null,
+            "array_max_items": null,
+            "enum": [
+              "accepted",
+              "contested",
+              "hypothesis",
+              "inferred",
+              "modeled",
+              "observation",
+              "refuted",
+              "reported",
+              "retracted",
+              "superseded",
+              "supported",
+              "unknown"
+            ],
+            "extension": false,
+            "field": "epistemic_state",
+            "integer_maximum": null,
+            "integer_minimum": null,
+            "max_length": 262144,
+            "min_length": null,
+            "required": true,
+            "type": "string"
+          },
+          {
+            "array_item_max_length": null,
+            "array_max_items": null,
+            "enum": [
+              "2.3"
+            ],
+            "extension": false,
+            "field": "gkx_version",
+            "integer_maximum": null,
+            "integer_minimum": null,
+            "max_length": 262144,
+            "min_length": null,
+            "required": true,
+            "type": "string"
+          },
+          {
+            "array_item_max_length": null,
+            "array_max_items": null,
+            "enum": [
+              "confidential",
+              "internal",
+              "phi",
+              "public",
+              "regulated",
+              "restricted",
+              "secret"
+            ],
+            "extension": false,
+            "field": "sensitivity",
+            "integer_maximum": null,
+            "integer_minimum": null,
+            "max_length": 262144,
+            "min_length": null,
+            "required": false,
+            "type": "string"
+          },
+          {
+            "array_item_max_length": 262144,
+            "array_max_items": 262144,
+            "enum": null,
+            "extension": false,
+            "field": "tags",
+            "integer_maximum": null,
+            "integer_minimum": null,
+            "max_length": null,
+            "min_length": null,
+            "required": false,
+            "type": "array<string>"
+          },
+          {
+            "array_item_max_length": null,
+            "array_max_items": null,
+            "enum": null,
+            "extension": false,
+            "field": "title",
+            "integer_maximum": null,
+            "integer_minimum": null,
+            "max_length": 262144,
+            "min_length": 1,
+            "required": true,
+            "type": "string"
+          },
+          {
+            "array_item_max_length": null,
+            "array_max_items": null,
+            "enum": null,
+            "extension": false,
+            "field": "type",
+            "integer_maximum": null,
+            "integer_minimum": null,
+            "max_length": 262144,
+            "min_length": 1,
+            "required": true,
+            "type": "string"
+          },
+          {
+            "array_item_max_length": null,
+            "array_max_items": null,
+            "enum": null,
+            "extension": false,
+            "field": "uid",
+            "integer_maximum": null,
+            "integer_minimum": null,
+            "max_length": 262144,
+            "min_length": 1,
+            "required": true,
+            "type": "string"
+          },
+          {
+            "array_item_max_length": null,
+            "array_max_items": null,
+            "enum": null,
+            "extension": false,
+            "field": "updated_at",
+            "integer_maximum": null,
+            "integer_minimum": null,
+            "max_length": 262144,
+            "min_length": null,
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "identity_rules": {
+          "duplicate_uid_or_path": "cross_record_report_only",
+          "identity_mutation_or_defaulting": false,
+          "path_is_identity": false,
+          "stable_authored_uid_required": true,
+          "uid_syntax_authority": "canonical_gkx_parser"
+        },
+        "minimum_sensitivity": "public",
+        "profile_id": "gkos-current",
+        "relationship_rules": {
+          "declaration_syntax_authority": "canonical_gkx_parser_receipts",
+          "endpoint_resolution_and_topology": "cross_record_report_only",
+          "malformed_authored_reference": "intrinsic",
+          "ordinary_markdown_or_wikilink_unresolved": "non_conflicting",
+          "second_resolution_pass": false
+        },
+        "required_fields": [
+          "created_at",
+          "epistemic_state",
+          "gkx_version",
+          "title",
+          "type",
+          "uid"
+        ],
+        "severity": [
+          {
+            "code": "GKX-AUTHORITY-ROLE-001",
+            "severity": "critical"
+          },
+          {
+            "code": "GKX-AUTHORITY-ROLE-002",
+            "severity": "error"
+          },
+          {
+            "code": "GKX-EPISTEMIC-002",
+            "severity": "error"
+          },
+          {
+            "code": "GKX-EPISTEMIC-004",
+            "severity": "warning"
+          },
+          {
+            "code": "GKX-EVIDENCE-002",
+            "severity": "error"
+          },
+          {
+            "code": "GKX-EVIDENCE-003",
+            "severity": "error"
+          },
+          {
+            "code": "GKX-IDENTITY-001",
+            "severity": "warning"
+          },
+          {
+            "code": "GKX-IDENTITY-002",
+            "severity": "error"
+          },
+          {
+            "code": "GKX-PROVENANCE-001",
+            "severity": "warning"
+          },
+          {
+            "code": "GKX-PROVENANCE-002",
+            "severity": "error"
+          },
+          {
+            "code": "GKX-SCHEMA-002",
+            "severity": "info"
+          },
+          {
+            "code": "GKX-SCHEMA-003",
+            "severity": "warning"
+          },
+          {
+            "code": "GKX-SCHEMA-004",
+            "severity": "error"
+          },
+          {
+            "code": "GKX-SENSITIVITY-001",
+            "severity": "warning"
+          },
+          {
+            "code": "GKX-SENSITIVITY-005",
+            "severity": "error"
+          },
+          {
+            "code": "GKX-TEMPORAL-001",
+            "severity": "warning"
+          }
+        ],
+        "standard_commit": "a2a2a6ca5c4dac32c6d9dc985ed7460f5f4350c6",
+        "standard_common_defs_sha256": "sha256:5b58edd93a53f6b821bfc03e2e4e3955da394bfaccb72e3ff194b45115c44c98",
+        "standard_diagnostics_sha256": "sha256:178e4801d1274da60fe029d3f326b9adbdbf0e2a2033469928022fa107427403",
+        "standard_frontmatter_schema_sha256": "sha256:eb25f75b4864a9130b2e27bdba2627e561fc79ab3a2537397bf5df024aab5ca3",
+        "unknown_fields": "allow"
+      },
+      "configuration_digest": "sha256:7c4dc435feda488d01be67a5c6da0ea52482b5f35a42f814fce579d2275f33e6",
+      "policy_digest": "sha256:f5b9d94c52105db8da71685c5cc2c9a19aa0e5a3d3b8e1af947509fdc6f56878",
+      "chunking": {
+        "chunker_version": "gkos-heading-chunker/1",
+        "max_tokens": 400,
+        "overlap_tokens": 0,
+        "tokenizer_version": "gkos-ascii-whitespace/1"
+      },
+      "validation_result": {
+        "contract_version": "gkos-ingest-validation/1.0.0-draft.1",
+        "corpus_valid": false,
+        "findings": [
+          {
+            "classification": "intrinsic",
+            "code": "GKX-PROVENANCE-001",
+            "contract_version": "gkos-ingest-finding/1.0.0-draft.1",
+            "coordinate_basis": "missing_field",
+            "deterministic": true,
+            "field": "provenance.source_refs",
+            "finding_id": "sha256:818c967be9d8bc46a61c17cd56d57a2322c2fed8d0d4bc2da19ca64a3b16554c",
+            "line": null,
+            "scope": "field",
+            "severity": "warning",
+            "source_observation_ordinal": 0,
+            "source_path": "accepted.md"
+          },
+          {
+            "classification": "intrinsic",
+            "code": "CANONICAL_SOURCE_UID_UNAVAILABLE",
+            "contract_version": "gkos-ingest-finding/1.0.0-draft.1",
+            "coordinate_basis": "missing_field",
+            "deterministic": true,
+            "field": "uid",
+            "finding_id": "sha256:02ab275c3ee7f73278669e79521d441ff2ce0e85c902b6ab5a3db29f98e51845",
+            "line": null,
+            "scope": "field",
+            "severity": "error",
+            "source_observation_ordinal": 0,
+            "source_path": "rejected.md"
+          },
+          {
+            "classification": "intrinsic",
+            "code": "GKX-IDENTITY-001",
+            "contract_version": "gkos-ingest-finding/1.0.0-draft.1",
+            "coordinate_basis": "missing_field",
+            "deterministic": true,
+            "field": "uid",
+            "finding_id": "sha256:2e8fd78c8ee79be1161545f59fdacb25ae83df27856658101662b2996ae64641",
+            "line": null,
+            "scope": "field",
+            "severity": "warning",
+            "source_observation_ordinal": 0,
+            "source_path": "rejected.md"
+          },
+          {
+            "classification": "intrinsic",
+            "code": "GKX-PROVENANCE-001",
+            "contract_version": "gkos-ingest-finding/1.0.0-draft.1",
+            "coordinate_basis": "missing_field",
+            "deterministic": true,
+            "field": "provenance.source_refs",
+            "finding_id": "sha256:b8279cd32f2185c22385b450aa285d2a026a9ae73b442bee7a35613a656d4807",
+            "line": null,
+            "scope": "field",
+            "severity": "warning",
+            "source_observation_ordinal": 0,
+            "source_path": "rejected.md"
+          },
+          {
+            "classification": "intrinsic",
+            "code": "GKX-SCHEMA-004",
+            "contract_version": "gkos-ingest-finding/1.0.0-draft.1",
+            "coordinate_basis": "missing_field",
+            "deterministic": true,
+            "field": "uid",
+            "finding_id": "sha256:00a5a60cdb6ed1f6401787554a4169d9cf7556aae3935db197422d3c4bb55f54",
+            "line": null,
+            "scope": "field",
+            "severity": "error",
+            "source_observation_ordinal": 0,
+            "source_path": "rejected.md"
+          },
+          {
+            "classification": "intrinsic",
+            "code": "GKX_INGEST_UID_REQUIRED",
+            "contract_version": "gkos-ingest-finding/1.0.0-draft.1",
+            "coordinate_basis": "missing_field",
+            "deterministic": true,
+            "field": "uid",
+            "finding_id": "sha256:218b73566b96628a588a2396031167b2846edfb0d3dffb7e74fdba65240088de",
+            "line": null,
+            "scope": "field",
+            "severity": "error",
+            "source_observation_ordinal": 0,
+            "source_path": "rejected.md"
+          },
+          {
+            "classification": "intrinsic",
+            "code": "GKX_PROFILE_FIELD_REQUIRED",
+            "contract_version": "gkos-ingest-finding/1.0.0-draft.1",
+            "coordinate_basis": "missing_field",
+            "deterministic": true,
+            "field": "uid",
+            "finding_id": "sha256:82f4ac0008c9176725e7f1d3da99a0ea84956376bd3c2a5eae6550afc2d91515",
+            "line": null,
+            "scope": "field",
+            "severity": "error",
+            "source_observation_ordinal": 0,
+            "source_path": "rejected.md"
+          }
+        ],
+        "ingest_intrinsic_valid": false,
+        "normalized_profile": {
+          "contract_version": "gkos-frontmatter-profile-effective/1.0.0-draft.1",
+          "engine_policy_hash": "sha256:2c2d8ec1e6481cbd4476bcc544c4fd19be03d8f21e317e44d889ea46e940ec8b",
+          "engine_policy_id": "policy:gkx23-default-v1",
+          "engine_projection_profile": "gkx-2.3-validating-projection",
+          "fields": [
+            {
+              "array_item_max_length": 262144,
+              "array_max_items": 262144,
+              "enum": null,
+              "extension": false,
+              "field": "aliases",
+              "integer_maximum": null,
+              "integer_minimum": null,
+              "max_length": null,
+              "min_length": null,
+              "required": false,
+              "type": "array<string>"
+            },
+            {
+              "array_item_max_length": null,
+              "array_max_items": null,
+              "enum": [
+                "approved",
+                "authored",
+                "derived",
+                "proposed"
+              ],
+              "extension": false,
+              "field": "authorship_origin",
+              "integer_maximum": null,
+              "integer_minimum": null,
+              "max_length": 262144,
+              "min_length": null,
+              "required": false,
+              "type": "string"
+            },
+            {
+              "array_item_max_length": null,
+              "array_max_items": null,
+              "enum": null,
+              "extension": false,
+              "field": "created_at",
+              "integer_maximum": null,
+              "integer_minimum": null,
+              "max_length": 262144,
+              "min_length": null,
+              "required": true,
+              "type": "string"
+            },
+            {
+              "array_item_max_length": null,
+              "array_max_items": null,
+              "enum": [
+                "accepted",
+                "contested",
+                "hypothesis",
+                "inferred",
+                "modeled",
+                "observation",
+                "refuted",
+                "reported",
+                "retracted",
+                "superseded",
+                "supported",
+                "unknown"
+              ],
+              "extension": false,
+              "field": "epistemic_state",
+              "integer_maximum": null,
+              "integer_minimum": null,
+              "max_length": 262144,
+              "min_length": null,
+              "required": true,
+              "type": "string"
+            },
+            {
+              "array_item_max_length": null,
+              "array_max_items": null,
+              "enum": [
+                "2.3"
+              ],
+              "extension": false,
+              "field": "gkx_version",
+              "integer_maximum": null,
+              "integer_minimum": null,
+              "max_length": 262144,
+              "min_length": null,
+              "required": true,
+              "type": "string"
+            },
+            {
+              "array_item_max_length": null,
+              "array_max_items": null,
+              "enum": [
+                "confidential",
+                "internal",
+                "phi",
+                "public",
+                "regulated",
+                "restricted",
+                "secret"
+              ],
+              "extension": false,
+              "field": "sensitivity",
+              "integer_maximum": null,
+              "integer_minimum": null,
+              "max_length": 262144,
+              "min_length": null,
+              "required": false,
+              "type": "string"
+            },
+            {
+              "array_item_max_length": 262144,
+              "array_max_items": 262144,
+              "enum": null,
+              "extension": false,
+              "field": "tags",
+              "integer_maximum": null,
+              "integer_minimum": null,
+              "max_length": null,
+              "min_length": null,
+              "required": false,
+              "type": "array<string>"
+            },
+            {
+              "array_item_max_length": null,
+              "array_max_items": null,
+              "enum": null,
+              "extension": false,
+              "field": "title",
+              "integer_maximum": null,
+              "integer_minimum": null,
+              "max_length": 262144,
+              "min_length": 1,
+              "required": true,
+              "type": "string"
+            },
+            {
+              "array_item_max_length": null,
+              "array_max_items": null,
+              "enum": null,
+              "extension": false,
+              "field": "type",
+              "integer_maximum": null,
+              "integer_minimum": null,
+              "max_length": 262144,
+              "min_length": 1,
+              "required": true,
+              "type": "string"
+            },
+            {
+              "array_item_max_length": null,
+              "array_max_items": null,
+              "enum": null,
+              "extension": false,
+              "field": "uid",
+              "integer_maximum": null,
+              "integer_minimum": null,
+              "max_length": 262144,
+              "min_length": 1,
+              "required": true,
+              "type": "string"
+            },
+            {
+              "array_item_max_length": null,
+              "array_max_items": null,
+              "enum": null,
+              "extension": false,
+              "field": "updated_at",
+              "integer_maximum": null,
+              "integer_minimum": null,
+              "max_length": 262144,
+              "min_length": null,
+              "required": false,
+              "type": "string"
+            }
+          ],
+          "identity_rules": {
+            "duplicate_uid_or_path": "cross_record_report_only",
+            "identity_mutation_or_defaulting": false,
+            "path_is_identity": false,
+            "stable_authored_uid_required": true,
+            "uid_syntax_authority": "canonical_gkx_parser"
+          },
+          "minimum_sensitivity": "public",
+          "profile_id": "gkos-current",
+          "relationship_rules": {
+            "declaration_syntax_authority": "canonical_gkx_parser_receipts",
+            "endpoint_resolution_and_topology": "cross_record_report_only",
+            "malformed_authored_reference": "intrinsic",
+            "ordinary_markdown_or_wikilink_unresolved": "non_conflicting",
+            "second_resolution_pass": false
+          },
+          "required_fields": [
+            "created_at",
+            "epistemic_state",
+            "gkx_version",
+            "title",
+            "type",
+            "uid"
+          ],
+          "severity": [
+            {
+              "code": "GKX-AUTHORITY-ROLE-001",
+              "severity": "critical"
+            },
+            {
+              "code": "GKX-AUTHORITY-ROLE-002",
+              "severity": "error"
+            },
+            {
+              "code": "GKX-EPISTEMIC-002",
+              "severity": "error"
+            },
+            {
+              "code": "GKX-EPISTEMIC-004",
+              "severity": "warning"
+            },
+            {
+              "code": "GKX-EVIDENCE-002",
+              "severity": "error"
+            },
+            {
+              "code": "GKX-EVIDENCE-003",
+              "severity": "error"
+            },
+            {
+              "code": "GKX-IDENTITY-001",
+              "severity": "warning"
+            },
+            {
+              "code": "GKX-IDENTITY-002",
+              "severity": "error"
+            },
+            {
+              "code": "GKX-PROVENANCE-001",
+              "severity": "warning"
+            },
+            {
+              "code": "GKX-PROVENANCE-002",
+              "severity": "error"
+            },
+            {
+              "code": "GKX-SCHEMA-002",
+              "severity": "info"
+            },
+            {
+              "code": "GKX-SCHEMA-003",
+              "severity": "warning"
+            },
+            {
+              "code": "GKX-SCHEMA-004",
+              "severity": "error"
+            },
+            {
+              "code": "GKX-SENSITIVITY-001",
+              "severity": "warning"
+            },
+            {
+              "code": "GKX-SENSITIVITY-005",
+              "severity": "error"
+            },
+            {
+              "code": "GKX-TEMPORAL-001",
+              "severity": "warning"
+            }
+          ],
+          "standard_commit": "a2a2a6ca5c4dac32c6d9dc985ed7460f5f4350c6",
+          "standard_common_defs_sha256": "sha256:5b58edd93a53f6b821bfc03e2e4e3955da394bfaccb72e3ff194b45115c44c98",
+          "standard_diagnostics_sha256": "sha256:178e4801d1274da60fe029d3f326b9adbdbf0e2a2033469928022fa107427403",
+          "standard_frontmatter_schema_sha256": "sha256:eb25f75b4864a9130b2e27bdba2627e561fc79ab3a2537397bf5df024aab5ca3",
+          "unknown_fields": "allow"
+        },
+        "observations": [
+          {
+            "classification": "accepted",
+            "contract_version": "gkos-ingest-source-observation/1.0.0-draft.1",
+            "finding_ids": [
+              "sha256:818c967be9d8bc46a61c17cd56d57a2322c2fed8d0d4bc2da19ca64a3b16554c"
+            ],
+            "intrinsic_blocking_finding_ids": [],
+            "source_digest": "sha256:274ace5500d75ecc498d6def322c732f7682e86ea557c1cc40451f0083bbfab4",
+            "source_observation_ordinal": 0,
+            "source_path": "accepted.md",
+            "source_size_bytes": 230
+          },
+          {
+            "classification": "rejected",
+            "contract_version": "gkos-ingest-source-observation/1.0.0-draft.1",
+            "finding_ids": [
+              "sha256:00a5a60cdb6ed1f6401787554a4169d9cf7556aae3935db197422d3c4bb55f54",
+              "sha256:02ab275c3ee7f73278669e79521d441ff2ce0e85c902b6ab5a3db29f98e51845",
+              "sha256:218b73566b96628a588a2396031167b2846edfb0d3dffb7e74fdba65240088de",
+              "sha256:2e8fd78c8ee79be1161545f59fdacb25ae83df27856658101662b2996ae64641",
+              "sha256:82f4ac0008c9176725e7f1d3da99a0ea84956376bd3c2a5eae6550afc2d91515",
+              "sha256:b8279cd32f2185c22385b450aa285d2a026a9ae73b442bee7a35613a656d4807"
+            ],
+            "intrinsic_blocking_finding_ids": [
+              "sha256:00a5a60cdb6ed1f6401787554a4169d9cf7556aae3935db197422d3c4bb55f54",
+              "sha256:02ab275c3ee7f73278669e79521d441ff2ce0e85c902b6ab5a3db29f98e51845",
+              "sha256:218b73566b96628a588a2396031167b2846edfb0d3dffb7e74fdba65240088de",
+              "sha256:82f4ac0008c9176725e7f1d3da99a0ea84956376bd3c2a5eae6550afc2d91515"
+            ],
+            "source_digest": "sha256:f2c03d138b7266f2bc849704062f207b4298b5bff9ff334c917403f730635869",
+            "source_observation_ordinal": 0,
+            "source_path": "rejected.md",
+            "source_size_bytes": 186
+          }
+        ],
+        "profile": {
+          "contract_version": "gkos-frontmatter-profile-coordinate/1.0.0-draft.1",
+          "effective_profile_digest": "sha256:9ab3b07da4cdfb584c2766762a32dc71653dffd87537ad0a4c9190e3a69015c5",
+          "engine_policy_hash": "sha256:2c2d8ec1e6481cbd4476bcc544c4fd19be03d8f21e317e44d889ea46e940ec8b",
+          "engine_policy_id": "policy:gkx23-default-v1",
+          "engine_projection_profile": "gkx-2.3-validating-projection",
+          "overlay_sha256": null,
+          "profile_id": "gkos-current",
+          "selector_id": "gkos:frontmatter-profile/current",
+          "standard_commit": "a2a2a6ca5c4dac32c6d9dc985ed7460f5f4350c6",
+          "standard_common_defs_sha256": "sha256:5b58edd93a53f6b821bfc03e2e4e3955da394bfaccb72e3ff194b45115c44c98",
+          "standard_diagnostics_sha256": "sha256:178e4801d1274da60fe029d3f326b9adbdbf0e2a2033469928022fa107427403",
+          "standard_frontmatter_schema_sha256": "sha256:eb25f75b4864a9130b2e27bdba2627e561fc79ab3a2537397bf5df024aab5ca3"
+        },
+        "rejections": [
+          {
+            "canonical_assertion_time": "2026-08-01T00:00:00.000Z",
+            "canonical_valid_from": "2026-08-01T00:00:00.000Z",
+            "contract_version": "gkos-ingest-rejection/1.0.0-draft.1",
+            "effective_sensitivity": "secret",
+            "findings": [
+              {
+                "classification": "intrinsic",
+                "code": "CANONICAL_SOURCE_UID_UNAVAILABLE",
+                "contract_version": "gkos-ingest-finding/1.0.0-draft.1",
+                "coordinate_basis": "missing_field",
+                "deterministic": true,
+                "field": "uid",
+                "finding_id": "sha256:02ab275c3ee7f73278669e79521d441ff2ce0e85c902b6ab5a3db29f98e51845",
+                "line": null,
+                "scope": "field",
+                "severity": "error",
+                "source_observation_ordinal": 0,
+                "source_path": "rejected.md"
+              },
+              {
+                "classification": "intrinsic",
+                "code": "GKX-IDENTITY-001",
+                "contract_version": "gkos-ingest-finding/1.0.0-draft.1",
+                "coordinate_basis": "missing_field",
+                "deterministic": true,
+                "field": "uid",
+                "finding_id": "sha256:2e8fd78c8ee79be1161545f59fdacb25ae83df27856658101662b2996ae64641",
+                "line": null,
+                "scope": "field",
+                "severity": "warning",
+                "source_observation_ordinal": 0,
+                "source_path": "rejected.md"
+              },
+              {
+                "classification": "intrinsic",
+                "code": "GKX-PROVENANCE-001",
+                "contract_version": "gkos-ingest-finding/1.0.0-draft.1",
+                "coordinate_basis": "missing_field",
+                "deterministic": true,
+                "field": "provenance.source_refs",
+                "finding_id": "sha256:b8279cd32f2185c22385b450aa285d2a026a9ae73b442bee7a35613a656d4807",
+                "line": null,
+                "scope": "field",
+                "severity": "warning",
+                "source_observation_ordinal": 0,
+                "source_path": "rejected.md"
+              },
+              {
+                "classification": "intrinsic",
+                "code": "GKX-SCHEMA-004",
+                "contract_version": "gkos-ingest-finding/1.0.0-draft.1",
+                "coordinate_basis": "missing_field",
+                "deterministic": true,
+                "field": "uid",
+                "finding_id": "sha256:00a5a60cdb6ed1f6401787554a4169d9cf7556aae3935db197422d3c4bb55f54",
+                "line": null,
+                "scope": "field",
+                "severity": "error",
+                "source_observation_ordinal": 0,
+                "source_path": "rejected.md"
+              },
+              {
+                "classification": "intrinsic",
+                "code": "GKX_INGEST_UID_REQUIRED",
+                "contract_version": "gkos-ingest-finding/1.0.0-draft.1",
+                "coordinate_basis": "missing_field",
+                "deterministic": true,
+                "field": "uid",
+                "finding_id": "sha256:218b73566b96628a588a2396031167b2846edfb0d3dffb7e74fdba65240088de",
+                "line": null,
+                "scope": "field",
+                "severity": "error",
+                "source_observation_ordinal": 0,
+                "source_path": "rejected.md"
+              },
+              {
+                "classification": "intrinsic",
+                "code": "GKX_PROFILE_FIELD_REQUIRED",
+                "contract_version": "gkos-ingest-finding/1.0.0-draft.1",
+                "coordinate_basis": "missing_field",
+                "deterministic": true,
+                "field": "uid",
+                "finding_id": "sha256:82f4ac0008c9176725e7f1d3da99a0ea84956376bd3c2a5eae6550afc2d91515",
+                "line": null,
+                "scope": "field",
+                "severity": "error",
+                "source_observation_ordinal": 0,
+                "source_path": "rejected.md"
+              }
+            ],
+            "profile": {
+              "contract_version": "gkos-frontmatter-profile-coordinate/1.0.0-draft.1",
+              "effective_profile_digest": "sha256:9ab3b07da4cdfb584c2766762a32dc71653dffd87537ad0a4c9190e3a69015c5",
+              "engine_policy_hash": "sha256:2c2d8ec1e6481cbd4476bcc544c4fd19be03d8f21e317e44d889ea46e940ec8b",
+              "engine_policy_id": "policy:gkx23-default-v1",
+              "engine_projection_profile": "gkx-2.3-validating-projection",
+              "overlay_sha256": null,
+              "profile_id": "gkos-current",
+              "selector_id": "gkos:frontmatter-profile/current",
+              "standard_commit": "a2a2a6ca5c4dac32c6d9dc985ed7460f5f4350c6",
+              "standard_common_defs_sha256": "sha256:5b58edd93a53f6b821bfc03e2e4e3955da394bfaccb72e3ff194b45115c44c98",
+              "standard_diagnostics_sha256": "sha256:178e4801d1274da60fe029d3f326b9adbdbf0e2a2033469928022fa107427403",
+              "standard_frontmatter_schema_sha256": "sha256:eb25f75b4864a9130b2e27bdba2627e561fc79ab3a2537397bf5df024aab5ca3"
+            },
+            "rejection_digest": "sha256:94e8fb6a83a6d11f050d392c2081f45b89b95ba4ab5497b8389cd22e1fb443aa",
+            "source_digest": "sha256:f2c03d138b7266f2bc849704062f207b4298b5bff9ff334c917403f730635869",
+            "source_observation_ordinal": 0,
+            "source_path": "rejected.md",
+            "source_size_bytes": 186
+          }
+        ],
+        "status": "invalid",
+        "summary": {
+          "findings": {
+            "critical": 0,
+            "error": 4,
+            "info": 0,
+            "warning": 3
+          },
+          "observed_source_count": 2,
+          "rejected_source_count": 1,
+          "valid_source_count": 1
+        }
+      },
+      "inner": {
+        "database_file": "retrieval-feb6e2d805323a1ae4a1b62b40a0a403e9abc7feb4cea12ef4847392e5826890.sqlite",
+        "manifest": {
+          "candidate_chunk_count": 1,
+          "candidate_declaration_count": 0,
+          "candidate_source_count": 1,
+          "chunker_version": "gkos-heading-chunker/1",
+          "configuration_digest": "sha256:7c4dc435feda488d01be67a5c6da0ea52482b5f35a42f814fce579d2275f33e6",
+          "contract_version": "gkos-retrieval/1.0.0-draft.2",
+          "embedding_dimensions": null,
+          "embedding_eligible_candidate_chunk_count": 0,
+          "embedding_model_id": null,
+          "embedding_provider_id": null,
+          "engine_version": "2.1.2",
+          "gkx_projection_profile": "gkx-2.3-validating-projection",
+          "gkx_standard_commit": "a2a2a6ca5c4dac32c6d9dc985ed7460f5f4350c6",
+          "lexical_backend": "sqlite_lexical_scan",
+          "policy_digest": "sha256:f5b9d94c52105db8da71685c5cc2c9a19aa0e5a3d3b8e1af947509fdc6f56878",
+          "projection_digest": "sha256:feb6e2d805323a1ae4a1b62b40a0a403e9abc7feb4cea12ef4847392e5826890",
+          "projection_id": "retrieval:feb6e2d805323a1ae4a1b62b",
+          "projection_schema_version": 3,
+          "provenance_contract_version": "gkos-retrieval-provenance/1.0.0-draft.1",
+          "represented_candidate_source_count": 1,
+          "source_snapshot_digest": "sha256:925ab1b2109f70a9ede7417294cfe9ec219722d402780475cf2538dc7c307b39",
+          "tokenizer_version": "gkos-ascii-whitespace/1",
+          "vault_id": "vault:ingest-storage-fixture"
+        },
+        "manifest_digest": "sha256:d53bc2e886e9fbcddbbff9f7dd60063d087d8c1f7d99c1a1f73dc7294700ceb9"
+      },
+      "rejection_journal": {
+        "journal_file": "ingest-rejections-22be31412abb3a50b582fe1287761bc7359ba6f9d33f5e6d1fe466ce5d897f2c.json",
+        "rejection_journal_digest": "sha256:22be31412abb3a50b582fe1287761bc7359ba6f9d33f5e6d1fe466ce5d897f2c",
+        "rejection_count": 1
+      }
+    },
+    "active_pointer": {
+      "contract_version": "gkos-ingest-active-pointer/1.0.0-draft.1",
+      "inner": {
+        "database_file": "retrieval-feb6e2d805323a1ae4a1b62b40a0a403e9abc7feb4cea12ef4847392e5826890.sqlite",
+        "manifest_digest": "sha256:d53bc2e886e9fbcddbbff9f7dd60063d087d8c1f7d99c1a1f73dc7294700ceb9",
+        "projection_digest": "sha256:feb6e2d805323a1ae4a1b62b40a0a403e9abc7feb4cea12ef4847392e5826890",
+        "projection_id": "retrieval:feb6e2d805323a1ae4a1b62b"
+      },
+      "owner_generation_file": "ingest-generation-73fd40c305b63c202e9e5a7f014c6377ad892c54326558754a067d126bb3f2fa.json",
+      "owner_generation_id": "ingest:73fd40c305b63c202e9e5a7f",
+      "owner_manifest_digest": "sha256:73fd40c305b63c202e9e5a7f014c6377ad892c54326558754a067d126bb3f2fa"
+    },
+    "migration": {
+      "contract_version": "gkos-ingest-migration/1.0.0-draft.1",
+      "target_owner_generation_id": "ingest:73fd40c305b63c202e9e5a7f",
+      "target_owner_manifest_digest": "sha256:73fd40c305b63c202e9e5a7f014c6377ad892c54326558754a067d126bb3f2fa",
+      "legacy_pointer": null,
+      "legacy_pointer_digest": null,
+      "migration_digest": "sha256:a38598a1b504984751a8bf2687c6c887f5a146cce8cb435663ffb10abe80ee32"
+    },
+    "migration_with_legacy": {
+      "contract_version": "gkos-ingest-migration/1.0.0-draft.1",
+      "target_owner_generation_id": "ingest:73fd40c305b63c202e9e5a7f",
+      "target_owner_manifest_digest": "sha256:73fd40c305b63c202e9e5a7f014c6377ad892c54326558754a067d126bb3f2fa",
+      "legacy_pointer": {
+        "database_file": "retrieval-34964e3c36e7f7efbc7cf1745d1784463aa81c7009bc48ea9c35b73bcaccb15c.sqlite",
+        "manifest": {
+          "candidate_chunk_count": 1,
+          "candidate_declaration_count": 0,
+          "candidate_source_count": 1,
+          "chunker_version": "gkos-heading-chunker/1",
+          "configuration_digest": "sha256:604bc7b760a834c1f858ea668a073bbabbeccc14765f3205e09a2622a2b773ef",
+          "contract_version": "gkos-retrieval/1.0.0-draft.2",
+          "embedding_dimensions": null,
+          "embedding_eligible_candidate_chunk_count": 0,
+          "embedding_model_id": null,
+          "embedding_provider_id": null,
+          "engine_version": "2.1.2",
+          "gkx_projection_profile": "gkx-2.3-validating-projection",
+          "gkx_standard_commit": "a2a2a6ca5c4dac32c6d9dc985ed7460f5f4350c6",
+          "lexical_backend": "sqlite_lexical_scan",
+          "policy_digest": "sha256:f5b9d94c52105db8da71685c5cc2c9a19aa0e5a3d3b8e1af947509fdc6f56878",
+          "projection_digest": "sha256:34964e3c36e7f7efbc7cf1745d1784463aa81c7009bc48ea9c35b73bcaccb15c",
+          "projection_id": "retrieval:34964e3c36e7f7efbc7cf174",
+          "projection_schema_version": 3,
+          "provenance_contract_version": "gkos-retrieval-provenance/1.0.0-draft.1",
+          "represented_candidate_source_count": 1,
+          "source_snapshot_digest": "sha256:925ab1b2109f70a9ede7417294cfe9ec219722d402780475cf2538dc7c307b39",
+          "tokenizer_version": "gkos-ascii-whitespace/1",
+          "vault_id": "vault:ingest-storage-fixture"
+        }
+      },
+      "legacy_pointer_digest": "sha256:70f3993dbcc932cc0888f4889f99033abe1525ffbee65cfa606752375a8fec2e",
+      "migration_digest": "sha256:148c5658b7d26bdc716c86340afad927159ece5ef70d3b646cdba2f743afa652"
+    },
+    "legacy_tombstone": {
+      "contract_version": "gkos-ingest-legacy-pointer-tombstone/1.0.0-draft.1",
+      "migration_digest": "sha256:a38598a1b504984751a8bf2687c6c887f5a146cce8cb435663ffb10abe80ee32",
+      "migration_file": "ingest-migration-a38598a1b504984751a8bf2687c6c887f5a146cce8cb435663ffb10abe80ee32.json",
+      "target_owner_generation_id": "ingest:73fd40c305b63c202e9e5a7f",
+      "target_owner_manifest_digest": "sha256:73fd40c305b63c202e9e5a7f014c6377ad892c54326558754a067d126bb3f2fa",
+      "tombstone_digest": "sha256:1922c94bd4afc3e25daaa9c90981f1f3a27ab806f3a0f3c82ba223e6a36018cb"
+    },
+    "activation_root": {
+      "activation_root_digest": "sha256:91e02da08d6779cce67860da30715cdac12b0f2a840f35339bdd5cd9dec4af31",
+      "active_pointer_digest": "sha256:dce69d38a104178f50844e3765f34ea520b2fcf4579e7177607f447cd7c963db",
+      "authority_lock_digest": "sha256:58cdbf74ffba0fbbf1a92a1cc54d5a0cd9fae75c9d662a15830747e08ef142b9",
+      "contract_version": "gkos-ingest-activation-root/1.0.0-draft.1",
+      "first_inner": {
+        "database_file": "retrieval-feb6e2d805323a1ae4a1b62b40a0a403e9abc7feb4cea12ef4847392e5826890.sqlite",
+        "manifest_digest": "sha256:d53bc2e886e9fbcddbbff9f7dd60063d087d8c1f7d99c1a1f73dc7294700ceb9",
+        "projection_digest": "sha256:feb6e2d805323a1ae4a1b62b40a0a403e9abc7feb4cea12ef4847392e5826890",
+        "projection_id": "retrieval:feb6e2d805323a1ae4a1b62b"
+      },
+      "first_owner_generation_id": "ingest:73fd40c305b63c202e9e5a7f",
+      "first_owner_manifest_digest": "sha256:73fd40c305b63c202e9e5a7f014c6377ad892c54326558754a067d126bb3f2fa",
+      "legacy_pointer_digest": null,
+      "migration_digest": "sha256:a38598a1b504984751a8bf2687c6c887f5a146cce8cb435663ffb10abe80ee32",
+      "migration_file": "ingest-migration-a38598a1b504984751a8bf2687c6c887f5a146cce8cb435663ffb10abe80ee32.json",
+      "tombstone_digest": "sha256:1922c94bd4afc3e25daaa9c90981f1f3a27ab806f3a0f3c82ba223e6a36018cb"
+    },
+    "authority_witness": {
+      "activation_root_digest": "sha256:91e02da08d6779cce67860da30715cdac12b0f2a840f35339bdd5cd9dec4af31",
+      "active_pointer_digest": "sha256:dce69d38a104178f50844e3765f34ea520b2fcf4579e7177607f447cd7c963db",
+      "authority_lock_digest": "sha256:58cdbf74ffba0fbbf1a92a1cc54d5a0cd9fae75c9d662a15830747e08ef142b9",
+      "contract_version": "gkos-ingest-authority-witness/1.0.0-draft.1",
+      "first_inner": {
+        "database_file": "retrieval-feb6e2d805323a1ae4a1b62b40a0a403e9abc7feb4cea12ef4847392e5826890.sqlite",
+        "manifest_digest": "sha256:d53bc2e886e9fbcddbbff9f7dd60063d087d8c1f7d99c1a1f73dc7294700ceb9",
+        "projection_digest": "sha256:feb6e2d805323a1ae4a1b62b40a0a403e9abc7feb4cea12ef4847392e5826890",
+        "projection_id": "retrieval:feb6e2d805323a1ae4a1b62b"
+      },
+      "first_owner_generation_id": "ingest:73fd40c305b63c202e9e5a7f",
+      "first_owner_manifest_digest": "sha256:73fd40c305b63c202e9e5a7f014c6377ad892c54326558754a067d126bb3f2fa",
+      "legacy_pointer_digest": null,
+      "migration_digest": "sha256:a38598a1b504984751a8bf2687c6c887f5a146cce8cb435663ffb10abe80ee32",
+      "migration_file": "ingest-migration-a38598a1b504984751a8bf2687c6c887f5a146cce8cb435663ffb10abe80ee32.json",
+      "state": "active",
+      "tombstone_digest": "sha256:1922c94bd4afc3e25daaa9c90981f1f3a27ab806f3a0f3c82ba223e6a36018cb",
+      "witness_digest": "sha256:445c4766c0e46dd88c32a24c6ae32a4a3b31dda0f2c04b9d1ed62d017aa71e58"
+    },
+    "authority_lock": {
+      "contract_version": "gkos-ingest-authority-lock/1.0.0-draft.1",
+      "lock_id": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+      "process_id": 4242,
+      "prior_active": null,
+      "prior_authority_digest": "sha256:a69d8fdfddc663656425a813cf0a6ae0c59bb65e021f246700bc5d8d4a18811f",
+      "operation": "activation",
+      "target": {
+        "inner": {
+          "database_file": "retrieval-feb6e2d805323a1ae4a1b62b40a0a403e9abc7feb4cea12ef4847392e5826890.sqlite",
+          "manifest_digest": "sha256:d53bc2e886e9fbcddbbff9f7dd60063d087d8c1f7d99c1a1f73dc7294700ceb9",
+          "projection_digest": "sha256:feb6e2d805323a1ae4a1b62b40a0a403e9abc7feb4cea12ef4847392e5826890",
+          "projection_id": "retrieval:feb6e2d805323a1ae4a1b62b"
+        },
+        "kind": "activation",
+        "owner_generation_id": "ingest:73fd40c305b63c202e9e5a7f",
+        "owner_manifest_digest": "sha256:73fd40c305b63c202e9e5a7f014c6377ad892c54326558754a067d126bb3f2fa",
+        "pointer_digest": "sha256:dce69d38a104178f50844e3765f34ea520b2fcf4579e7177607f447cd7c963db"
+      },
+      "lock_digest": "sha256:58cdbf74ffba0fbbf1a92a1cc54d5a0cd9fae75c9d662a15830747e08ef142b9"
+    },
+    "attempt_status": {
+      "contract_version": "gkos-ingest-attempt-status/1.0.0-draft.1",
+      "state": "blocked",
+      "availability": "stale",
+      "prior_active": {
+        "inner": {
+          "database_file": "retrieval-feb6e2d805323a1ae4a1b62b40a0a403e9abc7feb4cea12ef4847392e5826890.sqlite",
+          "manifest_digest": "sha256:d53bc2e886e9fbcddbbff9f7dd60063d087d8c1f7d99c1a1f73dc7294700ceb9",
+          "projection_digest": "sha256:feb6e2d805323a1ae4a1b62b40a0a403e9abc7feb4cea12ef4847392e5826890",
+          "projection_id": "retrieval:feb6e2d805323a1ae4a1b62b"
+        },
+        "kind": "ingest",
+        "owner_generation_id": "ingest:73fd40c305b63c202e9e5a7f",
+        "owner_manifest_digest": "sha256:73fd40c305b63c202e9e5a7f014c6377ad892c54326558754a067d126bb3f2fa",
+        "pointer_digest": "sha256:dce69d38a104178f50844e3765f34ea520b2fcf4579e7177607f447cd7c963db"
+      },
+      "attempt_digest": "sha256:f2bab93af4690a0d30b67ecf37ce032e4ffb19eecb3c2e56b1fe15867bfab80a",
+      "effective_profile_digest": "sha256:9ab3b07da4cdfb584c2766762a32dc71653dffd87537ad0a4c9190e3a69015c5",
+      "observation_snapshot_digest": "sha256:af6676addf1e59b13f4c5335ff0a277eca950fbf3102cc9543c077587fd4b4df",
+      "status_digest": "sha256:ae477c39c50def62223f044869c174462c249d7d790377d7154da9042759eb00"
+    },
+    "index_results": [
+      {
+        "contract_version": "gkos-ingest-index-result/1.0.0-draft.1",
+        "status": "published",
+        "mode": "strict",
+        "summary": {
+          "findings": {
+            "critical": 0,
+            "error": 0,
+            "info": 0,
+            "warning": 1
+          },
+          "observed_source_count": 1,
+          "rejected_source_count": 0,
+          "valid_source_count": 1
+        },
+        "active": {
+          "inner": {
+            "database_file": "retrieval-feb6e2d805323a1ae4a1b62b40a0a403e9abc7feb4cea12ef4847392e5826890.sqlite",
+            "manifest_digest": "sha256:d53bc2e886e9fbcddbbff9f7dd60063d087d8c1f7d99c1a1f73dc7294700ceb9",
+            "projection_digest": "sha256:feb6e2d805323a1ae4a1b62b40a0a403e9abc7feb4cea12ef4847392e5826890",
+            "projection_id": "retrieval:feb6e2d805323a1ae4a1b62b"
+          },
+          "kind": "ingest",
+          "owner_generation_id": "ingest:73fd40c305b63c202e9e5a7f",
+          "owner_manifest_digest": "sha256:73fd40c305b63c202e9e5a7f014c6377ad892c54326558754a067d126bb3f2fa",
+          "pointer_digest": "sha256:dce69d38a104178f50844e3765f34ea520b2fcf4579e7177607f447cd7c963db"
+        },
+        "blocked_attempt": null
+      },
+      {
+        "contract_version": "gkos-ingest-index-result/1.0.0-draft.1",
+        "status": "published",
+        "mode": "non_strict",
+        "summary": {
+          "findings": {
+            "critical": 0,
+            "error": 0,
+            "info": 0,
+            "warning": 1
+          },
+          "observed_source_count": 1,
+          "rejected_source_count": 0,
+          "valid_source_count": 1
+        },
+        "active": {
+          "inner": {
+            "database_file": "retrieval-d39d221fd8248095df4224599d7bf427423dd37023861159354659c28610a2a0.sqlite",
+            "manifest_digest": "sha256:d055dd99f3196dc23a8035898b782c46d14544614438cc406c1963ffb36c7083",
+            "projection_digest": "sha256:d39d221fd8248095df4224599d7bf427423dd37023861159354659c28610a2a0",
+            "projection_id": "retrieval:d39d221fd8248095df422459"
+          },
+          "kind": "ingest",
+          "owner_generation_id": "ingest:bd19aa1f3a96d58261ae0489",
+          "owner_manifest_digest": "sha256:bd19aa1f3a96d58261ae04893aab636158fd9101a9b1edf1afdde9f36e7d7d4f",
+          "pointer_digest": "sha256:8951fb8644eeaae81188ef6e2fe45323854c8a962a3c11170cb313e755599da6"
+        },
+        "blocked_attempt": null
+      },
+      {
+        "contract_version": "gkos-ingest-index-result/1.0.0-draft.1",
+        "status": "published_with_rejections",
+        "mode": "non_strict",
+        "summary": {
+          "findings": {
+            "critical": 0,
+            "error": 4,
+            "info": 0,
+            "warning": 3
+          },
+          "observed_source_count": 2,
+          "rejected_source_count": 1,
+          "valid_source_count": 1
+        },
+        "active": {
+          "inner": {
+            "database_file": "retrieval-feb6e2d805323a1ae4a1b62b40a0a403e9abc7feb4cea12ef4847392e5826890.sqlite",
+            "manifest_digest": "sha256:d53bc2e886e9fbcddbbff9f7dd60063d087d8c1f7d99c1a1f73dc7294700ceb9",
+            "projection_digest": "sha256:feb6e2d805323a1ae4a1b62b40a0a403e9abc7feb4cea12ef4847392e5826890",
+            "projection_id": "retrieval:feb6e2d805323a1ae4a1b62b"
+          },
+          "kind": "ingest",
+          "owner_generation_id": "ingest:73fd40c305b63c202e9e5a7f",
+          "owner_manifest_digest": "sha256:73fd40c305b63c202e9e5a7f014c6377ad892c54326558754a067d126bb3f2fa",
+          "pointer_digest": "sha256:dce69d38a104178f50844e3765f34ea520b2fcf4579e7177607f447cd7c963db"
+        },
+        "blocked_attempt": null
+      },
+      {
+        "contract_version": "gkos-ingest-index-result/1.0.0-draft.1",
+        "status": "blocked_strict",
+        "mode": "strict",
+        "summary": {
+          "findings": {
+            "critical": 0,
+            "error": 4,
+            "info": 0,
+            "warning": 2
+          },
+          "observed_source_count": 1,
+          "rejected_source_count": 1,
+          "valid_source_count": 0
+        },
+        "active": {
+          "inner": {
+            "database_file": "retrieval-feb6e2d805323a1ae4a1b62b40a0a403e9abc7feb4cea12ef4847392e5826890.sqlite",
+            "manifest_digest": "sha256:d53bc2e886e9fbcddbbff9f7dd60063d087d8c1f7d99c1a1f73dc7294700ceb9",
+            "projection_digest": "sha256:feb6e2d805323a1ae4a1b62b40a0a403e9abc7feb4cea12ef4847392e5826890",
+            "projection_id": "retrieval:feb6e2d805323a1ae4a1b62b"
+          },
+          "kind": "ingest",
+          "owner_generation_id": "ingest:73fd40c305b63c202e9e5a7f",
+          "owner_manifest_digest": "sha256:73fd40c305b63c202e9e5a7f014c6377ad892c54326558754a067d126bb3f2fa",
+          "pointer_digest": "sha256:dce69d38a104178f50844e3765f34ea520b2fcf4579e7177607f447cd7c963db"
+        },
+        "blocked_attempt": {
+          "attempt_digest": "sha256:f2bab93af4690a0d30b67ecf37ce032e4ffb19eecb3c2e56b1fe15867bfab80a",
+          "status_digest": "sha256:ae477c39c50def62223f044869c174462c249d7d790377d7154da9042759eb00"
+        }
+      },
+      {
+        "contract_version": "gkos-ingest-index-result/1.0.0-draft.1",
+        "status": "operational_failure",
+        "mode": "non_strict",
+        "summary": null,
+        "active": null,
+        "blocked_attempt": null
+      },
+      {
+        "contract_version": "gkos-ingest-index-result/1.0.0-draft.1",
+        "status": "operational_failure",
+        "mode": "strict",
+        "summary": null,
+        "active": null,
+        "blocked_attempt": null
+      }
+    ]
+  },
+  "union_matrix": {
+    "authority_witnesses": [
+      {
+        "activation_root_digest": "sha256:91e02da08d6779cce67860da30715cdac12b0f2a840f35339bdd5cd9dec4af31",
+        "active_pointer_digest": "sha256:dce69d38a104178f50844e3765f34ea520b2fcf4579e7177607f447cd7c963db",
+        "authority_lock_digest": "sha256:58cdbf74ffba0fbbf1a92a1cc54d5a0cd9fae75c9d662a15830747e08ef142b9",
+        "contract_version": "gkos-ingest-authority-witness/1.0.0-draft.1",
+        "first_inner": {
+          "database_file": "retrieval-feb6e2d805323a1ae4a1b62b40a0a403e9abc7feb4cea12ef4847392e5826890.sqlite",
+          "manifest_digest": "sha256:d53bc2e886e9fbcddbbff9f7dd60063d087d8c1f7d99c1a1f73dc7294700ceb9",
+          "projection_digest": "sha256:feb6e2d805323a1ae4a1b62b40a0a403e9abc7feb4cea12ef4847392e5826890",
+          "projection_id": "retrieval:feb6e2d805323a1ae4a1b62b"
+        },
+        "first_owner_generation_id": "ingest:73fd40c305b63c202e9e5a7f",
+        "first_owner_manifest_digest": "sha256:73fd40c305b63c202e9e5a7f014c6377ad892c54326558754a067d126bb3f2fa",
+        "legacy_pointer_digest": null,
+        "migration_digest": "sha256:a38598a1b504984751a8bf2687c6c887f5a146cce8cb435663ffb10abe80ee32",
+        "migration_file": "ingest-migration-a38598a1b504984751a8bf2687c6c887f5a146cce8cb435663ffb10abe80ee32.json",
+        "state": "activating",
+        "tombstone_digest": "sha256:1922c94bd4afc3e25daaa9c90981f1f3a27ab806f3a0f3c82ba223e6a36018cb",
+        "witness_digest": "sha256:2329f1d6683b2e29ad3bfbffb66c0ed2bf2928d085f6604bae734c7dabb5de7f"
+      },
+      {
+        "activation_root_digest": "sha256:91e02da08d6779cce67860da30715cdac12b0f2a840f35339bdd5cd9dec4af31",
+        "active_pointer_digest": "sha256:dce69d38a104178f50844e3765f34ea520b2fcf4579e7177607f447cd7c963db",
+        "authority_lock_digest": "sha256:58cdbf74ffba0fbbf1a92a1cc54d5a0cd9fae75c9d662a15830747e08ef142b9",
+        "contract_version": "gkos-ingest-authority-witness/1.0.0-draft.1",
+        "first_inner": {
+          "database_file": "retrieval-feb6e2d805323a1ae4a1b62b40a0a403e9abc7feb4cea12ef4847392e5826890.sqlite",
+          "manifest_digest": "sha256:d53bc2e886e9fbcddbbff9f7dd60063d087d8c1f7d99c1a1f73dc7294700ceb9",
+          "projection_digest": "sha256:feb6e2d805323a1ae4a1b62b40a0a403e9abc7feb4cea12ef4847392e5826890",
+          "projection_id": "retrieval:feb6e2d805323a1ae4a1b62b"
+        },
+        "first_owner_generation_id": "ingest:73fd40c305b63c202e9e5a7f",
+        "first_owner_manifest_digest": "sha256:73fd40c305b63c202e9e5a7f014c6377ad892c54326558754a067d126bb3f2fa",
+        "legacy_pointer_digest": null,
+        "migration_digest": "sha256:a38598a1b504984751a8bf2687c6c887f5a146cce8cb435663ffb10abe80ee32",
+        "migration_file": "ingest-migration-a38598a1b504984751a8bf2687c6c887f5a146cce8cb435663ffb10abe80ee32.json",
+        "state": "active",
+        "tombstone_digest": "sha256:1922c94bd4afc3e25daaa9c90981f1f3a27ab806f3a0f3c82ba223e6a36018cb",
+        "witness_digest": "sha256:445c4766c0e46dd88c32a24c6ae32a4a3b31dda0f2c04b9d1ed62d017aa71e58"
+      }
+    ],
+    "authority_locks": [
+      {
+        "contract_version": "gkos-ingest-authority-lock/1.0.0-draft.1",
+        "lock_id": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+        "process_id": 4242,
+        "prior_active": null,
+        "prior_authority_digest": "sha256:a69d8fdfddc663656425a813cf0a6ae0c59bb65e021f246700bc5d8d4a18811f",
+        "operation": "preflight",
+        "target": null,
+        "lock_digest": "sha256:d869bdba007b808c1877ca91586ad75a8397fdde4e8abae1f7913b383c6b0076"
+      },
+      {
+        "contract_version": "gkos-ingest-authority-lock/1.0.0-draft.1",
+        "lock_id": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+        "process_id": 4242,
+        "prior_active": {
+          "kind": "legacy",
+          "pointer_digest": "sha256:70f3993dbcc932cc0888f4889f99033abe1525ffbee65cfa606752375a8fec2e",
+          "projection_digest": "sha256:34964e3c36e7f7efbc7cf1745d1784463aa81c7009bc48ea9c35b73bcaccb15c",
+          "projection_id": "retrieval:34964e3c36e7f7efbc7cf174"
+        },
+        "prior_authority_digest": "sha256:7a540c9e74e91f6f0a2b6620af17fe330b351e5cc2ba5996db34ee0e645db78f",
+        "operation": "preflight",
+        "target": null,
+        "lock_digest": "sha256:9e5b822545e54f0aa842a8840bdb709cff709fd4e09153e61542be723ed42e37"
+      },
+      {
+        "contract_version": "gkos-ingest-authority-lock/1.0.0-draft.1",
+        "lock_id": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+        "process_id": 4242,
+        "prior_active": null,
+        "prior_authority_digest": "sha256:a69d8fdfddc663656425a813cf0a6ae0c59bb65e021f246700bc5d8d4a18811f",
+        "operation": "activation",
+        "target": {
+          "inner": {
+            "database_file": "retrieval-feb6e2d805323a1ae4a1b62b40a0a403e9abc7feb4cea12ef4847392e5826890.sqlite",
+            "manifest_digest": "sha256:d53bc2e886e9fbcddbbff9f7dd60063d087d8c1f7d99c1a1f73dc7294700ceb9",
+            "projection_digest": "sha256:feb6e2d805323a1ae4a1b62b40a0a403e9abc7feb4cea12ef4847392e5826890",
+            "projection_id": "retrieval:feb6e2d805323a1ae4a1b62b"
+          },
+          "kind": "activation",
+          "owner_generation_id": "ingest:73fd40c305b63c202e9e5a7f",
+          "owner_manifest_digest": "sha256:73fd40c305b63c202e9e5a7f014c6377ad892c54326558754a067d126bb3f2fa",
+          "pointer_digest": "sha256:dce69d38a104178f50844e3765f34ea520b2fcf4579e7177607f447cd7c963db"
+        },
+        "lock_digest": "sha256:58cdbf74ffba0fbbf1a92a1cc54d5a0cd9fae75c9d662a15830747e08ef142b9"
+      },
+      {
+        "contract_version": "gkos-ingest-authority-lock/1.0.0-draft.1",
+        "lock_id": "sha256:4444444444444444444444444444444444444444444444444444444444444444",
+        "process_id": 4242,
+        "prior_active": {
+          "inner": {
+            "database_file": "retrieval-feb6e2d805323a1ae4a1b62b40a0a403e9abc7feb4cea12ef4847392e5826890.sqlite",
+            "manifest_digest": "sha256:d53bc2e886e9fbcddbbff9f7dd60063d087d8c1f7d99c1a1f73dc7294700ceb9",
+            "projection_digest": "sha256:feb6e2d805323a1ae4a1b62b40a0a403e9abc7feb4cea12ef4847392e5826890",
+            "projection_id": "retrieval:feb6e2d805323a1ae4a1b62b"
+          },
+          "kind": "ingest",
+          "owner_generation_id": "ingest:73fd40c305b63c202e9e5a7f",
+          "owner_manifest_digest": "sha256:73fd40c305b63c202e9e5a7f014c6377ad892c54326558754a067d126bb3f2fa",
+          "pointer_digest": "sha256:dce69d38a104178f50844e3765f34ea520b2fcf4579e7177607f447cd7c963db"
+        },
+        "prior_authority_digest": "sha256:3c2447332ff49958db2e61fd45fba835d498f8ac3ebed6d4a0799c26f543efa7",
+        "operation": "blocked",
+        "target": {
+          "kind": "blocked",
+          "status_digest": "sha256:ae477c39c50def62223f044869c174462c249d7d790377d7154da9042759eb00"
+        },
+        "lock_digest": "sha256:5321a215a3149c188635ee7ee33ad9f1c55b06b5d85684b2636747430da47a96"
+      }
+    ],
+    "prior_active": [
+      null,
+      {
+        "kind": "legacy",
+        "projection_id": "retrieval:34964e3c36e7f7efbc7cf174",
+        "projection_digest": "sha256:34964e3c36e7f7efbc7cf1745d1784463aa81c7009bc48ea9c35b73bcaccb15c",
+        "pointer_digest": "sha256:70f3993dbcc932cc0888f4889f99033abe1525ffbee65cfa606752375a8fec2e"
+      },
+      {
+        "kind": "ingest",
+        "owner_generation_id": "ingest:73fd40c305b63c202e9e5a7f",
+        "owner_manifest_digest": "sha256:73fd40c305b63c202e9e5a7f014c6377ad892c54326558754a067d126bb3f2fa",
+        "inner": {
+          "database_file": "retrieval-feb6e2d805323a1ae4a1b62b40a0a403e9abc7feb4cea12ef4847392e5826890.sqlite",
+          "manifest_digest": "sha256:d53bc2e886e9fbcddbbff9f7dd60063d087d8c1f7d99c1a1f73dc7294700ceb9",
+          "projection_digest": "sha256:feb6e2d805323a1ae4a1b62b40a0a403e9abc7feb4cea12ef4847392e5826890",
+          "projection_id": "retrieval:feb6e2d805323a1ae4a1b62b"
+        },
+        "pointer_digest": "sha256:dce69d38a104178f50844e3765f34ea520b2fcf4579e7177607f447cd7c963db"
+      }
+    ],
+    "attempt_statuses": [
+      {
+        "contract_version": "gkos-ingest-attempt-status/1.0.0-draft.1",
+        "state": "blocked",
+        "availability": "unavailable",
+        "prior_active": null,
+        "attempt_digest": "sha256:f2bab93af4690a0d30b67ecf37ce032e4ffb19eecb3c2e56b1fe15867bfab80a",
+        "effective_profile_digest": "sha256:9ab3b07da4cdfb584c2766762a32dc71653dffd87537ad0a4c9190e3a69015c5",
+        "observation_snapshot_digest": "sha256:af6676addf1e59b13f4c5335ff0a277eca950fbf3102cc9543c077587fd4b4df",
+        "status_digest": "sha256:edda64fcf0c2149fd2a892003f5a11aa0a8c8201bb41c5ec643e66ee3a3c23bd"
+      },
+      {
+        "contract_version": "gkos-ingest-attempt-status/1.0.0-draft.1",
+        "state": "blocked",
+        "availability": "stale",
+        "prior_active": {
+          "kind": "legacy",
+          "pointer_digest": "sha256:70f3993dbcc932cc0888f4889f99033abe1525ffbee65cfa606752375a8fec2e",
+          "projection_digest": "sha256:34964e3c36e7f7efbc7cf1745d1784463aa81c7009bc48ea9c35b73bcaccb15c",
+          "projection_id": "retrieval:34964e3c36e7f7efbc7cf174"
+        },
+        "attempt_digest": "sha256:f2bab93af4690a0d30b67ecf37ce032e4ffb19eecb3c2e56b1fe15867bfab80a",
+        "effective_profile_digest": "sha256:9ab3b07da4cdfb584c2766762a32dc71653dffd87537ad0a4c9190e3a69015c5",
+        "observation_snapshot_digest": "sha256:af6676addf1e59b13f4c5335ff0a277eca950fbf3102cc9543c077587fd4b4df",
+        "status_digest": "sha256:4845c18b13d7d93f61fb8cb1d931de9bacf2844b927184e779e392be1a7c83fe"
+      },
+      {
+        "contract_version": "gkos-ingest-attempt-status/1.0.0-draft.1",
+        "state": "blocked",
+        "availability": "stale",
+        "prior_active": {
+          "inner": {
+            "database_file": "retrieval-feb6e2d805323a1ae4a1b62b40a0a403e9abc7feb4cea12ef4847392e5826890.sqlite",
+            "manifest_digest": "sha256:d53bc2e886e9fbcddbbff9f7dd60063d087d8c1f7d99c1a1f73dc7294700ceb9",
+            "projection_digest": "sha256:feb6e2d805323a1ae4a1b62b40a0a403e9abc7feb4cea12ef4847392e5826890",
+            "projection_id": "retrieval:feb6e2d805323a1ae4a1b62b"
+          },
+          "kind": "ingest",
+          "owner_generation_id": "ingest:73fd40c305b63c202e9e5a7f",
+          "owner_manifest_digest": "sha256:73fd40c305b63c202e9e5a7f014c6377ad892c54326558754a067d126bb3f2fa",
+          "pointer_digest": "sha256:dce69d38a104178f50844e3765f34ea520b2fcf4579e7177607f447cd7c963db"
+        },
+        "attempt_digest": "sha256:f2bab93af4690a0d30b67ecf37ce032e4ffb19eecb3c2e56b1fe15867bfab80a",
+        "effective_profile_digest": "sha256:9ab3b07da4cdfb584c2766762a32dc71653dffd87537ad0a4c9190e3a69015c5",
+        "observation_snapshot_digest": "sha256:af6676addf1e59b13f4c5335ff0a277eca950fbf3102cc9543c077587fd4b4df",
+        "status_digest": "sha256:ae477c39c50def62223f044869c174462c249d7d790377d7154da9042759eb00"
+      }
+    ],
+    "migrations": [
+      {
+        "contract_version": "gkos-ingest-migration/1.0.0-draft.1",
+        "target_owner_generation_id": "ingest:73fd40c305b63c202e9e5a7f",
+        "target_owner_manifest_digest": "sha256:73fd40c305b63c202e9e5a7f014c6377ad892c54326558754a067d126bb3f2fa",
+        "legacy_pointer": null,
+        "legacy_pointer_digest": null,
+        "migration_digest": "sha256:a38598a1b504984751a8bf2687c6c887f5a146cce8cb435663ffb10abe80ee32"
+      },
+      {
+        "contract_version": "gkos-ingest-migration/1.0.0-draft.1",
+        "target_owner_generation_id": "ingest:73fd40c305b63c202e9e5a7f",
+        "target_owner_manifest_digest": "sha256:73fd40c305b63c202e9e5a7f014c6377ad892c54326558754a067d126bb3f2fa",
+        "legacy_pointer": {
+          "database_file": "retrieval-34964e3c36e7f7efbc7cf1745d1784463aa81c7009bc48ea9c35b73bcaccb15c.sqlite",
+          "manifest": {
+            "candidate_chunk_count": 1,
+            "candidate_declaration_count": 0,
+            "candidate_source_count": 1,
+            "chunker_version": "gkos-heading-chunker/1",
+            "configuration_digest": "sha256:604bc7b760a834c1f858ea668a073bbabbeccc14765f3205e09a2622a2b773ef",
+            "contract_version": "gkos-retrieval/1.0.0-draft.2",
+            "embedding_dimensions": null,
+            "embedding_eligible_candidate_chunk_count": 0,
+            "embedding_model_id": null,
+            "embedding_provider_id": null,
+            "engine_version": "2.1.2",
+            "gkx_projection_profile": "gkx-2.3-validating-projection",
+            "gkx_standard_commit": "a2a2a6ca5c4dac32c6d9dc985ed7460f5f4350c6",
+            "lexical_backend": "sqlite_lexical_scan",
+            "policy_digest": "sha256:f5b9d94c52105db8da71685c5cc2c9a19aa0e5a3d3b8e1af947509fdc6f56878",
+            "projection_digest": "sha256:34964e3c36e7f7efbc7cf1745d1784463aa81c7009bc48ea9c35b73bcaccb15c",
+            "projection_id": "retrieval:34964e3c36e7f7efbc7cf174",
+            "projection_schema_version": 3,
+            "provenance_contract_version": "gkos-retrieval-provenance/1.0.0-draft.1",
+            "represented_candidate_source_count": 1,
+            "source_snapshot_digest": "sha256:925ab1b2109f70a9ede7417294cfe9ec219722d402780475cf2538dc7c307b39",
+            "tokenizer_version": "gkos-ascii-whitespace/1",
+            "vault_id": "vault:ingest-storage-fixture"
+          }
+        },
+        "legacy_pointer_digest": "sha256:70f3993dbcc932cc0888f4889f99033abe1525ffbee65cfa606752375a8fec2e",
+        "migration_digest": "sha256:148c5658b7d26bdc716c86340afad927159ece5ef70d3b646cdba2f743afa652"
+      }
+    ],
+    "index_results": [
+      {
+        "contract_version": "gkos-ingest-index-result/1.0.0-draft.1",
+        "status": "published",
+        "mode": "non_strict",
+        "summary": {
+          "findings": {
+            "critical": 0,
+            "error": 0,
+            "info": 0,
+            "warning": 1
+          },
+          "observed_source_count": 1,
+          "rejected_source_count": 0,
+          "valid_source_count": 1
+        },
+        "active": {
+          "inner": {
+            "database_file": "retrieval-d39d221fd8248095df4224599d7bf427423dd37023861159354659c28610a2a0.sqlite",
+            "manifest_digest": "sha256:d055dd99f3196dc23a8035898b782c46d14544614438cc406c1963ffb36c7083",
+            "projection_digest": "sha256:d39d221fd8248095df4224599d7bf427423dd37023861159354659c28610a2a0",
+            "projection_id": "retrieval:d39d221fd8248095df422459"
+          },
+          "kind": "ingest",
+          "owner_generation_id": "ingest:bd19aa1f3a96d58261ae0489",
+          "owner_manifest_digest": "sha256:bd19aa1f3a96d58261ae04893aab636158fd9101a9b1edf1afdde9f36e7d7d4f",
+          "pointer_digest": "sha256:8951fb8644eeaae81188ef6e2fe45323854c8a962a3c11170cb313e755599da6"
+        },
+        "blocked_attempt": null
+      },
+      {
+        "contract_version": "gkos-ingest-index-result/1.0.0-draft.1",
+        "status": "published",
+        "mode": "strict",
+        "summary": {
+          "findings": {
+            "critical": 0,
+            "error": 0,
+            "info": 0,
+            "warning": 1
+          },
+          "observed_source_count": 1,
+          "rejected_source_count": 0,
+          "valid_source_count": 1
+        },
+        "active": {
+          "inner": {
+            "database_file": "retrieval-feb6e2d805323a1ae4a1b62b40a0a403e9abc7feb4cea12ef4847392e5826890.sqlite",
+            "manifest_digest": "sha256:d53bc2e886e9fbcddbbff9f7dd60063d087d8c1f7d99c1a1f73dc7294700ceb9",
+            "projection_digest": "sha256:feb6e2d805323a1ae4a1b62b40a0a403e9abc7feb4cea12ef4847392e5826890",
+            "projection_id": "retrieval:feb6e2d805323a1ae4a1b62b"
+          },
+          "kind": "ingest",
+          "owner_generation_id": "ingest:73fd40c305b63c202e9e5a7f",
+          "owner_manifest_digest": "sha256:73fd40c305b63c202e9e5a7f014c6377ad892c54326558754a067d126bb3f2fa",
+          "pointer_digest": "sha256:dce69d38a104178f50844e3765f34ea520b2fcf4579e7177607f447cd7c963db"
+        },
+        "blocked_attempt": null
+      },
+      {
+        "contract_version": "gkos-ingest-index-result/1.0.0-draft.1",
+        "status": "published_with_rejections",
+        "mode": "non_strict",
+        "summary": {
+          "findings": {
+            "critical": 0,
+            "error": 4,
+            "info": 0,
+            "warning": 3
+          },
+          "observed_source_count": 2,
+          "rejected_source_count": 1,
+          "valid_source_count": 1
+        },
+        "active": {
+          "inner": {
+            "database_file": "retrieval-feb6e2d805323a1ae4a1b62b40a0a403e9abc7feb4cea12ef4847392e5826890.sqlite",
+            "manifest_digest": "sha256:d53bc2e886e9fbcddbbff9f7dd60063d087d8c1f7d99c1a1f73dc7294700ceb9",
+            "projection_digest": "sha256:feb6e2d805323a1ae4a1b62b40a0a403e9abc7feb4cea12ef4847392e5826890",
+            "projection_id": "retrieval:feb6e2d805323a1ae4a1b62b"
+          },
+          "kind": "ingest",
+          "owner_generation_id": "ingest:73fd40c305b63c202e9e5a7f",
+          "owner_manifest_digest": "sha256:73fd40c305b63c202e9e5a7f014c6377ad892c54326558754a067d126bb3f2fa",
+          "pointer_digest": "sha256:dce69d38a104178f50844e3765f34ea520b2fcf4579e7177607f447cd7c963db"
+        },
+        "blocked_attempt": null
+      },
+      {
+        "contract_version": "gkos-ingest-index-result/1.0.0-draft.1",
+        "status": "blocked_strict",
+        "mode": "strict",
+        "summary": {
+          "findings": {
+            "critical": 0,
+            "error": 4,
+            "info": 0,
+            "warning": 2
+          },
+          "observed_source_count": 1,
+          "rejected_source_count": 1,
+          "valid_source_count": 0
+        },
+        "active": {
+          "inner": {
+            "database_file": "retrieval-feb6e2d805323a1ae4a1b62b40a0a403e9abc7feb4cea12ef4847392e5826890.sqlite",
+            "manifest_digest": "sha256:d53bc2e886e9fbcddbbff9f7dd60063d087d8c1f7d99c1a1f73dc7294700ceb9",
+            "projection_digest": "sha256:feb6e2d805323a1ae4a1b62b40a0a403e9abc7feb4cea12ef4847392e5826890",
+            "projection_id": "retrieval:feb6e2d805323a1ae4a1b62b"
+          },
+          "kind": "ingest",
+          "owner_generation_id": "ingest:73fd40c305b63c202e9e5a7f",
+          "owner_manifest_digest": "sha256:73fd40c305b63c202e9e5a7f014c6377ad892c54326558754a067d126bb3f2fa",
+          "pointer_digest": "sha256:dce69d38a104178f50844e3765f34ea520b2fcf4579e7177607f447cd7c963db"
+        },
+        "blocked_attempt": {
+          "attempt_digest": "sha256:f2bab93af4690a0d30b67ecf37ce032e4ffb19eecb3c2e56b1fe15867bfab80a",
+          "status_digest": "sha256:ae477c39c50def62223f044869c174462c249d7d790377d7154da9042759eb00"
+        }
+      },
+      {
+        "contract_version": "gkos-ingest-index-result/1.0.0-draft.1",
+        "status": "operational_failure",
+        "mode": "non_strict",
+        "summary": null,
+        "active": null,
+        "blocked_attempt": null
+      },
+      {
+        "contract_version": "gkos-ingest-index-result/1.0.0-draft.1",
+        "status": "operational_failure",
+        "mode": "strict",
+        "summary": null,
+        "active": null,
+        "blocked_attempt": null
+      }
+    ]
+  },
+  "safe_inner_amendment": {
+    "required_in": [
+      "active_pointer.inner",
+      "activation_root.first_inner",
+      "authority_witness.first_inner",
+      "authority_lock.target.inner",
+      "prior_active.ingest.inner"
+    ],
+    "fields": [
+      "database_file",
+      "manifest_digest",
+      "projection_id",
+      "projection_digest"
+    ],
+    "owner_plane_fields_forbidden": [
+      "validation_result",
+      "rejection_journal",
+      "normalized_profile",
+      "source_path"
+    ]
+  },
+  "lifecycle": {
+    "publication_order": [
+      "authority_lock_preflight",
+      "prepare_accepted_only_chunks",
+      "unactivated_inner",
+      "rejection_journal",
+      "owner_manifest",
+      "activation_intent",
+      "migration",
+      "activation_root",
+      "witness_activating",
+      "legacy_tombstone",
+      "active_ingest_pointer",
+      "witness_active",
+      "exact_target_finalize"
+    ],
+    "irreversible_boundary": "activation_root",
+    "generic_release_before_boundary": "exact_prior_only",
+    "generic_release_at_or_after_boundary": "reject_and_retain_lock",
+    "stale_recovery": "exclusive hardlink claim; exact prior or exact bound target only",
+    "legacy_fallback": "only before activation_root"
+  },
+  "semantic_negative_matrix": [
+    {
+      "case": "active_pointer_owner_id_binding",
+      "envelope": "active_pointer",
+      "mutation": "owner_generation_id",
+      "reseal": null,
+      "schema_outcome": "accept",
+      "semantic_code": "GKX_INGEST_ACTIVE_POINTER_BINDING_INVALID"
+    },
+    {
+      "case": "root_pointer_binding",
+      "envelope": "activation_root",
+      "mutation": "active_pointer_digest",
+      "reseal": "activation_root_digest",
+      "schema_outcome": "accept",
+      "semantic_code": "GKX_INGEST_ACTIVATION_ROOT_BINDING_INVALID"
+    },
+    {
+      "case": "witness_root_binding",
+      "envelope": "authority_witness",
+      "mutation": "activation_root_digest",
+      "reseal": "witness_digest",
+      "schema_outcome": "accept",
+      "semantic_code": "GKX_INGEST_AUTHORITY_WITNESS_BINDING_INVALID"
+    },
+    {
+      "case": "lock_target_pointer_binding",
+      "envelope": "authority_lock",
+      "mutation": "target.pointer_digest",
+      "reseal": "lock_digest",
+      "schema_outcome": "accept",
+      "semantic_code": "GKX_INGEST_AUTHORITY_LOCK_ACTIVATION_TARGET_INVALID"
+    },
+    {
+      "case": "attempt_preimage_binding",
+      "envelope": "attempt_status",
+      "mutation": "attempt_digest",
+      "reseal": "status_digest",
+      "schema_outcome": "accept",
+      "semantic_code": "GKX_INGEST_ATTEMPT_STATUS_ATTEMPT_DIGEST_INVALID"
+    },
+    {
+      "case": "journal_duplicate_observation",
+      "envelope": "rejection_journal",
+      "mutation": "duplicate_first_rejection",
+      "reseal": "rejection_journal_digest",
+      "schema_outcome": "reject",
+      "semantic_code": "GKX_INGEST_REJECTION_JOURNAL_MULTIPLICITY_INVALID"
+    },
+    {
+      "case": "owner_journal_coordinate",
+      "envelope": "owner_generation",
+      "mutation": "rejection_journal.rejection_journal_digest",
+      "reseal": "owner_manifest_digest_and_id",
+      "schema_outcome": "accept",
+      "semantic_code": "GKX_INGEST_OWNER_MANIFEST_JOURNAL_BINDING_INVALID"
+    },
+    {
+      "case": "legacy_database_projection_binding",
+      "envelope": "migration_with_legacy",
+      "mutation": "legacy_pointer.database_file",
+      "reseal": "migration_digest",
+      "schema_outcome": "reject",
+      "semantic_code": "GKX_INGEST_LEGACY_POINTER_BINDING_INVALID"
+    },
+    {
+      "case": "index_owner_plane_forbidden",
+      "envelope": "index_results.status=published,mode=strict",
+      "mutation": "add_validation_result",
+      "reseal": null,
+      "schema_outcome": "reject",
+      "semantic_code": "GKX_INGEST_INDEX_RESULT_FIELDS_INVALID"
+    },
+    {
+      "case": "index_blocked_status_context",
+      "envelope": "index_results.status=blocked_strict,mode=strict",
+      "mutation": "blocked_attempt.status_digest",
+      "reseal": null,
+      "schema_outcome": "accept",
+      "semantic_code": "GKX_INGEST_INDEX_RESULT_BLOCKED_INVALID"
+    }
+  ]
+}

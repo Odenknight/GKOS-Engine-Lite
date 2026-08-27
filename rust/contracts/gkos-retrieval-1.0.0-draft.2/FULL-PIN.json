@@ -1,0 +1,20 @@
+{
+  "reference_repository": "Odenknight/GKOS-Engine",
+  "reference_commit": "6e2df27d33ede62ee0d2e3cb7610df478a7d66ce",
+  "reference_package_version": "2.1.2",
+  "reference_state": "full_phase2_published_hosted_green",
+  "contract_version": "gkos-retrieval/1.0.0-draft.2",
+  "pin_kind": "exact_full_commit_and_frozen_file_sha256",
+  "publication_qualified": true,
+  "note": "Exact eight-file Phase 2 pack copied byte-for-byte from the signed, hosted-green Full implementation commit. Rust consumes only trusted host-supplied candidate envelopes and parser-owned receipts; it is never a second GKX parser, resolver, or identity authority.",
+  "files": {
+    "README.md": "sha256:cf983c2e6269a856aece443f9cf16c0fafbe024ebc00714154838c7e0a7618ec",
+    "chunk.schema.json": "sha256:d1ffd008bf360807d50494bc34610670732ee9fb61ed15fcd8f0aee7496a6fab",
+    "conformance-fixture.json": "sha256:eb4b77590ae3d113a129f5f9baa7adb77737789d3fc1dfbcd8e9aa6ec353ae61",
+    "contract.json": "sha256:203ba5d54e1eeecd88a4d706f0394f9b517667194bb78e4f197911ac0358d4d5",
+    "projection.schema.json": "sha256:97ae4481f3780536de4ba743fc0f7067f342f6ca8ce69b8a976ed1894a5ee753",
+    "provenance.schema.json": "sha256:bcad32df33e5fe3e28aa85f4674b7c9eec92bf6e05c14a7d8a1858808231fb84",
+    "result.schema.json": "sha256:a12f1ba4a25ab746425fc279425e92579812beb5879d1b8d778571539198eb97",
+    "stored-provenance.schema.json": "sha256:de3261a093e65cba11cc05490947c914a9a3f880183b0a1cf2f52ef1dfd5a861"
+  }
+}

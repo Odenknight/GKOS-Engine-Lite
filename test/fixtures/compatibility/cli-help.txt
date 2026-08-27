@@ -1,0 +1,22 @@
+okf-lite (GKOS-Engine-Lite) v1.1.3
+GKOS-Engine-Lite — OKF+ Notes (2.2) + Agent-Ready (flat 2.3) tooling
+
+A thin command-line wrapper around gkos-engine for individuals and small,
+everyday vaults of Markdown notes — no Obsidian required.
+
+Usage:
+  okf-lite validate <dir>                                  schema/identity/lineage diagnostics; non-zero exit on error
+  okf-lite assess   <dir> [--json]                         per-note documentation-quality scores/labels
+  okf-lite graph    <dir> -o <graph.json> [--watch]        canonical Kosmos graph (stable serialization)
+  okf-lite export graphiti <dir> --episodes <out.json> [--group-id <ns>]
+  okf-lite assist explain <note.md>                        explain an issue in plain language
+  okf-lite assist improve <note.md>                        suggest the most useful improvements
+  okf-lite assist repair <note.md>                         suggest missing or corrected details
+  okf-lite assist find-links <note.md>                     suggest related-note connections
+  okf-lite assist check-privacy <note.md>                  check whether privacy should be raised
+
+AI help is optional. It must be enabled locally, every suggestion is checked
+by GKOS, and your note is never changed automatically.
+
+See https://github.com/Odenknight/GKOS-Engine-Lite for docs, and
+https://github.com/Odenknight/GKOS-Engine for the full engine this depends on.

@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gkos.example/contracts/retrieval/gkos-retrieval-1.0.0-draft.1/chunk.schema.json",
+  "title": "GKOS retrieval chunk draft 1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["chunk_id", "source_id", "source_path", "source_digest", "heading_path", "heading_depth", "ordinal_within_source", "structural_position", "part_ordinal", "start_byte", "end_byte", "start_line", "end_line", "content_digest", "text", "token_count", "lineage_id", "valid_from", "valid_to", "supersedes", "superseded_by", "metadata"],
+  "properties": {
+    "chunk_id": { "$ref": "#/$defs/sha256" },
+    "source_id": { "type": "string", "format": "uuid" },
+    "source_path": { "type": "string", "minLength": 1 },
+    "source_digest": { "$ref": "#/$defs/sha256" },
+    "heading_path": { "type": "array", "items": { "type": "string" } },
+    "heading_depth": { "type": "integer", "minimum": 0, "maximum": 6 },
+    "ordinal_within_source": { "type": "integer", "minimum": 1 },
+    "structural_position": { "type": "string", "minLength": 1 },
+    "part_ordinal": { "type": "integer", "minimum": 1 },
+    "start_byte": { "type": "integer", "minimum": 0 },
+    "end_byte": { "type": "integer", "minimum": 0 },
+    "start_line": { "type": "integer", "minimum": 1 },
+    "end_line": { "type": "integer", "minimum": 1 },
+    "content_digest": { "$ref": "#/$defs/sha256" },
+    "text": { "type": "string" },
+    "token_count": { "type": "integer", "minimum": 0 },
+    "parent_chunk_id": { "$ref": "#/$defs/sha256" },
+    "lineage_id": { "type": ["string", "null"] },
+    "valid_from": { "type": ["string", "null"] },
+    "valid_to": { "type": ["string", "null"] },
+    "supersedes": { "type": "array", "items": { "type": "string" } },
+    "superseded_by": { "type": "array", "items": { "type": "string" } },
+    "metadata": { "type": "object" }
+  },
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" }
+  }
+}

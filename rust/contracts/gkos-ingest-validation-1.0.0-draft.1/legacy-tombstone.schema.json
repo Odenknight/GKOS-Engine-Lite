@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Odenknight/GKOS-Engine/contracts/ingest/gkos-ingest-validation-1.0.0-draft.1/legacy-tombstone.schema.json",
+  "title": "GKOS ingest permanent legacy-pointer tombstone draft 1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract_version", "target_owner_generation_id", "target_owner_manifest_digest",
+    "migration_file", "migration_digest", "tombstone_digest"
+  ],
+  "properties": {
+    "contract_version": { "const": "gkos-ingest-legacy-pointer-tombstone/1.0.0-draft.1" },
+    "target_owner_generation_id": { "$ref": "state-common.schema.json#/$defs/ownerGenerationId" },
+    "target_owner_manifest_digest": { "$ref": "state-common.schema.json#/$defs/sha256" },
+    "migration_file": { "type": "string", "pattern": "^ingest-migration-[0-9a-f]{64}\\.json$" },
+    "migration_digest": { "$ref": "state-common.schema.json#/$defs/sha256" },
+    "tombstone_digest": { "$ref": "state-common.schema.json#/$defs/sha256" }
+  }
+}

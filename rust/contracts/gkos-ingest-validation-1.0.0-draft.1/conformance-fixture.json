@@ -1,0 +1,884 @@
+{
+  "contract_version": "gkos-ingest-validation-conformance/1.0.0-draft.1",
+  "status": "frozen",
+  "frozen": true,
+  "executable": {
+    "input": {
+      "files": [
+        {
+          "relativePath": "same.md",
+          "name": "same.md",
+          "extension": "md",
+          "size": 210,
+          "createdTime": 1785542400000,
+          "content": "---\ngkx_version: \"2.3\"\nuid: \"018f0000-0000-7000-8000-000000000301\"\ntitle: \"Valid\"\ntype: \"policy\"\ncreated_at: \"2026-08-01T00:00:00Z\"\nepistemic_state: \"reported\"\nsensitivity: \"public\"\n---\n# Valid\nValidated body.\n",
+          "kind": "note"
+        },
+        {
+          "relativePath": "same.md",
+          "name": "same.md",
+          "extension": "md",
+          "size": 198,
+          "createdTime": 1785542400000,
+          "content": "---\ngkx_version: \"2.3\"\nuid: \"invalid-authored-uid\"\ntitle: \"Invalid\"\ntype: \"policy\"\ncreated_at: \"2026-08-01T00:00:00Z\"\nepistemic_state: \"reported\"\nsensitivity: \"public\"\n---\n# Invalid\nValidated body.\n",
+          "kind": "note"
+        }
+      ],
+      "folders": [],
+      "attachments": [],
+      "scan_rejections": [
+        {
+          "source_path": "unreadable.md",
+          "source_digest": null,
+          "size": null,
+          "classification": "rejected",
+          "reason_codes": [
+            "SOURCE_READ_FAILED",
+            "SOURCE_UTF8_INVALID"
+          ]
+        }
+      ]
+    },
+    "expected_result": {
+      "contract_version": "gkos-ingest-validation/1.0.0-draft.1",
+      "corpus_valid": false,
+      "findings": [
+        {
+          "classification": "intrinsic",
+          "code": "GKX-PROVENANCE-001",
+          "contract_version": "gkos-ingest-finding/1.0.0-draft.1",
+          "coordinate_basis": "missing_field",
+          "deterministic": true,
+          "field": "provenance.source_refs",
+          "finding_id": "sha256:c1ae48a2bc691f5a9be3c7fe06b24ffb77399b038fa421bd9a9eb561ccb46136",
+          "line": null,
+          "scope": "field",
+          "severity": "warning",
+          "source_observation_ordinal": 0,
+          "source_path": "same.md"
+        },
+        {
+          "classification": "intrinsic",
+          "code": "CANONICAL_SOURCE_UID_UNAVAILABLE",
+          "contract_version": "gkos-ingest-finding/1.0.0-draft.1",
+          "coordinate_basis": "frontmatter_field",
+          "deterministic": true,
+          "field": "uid",
+          "finding_id": "sha256:ae8e74d42853420317cfc100bf361ceafe4661f7ba2db30fb3ef5e65a6386873",
+          "line": 3,
+          "scope": "field",
+          "severity": "error",
+          "source_observation_ordinal": 1,
+          "source_path": "same.md"
+        },
+        {
+          "classification": "intrinsic",
+          "code": "GKX-IDENTITY-002",
+          "contract_version": "gkos-ingest-finding/1.0.0-draft.1",
+          "coordinate_basis": "frontmatter_field",
+          "deterministic": true,
+          "field": "uid",
+          "finding_id": "sha256:6d828f8146b839e9e121a8f097a48bdd7865cdfda771d30672513c10511aff14",
+          "line": 3,
+          "scope": "field",
+          "severity": "error",
+          "source_observation_ordinal": 1,
+          "source_path": "same.md"
+        },
+        {
+          "classification": "intrinsic",
+          "code": "GKX_INGEST_UID_REQUIRED",
+          "contract_version": "gkos-ingest-finding/1.0.0-draft.1",
+          "coordinate_basis": "frontmatter_field",
+          "deterministic": true,
+          "field": "uid",
+          "finding_id": "sha256:610eafc3e0512ad637e95f2f745935105d63342254a2dfcefa79469441e518dc",
+          "line": 3,
+          "scope": "field",
+          "severity": "error",
+          "source_observation_ordinal": 1,
+          "source_path": "same.md"
+        },
+        {
+          "classification": "intrinsic",
+          "code": "GKX-PROVENANCE-001",
+          "contract_version": "gkos-ingest-finding/1.0.0-draft.1",
+          "coordinate_basis": "missing_field",
+          "deterministic": true,
+          "field": "provenance.source_refs",
+          "finding_id": "sha256:e718b8c7425ffcff408a92b0d8f87f5ec9027394119dce2441536d6d5294a19d",
+          "line": null,
+          "scope": "field",
+          "severity": "warning",
+          "source_observation_ordinal": 1,
+          "source_path": "same.md"
+        },
+        {
+          "classification": "intrinsic",
+          "code": "SOURCE_READ_FAILED",
+          "contract_version": "gkos-ingest-finding/1.0.0-draft.1",
+          "coordinate_basis": "file_observation",
+          "deterministic": true,
+          "field": null,
+          "finding_id": "sha256:9a50960930a97a83c4f8a96ba337f4f413d89a606e47b11aa60e11f49e3e9ca5",
+          "line": null,
+          "scope": "file",
+          "severity": "error",
+          "source_observation_ordinal": 0,
+          "source_path": "unreadable.md"
+        },
+        {
+          "classification": "intrinsic",
+          "code": "SOURCE_UTF8_INVALID",
+          "contract_version": "gkos-ingest-finding/1.0.0-draft.1",
+          "coordinate_basis": "file_observation",
+          "deterministic": true,
+          "field": null,
+          "finding_id": "sha256:b1bc9ec15d40831a5f0ac7534e25d519f698898eea59e9d11fe04681362a4f06",
+          "line": null,
+          "scope": "file",
+          "severity": "error",
+          "source_observation_ordinal": 0,
+          "source_path": "unreadable.md"
+        }
+      ],
+      "ingest_intrinsic_valid": false,
+      "normalized_profile": {
+        "contract_version": "gkos-frontmatter-profile-effective/1.0.0-draft.1",
+        "engine_policy_hash": "sha256:2c2d8ec1e6481cbd4476bcc544c4fd19be03d8f21e317e44d889ea46e940ec8b",
+        "engine_policy_id": "policy:gkx23-default-v1",
+        "engine_projection_profile": "gkx-2.3-validating-projection",
+        "fields": [
+          {
+            "array_item_max_length": 262144,
+            "array_max_items": 262144,
+            "enum": null,
+            "extension": false,
+            "field": "aliases",
+            "integer_maximum": null,
+            "integer_minimum": null,
+            "max_length": null,
+            "min_length": null,
+            "required": false,
+            "type": "array<string>"
+          },
+          {
+            "array_item_max_length": null,
+            "array_max_items": null,
+            "enum": [
+              "approved",
+              "authored",
+              "derived",
+              "proposed"
+            ],
+            "extension": false,
+            "field": "authorship_origin",
+            "integer_maximum": null,
+            "integer_minimum": null,
+            "max_length": 262144,
+            "min_length": null,
+            "required": false,
+            "type": "string"
+          },
+          {
+            "array_item_max_length": null,
+            "array_max_items": null,
+            "enum": null,
+            "extension": false,
+            "field": "created_at",
+            "integer_maximum": null,
+            "integer_minimum": null,
+            "max_length": 262144,
+            "min_length": null,
+            "required": true,
+            "type": "string"
+          },
+          {
+            "array_item_max_length": null,
+            "array_max_items": null,
+            "enum": [
+              "accepted",
+              "contested",
+              "hypothesis",
+              "inferred",
+              "modeled",
+              "observation",
+              "refuted",
+              "reported",
+              "retracted",
+              "superseded",
+              "supported",
+              "unknown"
+            ],
+            "extension": false,
+            "field": "epistemic_state",
+            "integer_maximum": null,
+            "integer_minimum": null,
+            "max_length": 262144,
+            "min_length": null,
+            "required": true,
+            "type": "string"
+          },
+          {
+            "array_item_max_length": null,
+            "array_max_items": null,
+            "enum": [
+              "2.3"
+            ],
+            "extension": false,
+            "field": "gkx_version",
+            "integer_maximum": null,
+            "integer_minimum": null,
+            "max_length": 262144,
+            "min_length": null,
+            "required": true,
+            "type": "string"
+          },
+          {
+            "array_item_max_length": null,
+            "array_max_items": null,
+            "enum": [
+              "confidential",
+              "internal",
+              "phi",
+              "public",
+              "regulated",
+              "restricted",
+              "secret"
+            ],
+            "extension": false,
+            "field": "sensitivity",
+            "integer_maximum": null,
+            "integer_minimum": null,
+            "max_length": 262144,
+            "min_length": null,
+            "required": false,
+            "type": "string"
+          },
+          {
+            "array_item_max_length": 262144,
+            "array_max_items": 262144,
+            "enum": null,
+            "extension": false,
+            "field": "tags",
+            "integer_maximum": null,
+            "integer_minimum": null,
+            "max_length": null,
+            "min_length": null,
+            "required": false,
+            "type": "array<string>"
+          },
+          {
+            "array_item_max_length": null,
+            "array_max_items": null,
+            "enum": null,
+            "extension": false,
+            "field": "title",
+            "integer_maximum": null,
+            "integer_minimum": null,
+            "max_length": 262144,
+            "min_length": 1,
+            "required": true,
+            "type": "string"
+          },
+          {
+            "array_item_max_length": null,
+            "array_max_items": null,
+            "enum": null,
+            "extension": false,
+            "field": "type",
+            "integer_maximum": null,
+            "integer_minimum": null,
+            "max_length": 262144,
+            "min_length": 1,
+            "required": true,
+            "type": "string"
+          },
+          {
+            "array_item_max_length": null,
+            "array_max_items": null,
+            "enum": null,
+            "extension": false,
+            "field": "uid",
+            "integer_maximum": null,
+            "integer_minimum": null,
+            "max_length": 262144,
+            "min_length": 1,
+            "required": true,
+            "type": "string"
+          },
+          {
+            "array_item_max_length": null,
+            "array_max_items": null,
+            "enum": null,
+            "extension": false,
+            "field": "updated_at",
+            "integer_maximum": null,
+            "integer_minimum": null,
+            "max_length": 262144,
+            "min_length": null,
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "identity_rules": {
+          "duplicate_uid_or_path": "cross_record_report_only",
+          "identity_mutation_or_defaulting": false,
+          "path_is_identity": false,
+          "stable_authored_uid_required": true,
+          "uid_syntax_authority": "canonical_gkx_parser"
+        },
+        "minimum_sensitivity": "public",
+        "profile_id": "gkos-current",
+        "relationship_rules": {
+          "declaration_syntax_authority": "canonical_gkx_parser_receipts",
+          "endpoint_resolution_and_topology": "cross_record_report_only",
+          "malformed_authored_reference": "intrinsic",
+          "ordinary_markdown_or_wikilink_unresolved": "non_conflicting",
+          "second_resolution_pass": false
+        },
+        "required_fields": [
+          "created_at",
+          "epistemic_state",
+          "gkx_version",
+          "title",
+          "type",
+          "uid"
+        ],
+        "severity": [
+          {
+            "code": "GKX-AUTHORITY-ROLE-001",
+            "severity": "critical"
+          },
+          {
+            "code": "GKX-AUTHORITY-ROLE-002",
+            "severity": "error"
+          },
+          {
+            "code": "GKX-EPISTEMIC-002",
+            "severity": "error"
+          },
+          {
+            "code": "GKX-EPISTEMIC-004",
+            "severity": "warning"
+          },
+          {
+            "code": "GKX-EVIDENCE-002",
+            "severity": "error"
+          },
+          {
+            "code": "GKX-EVIDENCE-003",
+            "severity": "error"
+          },
+          {
+            "code": "GKX-IDENTITY-001",
+            "severity": "warning"
+          },
+          {
+            "code": "GKX-IDENTITY-002",
+            "severity": "error"
+          },
+          {
+            "code": "GKX-PROVENANCE-001",
+            "severity": "warning"
+          },
+          {
+            "code": "GKX-PROVENANCE-002",
+            "severity": "error"
+          },
+          {
+            "code": "GKX-SCHEMA-002",
+            "severity": "info"
+          },
+          {
+            "code": "GKX-SCHEMA-003",
+            "severity": "warning"
+          },
+          {
+            "code": "GKX-SCHEMA-004",
+            "severity": "error"
+          },
+          {
+            "code": "GKX-SENSITIVITY-001",
+            "severity": "warning"
+          },
+          {
+            "code": "GKX-SENSITIVITY-005",
+            "severity": "error"
+          },
+          {
+            "code": "GKX-TEMPORAL-001",
+            "severity": "warning"
+          }
+        ],
+        "standard_commit": "a2a2a6ca5c4dac32c6d9dc985ed7460f5f4350c6",
+        "standard_common_defs_sha256": "sha256:5b58edd93a53f6b821bfc03e2e4e3955da394bfaccb72e3ff194b45115c44c98",
+        "standard_diagnostics_sha256": "sha256:178e4801d1274da60fe029d3f326b9adbdbf0e2a2033469928022fa107427403",
+        "standard_frontmatter_schema_sha256": "sha256:eb25f75b4864a9130b2e27bdba2627e561fc79ab3a2537397bf5df024aab5ca3",
+        "unknown_fields": "allow"
+      },
+      "observations": [
+        {
+          "classification": "accepted",
+          "contract_version": "gkos-ingest-source-observation/1.0.0-draft.1",
+          "finding_ids": [
+            "sha256:c1ae48a2bc691f5a9be3c7fe06b24ffb77399b038fa421bd9a9eb561ccb46136"
+          ],
+          "intrinsic_blocking_finding_ids": [],
+          "source_digest": "sha256:33fe1941a92bbc547f1ce695a3dee6dbdb2a05f2371e444dbac51734ea29ee3a",
+          "source_observation_ordinal": 0,
+          "source_path": "same.md",
+          "source_size_bytes": 210
+        },
+        {
+          "classification": "rejected",
+          "contract_version": "gkos-ingest-source-observation/1.0.0-draft.1",
+          "finding_ids": [
+            "sha256:610eafc3e0512ad637e95f2f745935105d63342254a2dfcefa79469441e518dc",
+            "sha256:6d828f8146b839e9e121a8f097a48bdd7865cdfda771d30672513c10511aff14",
+            "sha256:ae8e74d42853420317cfc100bf361ceafe4661f7ba2db30fb3ef5e65a6386873",
+            "sha256:e718b8c7425ffcff408a92b0d8f87f5ec9027394119dce2441536d6d5294a19d"
+          ],
+          "intrinsic_blocking_finding_ids": [
+            "sha256:610eafc3e0512ad637e95f2f745935105d63342254a2dfcefa79469441e518dc",
+            "sha256:6d828f8146b839e9e121a8f097a48bdd7865cdfda771d30672513c10511aff14",
+            "sha256:ae8e74d42853420317cfc100bf361ceafe4661f7ba2db30fb3ef5e65a6386873"
+          ],
+          "source_digest": "sha256:c165b2647273d86b5c63ab442fc62ee28896fb5035cd1298a7f0df7f73c819d7",
+          "source_observation_ordinal": 1,
+          "source_path": "same.md",
+          "source_size_bytes": 198
+        },
+        {
+          "classification": "rejected",
+          "contract_version": "gkos-ingest-source-observation/1.0.0-draft.1",
+          "finding_ids": [
+            "sha256:9a50960930a97a83c4f8a96ba337f4f413d89a606e47b11aa60e11f49e3e9ca5",
+            "sha256:b1bc9ec15d40831a5f0ac7534e25d519f698898eea59e9d11fe04681362a4f06"
+          ],
+          "intrinsic_blocking_finding_ids": [
+            "sha256:9a50960930a97a83c4f8a96ba337f4f413d89a606e47b11aa60e11f49e3e9ca5",
+            "sha256:b1bc9ec15d40831a5f0ac7534e25d519f698898eea59e9d11fe04681362a4f06"
+          ],
+          "source_digest": null,
+          "source_observation_ordinal": 0,
+          "source_path": "unreadable.md",
+          "source_size_bytes": null
+        }
+      ],
+      "profile": {
+        "contract_version": "gkos-frontmatter-profile-coordinate/1.0.0-draft.1",
+        "effective_profile_digest": "sha256:9ab3b07da4cdfb584c2766762a32dc71653dffd87537ad0a4c9190e3a69015c5",
+        "engine_policy_hash": "sha256:2c2d8ec1e6481cbd4476bcc544c4fd19be03d8f21e317e44d889ea46e940ec8b",
+        "engine_policy_id": "policy:gkx23-default-v1",
+        "engine_projection_profile": "gkx-2.3-validating-projection",
+        "overlay_sha256": null,
+        "profile_id": "gkos-current",
+        "selector_id": "gkos:frontmatter-profile/current",
+        "standard_commit": "a2a2a6ca5c4dac32c6d9dc985ed7460f5f4350c6",
+        "standard_common_defs_sha256": "sha256:5b58edd93a53f6b821bfc03e2e4e3955da394bfaccb72e3ff194b45115c44c98",
+        "standard_diagnostics_sha256": "sha256:178e4801d1274da60fe029d3f326b9adbdbf0e2a2033469928022fa107427403",
+        "standard_frontmatter_schema_sha256": "sha256:eb25f75b4864a9130b2e27bdba2627e561fc79ab3a2537397bf5df024aab5ca3"
+      },
+      "rejections": [
+        {
+          "canonical_assertion_time": "2026-08-01T00:00:00.000Z",
+          "canonical_valid_from": "2026-08-01T00:00:00.000Z",
+          "contract_version": "gkos-ingest-rejection/1.0.0-draft.1",
+          "effective_sensitivity": "secret",
+          "findings": [
+            {
+              "classification": "intrinsic",
+              "code": "CANONICAL_SOURCE_UID_UNAVAILABLE",
+              "contract_version": "gkos-ingest-finding/1.0.0-draft.1",
+              "coordinate_basis": "frontmatter_field",
+              "deterministic": true,
+              "field": "uid",
+              "finding_id": "sha256:ae8e74d42853420317cfc100bf361ceafe4661f7ba2db30fb3ef5e65a6386873",
+              "line": 3,
+              "scope": "field",
+              "severity": "error",
+              "source_observation_ordinal": 1,
+              "source_path": "same.md"
+            },
+            {
+              "classification": "intrinsic",
+              "code": "GKX-IDENTITY-002",
+              "contract_version": "gkos-ingest-finding/1.0.0-draft.1",
+              "coordinate_basis": "frontmatter_field",
+              "deterministic": true,
+              "field": "uid",
+              "finding_id": "sha256:6d828f8146b839e9e121a8f097a48bdd7865cdfda771d30672513c10511aff14",
+              "line": 3,
+              "scope": "field",
+              "severity": "error",
+              "source_observation_ordinal": 1,
+              "source_path": "same.md"
+            },
+            {
+              "classification": "intrinsic",
+              "code": "GKX_INGEST_UID_REQUIRED",
+              "contract_version": "gkos-ingest-finding/1.0.0-draft.1",
+              "coordinate_basis": "frontmatter_field",
+              "deterministic": true,
+              "field": "uid",
+              "finding_id": "sha256:610eafc3e0512ad637e95f2f745935105d63342254a2dfcefa79469441e518dc",
+              "line": 3,
+              "scope": "field",
+              "severity": "error",
+              "source_observation_ordinal": 1,
+              "source_path": "same.md"
+            },
+            {
+              "classification": "intrinsic",
+              "code": "GKX-PROVENANCE-001",
+              "contract_version": "gkos-ingest-finding/1.0.0-draft.1",
+              "coordinate_basis": "missing_field",
+              "deterministic": true,
+              "field": "provenance.source_refs",
+              "finding_id": "sha256:e718b8c7425ffcff408a92b0d8f87f5ec9027394119dce2441536d6d5294a19d",
+              "line": null,
+              "scope": "field",
+              "severity": "warning",
+              "source_observation_ordinal": 1,
+              "source_path": "same.md"
+            }
+          ],
+          "profile": {
+            "contract_version": "gkos-frontmatter-profile-coordinate/1.0.0-draft.1",
+            "effective_profile_digest": "sha256:9ab3b07da4cdfb584c2766762a32dc71653dffd87537ad0a4c9190e3a69015c5",
+            "engine_policy_hash": "sha256:2c2d8ec1e6481cbd4476bcc544c4fd19be03d8f21e317e44d889ea46e940ec8b",
+            "engine_policy_id": "policy:gkx23-default-v1",
+            "engine_projection_profile": "gkx-2.3-validating-projection",
+            "overlay_sha256": null,
+            "profile_id": "gkos-current",
+            "selector_id": "gkos:frontmatter-profile/current",
+            "standard_commit": "a2a2a6ca5c4dac32c6d9dc985ed7460f5f4350c6",
+            "standard_common_defs_sha256": "sha256:5b58edd93a53f6b821bfc03e2e4e3955da394bfaccb72e3ff194b45115c44c98",
+            "standard_diagnostics_sha256": "sha256:178e4801d1274da60fe029d3f326b9adbdbf0e2a2033469928022fa107427403",
+            "standard_frontmatter_schema_sha256": "sha256:eb25f75b4864a9130b2e27bdba2627e561fc79ab3a2537397bf5df024aab5ca3"
+          },
+          "rejection_digest": "sha256:26e643a6a5f919ace8f04d8c82ad79d2751503e25b42f38a542a7261f0458329",
+          "source_digest": "sha256:c165b2647273d86b5c63ab442fc62ee28896fb5035cd1298a7f0df7f73c819d7",
+          "source_observation_ordinal": 1,
+          "source_path": "same.md",
+          "source_size_bytes": 198
+        },
+        {
+          "canonical_assertion_time": null,
+          "canonical_valid_from": null,
+          "contract_version": "gkos-ingest-rejection/1.0.0-draft.1",
+          "effective_sensitivity": "secret",
+          "findings": [
+            {
+              "classification": "intrinsic",
+              "code": "SOURCE_READ_FAILED",
+              "contract_version": "gkos-ingest-finding/1.0.0-draft.1",
+              "coordinate_basis": "file_observation",
+              "deterministic": true,
+              "field": null,
+              "finding_id": "sha256:9a50960930a97a83c4f8a96ba337f4f413d89a606e47b11aa60e11f49e3e9ca5",
+              "line": null,
+              "scope": "file",
+              "severity": "error",
+              "source_observation_ordinal": 0,
+              "source_path": "unreadable.md"
+            },
+            {
+              "classification": "intrinsic",
+              "code": "SOURCE_UTF8_INVALID",
+              "contract_version": "gkos-ingest-finding/1.0.0-draft.1",
+              "coordinate_basis": "file_observation",
+              "deterministic": true,
+              "field": null,
+              "finding_id": "sha256:b1bc9ec15d40831a5f0ac7534e25d519f698898eea59e9d11fe04681362a4f06",
+              "line": null,
+              "scope": "file",
+              "severity": "error",
+              "source_observation_ordinal": 0,
+              "source_path": "unreadable.md"
+            }
+          ],
+          "profile": {
+            "contract_version": "gkos-frontmatter-profile-coordinate/1.0.0-draft.1",
+            "effective_profile_digest": "sha256:9ab3b07da4cdfb584c2766762a32dc71653dffd87537ad0a4c9190e3a69015c5",
+            "engine_policy_hash": "sha256:2c2d8ec1e6481cbd4476bcc544c4fd19be03d8f21e317e44d889ea46e940ec8b",
+            "engine_policy_id": "policy:gkx23-default-v1",
+            "engine_projection_profile": "gkx-2.3-validating-projection",
+            "overlay_sha256": null,
+            "profile_id": "gkos-current",
+            "selector_id": "gkos:frontmatter-profile/current",
+            "standard_commit": "a2a2a6ca5c4dac32c6d9dc985ed7460f5f4350c6",
+            "standard_common_defs_sha256": "sha256:5b58edd93a53f6b821bfc03e2e4e3955da394bfaccb72e3ff194b45115c44c98",
+            "standard_diagnostics_sha256": "sha256:178e4801d1274da60fe029d3f326b9adbdbf0e2a2033469928022fa107427403",
+            "standard_frontmatter_schema_sha256": "sha256:eb25f75b4864a9130b2e27bdba2627e561fc79ab3a2537397bf5df024aab5ca3"
+          },
+          "rejection_digest": "sha256:c7e8a2397576c3f916c8c09fa464632726f99e6836e1ea714148c72aa2500e92",
+          "source_digest": null,
+          "source_observation_ordinal": 0,
+          "source_path": "unreadable.md",
+          "source_size_bytes": null
+        }
+      ],
+      "status": "invalid",
+      "summary": {
+        "findings": {
+          "critical": 0,
+          "error": 5,
+          "info": 0,
+          "warning": 2
+        },
+        "observed_source_count": 3,
+        "rejected_source_count": 2,
+        "valid_source_count": 1
+      }
+    },
+    "expected_observation_snapshot_digest": "sha256:b90dc544bee19bd803a0cb51db6ce9fd25c7a757752646b1febdb3b44d516a06",
+    "expected_accepted_source_ids": [
+      "018f0000-0000-7000-8000-000000000301"
+    ],
+    "expected_rejection_ordinals": [
+      {
+        "source_path": "same.md",
+        "source_observation_ordinal": 1
+      },
+      {
+        "source_path": "unreadable.md",
+        "source_observation_ordinal": 0
+      }
+    ]
+  },
+  "normalized_profile_sensitivity_cases": [
+    {
+      "case": "sensitivity_cannot_be_required",
+      "mutations": [
+        { "target": "field", "field": "sensitivity", "member": "required", "value": true },
+        { "target": "required_fields", "operation": "insert", "value": "sensitivity" }
+      ],
+      "schema_outcome": "reject",
+      "semantic_outcome": "reject",
+      "semantic_code": "GKX_INGEST_NORMALIZED_PROFILE_SENSITIVITY_REQUIRED_INVALID"
+    },
+    {
+      "case": "missing_sensitivity_warning_cannot_escalate",
+      "mutations": [
+        { "target": "severity", "code": "GKX-SENSITIVITY-001", "member": "severity", "value": "error" }
+      ],
+      "schema_outcome": "reject",
+      "semantic_outcome": "reject",
+      "semantic_code": "GKX_INGEST_NORMALIZED_PROFILE_SEVERITY_INVALID"
+    },
+    {
+      "case": "optional_sensitivity_explicit_domain_cannot_be_empty",
+      "mutations": [
+        { "target": "profile", "member": "minimum_sensitivity", "value": "secret" },
+        { "target": "field", "field": "sensitivity", "member": "enum", "value": ["public"] }
+      ],
+      "schema_outcome": "accept",
+      "semantic_outcome": "reject",
+      "semantic_code": "GKX_INGEST_NORMALIZED_PROFILE_SENSITIVITY_DOMAIN_EMPTY"
+    },
+    {
+      "case": "optional_sensitivity_mixed_explicit_domain",
+      "mutations": [
+        { "target": "profile", "member": "minimum_sensitivity", "value": "secret" },
+        { "target": "field", "field": "sensitivity", "member": "enum", "value": ["public", "secret"] }
+      ],
+      "schema_outcome": "accept",
+      "semantic_outcome": "accept",
+      "semantic_code": null
+    }
+  ],
+  "missing_sensitivity_case": {
+    "input": {
+      "files": [
+        {
+          "relativePath": "missing-sensitivity.md",
+          "name": "missing-sensitivity.md",
+          "extension": "md",
+          "size": 216,
+          "createdTime": 1785542400000,
+          "content": "---\ngkx_version: \"2.3\"\nuid: \"018f0000-0000-7000-8000-000000000303\"\ntitle: \"Missing Sensitivity\"\ntype: \"policy\"\ncreated_at: \"2026-08-01T00:00:00Z\"\nepistemic_state: \"reported\"\n---\n# Missing Sensitivity\nValidated body.\n",
+          "kind": "note"
+        }
+      ],
+      "folders": [],
+      "attachments": [],
+      "scan_rejections": []
+    },
+    "expected": {
+      "status": "valid",
+      "corpus_valid": true,
+      "ingest_intrinsic_valid": true,
+      "valid_source_count": 1,
+      "rejected_source_count": 0,
+      "finding": {
+        "code": "GKX-SENSITIVITY-001",
+        "severity": "warning",
+        "classification": "intrinsic",
+        "scope": "field",
+        "coordinate_basis": "missing_field",
+        "line": null,
+        "field": "sensitivity.level"
+      },
+      "accepted_effective_sensitivity": "secret"
+    }
+  },
+  "unicode_ordering": {
+    "input": [".md", "😀.md"],
+    "expected_ecmascript_utf16": ["😀.md", ".md"],
+    "expected_utf8_bytes": [".md", "😀.md"]
+  },
+  "decision_a_declaration_reconciliation_case": {
+    "input": {
+      "files": [
+        {
+          "relativePath": "declared-old.md",
+          "name": "declared-old.md",
+          "extension": "md",
+          "size": 282,
+          "createdTime": 1785542400000,
+          "content": "---\ngkx_version: \"2.3\"\nuid: \"018f0000-0000-7000-8000-000000000301\"\ntitle: \"Declared Old\"\ntype: \"policy\"\ncreated_at: \"2026-08-01T00:00:00Z\"\nepistemic_state: \"reported\"\nsensitivity: \"public\"\nsuperseded_by:\n  - \"018f0000-0000-7000-8000-000000000303\"\n---\n# Declared Old\nValidated body.\n",
+          "kind": "note"
+        },
+        {
+          "relativePath": "declared-new.md",
+          "name": "declared-new.md",
+          "extension": "md",
+          "size": 279,
+          "createdTime": 1785542400000,
+          "content": "---\ngkx_version: \"2.3\"\nuid: \"018f0000-0000-7000-8000-000000000302\"\ntitle: \"Declared New\"\ntype: \"policy\"\ncreated_at: \"2026-08-01T00:00:00Z\"\nepistemic_state: \"reported\"\nsensitivity: \"public\"\nsupersedes:\n  - \"018f0000-0000-7000-8000-000000000301\"\n---\n# Declared New\nValidated body.\n",
+          "kind": "note"
+        },
+        {
+          "relativePath": "declared-other.md",
+          "name": "declared-other.md",
+          "extension": "md",
+          "size": 228,
+          "createdTime": 1785542400000,
+          "content": "---\ngkx_version: \"2.3\"\nuid: \"018f0000-0000-7000-8000-000000000303\"\ntitle: \"Declared Other\"\ntype: \"policy\"\ncreated_at: \"2026-08-01T00:00:00Z\"\nepistemic_state: \"reported\"\nsensitivity: \"public\"\n---\n# Declared Other\nValidated body.\n",
+          "kind": "note"
+        }
+      ],
+      "folders": [],
+      "attachments": [],
+      "scan_rejections": []
+    },
+    "expected": {
+      "status": "invalid",
+      "corpus_valid": false,
+      "ingest_intrinsic_valid": true,
+      "accepted_source_count": 3,
+      "accepted_lineage_declaration_count": 2,
+      "rejected_source_count": 0,
+      "finding": {
+        "code": "RETRIEVAL_AUTHORIZED_VIEW_CONFLICT",
+        "severity": "error",
+        "classification": "cross_record_report_only",
+        "scope": "corpus",
+        "coordinate_basis": "corpus",
+        "source_path": null,
+        "source_observation_ordinal": null,
+        "line": null,
+        "field": null
+      },
+      "raw_reference_in_result": false
+    }
+  },
+  "profile_selector_pre_io_reject_inputs": [
+    "\\\\server\\share\\profile.toml",
+    "//server/share/profile.toml",
+    "\\\\?\\UNC\\server\\share\\profile.toml",
+    "\\\\?\\C:\\foreign\\profile.toml",
+    "\\\\.\\PIPE\\gkos-profile",
+    "\\??\\UNC\\server\\share\\profile.toml",
+    "C:relative.toml",
+    "profile.toml:stream",
+    "NUL",
+    "con.txt",
+    "folder/AUX. ",
+    "COM\u00b9.toml",
+    "COM\u00b2",
+    "LPT\u00b3.txt",
+    "CONIN$",
+    "CONOUT$.txt",
+    "CLOCK$",
+    { "encoding": "utf16_code_units", "code_units": [55296] },
+    "line\nfeed.toml",
+    "carriage\rreturn.toml",
+    "tab\tname.toml",
+    "escape\u001bname.toml",
+    "delete\u007fname.toml"
+  ],
+  "predicate_matrix": {
+    "intrinsic_error_or_critical": {
+      "validate_invalid": true,
+      "ingest_rejected": true
+    },
+    "intrinsic_warning_or_info_only": {
+      "validate_invalid": false,
+      "ingest_rejected": false
+    },
+    "cross_record_error_or_critical": {
+      "validate_invalid": true,
+      "ingest_rejected": false
+    },
+    "cross_record_warning_or_info_only": {
+      "validate_invalid": false,
+      "ingest_rejected": false
+    }
+  },
+  "decision_a_matrix": [
+    {
+      "class": "canonical_identity_collision",
+      "finding": "RETRIEVAL_AUTHORIZED_VIEW_CONFLICT",
+      "classification": "cross_record_report_only",
+      "ingest_rejection": false
+    },
+    {
+      "class": "endpoint_resolution_ambiguity_or_unresolved",
+      "finding": "RETRIEVAL_AUTHORIZED_VIEW_CONFLICT",
+      "classification": "cross_record_report_only",
+      "ingest_rejection": false
+    },
+    {
+      "class": "forward_inverse_or_conflicting_declarations",
+      "finding": "RETRIEVAL_AUTHORIZED_VIEW_CONFLICT",
+      "classification": "cross_record_report_only",
+      "ingest_rejection": false
+    },
+    {
+      "class": "branch_cycle_or_temporal_order",
+      "finding": "RETRIEVAL_AUTHORIZED_VIEW_CONFLICT",
+      "classification": "cross_record_report_only",
+      "ingest_rejection": false
+    }
+  ],
+  "semantic_negative_matrix": [
+    {
+      "class": "normalized_profile_widening_or_duplicate_coordinate",
+      "schema_may_be_insufficient": true,
+      "semantic_outcome": "reject"
+    },
+    {
+      "class": "nonportable_source_path",
+      "schema_may_be_insufficient": false,
+      "semantic_outcome": "reject"
+    },
+    {
+      "class": "forged_finding_classification_scope_coordinate_or_digest",
+      "schema_may_be_insufficient": true,
+      "semantic_outcome": "reject"
+    },
+    {
+      "class": "rejection_temporal_content_finding_order_or_digest_mismatch",
+      "schema_may_be_insufficient": true,
+      "semantic_outcome": "reject"
+    },
+    {
+      "class": "result_profile_predicate_count_partition_or_nested_subset_mismatch",
+      "schema_may_be_insufficient": true,
+      "semantic_outcome": "reject"
+    }
+  ]
+}

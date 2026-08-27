@@ -1,0 +1,45 @@
+{
+  "fixture_version": 1,
+  "phase": "phase-3-ingest-validation",
+  "historical_fixture": "phase2-lite.json",
+  "full_reference": {
+    "repository": "Odenknight/GKOS-Engine",
+    "commit": "e7cc0dd478af3d0bda216c5258dec5f77932def7",
+    "package_version": "2.1.2",
+    "ingest_contract": "gkos-ingest-validation/1.0.0-draft.1",
+    "ingest_pack_file_count": 21,
+    "ingest_pack_bytes": 248079
+  },
+  "runtime_migration": {
+    "expected_changed_paths": [
+      "$.lite_package.engine_dependency",
+      "$.lite_package.engine_resolved_sha"
+    ],
+    "engine_dependency": "github:Odenknight/GKOS-Engine#e7cc0dd478af3d0bda216c5258dec5f77932def7",
+    "engine_resolved_sha": "e7cc0dd478af3d0bda216c5258dec5f77932def7"
+  },
+  "cli": {
+    "phase2_validate_help_line": "  okf-lite validate <dir>                                  schema/identity/lineage diagnostics; non-zero exit on error\n",
+    "phase3_validate_help_lines": "  okf-lite validate <dir>                                  schema/identity/lineage diagnostics; non-zero exit on error\n  okf-lite validate --kb-path <path> [--schema <path-or-id>] [--format text|json]\n  okf-lite index --kb-path <path> [--schema <path-or-id>] [--strict]\n",
+    "delegated_validate_argv": [
+      "validate",
+      "--kb-path",
+      "vault",
+      "--schema",
+      "profiles/x-tight.toml",
+      "--format",
+      "json"
+    ],
+    "delegated_index_argv": [
+      "index",
+      "--kb-path",
+      "vault",
+      "--schema",
+      "gkos:frontmatter-profile/current",
+      "--strict"
+    ]
+  },
+  "deterministic": {
+    "source_fixture_change": "none; Phase 0 note bytes and Phase 1 graph/Graphiti goldens remain exact"
+  }
+}

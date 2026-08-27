@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Odenknight/GKOS-Engine/contracts/ingest/gkos-ingest-validation-1.0.0-draft.1/active-pointer.schema.json",
+  "title": "GKOS ingest sole active pointer draft 1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["contract_version", "owner_generation_file", "owner_generation_id", "owner_manifest_digest", "inner"],
+  "properties": {
+    "contract_version": { "const": "gkos-ingest-active-pointer/1.0.0-draft.1" },
+    "owner_generation_file": { "type": "string", "pattern": "^ingest-generation-[0-9a-f]{64}\\.json$" },
+    "owner_generation_id": { "$ref": "state-common.schema.json#/$defs/ownerGenerationId" },
+    "owner_manifest_digest": { "$ref": "state-common.schema.json#/$defs/sha256" },
+    "inner": { "$ref": "state-common.schema.json#/$defs/activeProjection" }
+  }
+}

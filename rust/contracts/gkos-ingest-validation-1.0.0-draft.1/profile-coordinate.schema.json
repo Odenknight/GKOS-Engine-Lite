@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Odenknight/GKOS-Engine/contracts/ingest/gkos-ingest-validation-1.0.0-draft.1/profile-coordinate.schema.json",
+  "title": "GKOS ingest profile coordinate draft 1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract_version", "selector_id", "profile_id", "standard_commit",
+    "standard_frontmatter_schema_sha256", "standard_common_defs_sha256",
+    "standard_diagnostics_sha256", "engine_projection_profile", "engine_policy_id",
+    "engine_policy_hash", "overlay_sha256", "effective_profile_digest"
+  ],
+  "properties": {
+    "contract_version": { "const": "gkos-frontmatter-profile-coordinate/1.0.0-draft.1" },
+    "selector_id": { "enum": ["gkos:frontmatter-profile/current", "operator-overlay"] },
+    "profile_id": { "$ref": "#/$defs/profileId" },
+    "standard_commit": { "const": "a2a2a6ca5c4dac32c6d9dc985ed7460f5f4350c6" },
+    "standard_frontmatter_schema_sha256": { "const": "sha256:eb25f75b4864a9130b2e27bdba2627e561fc79ab3a2537397bf5df024aab5ca3" },
+    "standard_common_defs_sha256": { "const": "sha256:5b58edd93a53f6b821bfc03e2e4e3955da394bfaccb72e3ff194b45115c44c98" },
+    "standard_diagnostics_sha256": { "const": "sha256:178e4801d1274da60fe029d3f326b9adbdbf0e2a2033469928022fa107427403" },
+    "engine_projection_profile": { "const": "gkx-2.3-validating-projection" },
+    "engine_policy_id": { "const": "policy:gkx23-default-v1" },
+    "engine_policy_hash": { "const": "sha256:2c2d8ec1e6481cbd4476bcc544c4fd19be03d8f21e317e44d889ea46e940ec8b" },
+    "overlay_sha256": { "oneOf": [{ "$ref": "#/$defs/sha256" }, { "type": "null" }] },
+    "effective_profile_digest": { "$ref": "#/$defs/sha256" }
+  },
+  "allOf": [
+    {
+      "if": { "type": "object", "properties": { "selector_id": { "const": "gkos:frontmatter-profile/current" } }, "required": ["selector_id"] },
+      "then": {
+        "type": "object",
+        "properties": {
+          "profile_id": { "const": "gkos-current" },
+          "overlay_sha256": { "type": "null" },
+          "effective_profile_digest": { "const": "sha256:9ab3b07da4cdfb584c2766762a32dc71653dffd87537ad0a4c9190e3a69015c5" }
+        }
+      },
+      "else": { "type": "object", "properties": { "overlay_sha256": { "$ref": "#/$defs/sha256" } } }
+    }
+  ],
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "profileId": { "type": "string", "pattern": "^[a-z][a-z0-9._-]{0,63}$" }
+  }
+}

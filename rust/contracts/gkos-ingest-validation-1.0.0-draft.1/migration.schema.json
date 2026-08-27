@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Odenknight/GKOS-Engine/contracts/ingest/gkos-ingest-validation-1.0.0-draft.1/migration.schema.json",
+  "title": "GKOS ingest first-activation migration record draft 1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract_version", "target_owner_generation_id", "target_owner_manifest_digest",
+    "legacy_pointer", "legacy_pointer_digest", "migration_digest"
+  ],
+  "properties": {
+    "contract_version": { "const": "gkos-ingest-migration/1.0.0-draft.1" },
+    "target_owner_generation_id": { "$ref": "state-common.schema.json#/$defs/ownerGenerationId" },
+    "target_owner_manifest_digest": { "$ref": "state-common.schema.json#/$defs/sha256" },
+    "legacy_pointer": {
+      "oneOf": [
+        { "$ref": "state-common.schema.json#/$defs/legacyPointer" },
+        { "type": "null" }
+      ]
+    },
+    "legacy_pointer_digest": {
+      "oneOf": [
+        { "$ref": "state-common.schema.json#/$defs/sha256" },
+        { "type": "null" }
+      ]
+    },
+    "migration_digest": { "$ref": "state-common.schema.json#/$defs/sha256" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "legacy_pointer": { "type": "null" } }, "required": ["legacy_pointer"] },
+      "then": { "properties": { "legacy_pointer_digest": { "type": "null" } } },
+      "else": { "properties": { "legacy_pointer_digest": { "$ref": "state-common.schema.json#/$defs/sha256" } } }
+    }
+  ]
+}

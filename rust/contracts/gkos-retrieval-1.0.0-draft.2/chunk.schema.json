@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gkos.example/contracts/retrieval/gkos-retrieval-1.0.0-draft.2/chunk.schema.json",
+  "title": "GKOS retrieval chunk draft 2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["chunk_id", "source_id", "source_path", "source_digest", "heading_path", "heading_depth", "ordinal_within_source", "structural_position", "part_ordinal", "start_byte", "end_byte", "start_line", "end_line", "content_digest", "text", "token_count", "lineage_id", "valid_from", "valid_to", "supersedes", "superseded_by", "metadata"],
+  "properties": {
+    "chunk_id": { "$ref": "#/$defs/sha256" },
+    "source_id": { "$ref": "#/$defs/uid" },
+    "source_path": { "type": "string", "minLength": 1, "maxLength": 4096 },
+    "source_digest": { "$ref": "#/$defs/sha256" },
+    "heading_path": { "type": "array", "items": { "type": "string" } },
+    "heading_depth": { "type": "integer", "minimum": 0, "maximum": 6 },
+    "ordinal_within_source": { "type": "integer", "minimum": 1 },
+    "structural_position": { "type": "string", "minLength": 1 },
+    "part_ordinal": { "type": "integer", "minimum": 1 },
+    "start_byte": { "type": "integer", "minimum": 0 },
+    "end_byte": { "type": "integer", "minimum": 1 },
+    "start_line": { "type": "integer", "minimum": 1 },
+    "end_line": { "type": "integer", "minimum": 1 },
+    "content_digest": { "$ref": "#/$defs/sha256" },
+    "text": { "type": "string" },
+    "token_count": { "type": "integer", "minimum": 0 },
+    "parent_chunk_id": { "$ref": "#/$defs/sha256" },
+    "lineage_id": { "const": null },
+    "valid_from": { "$ref": "#/$defs/nullableTimestamp" },
+    "valid_to": { "$ref": "#/$defs/nullableTimestamp" },
+    "supersedes": { "type": "array", "items": { "$ref": "#/$defs/uid" }, "uniqueItems": true },
+    "superseded_by": { "type": "array", "items": { "$ref": "#/$defs/uid" }, "uniqueItems": true },
+    "metadata": { "$ref": "#/$defs/metadata" }
+  },
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "uid": { "type": "string", "pattern": "^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[1-8][0-9A-Fa-f]{3}-[89AaBb][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$" },
+    "timestamp": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$" },
+    "nullableTimestamp": { "oneOf": [{ "$ref": "#/$defs/timestamp" }, { "type": "null" }] },
+    "json": { "oneOf": [{ "type": ["string", "number", "boolean", "null"] }, { "type": "array", "items": { "$ref": "#/$defs/json" } }, { "type": "object", "additionalProperties": { "$ref": "#/$defs/json" } }] },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/json" },
+      "properties": {
+        "title": { "type": "string" }, "tags": { "type": "array", "items": { "type": "string" } },
+        "topic": { "type": "string" }, "category": { "type": "string" }, "authored_at": { "$ref": "#/$defs/timestamp" },
+        "sensitivity": { "enum": ["public", "internal", "restricted", "confidential", "regulated", "phi", "secret"] },
+        "gkx_type": { "type": "string" }, "epistemic_state": { "type": "string" }, "governance_state": { "type": "string" },
+        "review_state": { "type": "string" }, "authoritative": { "type": "boolean" },
+        "moc_relationships": { "type": "array", "items": { "type": "string" } }, "author_agent_id": { "type": "string" },
+        "quality": { "type": "number", "minimum": 0, "maximum": 1 }, "archived": { "type": "boolean" }
+      }
+    }
+  }
+}

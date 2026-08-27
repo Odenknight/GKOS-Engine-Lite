@@ -1,0 +1,819 @@
+{
+  "nodes": [
+    {
+      "id": "folder:.",
+      "kind": "folder",
+      "path": "",
+      "label": "Vault",
+      "area": "Vault",
+      "depth": 0,
+      "tags": [],
+      "aliases": [],
+      "color": "#f8fafc",
+      "outgoing": 0,
+      "incoming": 0
+    },
+    {
+      "id": "unresolved:policy v2",
+      "kind": "unresolved",
+      "path": "Policy v2",
+      "label": "Policy v2",
+      "area": "Unresolved",
+      "depth": 1,
+      "tags": [],
+      "aliases": [],
+      "color": "#ffb86b",
+      "outgoing": 0,
+      "incoming": 1,
+      "unresolved": true
+    },
+    {
+      "id": "folder:policy",
+      "kind": "folder",
+      "path": "policy",
+      "label": "policy",
+      "area": "policy",
+      "depth": 1,
+      "tags": [],
+      "aliases": [],
+      "color": "#34d3c9",
+      "outgoing": 0,
+      "incoming": 0
+    },
+    {
+      "id": "file:policy/v1.md",
+      "kind": "file",
+      "path": "policy/v1.md",
+      "label": "v1",
+      "area": "policy",
+      "depth": 2,
+      "extension": "md",
+      "size": 391,
+      "updatedAt": "2026-01-01T12:00:00.000Z",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "gkx": {
+        "uid": "019b2d14-4230-7db7-87d4-7d81cfaec901",
+        "type": "policy",
+        "title": "Policy v1",
+        "epistemicState": "accepted",
+        "sensitivity": "internal",
+        "supersedes": [],
+        "supersededBy": [
+          "019b2d14-4230-7db7-87d4-7d81cfaec902"
+        ],
+        "forkedFrom": [],
+        "forkedTo": [],
+        "relations": {
+          "superseded_by": [
+            "019b2d14-4230-7db7-87d4-7d81cfaec902"
+          ]
+        },
+        "related": [],
+        "projection": {
+          "profile": "gkx-2.3-validating-projection",
+          "conformanceClaim": "reader-and-deterministic-assessor",
+          "mode": "legacy",
+          "sourceVersion": null,
+          "sourcePath": "policy/v1.md",
+          "contentHash": "vryvks:av",
+          "rawFrontmatter": {
+            "okf_version": "2.3",
+            "uid": "019b2d14-4230-7db7-87d4-7d81cfaec901",
+            "title": "Policy v1",
+            "type": "policy",
+            "created_at": "2026-01-01T00:00:00Z",
+            "updated_at": "2026-01-01T12:00:00Z",
+            "epistemic_state": "accepted",
+            "sensitivity": "internal",
+            "authorship_origin": "authored",
+            "tags": [
+              "policy"
+            ],
+            "supersedes": [],
+            "superseded_by": [
+              "019b2d14-4230-7db7-87d4-7d81cfaec902"
+            ]
+          },
+          "extensions": {
+            "okf_version": "2.3"
+          },
+          "authored": {
+            "tags": [
+              "policy"
+            ],
+            "labels": [],
+            "relationships": {
+              "superseded_by": [
+                "019b2d14-4230-7db7-87d4-7d81cfaec902"
+              ]
+            },
+            "uid": "019b2d14-4230-7db7-87d4-7d81cfaec901",
+            "title": "Policy v1",
+            "type": "policy",
+            "createdAt": "2026-01-01T00:00:00Z",
+            "updatedAt": "2026-01-01T12:00:00Z",
+            "authorship": {
+              "origin": "authored"
+            },
+            "assertionOrigin": "authored",
+            "epistemic": {},
+            "epistemicState": "accepted",
+            "sensitivityBlock": {},
+            "sensitivity": "internal",
+            "provenance": {},
+            "evidence": {},
+            "lineage": {},
+            "review": {},
+            "assessmentReference": {},
+            "authorization": {}
+          },
+          "derived": {
+            "tags": [],
+            "labels": [
+              "assessment:weakly-supported",
+              "epistemic:accepted",
+              "identity:stable",
+              "provenance:missing",
+              "sensitivity:internal"
+            ],
+            "relationships": {},
+            "sensitivity": "internal",
+            "effectiveSensitivityReason": "authored-source-classification"
+          },
+          "proposed": {
+            "tags": [],
+            "labels": [],
+            "relationships": {}
+          },
+          "approved": {
+            "tags": [],
+            "labels": [],
+            "relationships": {}
+          },
+          "effective": {
+            "tags": [
+              "policy"
+            ],
+            "labels": [
+              "assessment:weakly-supported",
+              "epistemic:accepted",
+              "identity:stable",
+              "provenance:missing",
+              "sensitivity:internal"
+            ],
+            "relationships": {
+              "superseded_by": [
+                "019b2d14-4230-7db7-87d4-7d81cfaec902"
+              ]
+            },
+            "epistemicState": "accepted",
+            "epistemicStateDefaulted": false,
+            "sensitivity": "internal",
+            "evidence": {
+              "supports": [],
+              "contradicts": []
+            }
+          },
+          "diagnostics": [
+            {
+              "code": "GKX-EPISTEMIC-004",
+              "severity": "warning",
+              "field": "epistemic.state",
+              "message": "Accepted state lacks an approval or authorization record; acceptance is not treated as verified authority.",
+              "deterministic": true,
+              "sourcePath": "policy/v1.md"
+            },
+            {
+              "code": "GKX-PROVENANCE-001",
+              "severity": "warning",
+              "field": "provenance.source_refs",
+              "message": "No source reference is declared.",
+              "deterministic": true,
+              "sourcePath": "policy/v1.md"
+            },
+            {
+              "code": "GKX-SCHEMA-003",
+              "severity": "warning",
+              "field": "gkx_version",
+              "message": "No GKX compatibility version is declared; legacy semantics apply.",
+              "deterministic": true,
+              "sourcePath": "policy/v1.md"
+            }
+          ],
+          "assessment": {
+            "assessmentId": "assessment:vryvks-av",
+            "targetUid": "019b2d14-4230-7db7-87d4-7d81cfaec901",
+            "profile": "gkx-2.3-validating-projection",
+            "policy": {
+              "id": "policy:gkx23-default-v1",
+              "version": "1.0.0",
+              "hash": "sha256:2c2d8ec1e6481cbd4476bcc544c4fd19be03d8f21e317e44d889ea46e940ec8b",
+              "weights": {
+                "structural_completeness": 0.15,
+                "provenance_quality": 0.2,
+                "evidence_support": 0.2,
+                "relationship_integrity": 0.15,
+                "temporal_freshness": 0.1,
+                "contradiction_status": 0.1,
+                "review_readiness": 0.1
+              },
+              "missingValueBehavior": "exclude-null-and-renormalize"
+            },
+            "assessor": {
+              "id": "tool:gkos-engine",
+              "engineVersion": "2.1.2"
+            },
+            "inputHash": "fnv1a32:vryvks:av",
+            "calculatedAt": "2026-01-01T12:00:00Z",
+            "scores": {
+              "structural_completeness": 0.6,
+              "provenance_quality": 0,
+              "evidence_support": null,
+              "relationship_integrity": 1,
+              "temporal_freshness": null,
+              "contradiction_status": null,
+              "review_readiness": 0.2,
+              "overall": 0.4333
+            },
+            "exclusions": [
+              "evidence_support",
+              "temporal_freshness",
+              "contradiction_status"
+            ],
+            "labels": {
+              "derived": [
+                "assessment:weakly-supported"
+              ]
+            },
+            "diagnostics": [
+              {
+                "code": "GKX-EPISTEMIC-004",
+                "severity": "warning",
+                "field": "epistemic.state",
+                "message": "Accepted state lacks an approval or authorization record; acceptance is not treated as verified authority.",
+                "deterministic": true,
+                "sourcePath": "policy/v1.md"
+              },
+              {
+                "code": "GKX-PROVENANCE-001",
+                "severity": "warning",
+                "field": "provenance.source_refs",
+                "message": "No source reference is declared.",
+                "deterministic": true,
+                "sourcePath": "policy/v1.md"
+              },
+              {
+                "code": "GKX-SCHEMA-003",
+                "severity": "warning",
+                "field": "gkx_version",
+                "message": "No GKX compatibility version is declared; legacy semantics apply.",
+                "deterministic": true,
+                "sourcePath": "policy/v1.md"
+              }
+            ],
+            "interpretation": "documentation-and-support-quality-not-truth"
+          }
+        },
+        "supersedesIds": [],
+        "supersededByIds": [
+          "file:policy/v2.md"
+        ],
+        "invalidAt": "2026-01-02T00:00:00.000Z",
+        "head": false
+      },
+      "validAt": "2026-01-01T00:00:00.000Z",
+      "type": "policy",
+      "tags": [
+        "policy"
+      ],
+      "aliases": [],
+      "color": "#34d3c9",
+      "outgoing": 2,
+      "incoming": 0
+    },
+    {
+      "id": "file:policy/v2.md",
+      "kind": "file",
+      "path": "policy/v2.md",
+      "label": "v2",
+      "area": "policy",
+      "depth": 2,
+      "extension": "md",
+      "size": 373,
+      "updatedAt": "2026-01-02T12:00:00.000Z",
+      "createdAt": "2026-01-02T00:00:00.000Z",
+      "gkx": {
+        "uid": "019b2d14-4230-7db7-87d4-7d81cfaec902",
+        "type": "policy",
+        "title": "Policy v2",
+        "epistemicState": "accepted",
+        "sensitivity": "internal",
+        "supersedes": [
+          "019b2d14-4230-7db7-87d4-7d81cfaec901"
+        ],
+        "supersededBy": [],
+        "forkedFrom": [],
+        "forkedTo": [],
+        "relations": {
+          "supersedes": [
+            "019b2d14-4230-7db7-87d4-7d81cfaec901"
+          ]
+        },
+        "related": [],
+        "projection": {
+          "profile": "gkx-2.3-validating-projection",
+          "conformanceClaim": "reader-and-deterministic-assessor",
+          "mode": "legacy",
+          "sourceVersion": null,
+          "sourcePath": "policy/v2.md",
+          "contentHash": "1abefh9:ad",
+          "rawFrontmatter": {
+            "okf_version": "2.3",
+            "uid": "019b2d14-4230-7db7-87d4-7d81cfaec902",
+            "title": "Policy v2",
+            "type": "policy",
+            "created_at": "2026-01-02T00:00:00Z",
+            "updated_at": "2026-01-02T12:00:00Z",
+            "epistemic_state": "accepted",
+            "sensitivity": "internal",
+            "authorship_origin": "authored",
+            "tags": [
+              "policy"
+            ],
+            "supersedes": [
+              "019b2d14-4230-7db7-87d4-7d81cfaec901"
+            ],
+            "superseded_by": []
+          },
+          "extensions": {
+            "okf_version": "2.3"
+          },
+          "authored": {
+            "tags": [
+              "policy"
+            ],
+            "labels": [],
+            "relationships": {
+              "supersedes": [
+                "019b2d14-4230-7db7-87d4-7d81cfaec901"
+              ]
+            },
+            "uid": "019b2d14-4230-7db7-87d4-7d81cfaec902",
+            "title": "Policy v2",
+            "type": "policy",
+            "createdAt": "2026-01-02T00:00:00Z",
+            "updatedAt": "2026-01-02T12:00:00Z",
+            "authorship": {
+              "origin": "authored"
+            },
+            "assertionOrigin": "authored",
+            "epistemic": {},
+            "epistemicState": "accepted",
+            "sensitivityBlock": {},
+            "sensitivity": "internal",
+            "provenance": {},
+            "evidence": {},
+            "lineage": {},
+            "review": {},
+            "assessmentReference": {},
+            "authorization": {}
+          },
+          "derived": {
+            "tags": [],
+            "labels": [
+              "assessment:weakly-supported",
+              "epistemic:accepted",
+              "identity:stable",
+              "provenance:missing",
+              "sensitivity:internal"
+            ],
+            "relationships": {},
+            "sensitivity": "internal",
+            "effectiveSensitivityReason": "authored-source-classification"
+          },
+          "proposed": {
+            "tags": [],
+            "labels": [],
+            "relationships": {}
+          },
+          "approved": {
+            "tags": [],
+            "labels": [],
+            "relationships": {}
+          },
+          "effective": {
+            "tags": [
+              "policy"
+            ],
+            "labels": [
+              "assessment:weakly-supported",
+              "epistemic:accepted",
+              "identity:stable",
+              "provenance:missing",
+              "sensitivity:internal"
+            ],
+            "relationships": {
+              "supersedes": [
+                "019b2d14-4230-7db7-87d4-7d81cfaec901"
+              ]
+            },
+            "epistemicState": "accepted",
+            "epistemicStateDefaulted": false,
+            "sensitivity": "internal",
+            "evidence": {
+              "supports": [],
+              "contradicts": []
+            }
+          },
+          "diagnostics": [
+            {
+              "code": "GKX-EPISTEMIC-004",
+              "severity": "warning",
+              "field": "epistemic.state",
+              "message": "Accepted state lacks an approval or authorization record; acceptance is not treated as verified authority.",
+              "deterministic": true,
+              "sourcePath": "policy/v2.md"
+            },
+            {
+              "code": "GKX-PROVENANCE-001",
+              "severity": "warning",
+              "field": "provenance.source_refs",
+              "message": "No source reference is declared.",
+              "deterministic": true,
+              "sourcePath": "policy/v2.md"
+            },
+            {
+              "code": "GKX-SCHEMA-003",
+              "severity": "warning",
+              "field": "gkx_version",
+              "message": "No GKX compatibility version is declared; legacy semantics apply.",
+              "deterministic": true,
+              "sourcePath": "policy/v2.md"
+            }
+          ],
+          "assessment": {
+            "assessmentId": "assessment:1abefh9-ad",
+            "targetUid": "019b2d14-4230-7db7-87d4-7d81cfaec902",
+            "profile": "gkx-2.3-validating-projection",
+            "policy": {
+              "id": "policy:gkx23-default-v1",
+              "version": "1.0.0",
+              "hash": "sha256:2c2d8ec1e6481cbd4476bcc544c4fd19be03d8f21e317e44d889ea46e940ec8b",
+              "weights": {
+                "structural_completeness": 0.15,
+                "provenance_quality": 0.2,
+                "evidence_support": 0.2,
+                "relationship_integrity": 0.15,
+                "temporal_freshness": 0.1,
+                "contradiction_status": 0.1,
+                "review_readiness": 0.1
+              },
+              "missingValueBehavior": "exclude-null-and-renormalize"
+            },
+            "assessor": {
+              "id": "tool:gkos-engine",
+              "engineVersion": "2.1.2"
+            },
+            "inputHash": "fnv1a32:1abefh9:ad",
+            "calculatedAt": "2026-01-02T12:00:00Z",
+            "scores": {
+              "structural_completeness": 0.6,
+              "provenance_quality": 0,
+              "evidence_support": null,
+              "relationship_integrity": 1,
+              "temporal_freshness": null,
+              "contradiction_status": null,
+              "review_readiness": 0.2,
+              "overall": 0.4333
+            },
+            "exclusions": [
+              "evidence_support",
+              "temporal_freshness",
+              "contradiction_status"
+            ],
+            "labels": {
+              "derived": [
+                "assessment:weakly-supported"
+              ]
+            },
+            "diagnostics": [
+              {
+                "code": "GKX-EPISTEMIC-004",
+                "severity": "warning",
+                "field": "epistemic.state",
+                "message": "Accepted state lacks an approval or authorization record; acceptance is not treated as verified authority.",
+                "deterministic": true,
+                "sourcePath": "policy/v2.md"
+              },
+              {
+                "code": "GKX-PROVENANCE-001",
+                "severity": "warning",
+                "field": "provenance.source_refs",
+                "message": "No source reference is declared.",
+                "deterministic": true,
+                "sourcePath": "policy/v2.md"
+              },
+              {
+                "code": "GKX-SCHEMA-003",
+                "severity": "warning",
+                "field": "gkx_version",
+                "message": "No GKX compatibility version is declared; legacy semantics apply.",
+                "deterministic": true,
+                "sourcePath": "policy/v2.md"
+              }
+            ],
+            "interpretation": "documentation-and-support-quality-not-truth"
+          }
+        },
+        "supersedesIds": [
+          "file:policy/v1.md"
+        ],
+        "supersededByIds": [],
+        "invalidAt": null,
+        "head": true
+      },
+      "validAt": "2026-01-02T00:00:00.000Z",
+      "type": "policy",
+      "tags": [
+        "policy"
+      ],
+      "aliases": [],
+      "color": "#34d3c9",
+      "outgoing": 0,
+      "incoming": 1
+    }
+  ],
+  "links": [
+    {
+      "id": "contains:folder:.->folder:policy",
+      "source": "folder:.",
+      "target": "folder:policy",
+      "kind": "contains"
+    },
+    {
+      "id": "contains:folder:policy->file:policy/v1.md",
+      "source": "folder:policy",
+      "target": "file:policy/v1.md",
+      "kind": "contains"
+    },
+    {
+      "id": "contains:folder:policy->file:policy/v2.md",
+      "source": "folder:policy",
+      "target": "file:policy/v2.md",
+      "kind": "contains"
+    },
+    {
+      "id": "wikilink:file:policy/v1.md->unresolved:policy v2:3",
+      "source": "file:policy/v1.md",
+      "target": "unresolved:policy v2",
+      "kind": "wikilink",
+      "sourcePath": "policy/v1.md"
+    },
+    {
+      "id": "lineage:file:policy/v1.md->file:policy/v2.md:4",
+      "source": "file:policy/v1.md",
+      "target": "file:policy/v2.md",
+      "kind": "lineage"
+    }
+  ],
+  "stats": {
+    "files": 2,
+    "folders": 2,
+    "unresolved": 1,
+    "links": 5,
+    "wikilinks": 1,
+    "markdownLinks": 0,
+    "propertyLinks": 0,
+    "orphans": 0
+  },
+  "areas": [
+    "Unresolved",
+    "Vault",
+    "policy"
+  ],
+  "tags": [
+    "policy"
+  ],
+  "statuses": [],
+  "types": [
+    "policy"
+  ],
+  "diagnostics": {
+    "notes": 2,
+    "folders": 2,
+    "attachments": 0,
+    "unresolvedLinks": 1,
+    "ambiguousLinks": 0,
+    "lineageEdges": 1,
+    "lineageCycles": 0,
+    "lineageWarnings": [],
+    "residualCollisions": 0
+  },
+  "__timeSpan": {
+    "min": 1767225600000,
+    "max": 1767312000000
+  },
+  "gkxProfile": "GKX 2.3 Validating Projection Profile",
+  "gkxUidIndex": {
+    "019b2d14-4230-7db7-87d4-7d81cfaec901": "file:policy/v1.md",
+    "019b2d14-4230-7db7-87d4-7d81cfaec902": "file:policy/v2.md"
+  },
+  "gkxAssessments": [
+    {
+      "assessmentId": "assessment:vryvks-av",
+      "targetUid": "019b2d14-4230-7db7-87d4-7d81cfaec901",
+      "profile": "gkx-2.3-validating-projection",
+      "policy": {
+        "id": "policy:gkx23-default-v1",
+        "version": "1.0.0",
+        "hash": "sha256:2c2d8ec1e6481cbd4476bcc544c4fd19be03d8f21e317e44d889ea46e940ec8b",
+        "weights": {
+          "structural_completeness": 0.15,
+          "provenance_quality": 0.2,
+          "evidence_support": 0.2,
+          "relationship_integrity": 0.15,
+          "temporal_freshness": 0.1,
+          "contradiction_status": 0.1,
+          "review_readiness": 0.1
+        },
+        "missingValueBehavior": "exclude-null-and-renormalize"
+      },
+      "assessor": {
+        "id": "tool:gkos-engine",
+        "engineVersion": "2.1.2"
+      },
+      "inputHash": "fnv1a32:vryvks:av",
+      "calculatedAt": "2026-01-01T12:00:00Z",
+      "scores": {
+        "structural_completeness": 0.6,
+        "provenance_quality": 0,
+        "evidence_support": null,
+        "relationship_integrity": 1,
+        "temporal_freshness": null,
+        "contradiction_status": null,
+        "review_readiness": 0.2,
+        "overall": 0.4333
+      },
+      "exclusions": [
+        "evidence_support",
+        "temporal_freshness",
+        "contradiction_status"
+      ],
+      "labels": {
+        "derived": [
+          "assessment:weakly-supported"
+        ]
+      },
+      "diagnostics": [
+        {
+          "code": "GKX-EPISTEMIC-004",
+          "severity": "warning",
+          "field": "epistemic.state",
+          "message": "Accepted state lacks an approval or authorization record; acceptance is not treated as verified authority.",
+          "deterministic": true,
+          "sourcePath": "policy/v1.md"
+        },
+        {
+          "code": "GKX-PROVENANCE-001",
+          "severity": "warning",
+          "field": "provenance.source_refs",
+          "message": "No source reference is declared.",
+          "deterministic": true,
+          "sourcePath": "policy/v1.md"
+        },
+        {
+          "code": "GKX-SCHEMA-003",
+          "severity": "warning",
+          "field": "gkx_version",
+          "message": "No GKX compatibility version is declared; legacy semantics apply.",
+          "deterministic": true,
+          "sourcePath": "policy/v1.md"
+        }
+      ],
+      "interpretation": "documentation-and-support-quality-not-truth"
+    },
+    {
+      "assessmentId": "assessment:1abefh9-ad",
+      "targetUid": "019b2d14-4230-7db7-87d4-7d81cfaec902",
+      "profile": "gkx-2.3-validating-projection",
+      "policy": {
+        "id": "policy:gkx23-default-v1",
+        "version": "1.0.0",
+        "hash": "sha256:2c2d8ec1e6481cbd4476bcc544c4fd19be03d8f21e317e44d889ea46e940ec8b",
+        "weights": {
+          "structural_completeness": 0.15,
+          "provenance_quality": 0.2,
+          "evidence_support": 0.2,
+          "relationship_integrity": 0.15,
+          "temporal_freshness": 0.1,
+          "contradiction_status": 0.1,
+          "review_readiness": 0.1
+        },
+        "missingValueBehavior": "exclude-null-and-renormalize"
+      },
+      "assessor": {
+        "id": "tool:gkos-engine",
+        "engineVersion": "2.1.2"
+      },
+      "inputHash": "fnv1a32:1abefh9:ad",
+      "calculatedAt": "2026-01-02T12:00:00Z",
+      "scores": {
+        "structural_completeness": 0.6,
+        "provenance_quality": 0,
+        "evidence_support": null,
+        "relationship_integrity": 1,
+        "temporal_freshness": null,
+        "contradiction_status": null,
+        "review_readiness": 0.2,
+        "overall": 0.4333
+      },
+      "exclusions": [
+        "evidence_support",
+        "temporal_freshness",
+        "contradiction_status"
+      ],
+      "labels": {
+        "derived": [
+          "assessment:weakly-supported"
+        ]
+      },
+      "diagnostics": [
+        {
+          "code": "GKX-EPISTEMIC-004",
+          "severity": "warning",
+          "field": "epistemic.state",
+          "message": "Accepted state lacks an approval or authorization record; acceptance is not treated as verified authority.",
+          "deterministic": true,
+          "sourcePath": "policy/v2.md"
+        },
+        {
+          "code": "GKX-PROVENANCE-001",
+          "severity": "warning",
+          "field": "provenance.source_refs",
+          "message": "No source reference is declared.",
+          "deterministic": true,
+          "sourcePath": "policy/v2.md"
+        },
+        {
+          "code": "GKX-SCHEMA-003",
+          "severity": "warning",
+          "field": "gkx_version",
+          "message": "No GKX compatibility version is declared; legacy semantics apply.",
+          "deterministic": true,
+          "sourcePath": "policy/v2.md"
+        }
+      ],
+      "interpretation": "documentation-and-support-quality-not-truth"
+    }
+  ],
+  "gkxDiagnostics": [
+    {
+      "code": "GKX-EPISTEMIC-004",
+      "severity": "warning",
+      "field": "epistemic.state",
+      "message": "Accepted state lacks an approval or authorization record; acceptance is not treated as verified authority.",
+      "deterministic": true,
+      "sourcePath": "policy/v1.md"
+    },
+    {
+      "code": "GKX-PROVENANCE-001",
+      "severity": "warning",
+      "field": "provenance.source_refs",
+      "message": "No source reference is declared.",
+      "deterministic": true,
+      "sourcePath": "policy/v1.md"
+    },
+    {
+      "code": "GKX-SCHEMA-003",
+      "severity": "warning",
+      "field": "gkx_version",
+      "message": "No GKX compatibility version is declared; legacy semantics apply.",
+      "deterministic": true,
+      "sourcePath": "policy/v1.md"
+    },
+    {
+      "code": "GKX-EPISTEMIC-004",
+      "severity": "warning",
+      "field": "epistemic.state",
+      "message": "Accepted state lacks an approval or authorization record; acceptance is not treated as verified authority.",
+      "deterministic": true,
+      "sourcePath": "policy/v2.md"
+    },
+    {
+      "code": "GKX-PROVENANCE-001",
+      "severity": "warning",
+      "field": "provenance.source_refs",
+      "message": "No source reference is declared.",
+      "deterministic": true,
+      "sourcePath": "policy/v2.md"
+    },
+    {
+      "code": "GKX-SCHEMA-003",
+      "severity": "warning",
+      "field": "gkx_version",
+      "message": "No GKX compatibility version is declared; legacy semantics apply.",
+      "deterministic": true,
+      "sourcePath": "policy/v2.md"
+    }
+  ]
+}

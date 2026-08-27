@@ -1,5 +1,49 @@
 # Changelog
 
+## 2.1.2 — functional uplift Phases 0–3
+
+- Admitted the qualified Phase 0–3 chain through PR #22 and recorded the exact
+  Full pin and authority boundaries in the current capability list and build
+  handoff.
+
+### Phase 3 integration
+
+- Pinned the delegated CLI and frozen 21-file ingest contract mirror to signed,
+  hosted-green GKOS-Engine implementation commit
+  `e7cc0dd478af3d0bda216c5258dec5f77932def7`; no tag or release is claimed.
+- Added byte-exact `validate --kb-path ... [--schema ...]` and `index`
+  delegation, including strict/non-strict results, safe operational failures,
+  and unchanged source-note bytes.
+- Added a private Rust verifier for Full-produced normalized profiles,
+  findings, rejections, journals, owner/state envelopes, and digests without a
+  second YAML, TOML, GKX identity, profile, or Decision-A authority.
+- Added the Full-compatible durable guard around the frozen public legacy
+  schema-2 writer APIs and the internal schema-3 writer, preventing provider or
+  pointer work when Phase 3 owner authority exists.
+
+### Phase 2 integration
+
+- Pinned the five-command JavaScript delegate and the static Rust retrieval
+  contract mirror to signed, hosted-green GKOS-Engine commit
+  `6e2df27d33ede62ee0d2e3cb7610df478a7d66ce`; no tag or release is claimed.
+- Added point-in-time `search --as-of` delegation with byte-equivalent
+  Full/Lite exit status, stdout, stderr, and unchanged source-note bytes.
+- Added Decision-A authorization-scoped lineage, temporal provenance, and
+  exact citation conformance without creating a second GKX authority.
+
+### Phase 1 integration
+
+- Pinned the delegated CLI to exact reviewed GKOS-Engine commit
+  `bbc2ea874f4dde37e6376e46c080cb1c69ab1bb3` and mirrored its package version
+  `2.1.2`; no matching Lite tag or release is claimed.
+- Added `search` to the explicit read-only delegation boundary with byte-exact
+  Full/Lite output and diagnostic conformance tests.
+- Added the owner-ratified Rust retrieval workspace for the future static Lite
+  path, bound to Full's versioned retrieval contracts and never a second GKX
+  authority.
+- Preserved the immutable Phase 0 compatibility bytes and added separately
+  classified Phase 1 graph and Graphiti migration goldens.
+
 ## 1.1.3
 
 - Engine-verbatim catch-up to `GKOS-Engine#v1.1.3`: bumped the `gkos-engine`

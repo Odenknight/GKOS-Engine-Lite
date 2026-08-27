@@ -1,0 +1,179 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gkos.example/contracts/retrieval/gkos-retrieval-1.0.0-draft.1/gkos-config.schema.json",
+  "title": "GKOS trusted host configuration draft 1",
+  "description": "Logical JSON representation of the strict gkos.toml subset accepted by GKOS-Engine Phase 1; root TOML keys are represented as root JSON properties.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["config_version"],
+  "properties": {
+    "config_version": { "const": 1 },
+    "service": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "transport": { "type": "string" },
+        "host": { "type": "string" },
+        "port": { "type": "number" },
+        "legacy_rest": { "type": "boolean" }
+      }
+    },
+    "agents": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "multi_agent": { "type": "boolean" },
+        "require_authentication": { "type": "boolean" },
+        "activity_retention_days": { "type": "number" }
+      }
+    },
+    "retrieval": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "mode": { "type": "string" },
+        "max_tokens": { "type": "number" },
+        "overlap_tokens": { "type": "number" },
+        "parent_expansion": { "type": "boolean" },
+        "parent_expansion_max_child_tokens": { "type": "integer", "minimum": 1, "maximum": 4096 },
+        "mmr": { "type": "boolean" },
+        "mmr_lambda": { "type": "number" },
+        "rrf_k": { "type": "number" },
+        "lexical_top_k": { "type": "number" },
+        "semantic_top_k": { "type": "number" },
+        "path_include": { "type": "array", "items": { "type": "string" } },
+        "path_exclude": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "vectors": { "$ref": "#/$defs/vectorProvider" },
+    "reranker": { "$ref": "#/$defs/rerankProvider" },
+    "graph": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "sqlite_projection": { "type": "boolean" },
+        "graphiti_projection": { "type": "boolean" },
+        "similarity_projection": { "type": "boolean" }
+      }
+    },
+    "watcher": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "debounce_ms": { "type": "number" },
+        "startup_reconciliation": { "type": "boolean" }
+      }
+    }
+  },
+  "$defs": {
+    "disabledProvider": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["enabled"],
+      "properties": { "enabled": { "const": false } }
+    },
+    "vectorProvider": {
+      "oneOf": [
+        { "$ref": "#/$defs/disabledProvider" },
+        { "$ref": "#/$defs/openAiVectorProvider" },
+        { "$ref": "#/$defs/localOnnxVectorProvider" },
+        { "$ref": "#/$defs/mcpVectorProvider" }
+      ]
+    },
+    "rerankProvider": {
+      "oneOf": [
+        { "$ref": "#/$defs/disabledProvider" },
+        { "$ref": "#/$defs/openAiRerankProvider" },
+        { "$ref": "#/$defs/localOnnxRerankProvider" },
+        { "$ref": "#/$defs/mcpRerankProvider" }
+      ]
+    },
+    "openAiVectorProvider": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["enabled", "provider", "provider_id", "model_id", "dimensions", "endpoint"],
+      "properties": {
+        "enabled": { "const": true },
+        "provider": { "const": "openai_compatible" },
+        "provider_id": { "type": "string", "minLength": 1 },
+        "model_id": { "type": "string", "minLength": 1 },
+        "dimensions": { "type": "integer", "minimum": 1, "maximum": 1000000 },
+        "timeout_ms": { "$ref": "#/$defs/timeout" },
+        "endpoint": { "type": "string", "minLength": 1, "format": "uri", "pattern": "^https?://" },
+        "token_env": { "type": "string", "minLength": 1 }
+      }
+    },
+    "localOnnxVectorProvider": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["enabled", "provider", "provider_id", "model_id", "dimensions", "model_path"],
+      "properties": {
+        "enabled": { "const": true },
+        "provider": { "const": "local_onnx" },
+        "provider_id": { "type": "string", "minLength": 1 },
+        "model_id": { "type": "string", "minLength": 1 },
+        "dimensions": { "type": "integer", "minimum": 1, "maximum": 1000000 },
+        "timeout_ms": { "$ref": "#/$defs/timeout" },
+        "model_path": { "type": "string", "minLength": 1 }
+      }
+    },
+    "mcpVectorProvider": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["enabled", "provider", "provider_id", "model_id", "dimensions", "server", "tool"],
+      "properties": {
+        "enabled": { "const": true },
+        "provider": { "const": "mcp" },
+        "provider_id": { "type": "string", "minLength": 1 },
+        "model_id": { "type": "string", "minLength": 1 },
+        "dimensions": { "type": "integer", "minimum": 1, "maximum": 1000000 },
+        "timeout_ms": { "$ref": "#/$defs/timeout" },
+        "server": { "type": "string", "minLength": 1 },
+        "tool": { "type": "string", "minLength": 1 }
+      }
+    },
+    "openAiRerankProvider": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["enabled", "provider", "provider_id", "model_id", "endpoint"],
+      "properties": {
+        "enabled": { "const": true },
+        "provider": { "const": "openai_compatible" },
+        "provider_id": { "type": "string", "minLength": 1 },
+        "model_id": { "type": "string", "minLength": 1 },
+        "timeout_ms": { "$ref": "#/$defs/timeout" },
+        "endpoint": { "type": "string", "minLength": 1, "format": "uri", "pattern": "^https?://" },
+        "token_env": { "type": "string", "minLength": 1 }
+      }
+    },
+    "localOnnxRerankProvider": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["enabled", "provider", "provider_id", "model_id", "model_path"],
+      "properties": {
+        "enabled": { "const": true },
+        "provider": { "const": "local_onnx" },
+        "provider_id": { "type": "string", "minLength": 1 },
+        "model_id": { "type": "string", "minLength": 1 },
+        "timeout_ms": { "$ref": "#/$defs/timeout" },
+        "model_path": { "type": "string", "minLength": 1 }
+      }
+    },
+    "mcpRerankProvider": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["enabled", "provider", "provider_id", "model_id", "server", "tool"],
+      "properties": {
+        "enabled": { "const": true },
+        "provider": { "const": "mcp" },
+        "provider_id": { "type": "string", "minLength": 1 },
+        "model_id": { "type": "string", "minLength": 1 },
+        "timeout_ms": { "$ref": "#/$defs/timeout" },
+        "server": { "type": "string", "minLength": 1 },
+        "tool": { "type": "string", "minLength": 1 }
+      }
+    },
+    "timeout": { "type": "integer", "minimum": 1, "maximum": 300000 }
+  }
+}

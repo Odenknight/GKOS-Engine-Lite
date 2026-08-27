@@ -1,0 +1,276 @@
+{
+  "contract_version": "gkos-ingest-cli-conformance/1.0.0-draft.1",
+  "status": "frozen",
+  "frozen": true,
+  "commands": {
+    "validate": "gkx validate --kb-path <path> [--schema <path-or-id>] [--format text|json]",
+    "index": "gkx index --kb-path <path> [--schema <path-or-id>] [--strict]",
+    "legacy_validate": "gkx validate <dir>"
+  },
+  "argument_mode": {
+    "mix_positional_and_kb_path": "usage_error",
+    "phase3_flags_on_legacy_validate": "usage_error",
+    "index_positional": "usage_error",
+    "duplicate_or_missing_flag_value": "usage_error",
+    "all_argument_and_profile_selector_validation_precedes_corpus_or_state_io": true
+  },
+  "help": {
+    "argv": ["--help"],
+    "exit_code": 0,
+    "required_exact_lines": [
+      "  gkx validate --kb-path <path> [--schema <path-or-id>] [--format text|json]",
+      "  gkx index --kb-path <path> [--schema <path-or-id>] [--strict]",
+      "  gkx validate <dir>                                  schema/identity/lineage diagnostics; non-zero exit on error"
+    ],
+    "forbidden_fragments": ["<id|path>"],
+    "stderr": ""
+  },
+  "invalid_argv_matrix": [
+    { "name": "validate_mixed_positional_and_flag", "argv": ["validate", "<vault>", "--kb-path", "<vault>"], "error": "validate_usage" },
+    { "name": "validate_missing_kb_value", "argv": ["validate", "--kb-path"], "error": "validate_usage" },
+    { "name": "validate_phase3_flag_on_legacy", "argv": ["validate", "<vault>", "--schema", "gkos:frontmatter-profile/current"], "error": "validate_usage" },
+    { "name": "validate_duplicate_kb", "argv": ["validate", "--kb-path", "<vault>", "--kb-path", "<vault>"], "error": "validate_usage" },
+    { "name": "validate_unknown_format", "argv": ["validate", "--kb-path", "<vault>", "--format", "yaml"], "error": "validate_usage" },
+    { "name": "index_positional", "argv": ["index", "<vault>"], "error": "index_usage" },
+    { "name": "index_validate_only_format", "argv": ["index", "--kb-path", "<vault>", "--format", "json"], "error": "index_usage" },
+    { "name": "index_duplicate_strict", "argv": ["index", "--kb-path", "<vault>", "--strict", "--strict"], "error": "index_usage" }
+  ],
+  "local_kb_path": {
+    "raw_and_resolved_absolute_spelling_checked_before_io": true,
+    "canonical_root_identity_bound_before_scan": true,
+    "same_opaque_root_capability_consumed_by_scan_authority_and_provider_stage": true,
+    "reject_inputs": [
+      { "name": "unc", "input": "\\\\server\\share\\vault" },
+      { "name": "slash_unc", "input": "//server/share/vault" },
+      { "name": "extended_unc", "input": "\\\\?\\UNC\\server\\share\\vault" },
+      { "name": "extended_local", "input": "\\\\?\\C:\\foreign\\vault" },
+      { "name": "device", "input": "\\\\.\\PIPE\\gkos-vault" },
+      { "name": "nt_object_manager", "input": "\\??\\UNC\\server\\share\\vault" },
+      { "name": "drive_relative", "input": "C:relative" },
+      { "name": "alternate_data_stream", "input": "vault:stream" },
+      { "name": "reserved_device", "input": "NUL" },
+      { "name": "reserved_device_with_extension", "input": "con.txt" },
+      { "name": "reserved_device_trailing", "input": "folder/AUX. " },
+      { "name": "reserved_superscript_com1", "input": "COM\u00b9" },
+      { "name": "reserved_superscript_com2", "input": "COM\u00b2.txt" },
+      { "name": "reserved_superscript_lpt3", "input": "LPT\u00b3" },
+      { "name": "reserved_conin", "input": "CONIN$" },
+      { "name": "reserved_conout", "input": "CONOUT$.txt" },
+      { "name": "reserved_clock", "input": "CLOCK$" },
+      { "name": "trailing_dot", "input": "trailing." },
+      { "name": "trailing_space", "input": "trailing " },
+      { "name": "control", "input": "line\nfeed" },
+      { "name": "carriage_return", "input": "carriage\rreturn" },
+      { "name": "tab", "input": "tab\tname" },
+      { "name": "escape", "input": "escape\u001bname" },
+      { "name": "del", "input": "delete\u007fname" },
+      { "name": "unpaired_surrogate", "encoding": "utf16_code_units", "code_units": [55296] },
+      { "name": "empty", "input": "" }
+    ],
+    "non_windows_reject_inputs": ["C:/foreign-drive/vault"],
+    "windows_forbidden_base_resolution": {
+      "base": "\\\\server\\share\\operator",
+      "relative": "vault"
+    },
+    "portable_acceptance": "ordinary local absolute or relative spelling; Windows ordinary drive and 8.3/case spellings canonicalize to one root; extended namespaces remain forbidden"
+  },
+  "materializable_corpora": {
+    "invalid": {
+      "files": [
+        {
+          "path": "valid.md",
+          "content": "---\ngkx_version: \"2.3\"\nuid: \"018f0000-0000-7000-8000-000000000601\"\ntitle: \"Visible\"\ntype: \"policy\"\ncreated_at: \"2026-08-01T00:00:00Z\"\nepistemic_state: \"reported\"\nsensitivity: \"public\"\n---\n# Visible\nVISIBLE_PROVIDER_SENTINEL\n"
+        },
+        {
+          "path": "invalid.md",
+          "content": "---\ngkx_version: \"2.3\"\nuid: \"invalid-authored-uid\"\ntitle: \"Invalid\"\ntype: \"policy\"\ncreated_at: \"2026-08-01T00:00:00Z\"\nepistemic_state: \"reported\"\nsensitivity: \"public\"\n---\n# Invalid\nREJECTED_SOURCE_SENTINEL\n"
+        }
+      ]
+    },
+    "valid": {
+      "files": [
+        {
+          "path": "missing-sensitivity.md",
+          "content": "---\ngkx_version: \"2.3\"\nuid: \"018f0000-0000-7000-8000-000000000303\"\ntitle: \"Missing Sensitivity\"\ntype: \"policy\"\ncreated_at: \"2026-08-01T00:00:00Z\"\nepistemic_state: \"reported\"\n---\n# Missing Sensitivity\nValidated body.\n"
+        }
+      ],
+      "expected_behavior_reference": "conformance-fixture.json#/missing_sensitivity_case/expected"
+    }
+  },
+  "presentation_matrix": [
+    {
+      "name": "validate_json_invalid",
+      "command": "validate",
+      "argv": ["validate", "--kb-path", "<fixture-vault>", "--format", "json"],
+      "input_reference": "cli-conformance-fixture.json#/materializable_corpora/invalid",
+      "mode": null,
+      "outcome": "invalid",
+      "exit_code": 1,
+      "stdout_encoding": "JSON.stringify(sealed_result,null,2)+LF",
+      "expected_stdout_sha256": "sha256:581968707d8cc2db6a32ffede76fcfc452e2494c197e915b5f0e7bac70d2d2c6",
+      "stderr": ""
+    },
+    {
+      "name": "validate_text_invalid",
+      "command": "validate",
+      "argv": ["validate", "--kb-path", "<fixture-vault>"],
+      "input_reference": "cli-conformance-fixture.json#/materializable_corpora/invalid",
+      "mode": null,
+      "outcome": "invalid",
+      "exit_code": 1,
+      "stdout_encoding": "frozen_validation_text_lines+LF",
+      "expected_stdout": "gkx validate: INVALID\n  sources: observed=2 valid=1 rejected=1\n  findings: critical=0 error=3 warning=2 info=0\n  [error] CANONICAL_SOURCE_UID_UNAVAILABLE invalid.md:3 (uid)\n  [error] GKX-IDENTITY-002 invalid.md:3 (uid)\n  [error] GKX_INGEST_UID_REQUIRED invalid.md:3 (uid)\n  [warning] GKX-PROVENANCE-001 invalid.md (provenance.source_refs)\n  [warning] GKX-PROVENANCE-001 valid.md (provenance.source_refs)\n",
+      "expected_stdout_sha256": "sha256:d439393574c022ea0aefe814183a5e20b194d463e36ee4a9c39ce531d8080624",
+      "stderr": ""
+    },
+    {
+      "name": "validate_json_valid",
+      "command": "validate",
+      "argv": ["validate", "--kb-path", "<fixture-vault>", "--format", "json"],
+      "input_reference": "cli-conformance-fixture.json#/materializable_corpora/valid",
+      "mode": null,
+      "outcome": "valid",
+      "exit_code": 0,
+      "stdout_encoding": "JSON.stringify(sealed_result,null,2)+LF",
+      "expected_stdout_sha256": "sha256:eaad57fe9cadf463d72d1c1ed758f0dff7b7996668bf163fa74a5ec2fb5be3f6",
+      "stderr": ""
+    },
+    {
+      "name": "validate_text_valid",
+      "command": "validate",
+      "argv": ["validate", "--kb-path", "<fixture-vault>"],
+      "input_reference": "cli-conformance-fixture.json#/materializable_corpora/valid",
+      "mode": null,
+      "outcome": "valid",
+      "exit_code": 0,
+      "stdout_encoding": "frozen_validation_text_lines+LF",
+      "expected_stdout": "gkx validate: VALID\n  sources: observed=1 valid=1 rejected=0\n  findings: critical=0 error=0 warning=2 info=0\n  [warning] GKX-PROVENANCE-001 missing-sensitivity.md (provenance.source_refs)\n  [warning] GKX-SENSITIVITY-001 missing-sensitivity.md (sensitivity.level)\n",
+      "expected_stdout_sha256": "sha256:b0e8ceedc96803b367bd9046f48e0e66c5930588ce13d911661f7c60ab008862",
+      "stderr": ""
+    },
+    {
+      "name": "index_published_strict",
+      "command": "index",
+      "argv": ["index", "--kb-path", "<fixture-vault>", "--strict"],
+      "result_reference": "storage-conformance-fixture.json#/valid_envelopes/index_results/status=published,mode=strict",
+      "mode": "strict",
+      "outcome": "published",
+      "exit_code": 0,
+      "stdout_encoding": "JSON.stringify(sealed_result,null,2)+LF",
+      "expected_stdout_sha256": "sha256:9f6a9050b099fdbb51e27c75feba781087dc4f6d8690624a04bd1340afdfb617",
+      "stderr": ""
+    },
+    {
+      "name": "index_published_non_strict",
+      "command": "index",
+      "argv": ["index", "--kb-path", "<fixture-vault>"],
+      "result_reference": "storage-conformance-fixture.json#/valid_envelopes/index_results/status=published,mode=non_strict",
+      "mode": "non_strict",
+      "outcome": "published",
+      "exit_code": 0,
+      "stdout_encoding": "JSON.stringify(sealed_result,null,2)+LF",
+      "expected_stdout_sha256": "sha256:b90afe4488a5fd6b77824578a1a304346f7c2eafab021dcfb93fb4be427beab0",
+      "stderr": ""
+    },
+    {
+      "name": "index_published_with_rejections_non_strict",
+      "command": "index",
+      "argv": ["index", "--kb-path", "<fixture-vault>"],
+      "result_reference": "storage-conformance-fixture.json#/valid_envelopes/index_results/status=published_with_rejections,mode=non_strict",
+      "mode": "non_strict",
+      "outcome": "published_with_rejections",
+      "exit_code": 0,
+      "stdout_encoding": "JSON.stringify(sealed_result,null,2)+LF",
+      "expected_stdout_sha256": "sha256:061aa1022f5164f547c58a46f61393d90d2b42e71af670b92c1ab0924c20f849",
+      "stderr": ""
+    },
+    {
+      "name": "index_blocked_strict",
+      "command": "index",
+      "argv": ["index", "--kb-path", "<fixture-vault>", "--strict"],
+      "result_reference": "storage-conformance-fixture.json#/valid_envelopes/index_results/status=blocked_strict,mode=strict",
+      "mode": "strict",
+      "outcome": "blocked_strict",
+      "exit_code": 1,
+      "stdout_encoding": "JSON.stringify(sealed_result,null,2)+LF",
+      "expected_stdout_sha256": "sha256:23b47882e21ccb77e6eea34e6f70ffc952ef16ef9b28f04d5c7f154b27935292",
+      "stderr": ""
+    },
+    {
+      "name": "index_operational_non_strict",
+      "command": "index",
+      "argv": ["index", "--kb-path", "<missing-vault>"],
+      "result_reference": "storage-conformance-fixture.json#/valid_envelopes/index_results/status=operational_failure,mode=non_strict",
+      "mode": "non_strict",
+      "outcome": "operational_failure",
+      "exit_code": 3,
+      "stdout_encoding": "JSON.stringify(sealed_result,null,2)+LF",
+      "expected_stdout_sha256": "sha256:910f52daa36f36b656455e498e9537e81c61e067fc3e19e827e9a559499d1a58",
+      "stderr": "gkx index: operational failure\n"
+    },
+    {
+      "name": "index_operational_strict",
+      "command": "index",
+      "argv": ["index", "--kb-path", "<missing-vault>", "--strict"],
+      "result_reference": "storage-conformance-fixture.json#/valid_envelopes/index_results/status=operational_failure,mode=strict",
+      "mode": "strict",
+      "outcome": "operational_failure",
+      "exit_code": 3,
+      "stdout_encoding": "JSON.stringify(sealed_result,null,2)+LF",
+      "expected_stdout_sha256": "sha256:3385b74736bfba70ebd422545161d586acba4ba4ac9ac03592037cd2e4129f84",
+      "stderr": "gkx index: operational failure\n"
+    }
+  ],
+  "validation_text_lines": [
+    "gkx validate: <VALID|INVALID>",
+    "  sources: observed=<integer> valid=<integer> rejected=<integer>",
+    "  findings: critical=<integer> error=<integer> warning=<integer> info=<integer>",
+    "  [<severity>] <code> <corpus|source_path[:line]>[ (<field>)]"
+  ],
+  "fixed_error_matrix": [
+    { "name": "validate_usage", "exit_code": 2, "stdout": "", "stderr": "gkx validate: invalid arguments\n" },
+    { "name": "index_usage", "exit_code": 2, "stdout": "", "stderr": "gkx index: invalid arguments\n" },
+    { "name": "validate_kb_path", "exit_code": 2, "stdout": "", "stderr": "gkx validate: invalid knowledge-base path\n" },
+    { "name": "index_kb_path", "exit_code": 2, "stdout": "", "stderr": "gkx index: invalid knowledge-base path\n" },
+    { "name": "validate_profile", "exit_code": 2, "stdout": "", "stderr": "gkx validate: profile selection failed\n" },
+    { "name": "index_profile", "exit_code": 2, "stdout": "", "stderr": "gkx index: profile selection failed\n" },
+    { "name": "validate_operational", "exit_code": 3, "stdout": "", "stderr": "gkx validate: operational failure\n" },
+    { "name": "search_authority", "exit_code": 3, "stdout": "", "stderr": "gkx search: operational authority failure\n" }
+  ],
+  "search_routing_matrix": [
+    {
+      "name": "legacy_before_phase3",
+      "route": "legacy_compatible_index_then_search",
+      "attempt_status_bytes_loaded": false,
+      "owner_bytes_loaded": false
+    },
+    {
+      "name": "attempt_status_with_legacy_prior",
+      "route": "metadata_only_existing_legacy_read",
+      "attempt_status_bytes_loaded": false,
+      "owner_bytes_loaded": false
+    },
+    {
+      "name": "attempt_status_without_prior",
+      "route": "metadata_only_unavailable",
+      "attempt_status_bytes_loaded": false,
+      "owner_bytes_loaded": false,
+      "exit_code": 3,
+      "stderr": "gkx search: operational authority failure\n"
+    },
+    {
+      "name": "active_phase3",
+      "route": "public_safe_inner_only",
+      "attempt_status_bytes_loaded": false,
+      "owner_bytes_loaded": false
+    },
+    {
+      "name": "aliased_or_case_noncanonical_evidence",
+      "route": "fail_closed",
+      "attempt_status_bytes_loaded": false,
+      "owner_bytes_loaded": false,
+      "exit_code": 3,
+      "stderr": "gkx search: operational authority failure\n"
+    }
+  ]
+}

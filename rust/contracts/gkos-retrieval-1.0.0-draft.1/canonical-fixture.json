@@ -1,0 +1,43 @@
+{
+  "contract_version": "gkos-retrieval/1.0.0-draft.1",
+  "canonical_json": "recursive objects sorted by UTF-16 code units; arrays retain order; JSON.stringify-compatible finite-number rendering; negative zero renders as zero; strings are not Unicode-normalized",
+  "cases": [
+    {
+      "id": "numbers",
+      "input_expressions": ["1.0", "-0", "1e-7", "1e-6", "9007199254740991"],
+      "canonical_json": "{\"negative_zero\":0,\"one\":1,\"safe_max\":9007199254740991,\"small\":1e-7,\"threshold\":0.000001}",
+      "sha256": "sha256:616063ac4d4226377746c6664fab71ba05aff330372fa609659009cde0181d62"
+    },
+    {
+      "id": "utf16-key-order",
+      "canonical_json": "{\"a\":\"ascii\",\"😀\":\"non-bmp\",\"\":\"bmp-private\"}",
+      "sha256": "sha256:f3e724ae75034bdcb5812b7af272187df5bb257f60c6a14f40237060ad4ac63b"
+    },
+    {
+      "id": "unicode-values-no-normalization",
+      "canonical_json": "{\"combining\":\"é\",\"precomposed\":\"é\"}",
+      "sha256": "sha256:17332475eca50c57d196994844b97737849612e9dcad9220dcc2a1414043efb7"
+    }
+  ],
+  "rejected_numbers": ["9007199254740992", "-9007199254740992", "1e21", "NaN", "Infinity"],
+  "portable_source_paths": [
+    { "path": "policy/example.md", "accepted": true },
+    { "path": "draft..md", "accepted": true },
+    { "path": "folder/ok note.md", "accepted": true },
+    { "path": "folder/name:bad.md", "accepted": false },
+    { "path": "folder\\note.md", "accepted": false },
+    { "path": "folder//note.md", "accepted": false },
+    { "path": "../note.md", "accepted": false },
+    { "path": "folder/./note.md", "accepted": false },
+    { "path": "/absolute.md", "accepted": false },
+    { "path": "folder/trailing.", "accepted": false }
+  ],
+  "timestamp_filters": [
+    { "value": "2026-08-20T12:34Z", "accepted": true },
+    { "value": "2026-08-20T12:34:56.123Z", "accepted": true },
+    { "value": "2026-08-20T08:34:56-04:00", "accepted": true },
+    { "value": "2026-08-20T12:34", "accepted": false },
+    { "value": "2026-08-20 12:34:56Z", "accepted": false },
+    { "value": "2026-08-20T12:34:56+99:00", "accepted": false }
+  ]
+}

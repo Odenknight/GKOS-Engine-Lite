@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Odenknight/GKOS-Engine/contracts/ingest/gkos-ingest-validation-1.0.0-draft.1/index-result.schema.json",
+  "title": "GKOS ingest path-free index result draft 1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["contract_version", "status", "mode", "summary", "active", "blocked_attempt"],
+  "properties": {
+    "contract_version": { "const": "gkos-ingest-index-result/1.0.0-draft.1" },
+    "status": { "enum": ["published", "published_with_rejections", "blocked_strict", "operational_failure"] },
+    "mode": { "enum": ["strict", "non_strict"] },
+    "summary": {
+      "oneOf": [
+        { "type": "null" },
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["observed_source_count", "valid_source_count", "rejected_source_count", "findings"],
+          "properties": {
+            "observed_source_count": { "$ref": "#/$defs/count" },
+            "valid_source_count": { "$ref": "#/$defs/count" },
+            "rejected_source_count": { "$ref": "#/$defs/count" },
+            "findings": {
+              "type": "object", "additionalProperties": false,
+              "required": ["info", "warning", "error", "critical"],
+              "properties": {
+                "info": { "$ref": "#/$defs/count" },
+                "warning": { "$ref": "#/$defs/count" },
+                "error": { "$ref": "#/$defs/count" },
+                "critical": { "$ref": "#/$defs/count" }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "active": { "$ref": "state-common.schema.json#/$defs/priorActive" },
+    "blocked_attempt": {
+      "oneOf": [
+        { "type": "null" },
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["attempt_digest", "status_digest"],
+          "properties": {
+            "attempt_digest": { "$ref": "state-common.schema.json#/$defs/sha256" },
+            "status_digest": { "$ref": "state-common.schema.json#/$defs/sha256" }
+          }
+        }
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "status": { "const": "published" } }, "required": ["status"] },
+      "then": {
+        "properties": {
+          "summary": { "type": "object", "properties": { "rejected_source_count": { "const": 0 } } },
+          "active": { "type": "object", "properties": { "kind": { "const": "ingest" } }, "required": ["kind"] },
+          "blocked_attempt": { "type": "null" }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "status": { "const": "published_with_rejections" } }, "required": ["status"] },
+      "then": {
+        "properties": {
+          "mode": { "const": "non_strict" },
+          "summary": { "type": "object", "properties": { "rejected_source_count": { "type": "integer", "minimum": 1 } } },
+          "active": { "type": "object", "properties": { "kind": { "const": "ingest" } }, "required": ["kind"] },
+          "blocked_attempt": { "type": "null" }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "status": { "const": "blocked_strict" } }, "required": ["status"] },
+      "then": {
+        "properties": {
+          "mode": { "const": "strict" },
+          "summary": { "type": "object", "properties": { "rejected_source_count": { "type": "integer", "minimum": 1 } } },
+          "blocked_attempt": { "type": "object" }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "status": { "const": "operational_failure" } }, "required": ["status"] },
+      "then": {
+        "properties": { "summary": { "type": "null" }, "active": { "type": "null" }, "blocked_attempt": { "type": "null" } }
+      }
+    }
+  ],
+  "$defs": {
+    "count": { "type": "integer", "minimum": 0, "maximum": 1000000 }
+  }
+}

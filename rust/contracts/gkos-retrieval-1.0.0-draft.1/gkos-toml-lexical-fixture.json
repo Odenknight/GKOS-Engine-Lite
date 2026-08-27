@@ -1,0 +1,95 @@
+{
+  "contract_version": "gkos-retrieval/1.0.0-draft.1",
+  "profile": "gkos-toml-subset/1",
+  "accepted": [
+    {
+      "id": "minimal",
+      "text": "config_version = 1\n",
+      "canonical_document": "{\"\":{\"config_version\":1}}",
+      "configuration_digest": "sha256:27733af488dd4ba84642203fa5909af7f4ba1b80cbbbff35026983f9aa578559"
+    },
+    {
+      "id": "one-line-strings-decimals-and-dense-string-array",
+      "text": "config_version = 1\n\n[retrieval]\nmode = \"fts\\tlocal\"\nmmr = true\nmmr_lambda = 0.7\nrrf_k = 60\npath_include = ['policy/**', \"emoji/\\U0001F600.md\", \"letter/\\u0061.md\", 'literal#hash'] # bounded strings\n",
+      "canonical_document": "{\"\":{\"config_version\":1},\"retrieval\":{\"mmr\":true,\"mmr_lambda\":0.7,\"mode\":\"fts\\tlocal\",\"path_include\":[\"policy/**\",\"emoji/😀.md\",\"letter/a.md\",\"literal#hash\"],\"rrf_k\":60}}",
+      "configuration_digest": "sha256:56b5d1435312a2c5ccdd3d7115243becc199f6a317c94f8df5ff425fa7a502de"
+    }
+  ],
+  "rejected": [
+    {
+      "id": "json-only-solidus-escape",
+      "text": "config_version = 1\n[retrieval]\nmode = \"bad\\/escape\"\n",
+      "error_code": "GKOS_CONFIG_BASIC_STRING_ESCAPE_INVALID"
+    },
+    {
+      "id": "unicode-lone-high-surrogate",
+      "text": "config_version = 1\n[retrieval]\nmode = \"\\uD800\"\n",
+      "error_code": "GKOS_CONFIG_UNICODE_ESCAPE_INVALID"
+    },
+    {
+      "id": "unicode-lone-low-surrogate",
+      "text": "config_version = 1\n[retrieval]\nmode = \"\\uDFFF\"\n",
+      "error_code": "GKOS_CONFIG_UNICODE_ESCAPE_INVALID"
+    },
+    {
+      "id": "unicode-out-of-range",
+      "text": "config_version = 1\n[retrieval]\nmode = \"\\U00110000\"\n",
+      "error_code": "GKOS_CONFIG_UNICODE_ESCAPE_INVALID"
+    },
+    {
+      "id": "leading-zero-integer",
+      "text": "config_version = 1\n[retrieval]\nrrf_k = 060\n",
+      "error_code": "GKOS_CONFIG_VALUE_UNSUPPORTED"
+    },
+    {
+      "id": "numeric-underscore",
+      "text": "config_version = 1\n[retrieval]\nrrf_k = 1_000\n",
+      "error_code": "GKOS_CONFIG_VALUE_UNSUPPORTED"
+    },
+    {
+      "id": "numeric-exponent",
+      "text": "config_version = 1\n[retrieval]\nmmr_lambda = 7e-1\n",
+      "error_code": "GKOS_CONFIG_VALUE_UNSUPPORTED"
+    },
+    {
+      "id": "integer-coordinate-decimal",
+      "text": "config_version = 1.0\n",
+      "error_code": "GKOS_CONFIG_INTEGER_SYNTAX_INVALID"
+    },
+    {
+      "id": "special-float",
+      "text": "config_version = 1\n[retrieval]\nmmr_lambda = nan\n",
+      "error_code": "GKOS_CONFIG_VALUE_UNSUPPORTED"
+    },
+    {
+      "id": "trailing-array-comma",
+      "text": "config_version = 1\n[retrieval]\npath_include = [\"notes/**\",]\n",
+      "error_code": "GKOS_CONFIG_ARRAY_TRAILING_COMMA_UNSUPPORTED"
+    },
+    {
+      "id": "multiline-string",
+      "text": "config_version = 1\n[retrieval]\nmode = \"\"\"fts\"\"\"\n",
+      "error_code": "GKOS_CONFIG_BASIC_STRING_INVALID"
+    },
+    {
+      "id": "dotted-key",
+      "text": "config_version = 1\nretrieval.mode = \"fts\"\n",
+      "error_code": "GKOS_CONFIG_KEY_UNKNOWN"
+    },
+    {
+      "id": "duplicate-section",
+      "text": "config_version = 1\n[retrieval]\nmode = \"fts\"\n[retrieval]\nmmr = false\n",
+      "error_code": "GKOS_CONFIG_DUPLICATE_SECTION"
+    },
+    {
+      "id": "inline-table",
+      "text": "config_version = 1\n[retrieval]\nmode = { value = \"fts\" }\n",
+      "error_code": "GKOS_CONFIG_VALUE_UNSUPPORTED"
+    },
+    {
+      "id": "non-string-array",
+      "text": "config_version = 1\n[retrieval]\npath_include = [\"notes/**\", 7]\n",
+      "error_code": "GKOS_CONFIG_ARRAY_INVALID"
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Odenknight/GKOS-Engine/contracts/ingest/gkos-ingest-validation-1.0.0-draft.1/rejection-journal.schema.json",
+  "title": "GKOS ingest sealed rejection journal draft 1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract_version", "observation_snapshot_digest", "profile", "normalized_profile",
+    "rejection_count", "rejections", "rejection_journal_digest"
+  ],
+  "properties": {
+    "contract_version": { "const": "gkos-ingest-rejection-journal/1.0.0-draft.1" },
+    "observation_snapshot_digest": { "$ref": "state-common.schema.json#/$defs/sha256" },
+    "profile": { "$ref": "profile-coordinate.schema.json" },
+    "normalized_profile": { "$ref": "normalized-profile.schema.json" },
+    "rejection_count": { "type": "integer", "minimum": 0, "maximum": 1000000 },
+    "rejections": {
+      "type": "array", "maxItems": 1000000, "uniqueItems": true,
+      "items": { "$ref": "rejection.schema.json" }
+    },
+    "rejection_journal_digest": { "$ref": "state-common.schema.json#/$defs/sha256" }
+  }
+}

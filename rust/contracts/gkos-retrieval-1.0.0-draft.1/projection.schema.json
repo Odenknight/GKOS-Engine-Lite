@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gkos.example/contracts/retrieval/gkos-retrieval-1.0.0-draft.1/projection.schema.json",
+  "title": "GKOS retrieval projection manifest draft 1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["contract_version", "projection_schema_version", "projection_id", "engine_version", "vault_id", "source_snapshot_digest", "configuration_digest", "policy_digest", "chunker_version", "tokenizer_version", "lexical_backend", "embedding_provider_id", "embedding_model_id", "embedding_dimensions", "source_count", "chunk_count", "projection_digest"],
+  "properties": {
+    "contract_version": { "const": "gkos-retrieval/1.0.0-draft.1" },
+    "projection_schema_version": { "const": 2 },
+    "projection_id": { "type": "string", "pattern": "^retrieval:[0-9a-f]{24}$" },
+    "engine_version": { "type": "string", "minLength": 1 },
+    "vault_id": { "type": "string", "minLength": 1 },
+    "source_snapshot_digest": { "$ref": "#/$defs/sha256" },
+    "configuration_digest": { "$ref": "#/$defs/sha256" },
+    "policy_digest": { "$ref": "#/$defs/sha256" },
+    "chunker_version": { "const": "gkos-heading-chunker/1" },
+    "tokenizer_version": { "const": "gkos-ascii-whitespace/1" },
+    "lexical_backend": { "enum": ["sqlite_fts5", "sqlite_lexical_scan"] },
+    "embedding_provider_id": { "type": ["string", "null"] },
+    "embedding_model_id": { "type": ["string", "null"] },
+    "embedding_dimensions": { "type": ["integer", "null"], "minimum": 1 },
+    "source_count": { "type": "integer", "minimum": 0 },
+    "chunk_count": { "type": "integer", "minimum": 0 },
+    "projection_digest": { "$ref": "#/$defs/sha256" }
+  },
+  "$defs": { "sha256": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" } }
+}

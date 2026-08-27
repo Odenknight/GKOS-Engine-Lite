@@ -12,21 +12,40 @@ GKOS-Engine-Lite is the standalone, non-Obsidian counterpart to
 [Kosmos Research Studio Lite (KRS-Lite)](https://github.com/Odenknight/Kosmos-Oden-Lite): it gives
 individuals and small vaults the same GKOS-Engine-Lite schema — GKX Notes
 (2.2) with the optional Agent-Ready flat 2.3 profile — as a command-line tool
-you can point at any folder of Markdown notes. The CLI package has no Obsidian dependency, plugin, or GUI: just `okf-lite validate`, `assess`, `graph`, and `export` over a
-directory.
+you can point at any folder of Markdown notes. The CLI package has no Obsidian
+dependency, plugin, or GUI: just `okf-lite validate`, `index`, `assess`,
+`search`, `graph`, and `export` over a directory.
 
-It is a thin wrapper, not a reimplementation. Under the hood it depends
+## Current build status
+
+The qualified functional-uplift source is
+`codex/phase-3-ingest-validation` at
+`41912fd6db279f1b46e67cb4b88c1f1b4ba86e63`. PR #22 admits its Phase 0–3
+chain from pre-admission Lite `main`
+`2ebbf77583af3e83032054f1256188dc56376907` and records the `v2.1.2` source
+release. This does not publish or qualify a one-file static Lite artifact or a
+Desktop installer release.
+
+For the exact implemented/deferred matrix, read
+[Current capabilities](docs/CURRENT_CAPABILITIES.md). Builders continuing the
+qualified branch should start with the
+[current build handoff](docs/HANDOFF_2026-08-27.md).
+
+The published JavaScript CLI remains a thin delegate. Under the hood it depends
 directly on [gkos-engine](https://github.com/Odenknight/GKOS-Engine) — the
 canonical, deterministic engine that also powers KRS and KRS-Lite — and
-re-exports its CLI commands unchanged. Same parser,
-same validation and assessment behavior, through the same upstream execution
-path. CI verifies the restricted command boundary and compatibility fixtures;
-Lite does not independently implement deterministic semantics.
+delegates its allowed GKX commands unchanged. Same parser, same validation and
+assessment behavior, through the same upstream execution path. The new
+`rust/` retrieval core is the separately governed future static-Lite path: a
+pin-bound implementation of Full-owned retrieval contracts with exact
+cross-language conformance, never a second GKX parser, lineage model, or
+authority. No static distribution or platform qualification is claimed yet.
+CI verifies both the restricted command boundary and compatibility fixtures.
 
 Version 1.1 also offers an optional `assist` command backed by a separately
 configured local intelligence sidecar. It never modifies a note and prints
 only engine-validated candidate proposals. Python, DSPy, a model, and provider
-credentials are optional; `validate`, `assess`, `graph`, and `export` work
+credentials are optional; `validate`, `assess`, `search`, `graph`, and `export` work
 unchanged without them.
 
 ## Why "Lite"
@@ -42,11 +61,13 @@ What "Lite" narrows is documentation and positioning, not behavior: this
 README and this package describe and support the everyday, individual-vault
 workflow — OKF+ Notes (2.2) and Agent-Ready (flat 2.3) — and don't document
 Machine-Dialect-specific workflows, sidecar governance, or proposal/decision
-records. If you need those, use gkos-engine directly. If gkos-engine later
-grows write-capable commands (migrate, proposals, decisions, mv, serve — none
-exist yet as of the pinned gkos-engine release), GKOS-Engine-Lite's CLI surface will stay
-limited to the four deterministic read-only commands below plus the separate,
-proposal-only `assist` surface.
+records. If you need those, use gkos-engine directly. The Phase 3 `index`
+command writes only sealed derived retrieval generations under the pinned
+Engine's fail-closed owner protocol; it never changes source notes. If
+gkos-engine later grows broader write-capable commands (migrate, proposals,
+decisions, mv, or serve), GKOS-Engine-Lite's CLI surface will stay limited to
+the six delegated commands below plus the separate, proposal-only `assist`
+surface.
 
 ## Install
 
@@ -56,16 +77,26 @@ Requires Node >=22 <25.
 npm install gkos-engine-lite
 ```
 
-`gkos-engine` has no npm registry publish; it's installed as a pinned git
-dependency (`github:Odenknight/GKOS-Engine#v1.1.3`, resolved to commit
-`72c4a3268c9db132f2f9dd5aaa7eb7075e6bab2a`). Git installation runs the
+`gkos-engine` has no npm registry publish; this integration branch installs
+Engine package 2.1.2 from the exact reviewed commit
+`e7cc0dd478af3d0bda216c5258dec5f77932def7`. This commit pin is not a claim
+that a matching Engine or Lite release tag exists. Git installation runs the
 engine package's standard `prepare` build.
+
+Historical note bytes remain valid compatibility input and need no source
+rewrite. Derived graph and projection envelopes produced by this pin use the
+current canonical GKX namespace; the preserved Phase 0 and classified Phase 1
+goldens document that migration explicitly.
 
 ## CLI: `okf-lite`
 
 ```sh
 node bin/okf-lite.mjs validate ./my-notes
+node bin/okf-lite.mjs validate --kb-path ./my-notes --schema gkos:frontmatter-profile/current --format json
+node bin/okf-lite.mjs index --kb-path ./my-notes --strict
 node bin/okf-lite.mjs assess   ./my-notes --json
+node bin/okf-lite.mjs search   "canonical policy" --kb-path ./my-notes --limit 5
+node bin/okf-lite.mjs search   "historical policy" --kb-path ./my-notes --as-of 2026-07-15T00:00-04:00 --limit 5
 node bin/okf-lite.mjs graph    ./my-notes -o graph.json
 node bin/okf-lite.mjs export graphiti ./my-notes --episodes episodes.json
 ```
@@ -98,11 +129,40 @@ Runs the deterministic parser/projection/validation over every note in
 `<dir>` and prints a summary plus per-note diagnostics. Exits non-zero if any
 `error` or `critical` diagnostics are found.
 
+The additive Phase 3 form is
+`okf-lite validate --kb-path <path> [--schema <path-or-id>] [--format text|json]`.
+Omitting `--schema` or selecting exact
+`gkos:frontmatter-profile/current` uses the frozen built-in profile; an
+explicit local strict-TOML overlay may only tighten it. Lite delegates the
+original arguments and output bytes to Full and does not parse YAML or TOML.
+
+### `okf-lite index --kb-path <path> [--schema <path-or-id>] [--strict]`
+
+Delegates Phase 3 ingest validation and atomic derived-generation publication
+to the pinned Engine. Strict mode blocks publication on intrinsic validation
+errors; non-strict mode excludes invalid sources whole and may publish a
+sealed generation with rejections. Full remains the sole parser, profile,
+owner-storage, and activation authority; source-note bytes are never changed.
+
 ### `okf-lite assess <dir> [--json]`
 
 Runs the assessment engine over every note and prints per-note
 documentation-quality scores and labels. `--json` emits a
 stable-key-ordered JSON array instead of the human-readable table.
+
+### `okf-lite search <query> --kb-path <dir> [--limit <n>] [--as-of <GKX timestamp>]`
+
+Delegates to the pinned Engine retrieval CLI and returns the versioned
+retrieval result contract with explicit provider stages, confidence, and exact
+verified citations. The mandatory path is local lexical retrieval; optional
+provider configuration does not change GKX identity or authority. On this
+Phase 3 branch, Lite preserves the optional `--as-of` flag and its value
+unchanged at the delegation boundary. The wrapper and pinned Full CLI execute
+the same corpus and trusted configuration with byte-equivalent exit status,
+stdout, and stderr; only the process-specific PID on the exact Node SQLite
+experimental-warning line is normalized by the test. See
+[Citation and temporal provenance](docs/citations.md) for the pin-bound result
+semantics and authority boundary.
 
 ### `okf-lite graph <dir> -o <graph.json> [--watch]`
 
@@ -120,15 +180,18 @@ reproducible and auditable.
 ## Desktop app — GKOS Engine Desktop
 
 `desktop/` contains the separate **GKOS Engine Desktop** presentation package, a Tauri 2 tray app for macOS and
-Windows that wraps the engine's headless sidecar (`kosmos-agent`, from
-[gkos-engine v1.1.3](https://github.com/Odenknight/GKOS-Engine/releases/tag/v1.1.0)).
+Windows that wraps the engine's headless sidecar (`kosmos-agent`). The CLI
+integration is bound to [Engine package 2.1.2 at exact commit
+`e7cc0dd`](https://github.com/Odenknight/GKOS-Engine/commit/e7cc0dd478af3d0bda216c5258dec5f77932def7);
+desktop sidecar artifacts remain separately qualified and are not implied by
+that source pin.
 Point it at a notes folder; it watches and projects (OKF+ 2.3 + Graphiti) and
 serves a **loopback-only, read-only, token-gated** agent API for local AI
 assistants (Claude Desktop, Cursor, …). No cloud, no remote access, no tunnel.
 
 A mandatory first-run wizard makes you choose a default sensitivity **before**
 the API can ever be enabled (fail-closed to `secret`). Installer workflows are implemented and build **unsigned** artifacts. The
-current Engine v1.1.3 configuration requires a fresh installer-matrix and
+current Engine package 2.1.2 integration requires a fresh installer-matrix and
 clean-machine verification before availability is claimed (`.github/workflows/desktop-build.yml`) — your OS will warn
 on first open; the guides below cover the safe open-anyway steps.
 

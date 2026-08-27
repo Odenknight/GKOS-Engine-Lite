@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Odenknight/GKOS-Engine/contracts/ingest/gkos-ingest-validation-1.0.0-draft.1/authority-witness.schema.json",
+  "title": "GKOS ingest durable authority witness draft 1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract_version", "state", "first_owner_generation_id", "first_owner_manifest_digest", "first_inner",
+    "migration_file", "migration_digest", "legacy_pointer_digest", "tombstone_digest", "active_pointer_digest",
+    "authority_lock_digest", "activation_root_digest", "witness_digest"
+  ],
+  "properties": {
+    "contract_version": { "const": "gkos-ingest-authority-witness/1.0.0-draft.1" },
+    "state": { "enum": ["activating", "active"] },
+    "first_owner_generation_id": { "$ref": "state-common.schema.json#/$defs/ownerGenerationId" },
+    "first_owner_manifest_digest": { "$ref": "state-common.schema.json#/$defs/sha256" },
+    "first_inner": { "$ref": "state-common.schema.json#/$defs/activeProjection" },
+    "migration_file": { "type": "string", "pattern": "^ingest-migration-[0-9a-f]{64}\\.json$" },
+    "migration_digest": { "$ref": "state-common.schema.json#/$defs/sha256" },
+    "legacy_pointer_digest": {
+      "oneOf": [{ "$ref": "state-common.schema.json#/$defs/sha256" }, { "type": "null" }]
+    },
+    "tombstone_digest": { "$ref": "state-common.schema.json#/$defs/sha256" },
+    "active_pointer_digest": { "$ref": "state-common.schema.json#/$defs/sha256" },
+    "authority_lock_digest": { "$ref": "state-common.schema.json#/$defs/sha256" },
+    "activation_root_digest": { "$ref": "state-common.schema.json#/$defs/sha256" },
+    "witness_digest": { "$ref": "state-common.schema.json#/$defs/sha256" }
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Odenknight/GKOS-Engine/contracts/ingest/gkos-ingest-validation-1.0.0-draft.1/owner-generation.schema.json",
+  "title": "GKOS ingest owner generation manifest draft 1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract_version", "owner_generation_id", "owner_manifest_digest", "mode", "vault_id",
+    "observation_snapshot_digest", "profile", "normalized_profile", "configuration_digest", "policy_digest",
+    "chunking", "validation_result", "inner", "rejection_journal"
+  ],
+  "properties": {
+    "contract_version": { "const": "gkos-ingest-generation/1.0.0-draft.1" },
+    "owner_generation_id": { "$ref": "state-common.schema.json#/$defs/ownerGenerationId" },
+    "owner_manifest_digest": { "$ref": "state-common.schema.json#/$defs/sha256" },
+    "mode": { "enum": ["strict", "non_strict"] },
+    "vault_id": { "type": "string", "minLength": 1, "maxLength": 512 },
+    "observation_snapshot_digest": { "$ref": "state-common.schema.json#/$defs/sha256" },
+    "profile": { "$ref": "profile-coordinate.schema.json" },
+    "normalized_profile": { "$ref": "normalized-profile.schema.json" },
+    "configuration_digest": { "$ref": "state-common.schema.json#/$defs/sha256" },
+    "policy_digest": { "$ref": "state-common.schema.json#/$defs/sha256" },
+    "chunking": {
+      "type": "object", "additionalProperties": false,
+      "required": ["chunker_version", "tokenizer_version", "max_tokens", "overlap_tokens"],
+      "properties": {
+        "chunker_version": { "const": "gkos-heading-chunker/1" },
+        "tokenizer_version": { "const": "gkos-ascii-whitespace/1" },
+        "max_tokens": { "type": "integer", "minimum": 16, "maximum": 4096 },
+        "overlap_tokens": { "type": "integer", "minimum": 0, "maximum": 4095 }
+      }
+    },
+    "validation_result": { "$ref": "result.schema.json" },
+    "inner": { "$ref": "state-common.schema.json#/$defs/innerCoordinate" },
+    "rejection_journal": {
+      "type": "object", "additionalProperties": false,
+      "required": ["journal_file", "rejection_journal_digest", "rejection_count"],
+      "properties": {
+        "journal_file": { "type": "string", "pattern": "^ingest-rejections-[0-9a-f]{64}\\.json$" },
+        "rejection_journal_digest": { "$ref": "state-common.schema.json#/$defs/sha256" },
+        "rejection_count": { "type": "integer", "minimum": 0, "maximum": 1000000 }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "mode": { "const": "strict" } }, "required": ["mode"] },
+      "then": { "properties": { "validation_result": { "type": "object", "properties": { "ingest_intrinsic_valid": { "const": true } } } } }
+    }
+  ]
+}

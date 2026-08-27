@@ -1,0 +1,19 @@
+{
+  "reference_repository": "Odenknight/GKOS-Engine",
+  "reference_commit": "bbc2ea874f4dde37e6376e46c080cb1c69ab1bb3",
+  "reference_package_version": "2.1.2",
+  "contract_version": "gkos-retrieval/1.0.0-draft.1",
+  "pin_kind": "exact_frozen_file_sha256",
+  "note": "Exact nine-file Phase 1 pack copied byte-for-byte from the signed Full implementation commit. The Rust implementation is pin-bound and contract-conforming; it is never a second GKX authority.",
+  "files": {
+    "README.md": "sha256:2028882032f2292bd0bbc937016a128449babf5f9adc395824029ee0047cc942",
+    "canonical-fixture.json": "sha256:f30dd5c3e71407e6544b9c727ff5597c4809936dbbd14a5fdca87dcb99031db2",
+    "chunk.schema.json": "sha256:2474a40e8abc930cbc6e713aa8966be41f0fba87c5b38c5868b42403e8f3f721",
+    "conformance-fixture.json": "sha256:462de9f327585ec2eed019a4b728403b6c0bbfa3ade158ed618cafd214a4b009",
+    "contract.json": "sha256:418fffcf3954c634453c3f3e8dd756dd2636ee0030d9ecf6c4ccb5147b8d0c6e",
+    "gkos-config.schema.json": "sha256:e42fe89d102ec602b0738aa01a3c8f98cc8fb55d9edc25265f6feb168a0ca8d6",
+    "gkos-toml-lexical-fixture.json": "sha256:abdb26527fd5c047db96801c22ebf30efca544fe306744c666b858ba57bd039b",
+    "projection.schema.json": "sha256:99f7eb70530dd44866c8c28b71f97d9d76af2e00b8ea399dc4f2e5f3e6467fa3",
+    "result.schema.json": "sha256:b9bb7e360fa04ee1e0b75984d313cd63488ef698149ff0b3f29b3c003126faa3"
+  }
+}

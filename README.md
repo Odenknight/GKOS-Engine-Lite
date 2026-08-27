@@ -16,6 +16,20 @@ you can point at any folder of Markdown notes. The CLI package has no Obsidian
 dependency, plugin, or GUI: just `okf-lite validate`, `index`, `assess`,
 `search`, `graph`, and `export` over a directory.
 
+## Current build status
+
+The active functional-uplift build is
+`codex/phase-3-ingest-validation` at
+`41912fd6db279f1b46e67cb4b88c1f1b4ba86e63`. It contains the qualified Phase
+0–3 chain and is ten commits ahead of public Lite `main` at
+`2ebbf77583af3e83032054f1256188dc56376907`. It has not been merged, tagged,
+released, or published as a static Lite artifact.
+
+For the exact implemented/deferred matrix, read
+[Current capabilities](docs/CURRENT_CAPABILITIES.md). Builders continuing the
+qualified branch should start with the
+[current build handoff](docs/HANDOFF_2026-08-27.md).
+
 The published JavaScript CLI remains a thin delegate. Under the hood it depends
 directly on [gkos-engine](https://github.com/Odenknight/GKOS-Engine) — the
 canonical, deterministic engine that also powers KRS and KRS-Lite — and

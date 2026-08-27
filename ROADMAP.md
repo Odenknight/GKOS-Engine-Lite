@@ -34,8 +34,10 @@ forward roadmap for this active distribution.
 
 - Shared deterministic behavior is implemented in GKOS-Engine first.
 - Normative or GKX contract questions are referred to gkos-standard.
-- The five delegated read-only commands (`validate`, `assess`, `search`,
-  `graph`, and `export graphiti`) always work without AI.
+- The six delegated source-note-preserving commands (`validate`, `index`,
+  `assess`, `search`, `graph`, and `export graphiti`) always work without AI.
+  `index` may publish governed derived state through the pinned Full owner
+  protocol; it never rewrites source notes.
 - Notes are never changed automatically; sensitivity is never lowered
   automatically.
 - This distribution does not count as an independent GKOS implementation.

@@ -2,8 +2,11 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, "codex/**"]
   pull_request:
+
+permissions:
+  contents: read
 
 jobs:
   test:
@@ -87,6 +90,9 @@ jobs:
           if ($viewerHash -ne "11e004a5e500f5bb196ec321eefd0cd7f9dd332715edc4b1b71f286a10e768dd") {
             throw "Kosmos-Oden viewer compile asset digest mismatch"
           }
+      - name: Windows frontend and packaged REST tests
+        working-directory: desktop
+        run: npm test
       - name: Native Tauri tests
         run: cargo test --manifest-path desktop/src-tauri/Cargo.toml --locked
 

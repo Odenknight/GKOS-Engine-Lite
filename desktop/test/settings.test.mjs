@@ -67,9 +67,15 @@ test("enable is gated on folder + sensitivity (decision 3)", () => {
 });
 
 test("everyday UI copy avoids internal connection jargon", () => {
-  assert.match(STRINGS.settings.enableLabel, /local AI apps/i);
-  assert.doesNotMatch(STRINGS.settings.enableLabel, /API|MCP|loopback/i);
+  assert.match(STRINGS.settings.enableLabel, /Agent API/i);
+  assert.doesNotMatch(STRINGS.connect.intro, /streamable-http|\/mcp/i);
+  assert.match(STRINGS.connect.intro, /does not expose MCP/i);
+  assert.match(STRINGS.wizard.enableNotice, /not an access-control filter/i);
+  assert.match(STRINGS.wizard.welcomeBody, /proxy, or tunnel/i);
+  assert.match(STRINGS.wizard.welcomeBody, /copy, or export/i);
+  assert.doesNotMatch(STRINGS.wizard.welcomeBody, /nothing leaves|no tunnel|cannot accept/i);
+  assert.match(STRINGS.settings.enableHelp, /every indexed note/i);
   assert.match(STRINGS.settings.advancedHeading, /advanced/i);
-  assert.match(STRINGS.connect.copy, /copy setup/i);
-  assert.match(STRINGS.connect.copied, /paste it into your AI app/i);
+  assert.match(STRINGS.connect.copy, /copy command/i);
+  assert.match(STRINGS.connect.copied, /bearer token/i);
 });

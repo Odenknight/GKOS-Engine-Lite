@@ -26,6 +26,15 @@ chain from pre-admission Lite `main`
 release. This does not publish or qualify a one-file static Lite artifact or a
 Desktop installer release.
 
+The current bounded Desktop qualification candidate is
+`codex/qualify-lite-review-20260901`. Its CI-enablement change begins at
+`1fabff81caf2286f24d4cab45188eeb6a59d21ad`: review-branch pushes now exercise
+the normal CI lanes, and the Windows native lane executes the frontend's
+packaged-runtime tests after acquiring and checksum-verifying the sidecar.
+Local tests and builds are review evidence only. Hosted Windows, Rust/Tauri,
+MSRV, formatting, Clippy, installer-matrix, and clean-machine results remain
+required before any corresponding platform or availability claim.
+
 For the exact implemented/deferred matrix, read
 [Current capabilities](docs/CURRENT_CAPABILITIES.md). Builders continuing the
 qualified branch should start with the
@@ -186,8 +195,12 @@ integration is bound to [Engine package 2.1.2 at exact commit
 desktop sidecar artifacts remain separately qualified and are not implied by
 that source pin.
 Point it at a notes folder; it watches and projects (OKF+ 2.3 + Graphiti) and
-serves a **loopback-only, read-only, token-gated** agent API for local AI
-assistants (Claude Desktop, Cursor, …). No cloud, no remote access, no tunnel.
+serves a **loopback-only, read-only, token-gated, GET-only REST API** for local
+clients. The checksum-pinned packaged sidecar is GKOS-Engine `v1.1.3`, SHA-256
+`29ab43c9ce79b8c14978594a18523a04e3f7518d87560f1e4c17744da08f12c2`.
+It does not expose MCP: `/mcp` is deliberately absent, and quick-connect
+commands target only implemented REST routes. No cloud, remote-bind, built-in
+proxy, or built-in tunnel is provided.
 
 A mandatory first-run wizard makes you choose a default sensitivity **before**
 the API can ever be enabled (fail-closed to `secret`). Installer workflows are implemented and build **unsigned** artifacts. The
@@ -202,8 +215,11 @@ on first open; the guides below cover the safe open-anyway steps.
   troubleshooting.
 
 The desktop frontend logic (snippet generation, settings validation) is
-type-checked and unit-tested (`node --test`) in CI; Rust/Tauri compilation and
-the `.dmg`/`.exe` bundles are produced exclusively on the CI matrix.
+type-checked and unit-tested (`node --test`) in CI. On Windows, the native lane
+also exercises those advertised commands against the acquired, checksum-pinned
+packaged REST sidecar before running native Tauri tests. Rust/Tauri compilation
+and the `.dmg`/`.exe` bundles are produced exclusively on the CI matrix; the
+presence of these jobs is not itself a successful hosted qualification.
 
 ## Relationship to the rest of the GKOS family
 

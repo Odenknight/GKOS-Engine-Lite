@@ -2,13 +2,15 @@
 
 ## Why use this
 
-Your notes are yours, and they stay on your computer. GKOS Engine Desktop lets AI assistants you already use — like Claude — read and understand your notes without uploading anything anywhere. It watches your notes folder, builds a live map of what's in it (including a connections view called Graphiti), and applies privacy rules you choose before any assistant can see a single word. It only talks to programs on your own machine — it cannot accept a connection from the internet.
+GKOS Engine Desktop watches your notes folder and builds a live map of what's in it, including a Graphiti projection. When enabled, the current sidecar exposes that map through a bearer-token-protected, GET-only REST API bound directly to loopback. GKOS has no built-in upload, remote-bind, proxy, or tunnel feature. A client holding the token can copy or export responses, and separately configured proxy or tunnel software can relay them beyond this computer.
+
+Sensitivity values classify records and fail closed when missing or invalid, but they are not access-control rules for this API. Any local app that receives the bearer token can read every indexed note and projection. Keep sharing disabled or withhold the token when that is not acceptable.
 
 Optional AI suggestions require a separately installed local helper. It is not
 required for setup, never writes notes, and cannot override engine privacy or
 validation rules.
 
-The normal settings screen uses one **Share with local AI apps** switch.
+The normal settings screen uses one **Enable local Agent API** switch.
 Ports, access keys, and configuration text stay under **Advanced connection
 settings** or **Show technical details**. Most people never need to change
 them.
@@ -48,7 +50,7 @@ The app walks you through five short steps the first time it opens.
 
 1. **Welcome.** A short explanation of why the app exists (the same idea as above).
 2. **Pick your notes folder.** Choose the folder on your computer where your notes live.
-3. **Choose your default privacy level.** Every note gets a privacy level. Unlabeled notes use whichever one you pick here. From most open to most private:
+3. **Choose your default sensitivity classification.** Every note gets a classification. Unlabeled notes use whichever one you pick here. From most open to most private:
    - **public** — fine for anyone to see.
    - **internal** — for your eyes and your own tools, not the outside world.
    - **restricted** — limited to a specific purpose.
@@ -59,18 +61,22 @@ The app walks you through five short steps the first time it opens.
 
    **Secret** is picked for you by default. When in doubt, keep secret.
 
-   One rule to remember: the app can mark a note as **more** private than your default — never less.
-4. **Turn on the local agent connection.** This is off until you switch it on. Turning it on means notes on your computer become reachable by other apps on this same computer — never over the internet. Your default privacy level from step 3 governs what unlabeled notes show.
+   One rule to remember: the app can mark a note as **more** sensitive than your default — never less. This classification does not filter Agent API responses.
+4. **Turn on the local Agent API.** This is off until you switch it on. Turning it on makes every indexed note readable by apps holding the bearer token. The server itself binds to loopback; token-holding clients or separately configured proxies can still copy or relay responses.
 5. **Finish.** The wizard closes and the app settles into your tray (Mac: menu bar, top right; Windows: system tray, bottom right).
 
-## 4. Connect Claude Desktop
+## 4. Verify the local Agent API
 
-Open the tray icon and choose **Copy MCP connect snippet**. Paste it into Claude Desktop's settings. It looks like this:
+Open the tray icon and choose **Copy Agent API health command**, then run the copied command in a terminal. It looks like this:
 
 ```
-claude mcp add kosmos-oden http://127.0.0.1:4814/mcp
+# Windows PowerShell
+curl.exe -H "Authorization: Bearer <token>" "http://127.0.0.1:4814/health"
+
+# macOS or Linux
+curl -H "Authorization: Bearer <token>" "http://127.0.0.1:4814/health"
 ```
 
 ## You're done
 
-GKOS Engine Desktop now lives quietly in your tray (menu bar on Mac, system tray on Windows). Click the icon any time to open Settings, see status, copy the connect snippet again, or choose **Open 3D View** for a read-only 3D map of your notes and their connections.
+GKOS Engine Desktop now lives quietly in your tray (menu bar on Mac, system tray on Windows). Click the icon any time to open Settings, see status, copy the health command again, or choose **Open 3D View** for a read-only 3D map of your notes and their connections. The pinned sidecar does not expose MCP; do not configure an MCP client against `/mcp`.

@@ -15,6 +15,12 @@ forward roadmap for this active distribution.
 
 ## Next: 1.1.x / Desktop 0.2.x
 
+- Complete the current review-branch qualification on hosted Windows and the
+  declared Rust lanes: MSRV, current Linux tests, formatting, Clippy, Windows
+  MSVC, and Tauri native tests.
+- Confirm on hosted Windows that every advertised quick-connect command works
+  against the checksum-pinned GKOS-Engine `v1.1.3` packaged REST sidecar. The
+  sidecar remains REST-only; MCP is not part of this milestone.
 - In-app assistance panel and one-step sidecar readiness guidance.
 - Accessible loading, success, unavailable, and retry states.
 - Clean-machine Windows and macOS installer smoke tests.
@@ -41,3 +47,6 @@ forward roadmap for this active distribution.
 - Notes are never changed automatically; sensitivity is never lowered
   automatically.
 - This distribution does not count as an independent GKOS implementation.
+- A local or hosted test result qualifies only its exact commit, operating
+  system, toolchain, and acquired artifact. It does not imply installer,
+  signing, release, or other-platform qualification.

@@ -1,6 +1,6 @@
 # GKOS-Engine-Lite current capabilities
 
-Status date: 2026-08-27
+Status date: 2026-09-01
 
 This inventory describes the functional-uplift implementation qualified at
 `41912fd6db279f1b46e67cb4b88c1f1b4ba86e63` and admitted through PR #22 from
@@ -8,6 +8,14 @@ pre-admission Lite `main`
 `2ebbf77583af3e83032054f1256188dc56376907`. The `v2.1.2` tag identifies the
 merged JavaScript/Rust source release. It does not publish or qualify a
 one-file static Lite distribution or a Desktop installer release.
+
+The successor review branch `codex/qualify-lite-review-20260901` begins its
+CI-enablement change at
+`1fabff81caf2286f24d4cab45188eeb6a59d21ad`. It adds review-branch CI coverage
+and makes the Windows native lane run the packaged REST runtime test after
+checksum-verifying its acquired sidecar. This is a review candidate, not a
+platform, installer, release, or publication qualification; hosted lanes have
+not yet been receipted for the successor.
 
 ## Capability matrix
 
@@ -23,7 +31,7 @@ one-file static Lite distribution or a Desktop installer release.
 | Rust retrieval core | `rust/` library and conformance boundary | Phase 1 qualified | Pin-bound implementation of Full-owned retrieval contracts, SQLite/FTS5 generations, provider-neutral adapters, ranking, filtering, and citation verification. It is not an independent GKX parser or authority. |
 | Lineage and citation preservation | Rust contracts, fixtures, and CLI equivalence gates | Phase 2 qualified | Preserves Full-minted identity, authored/effective lineage, temporal state, sensitivity, and verified citation bindings without minting new authority. |
 | Ingest envelope validation | Private Rust ingest modules and frozen Full pack | Phase 3 qualified | Validates strict canonical JSON envelopes from Full. No public raw-ingest API and no Lite owner-plane writer, pointer publisher, or activation authority. |
-| Desktop presentation | `desktop/` Tauri package | Source and CI workflows present | Installer workflows build unsigned artifacts. Current Engine integration still requires fresh installer-matrix and clean-machine qualification before availability is claimed. |
+| Desktop presentation | `desktop/` Tauri package | Source and CI workflows present; successor hosted qualification pending | The packaged sidecar is checksum-pinned GKOS-Engine `v1.1.3` and exposes bearer-token-protected, GET-only REST routes on loopback. It does not expose MCP. The Windows native lane is configured to run packaged-runtime and Tauri tests, but fresh hosted results, installer-matrix, and clean-machine qualification remain required before availability is claimed. |
 | JavaScript package | `gkos-engine-lite` 2.1.2 | Thin CLI package | Published files are limited to `bin/`; the engine dependency is pinned to Full commit `e7cc0dd478af3d0bda216c5258dec5f77932def7`. |
 
 ## Exact command boundary
@@ -56,6 +64,11 @@ Lite wrapper.
   installer, or Desktop availability.
 - A claim that the pinned Full commit equals current Full `main` or a matching
   release tag.
+- MCP quick-connect or MCP transport through the current packaged Desktop
+  sidecar; advertised quick-connect commands are REST-only.
+- Hosted qualification of successor branch
+  `codex/qualify-lite-review-20260901` until its exact final SHA completes the
+  required Windows, Rust/Tauri, MSRV, formatting, and Clippy lanes.
 
 ## Qualification evidence
 

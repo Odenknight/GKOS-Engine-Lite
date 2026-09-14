@@ -19,7 +19,11 @@ before a matching tag exists:
 The CLI never invents its own number, so its tag sequence skips any engine
 version that produced no Lite release. The active Phase 3 integration pins
 Engine commit `e7cc0dd478af3d0bda216c5258dec5f77932def7`, whose package version is
-`2.1.2`; this is not a claim that an Engine or Lite `v2.1.2` tag exists.
+`2.1.2`. Both source tags now exist: Full `v2.1.2` resolves to
+`7bf14b481e78c5ae9d1e14661602be4f24559d0e`, and Lite `v2.1.2` resolves to
+`4027bfc4499ad0a2f3e753401f1320468e283823`. The Full dependency pin is a
+different revision from the Full tag; matching package versions do not prove
+behavioral equivalence. Source tags do not establish npm or installer publication.
 `bin/okf-lite.mjs` reads the version from
 `package.json` at runtime — do not hardcode it. The
 `.github/workflows/pin-bump.yml` `workflow_dispatch` job automates this.

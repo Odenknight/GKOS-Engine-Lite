@@ -79,10 +79,14 @@ candidates and endpoints are suppressed. Lite applies these frozen rules only
 to host-supplied opaque candidate keys and canonical receipt tiers, never to
 raw GKX text or a second resolver.
 
-The JavaScript wrapper is pinned to the same Phase 2 Full commit. Its
+The original Phase 2 JavaScript wrapper was pinned to the Phase 2 Full commit.
+The current wrapper pins the later Phase 3 Full revision recorded in
+[versioning](../VERSIONING.md); historical parity evidence is revision-bound. Its
 point-in-time command test executes an identical corpus/configuration through
 both command boundaries and compares exit status, stdout, and stderr
 byte-for-byte, apart from the already-approved PID normalization on the exact
-Node SQLite experimental-warning line. Lite hosted qualification remains
-pending; no merge, tag, release, deployment, or artifact publication is
-claimed.
+Node SQLite experimental-warning line. Phase 2 hosted evidence is recorded in
+[the Phase 2 dossier](evidence/phase-2-lineage-citations.md). Current hosted
+results are recorded in [current capabilities](CURRENT_CAPABILITIES.md).
+Neither establishes equivalence to another Full revision or qualifies a
+static executable, installer, deployment, or published package.

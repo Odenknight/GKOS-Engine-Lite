@@ -1,0 +1,110 @@
+{
+  "format": "dirty-snapshot-v2",
+  "qualification": false,
+  "remote": "https://github.com/Odenknight/GKOS-Engine-Lite.git",
+  "visibility": {
+    "isPrivate": false,
+    "nameWithOwner": "Odenknight/GKOS-Engine-Lite",
+    "url": "https://github.com/Odenknight/GKOS-Engine-Lite"
+  },
+  "prior_manifest_sha256": "1ed0ae92334e322abf6a487b214810ad213bd786c41fbb599c7a1a05f1742ffe",
+  "index_sha256": "6b9d20596f083374fd8da524fd687aebaaa5bd23b05845b8e7915130598b382e",
+  "archives": [
+    {
+      "path": "objects-001.tar.gz",
+      "sha256": "b36a83d3adcbe266e18e4e5e4587f88a48fe8f3c5332a02be4582a28df74eacd",
+      "bytes": 47892,
+      "objects": 21
+    }
+  ],
+  "objects": [
+    {
+      "sha256": "000c49c810e6ac8fa453db05ce6ecf3cd2dbd200ed569d19687312d54f0c6450",
+      "bytes": 3002
+    },
+    {
+      "sha256": "14d6c8bf626994dc5404143e65f5e6ae7bd0e11f3436dad82ee3e71104696817",
+      "bytes": 4437
+    },
+    {
+      "sha256": "1cd48f16f6a5761ba545cbd4f37932da2ae9ed3da8e6c87261d42949084b9ac4",
+      "bytes": 3787
+    },
+    {
+      "sha256": "1d455e3d6242d2a3334f86886ce804091c5d37d58494123d44935d0128c1c2d7",
+      "bytes": 3194
+    },
+    {
+      "sha256": "31d33f9b5486b99c238a62ad411973fcc8118d133ae32d9893c9b6e5686fea89",
+      "bytes": 12867
+    },
+    {
+      "sha256": "32ef36e4b72a84e88fefdaca422dccbff700196d39c0dde0b9a92eadd298aa88",
+      "bytes": 3498
+    },
+    {
+      "sha256": "34d78311f080d7c648a2569816600a6ec4268b8428d5f11ebcec454dd0f27e76",
+      "bytes": 2831
+    },
+    {
+      "sha256": "3551559a1d809c3eacd9b20cb2e798c850bb857ce244c22115e3a5e8dac1ce28",
+      "bytes": 27036
+    },
+    {
+      "sha256": "4299fea659514789ac1c8043e89e77735a33e40ae8682392008aaa2149c28190",
+      "bytes": 4680
+    },
+    {
+      "sha256": "56b6828877a278ffed765dc34707e0942ca26ab80c89a82355eac2b36f4c0431",
+      "bytes": 4546
+    },
+    {
+      "sha256": "64f0488fb102cf6e7b563f5d0f5201169620aa39578c35930d12cbe6e8141f49",
+      "bytes": 2952
+    },
+    {
+      "sha256": "77f87994105a97bba46210f91df8bfff54fa3bb9755fcc53a1fe933e61baeafe",
+      "bytes": 8298
+    },
+    {
+      "sha256": "7872b768816d9f5c70304eca7aaad21445b341f218b510fc11bc908f83ea57f5",
+      "bytes": 3696
+    },
+    {
+      "sha256": "b6c9814909f01ecd9839f5a599ef9c8942cf71c6b3397cc561caa56cc3b88f15",
+      "bytes": 2864
+    },
+    {
+      "sha256": "bd5a9809ea3faaa355b0b5d4a7712b08e1a0c6ccaec360c9276ada47a6305c63",
+      "bytes": 11921
+    },
+    {
+      "sha256": "bf6849987e53dafbf2f53a468e8dd57109ba099d3541ace641880c5cacccb4a0",
+      "bytes": 3159
+    },
+    {
+      "sha256": "cfd46930437cdec8817b4239516cc3e5a537fcc33213a4cbdb246518c24e86b8",
+      "bytes": 8073
+    },
+    {
+      "sha256": "d2da3bd4265ec1f2e3dfabb98fbacd0290e4e2042f63d4f57d2626b1b3c14322",
+      "bytes": 15237
+    },
+    {
+      "sha256": "e1a0b84f01224242218179a981d764336f819fc2abf75305e9b789908dea6dcc",
+      "bytes": 15710
+    },
+    {
+      "sha256": "ef8e57ffe963b1ec61abfc046f5ba1595715833afc720216c45471a918abf4e8",
+      "bytes": 24846
+    },
+    {
+      "sha256": "f2dc7cf21896e1137db8167eae3ad1f19e01f70fab719a47ffb6bde9761ab9ba",
+      "bytes": 3752
+    }
+  ],
+  "privacy_routed_out": 0,
+  "privacy_routed_in": 0,
+  "source_problems": [],
+  "publication_disposition": "READY_FOR_PUBLISHER_REVIEW_AFTER_INDEPENDENT_V2_VERIFICATION"
+}

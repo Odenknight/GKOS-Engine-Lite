@@ -1,0 +1,280 @@
+{
+  "format": "dirty-snapshot-v2",
+  "qualification": false,
+  "remote": "https://github.com/Odenknight/GKOS-Engine-Lite.git",
+  "visibility": {
+    "isPrivate": false,
+    "nameWithOwner": "Odenknight/GKOS-Engine-Lite",
+    "url": "https://github.com/Odenknight/GKOS-Engine-Lite"
+  },
+  "source_manifest_sha256": "670a3427862d03dbba039237c49431921b468edeaadfca0fd9a6e0330db8f7c6",
+  "screening_sha256": "52b5b06b31dc361a4f573661669a9ca21b9ae1ba73541dc7afc5935a57e9a975",
+  "checkouts": [
+    {
+      "checkout_id": "1c54ba06ff81bc080e4351a0c2b21022f502cafae9cc51d6afc15b900f56d6b3",
+      "path": "C:\\Users\\FAC\\Documents\\_AI_builds_GPT\\GKOS-Engine-check\\orchestration\\upgrades\\lite",
+      "parent_head": "4027bfc4499ad0a2f3e753401f1320468e283823",
+      "branch": "main",
+      "original_remote": "https://github.com/Odenknight/GKOS-Engine-Lite.git",
+      "files": [
+        {
+          "path": "desktop/docs/QUICKSTART.md",
+          "staged_status": null,
+          "worktree_status": "M",
+          "untracked": false,
+          "screening_flags": [],
+          "index": [
+            {
+              "mode": "100644",
+              "oid": "049cf6384e16bc8f8cbf2dad7226cc4139142d3f",
+              "stage": 0,
+              "sha256": "1cd48f16f6a5761ba545cbd4f37932da2ae9ed3da8e6c87261d42949084b9ac4",
+              "bytes": 3787
+            }
+          ],
+          "staged_deleted": false,
+          "working_deleted": false,
+          "working": {
+            "state": "PRESENT",
+            "sha256": "14d6c8bf626994dc5404143e65f5e6ae7bd0e11f3436dad82ee3e71104696817",
+            "bytes": 4437
+          }
+        },
+        {
+          "path": "desktop/docs/USER-GUIDE.md",
+          "staged_status": null,
+          "worktree_status": "M",
+          "untracked": false,
+          "screening_flags": [],
+          "index": [
+            {
+              "mode": "100644",
+              "oid": "24197683731990f29927f276cbcf887ad22a7aa4",
+              "stage": 0,
+              "sha256": "31d33f9b5486b99c238a62ad411973fcc8118d133ae32d9893c9b6e5686fea89",
+              "bytes": 12867
+            }
+          ],
+          "staged_deleted": false,
+          "working_deleted": false,
+          "working": {
+            "state": "PRESENT",
+            "sha256": "bd5a9809ea3faaa355b0b5d4a7712b08e1a0c6ccaec360c9276ada47a6305c63",
+            "bytes": 11921
+          }
+        },
+        {
+          "path": "desktop/src-tauri/src/lib.rs",
+          "staged_status": null,
+          "worktree_status": "M",
+          "untracked": false,
+          "screening_flags": [],
+          "index": [
+            {
+              "mode": "100644",
+              "oid": "c1e02b56102966f193ee25d4a12976ac5e126483",
+              "stage": 0,
+              "sha256": "ef8e57ffe963b1ec61abfc046f5ba1595715833afc720216c45471a918abf4e8",
+              "bytes": 24846
+            }
+          ],
+          "staged_deleted": false,
+          "working_deleted": false,
+          "working": {
+            "state": "PRESENT",
+            "sha256": "3551559a1d809c3eacd9b20cb2e798c850bb857ce244c22115e3a5e8dac1ce28",
+            "bytes": 27036
+          }
+        },
+        {
+          "path": "desktop/src/main.ts",
+          "staged_status": null,
+          "worktree_status": "M",
+          "untracked": false,
+          "screening_flags": [],
+          "index": [
+            {
+              "mode": "100644",
+              "oid": "bffd1081ba16921328025c6591d94066486eb1ba",
+              "stage": 0,
+              "sha256": "d2da3bd4265ec1f2e3dfabb98fbacd0290e4e2042f63d4f57d2626b1b3c14322",
+              "bytes": 15237
+            }
+          ],
+          "staged_deleted": false,
+          "working_deleted": false,
+          "working": {
+            "state": "PRESENT",
+            "sha256": "e1a0b84f01224242218179a981d764336f819fc2abf75305e9b789908dea6dcc",
+            "bytes": 15710
+          }
+        },
+        {
+          "path": "desktop/src/snippets.ts",
+          "staged_status": null,
+          "worktree_status": "M",
+          "untracked": false,
+          "screening_flags": [],
+          "index": [
+            {
+              "mode": "100644",
+              "oid": "c95621ffd3faba487f791109d328241a115ab2d5",
+              "stage": 0,
+              "sha256": "7872b768816d9f5c70304eca7aaad21445b341f218b510fc11bc908f83ea57f5",
+              "bytes": 3696
+            }
+          ],
+          "staged_deleted": false,
+          "working_deleted": false,
+          "working": {
+            "state": "PRESENT",
+            "sha256": "64f0488fb102cf6e7b563f5d0f5201169620aa39578c35930d12cbe6e8141f49",
+            "bytes": 2952
+          }
+        },
+        {
+          "path": "desktop/src/strings.ts",
+          "staged_status": null,
+          "worktree_status": "M",
+          "untracked": false,
+          "screening_flags": [],
+          "index": [
+            {
+              "mode": "100644",
+              "oid": "eb612963087d9ead98dd52b9b1cbd46e18a596e7",
+              "stage": 0,
+              "sha256": "cfd46930437cdec8817b4239516cc3e5a537fcc33213a4cbdb246518c24e86b8",
+              "bytes": 8073
+            }
+          ],
+          "staged_deleted": false,
+          "working_deleted": false,
+          "working": {
+            "state": "PRESENT",
+            "sha256": "77f87994105a97bba46210f91df8bfff54fa3bb9755fcc53a1fe933e61baeafe",
+            "bytes": 8298
+          }
+        },
+        {
+          "path": "desktop/test/packaged-rest-runtime.test.mjs",
+          "staged_status": null,
+          "worktree_status": null,
+          "untracked": true,
+          "screening_flags": [],
+          "index": [],
+          "staged_deleted": false,
+          "working_deleted": false,
+          "working": {
+            "state": "PRESENT",
+            "sha256": "f2dc7cf21896e1137db8167eae3ad1f19e01f70fab719a47ffb6bde9761ab9ba",
+            "bytes": 3752
+          }
+        },
+        {
+          "path": "desktop/test/phase0-compatibility.test.mjs",
+          "staged_status": null,
+          "worktree_status": "M",
+          "untracked": false,
+          "screening_flags": [],
+          "index": [
+            {
+              "mode": "100644",
+              "oid": "6e01a8cca7481d66cadb7f3ff6e9e9ab9584734d",
+              "stage": 0,
+              "sha256": "b6c9814909f01ecd9839f5a599ef9c8942cf71c6b3397cc561caa56cc3b88f15",
+              "bytes": 2864
+            }
+          ],
+          "staged_deleted": false,
+          "working_deleted": false,
+          "working": {
+            "state": "PRESENT",
+            "sha256": "1d455e3d6242d2a3334f86886ce804091c5d37d58494123d44935d0128c1c2d7",
+            "bytes": 3194
+          }
+        },
+        {
+          "path": "desktop/test/settings.test.mjs",
+          "staged_status": null,
+          "worktree_status": "M",
+          "untracked": false,
+          "screening_flags": [],
+          "index": [
+            {
+              "mode": "100644",
+              "oid": "958928d144635c30fc4d74738aed58b88ebcddd9",
+              "stage": 0,
+              "sha256": "000c49c810e6ac8fa453db05ce6ecf3cd2dbd200ed569d19687312d54f0c6450",
+              "bytes": 3002
+            }
+          ],
+          "staged_deleted": false,
+          "working_deleted": false,
+          "working": {
+            "state": "PRESENT",
+            "sha256": "32ef36e4b72a84e88fefdaca422dccbff700196d39c0dde0b9a92eadd298aa88",
+            "bytes": 3498
+          }
+        },
+        {
+          "path": "desktop/test/snippets.test.mjs",
+          "staged_status": null,
+          "worktree_status": "M",
+          "untracked": false,
+          "screening_flags": [],
+          "index": [
+            {
+              "mode": "100644",
+              "oid": "07ad21b354b9d269ab5455426133b9dccebfc497",
+              "stage": 0,
+              "sha256": "bf6849987e53dafbf2f53a468e8dd57109ba099d3541ace641880c5cacccb4a0",
+              "bytes": 3159
+            }
+          ],
+          "staged_deleted": false,
+          "working_deleted": false,
+          "working": {
+            "state": "PRESENT",
+            "sha256": "34d78311f080d7c648a2569816600a6ec4268b8428d5f11ebcec454dd0f27e76",
+            "bytes": 2831
+          }
+        }
+      ],
+      "prior_exclusions": []
+    },
+    {
+      "checkout_id": "179945f21104e59cc2821073895d63704606e0de54c41ee572c483d61ac11d68",
+      "path": "C:\\Users\\FAC\\Documents\\_AI_builds_GPT\\Governance\\readme-audit\\GKOS-Engine-Lite",
+      "parent_head": "a76019f33a44ef800f2217f68c239e448230472a",
+      "branch": "main",
+      "original_remote": "https://github.com/Odenknight/GKOS-Engine-Lite.git",
+      "files": [
+        {
+          "path": "README.md",
+          "staged_status": null,
+          "worktree_status": "M",
+          "untracked": false,
+          "screening_flags": [],
+          "index": [
+            {
+              "mode": "100644",
+              "oid": "896795c34f6ad783deabdde82803bd595b6936c7",
+              "stage": 0,
+              "sha256": "4299fea659514789ac1c8043e89e77735a33e40ae8682392008aaa2149c28190",
+              "bytes": 4680
+            }
+          ],
+          "staged_deleted": false,
+          "working_deleted": false,
+          "working": {
+            "state": "PRESENT",
+            "sha256": "56b6828877a278ffed765dc34707e0942ca26ab80c89a82355eac2b36f4c0431",
+            "bytes": 4546
+          }
+        }
+      ],
+      "prior_exclusions": []
+    }
+  ],
+  "privacy_routing_authority": "Root task instruction: preserve private evidence and all Kosmos coordination in private GKOS-Engine-Rust; no public export of unproven flagged bytes."
+}

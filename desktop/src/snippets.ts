@@ -1,11 +1,13 @@
 /**
- * Quick-connect snippet generation — pure functions (no Tauri, no DOM) so they
- * are unit-testable with `node --test`. Formats mirror Kosmos-Oden's
- * settings.ts exactly (server name `kosmos-oden`, MCP Streamable HTTP + bearer)
- * so the ecosystem stays consistent.
+ * Authenticated local Agent API examples — pure functions (no Tauri, no DOM)
+ * so they are unit-testable with `node --test`.
+ *
+ * The pinned sidecar is a GET-only REST service. It does not expose MCP. Keep
+ * these examples limited to routes the exact Engine pin implements so the UI
+ * cannot advertise a configuration that deterministically returns 404.
  */
 
-import { LOOPBACK_HOST, MCP_SERVER_NAME } from "./strings";
+import { LOOPBACK_HOST } from "./strings";
 
 export interface ConnectInfo {
   port: number;
@@ -17,61 +19,28 @@ export function baseUrl(port: number): string {
   return `http://${LOOPBACK_HOST}:${port}`;
 }
 
-/** The MCP endpoint URL, e.g. `http://127.0.0.1:4814/mcp`. */
-export function mcpUrl(port: number): string {
-  return `${baseUrl(port)}/mcp`;
+export const AGENT_API_ROUTES = Object.freeze({
+  health: "/health",
+  notes: "/notes",
+  graph: "/graph",
+  graphiti: "/graphiti/episodes",
+} as const);
+
+export type AgentApiRoute = keyof typeof AGENT_API_ROUTES;
+export type CommandPlatform = "windows" | "posix";
+
+export function commandPlatform(userAgent: string): CommandPlatform {
+  return /windows/i.test(userAgent) ? "windows" : "posix";
 }
 
-/**
- * The short tray snippet the docs illustrate for Claude Desktop. We emit the
- * fully-working variant (transport + bearer header) so the pasted command
- * actually authenticates against the token-gated loopback server.
- */
-export function claudeCodeCommand(info: ConnectInfo): string {
-  return `claude mcp add --transport http --header "Authorization: Bearer ${info.token}" ${MCP_SERVER_NAME} "${mcpUrl(info.port)}"`;
-}
-
-/** `.mcp.json` block for a Claude Code project (Streamable HTTP). */
-export function claudeProjectJson(info: ConnectInfo): string {
-  return JSON.stringify(
-    {
-      mcpServers: {
-        [MCP_SERVER_NAME]: {
-          type: "streamable-http",
-          url: mcpUrl(info.port),
-          headers: { Authorization: `Bearer ${info.token}` },
-        },
-      },
-    },
-    null,
-    2,
-  );
-}
-
-/** Cursor MCP settings block (HTTP transport + bearer header). */
-export function cursorJson(info: ConnectInfo): string {
-  return JSON.stringify(
-    {
-      mcpServers: {
-        [MCP_SERVER_NAME]: {
-          url: mcpUrl(info.port),
-          headers: { Authorization: `Bearer ${info.token}` },
-        },
-      },
-    },
-    null,
-    2,
-  );
-}
-
-/** Generic TOML (Codex / universal MCP surfaces). */
-export function genericToml(info: ConnectInfo): string {
-  return `[mcp_servers.${MCP_SERVER_NAME}]\nurl = "${mcpUrl(info.port)}"\nhttp_headers = { Authorization = "Bearer ${info.token}" }\n`;
-}
-
-/** A cURL health check (plain HTTP, bearer). */
-export function curlHealth(info: ConnectInfo): string {
-  return `curl -H "Authorization: Bearer ${info.token}" "${baseUrl(info.port)}/health"`;
+/** An exact authenticated GET example for one implemented Agent API route. */
+export function curlAgentApi(
+  info: ConnectInfo,
+  route: AgentApiRoute,
+  platform: CommandPlatform = "posix",
+): string {
+  const executable = platform === "windows" ? "curl.exe" : "curl";
+  return `${executable} -H "Authorization: Bearer ${info.token}" "${baseUrl(info.port)}${AGENT_API_ROUTES[route]}"`;
 }
 
 /**
@@ -96,13 +65,15 @@ export function viewerAppUrl(info: ConnectInfo): string {
   return `vault-kosmos.html?${viewerQuery(info)}`;
 }
 
-/** All snippets keyed by client, for the quick-connect panel. */
-export function allSnippets(info: ConnectInfo): Record<string, string> {
+/** All implemented REST examples keyed by response surface. */
+export function allSnippets(
+  info: ConnectInfo,
+  platform: CommandPlatform = "posix",
+): Record<string, string> {
   return {
-    claudeCode: claudeCodeCommand(info),
-    claudeJson: claudeProjectJson(info),
-    cursor: cursorJson(info),
-    toml: genericToml(info),
-    curl: curlHealth(info),
+    health: curlAgentApi(info, "health", platform),
+    notes: curlAgentApi(info, "notes", platform),
+    graph: curlAgentApi(info, "graph", platform),
+    graphiti: curlAgentApi(info, "graphiti", platform),
   };
 }

@@ -10,7 +10,7 @@ import { writeText } from "@tauri-apps/plugin-clipboard-manager";
 
 import { STRINGS, SENSITIVITY_LEVELS, SENSITIVITY_DESCRIPTIONS, type SensitivityLevel } from "./strings";
 import { normalizeSettings, enableBlockedReason, type Settings } from "./settings-schema";
-import { allSnippets } from "./snippets";
+import { allSnippets, commandPlatform } from "./snippets";
 import type { StatusDoc, SupervisorStatus, ConnectPayload } from "./status";
 
 // ---- Rust bridge (command names must match src-tauri/src/lib.rs) ----
@@ -289,17 +289,20 @@ async function renderSettings(root: HTMLElement): Promise<void> {
     st.appendChild(connectionDetails);
     card.appendChild(st);
 
-    // Quick connect
+    // Exact local Agent API examples. The pinned sidecar does not expose MCP.
     const qc = section(STRINGS.connect.heading);
     qc.appendChild(el("p", "help", STRINGS.connect.intro));
     if (!connect || supervisor === "stopped" || supervisor === "error") {
       qc.appendChild(el("p", "help", STRINGS.connect.disabled));
     } else {
-      const snips = allSnippets({ port: connect.port, token: connect.token });
-      qc.appendChild(snippetBlock(STRINGS.connect.claudeCode, STRINGS.connect.claudeCodeDesc, snips.claudeCode));
-      qc.appendChild(snippetBlock(STRINGS.connect.claudeJson, STRINGS.connect.claudeJsonDesc, snips.claudeJson));
-      qc.appendChild(snippetBlock(STRINGS.connect.cursor, STRINGS.connect.cursorDesc, snips.cursor));
-      qc.appendChild(snippetBlock(STRINGS.connect.toml, STRINGS.connect.tomlDesc, snips.toml));
+      const snips = allSnippets(
+        { port: connect.port, token: connect.token },
+        commandPlatform(navigator.userAgent),
+      );
+      qc.appendChild(snippetBlock(STRINGS.connect.health, STRINGS.connect.healthDesc, snips.health));
+      qc.appendChild(snippetBlock(STRINGS.connect.notes, STRINGS.connect.notesDesc, snips.notes));
+      qc.appendChild(snippetBlock(STRINGS.connect.graph, STRINGS.connect.graphDesc, snips.graph));
+      qc.appendChild(snippetBlock(STRINGS.connect.graphiti, STRINGS.connect.graphitiDesc, snips.graphiti));
     }
     card.appendChild(qc);
 

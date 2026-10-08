@@ -7,7 +7,7 @@
 //!     disable/quit, restart-with-backoff max 3 then surface an error state);
 //!   * expose commands to the frontend (pick folder, get/set settings,
 //!     start/stop sidecar, read status file + token, open windows);
-//!   * a tray with: Open Settings, Copy MCP connect snippet, Quit.
+//!   * a tray with: Open Settings, Copy Agent API health command, Quit.
 //!
 //! Loopback-only and unsigned are enforced upstream (the sidecar hardcodes
 //! 127.0.0.1; signing is deliberately absent from tauri.conf.json).
@@ -29,7 +29,6 @@ const MAX_RESTARTS: u32 = 3;
 const DEFAULT_PORT: u16 = 4814;
 /// Loopback host the viewer's `?api=` points at (matches the sidecar's hardcoded bind).
 const LOOPBACK_HOST: &str = "127.0.0.1";
-const MCP_SERVER_NAME: &str = "kosmos-oden";
 const SENSITIVITY_LEVELS: [&str; 7] = [
     "public",
     "internal",
@@ -580,18 +579,30 @@ fn open_url_in_default_browser(url: &str) -> Result<(), String> {
 
 // -------------------------------- tray --------------------------------------
 
-fn copy_snippet(app: &AppHandle) {
+fn agent_api_health_command_with(executable: &str, port: u16, token: &str) -> String {
+    format!(
+        "{executable} -H \"Authorization: Bearer {token}\" \"http://{LOOPBACK_HOST}:{port}/health\""
+    )
+}
+
+fn agent_api_health_command(port: u16, token: &str) -> String {
+    #[cfg(target_os = "windows")]
+    let executable = "curl.exe";
+    #[cfg(not(target_os = "windows"))]
+    let executable = "curl";
+    agent_api_health_command_with(executable, port, token)
+}
+
+fn copy_health_command(app: &AppHandle) {
     let state = app.state::<AppState>();
     let port = state.settings.lock().unwrap().port;
     match read_token(app) {
         Some(token) => {
-            let snippet = format!(
-                "claude mcp add --transport http --header \"Authorization: Bearer {token}\" {MCP_SERVER_NAME} \"http://127.0.0.1:{port}/mcp\""
-            );
-            let _ = app.clipboard().write_text(snippet);
+            let command = agent_api_health_command(port, &token);
+            let _ = app.clipboard().write_text(command);
         }
         None => {
-            // Not enabled yet — open settings so the user can enable + connect.
+            // Not enabled yet — open settings so the user can enable the API.
             let _ = show_settings(app);
         }
     }
@@ -600,9 +611,14 @@ fn copy_snippet(app: &AppHandle) {
 fn build_tray(app: &AppHandle) -> Result<(), String> {
     let open_settings = MenuItem::with_id(app, "open_settings", "Open Settings", true, None::<&str>)
         .map_err(|e| e.to_string())?;
-    let copy_snippet_item =
-        MenuItem::with_id(app, "copy_snippet", "Copy MCP connect snippet", true, None::<&str>)
-            .map_err(|e| e.to_string())?;
+    let copy_health_item = MenuItem::with_id(
+        app,
+        "copy_health",
+        "Copy Agent API health command",
+        true,
+        None::<&str>,
+    )
+    .map_err(|e| e.to_string())?;
     let open_3d = MenuItem::with_id(app, "open_3d", "Open 3D View", true, None::<&str>)
         .map_err(|e| e.to_string())?;
     let open_3d_browser =
@@ -611,7 +627,13 @@ fn build_tray(app: &AppHandle) -> Result<(), String> {
     let quit = MenuItem::with_id(app, "quit", "Quit", true, None::<&str>).map_err(|e| e.to_string())?;
     let menu = Menu::with_items(
         app,
-        &[&open_settings, &copy_snippet_item, &open_3d, &open_3d_browser, &quit],
+        &[
+            &open_settings,
+            &copy_health_item,
+            &open_3d,
+            &open_3d_browser,
+            &quit,
+        ],
     )
     .map_err(|e| e.to_string())?;
 
@@ -624,7 +646,7 @@ fn build_tray(app: &AppHandle) -> Result<(), String> {
             "open_settings" => {
                 let _ = show_settings(app);
             }
-            "copy_snippet" => copy_snippet(app),
+            "copy_health" => copy_health_command(app),
             "open_3d" => {
                 if let Err(e) = show_3d_view(app) {
                     eprintln!("open 3D view failed: {e}");
@@ -644,6 +666,33 @@ fn build_tray(app: &AppHandle) -> Result<(), String> {
         .build(app)
         .map_err(|e| e.to_string())?;
     Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::{agent_api_health_command, agent_api_health_command_with};
+
+    #[test]
+    fn tray_command_targets_the_implemented_authenticated_health_route() {
+        let command = agent_api_health_command(4814, "phase-test-token");
+        #[cfg(target_os = "windows")]
+        assert!(command.starts_with("curl.exe "));
+        #[cfg(not(target_os = "windows"))]
+        assert!(command.starts_with("curl "));
+        assert!(!command.contains("/mcp"));
+    }
+
+    #[test]
+    fn windows_and_posix_commands_name_the_native_curl_executable_explicitly() {
+        assert_eq!(
+            agent_api_health_command_with("curl.exe", 4814, "phase-test-token"),
+            "curl.exe -H \"Authorization: Bearer phase-test-token\" \"http://127.0.0.1:4814/health\""
+        );
+        assert_eq!(
+            agent_api_health_command_with("curl", 4814, "phase-test-token"),
+            "curl -H \"Authorization: Bearer phase-test-token\" \"http://127.0.0.1:4814/health\""
+        );
+    }
 }
 
 // -------------------------------- run ---------------------------------------

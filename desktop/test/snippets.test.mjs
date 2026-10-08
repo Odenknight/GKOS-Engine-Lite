@@ -1,13 +1,10 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
+  AGENT_API_ROUTES,
   baseUrl,
-  mcpUrl,
-  claudeCodeCommand,
-  claudeProjectJson,
-  cursorJson,
-  genericToml,
-  curlHealth,
+  commandPlatform,
+  curlAgentApi,
   allSnippets,
   viewerQuery,
   viewerAppUrl,
@@ -15,46 +12,43 @@ import {
 
 const info = { port: 4814, token: "deadbeefcafe" };
 
-test("baseUrl / mcpUrl use loopback host and given port", () => {
+test("Agent API examples expose only exact implemented GET routes", () => {
   assert.equal(baseUrl(4814), "http://127.0.0.1:4814");
-  assert.equal(mcpUrl(9000), "http://127.0.0.1:9000/mcp");
+  assert.deepEqual(AGENT_API_ROUTES, {
+    health: "/health",
+    notes: "/notes",
+    graph: "/graph",
+    graphiti: "/graphiti/episodes",
+  });
+  assert.equal(
+    curlAgentApi(info, "health"),
+    'curl -H "Authorization: Bearer deadbeefcafe" "http://127.0.0.1:4814/health"',
+  );
 });
 
-test("claude code command mirrors Kosmos-Oden format with bearer + server name", () => {
-  const cmd = claudeCodeCommand(info);
-  assert.match(cmd, /^claude mcp add --transport http --header "Authorization: Bearer deadbeefcafe" kosmos-oden "http:\/\/127\.0\.0\.1:4814\/mcp"$/);
+test("Windows examples use curl.exe instead of PowerShell's curl alias", () => {
+  assert.equal(commandPlatform("Mozilla/5.0 (Windows NT 10.0; Win64; x64)"), "windows");
+  assert.equal(commandPlatform("Mozilla/5.0 (Macintosh; Intel Mac OS X)"), "posix");
+  assert.equal(
+    curlAgentApi(info, "health", "windows"),
+    'curl.exe -H "Authorization: Bearer deadbeefcafe" "http://127.0.0.1:4814/health"',
+  );
+  for (const command of Object.values(allSnippets(info, "windows"))) {
+    assert.match(command, /^curl\.exe /);
+  }
 });
 
-test("claude project .mcp.json is valid streamable-http block", () => {
-  const obj = JSON.parse(claudeProjectJson(info));
-  assert.equal(obj.mcpServers["kosmos-oden"].type, "streamable-http");
-  assert.equal(obj.mcpServers["kosmos-oden"].url, "http://127.0.0.1:4814/mcp");
-  assert.equal(obj.mcpServers["kosmos-oden"].headers.Authorization, "Bearer deadbeefcafe");
+test("all snippets use bearer auth and never advertise the absent MCP route", () => {
+  const snippets = allSnippets(info);
+  assert.deepEqual(Object.keys(snippets).sort(), ["graph", "graphiti", "health", "notes"]);
+  for (const [name, command] of Object.entries(snippets)) {
+    assert.match(command, /Authorization: Bearer deadbeefcafe/, name);
+    assert.doesNotMatch(command, /\/mcp(?:\b|\/)/i, name);
+  }
+  assert.match(snippets.notes, /\/notes"$/);
+  assert.match(snippets.graph, /\/graph"$/);
+  assert.match(snippets.graphiti, /\/graphiti\/episodes"$/);
 });
-
-test("cursor block is valid JSON with url + header", () => {
-  const obj = JSON.parse(cursorJson(info));
-  assert.equal(obj.mcpServers["kosmos-oden"].url, "http://127.0.0.1:4814/mcp");
-  assert.equal(obj.mcpServers["kosmos-oden"].headers.Authorization, "Bearer deadbeefcafe");
-});
-
-test("generic TOML has section header, url, and http_headers", () => {
-  const toml = genericToml(info);
-  assert.match(toml, /\[mcp_servers\.kosmos-oden\]/);
-  assert.match(toml, /url = "http:\/\/127\.0\.0\.1:4814\/mcp"/);
-  assert.match(toml, /http_headers = \{ Authorization = "Bearer deadbeefcafe" \}/);
-});
-
-test("curl health check targets /health with bearer", () => {
-  assert.equal(curlHealth(info), 'curl -H "Authorization: Bearer deadbeefcafe" "http://127.0.0.1:4814/health"');
-});
-
-test("allSnippets returns every client key", () => {
-  const s = allSnippets(info);
-  assert.deepEqual(Object.keys(s).sort(), ["claudeCode", "claudeJson", "curl", "cursor", "toml"]);
-});
-
-// ---- 3D viewer URL building --------------------------------------------
 
 test("viewerQuery percent-encodes the api base and carries the token", () => {
   assert.equal(

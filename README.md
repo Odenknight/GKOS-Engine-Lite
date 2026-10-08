@@ -1,21 +1,20 @@
 # GKOS-Engine-Lite
 
-**Command-line OKF+ Notes (2.2) + Agent-Ready (flat 2.3) tooling for any
-folder of Markdown notes.**
+> **Portfolio position** · Product: GKOS-Engine-Lite · Repository: `Odenknight/GKOS-Engine-Lite`
+> Tier: TF (dependency class: T2 embedding) · GKX schema: GKX Notes 2.2 + flat 2.3
+> Engine dependency: embeds GKOS-Engine at frozen pin `v1.0.4`
+> Lifecycle: Frozen · Relationships: none
+> Authority for this block: GKOS-REGISTRY-001
 
-GKOS-Engine-Lite is the standalone, non-Obsidian counterpart to
-[Kosmos-Oden-Lite](https://github.com/Odenknight/Kosmos-Oden-Lite): it gives
-individuals and small vaults the same GKOS-Engine-Lite schema — OKF+ Notes
-(2.2) with the optional Agent-Ready flat 2.3 profile — as a command-line tool
-you can point at any folder of Markdown notes. No Obsidian, no plugin, no
-GUI: just `okf-lite validate`, `assess`, `graph`, and `export` over a
-directory.
+GKOS-Engine-Lite is a frozen lighter legacy Engine line. It provides
+command-line tooling for GKX Notes 2.2 with the optional Agent-Ready flat 2.3
+profile. It embeds GKOS-Engine at the pinned historical `v1.0.4` version; it
+does not track current Engine upgrades.
 
-It is a thin wrapper, not a reimplementation. Under the hood it depends
-directly on [gkos-engine](https://github.com/Odenknight/GKOS-Engine) — the
-canonical, deterministic engine that also powers Kosmos-Oden and
-Kosmos-Oden-Lite — and re-exports its CLI commands unchanged. Same parser,
-same validation, same assessment scoring, same output, byte for byte.
+It is a thin wrapper, not a reimplementation; it does not independently
+implement deterministic semantics. Its pinned embedded Engine supplies the
+parser, validation, assessment scoring, and output. This frozen repository
+receives documentation, security, and repository-maintenance corrections only.
 
 ## Why "Lite"
 
@@ -26,14 +25,11 @@ governance workflows), and diagnostic commands are always honest about what
 they find in a vault regardless of dialect — GKOS-Engine-Lite never hides or
 misreports a note just because it's outside its intended audience.
 
-What "Lite" narrows is documentation and positioning, not behavior: this
+What "Lite" historically narrowed is documentation and positioning, not behavior: this
 README and this package describe and support the everyday, individual-vault
 workflow — OKF+ Notes (2.2) and Agent-Ready (flat 2.3) — and don't document
 Machine-Dialect-specific workflows, sidecar governance, or proposal/decision
-records. If you need those, use gkos-engine directly. If gkos-engine later
-grows write-capable commands (migrate, proposals, decisions, mv, serve — none
-exist yet as of gkos-engine v1.0.0), GKOS-Engine-Lite's CLI surface will stay
-limited to the four read-only diagnostic commands below.
+records. If you need current Engine capabilities, use GKOS-Engine directly.
 
 ## Install
 
@@ -44,7 +40,7 @@ npm install gkos-engine-lite
 ```
 
 `gkos-engine` has no npm registry publish; it's installed as a pinned git
-dependency (`github:Odenknight/GKOS-Engine#v1.0.0`). Its own package doesn't
+dependency (`github:Odenknight/GKOS-Engine#v1.0.4`). Its own package doesn't
 ship a prebuilt bundle for git installs, so a `postinstall` script
 (`scripts/build-engine.mjs`) bundles it locally with esbuild the first time
 you install — this is transparent and only runs once.

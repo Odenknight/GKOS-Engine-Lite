@@ -11,8 +11,8 @@ const execFileAsync = promisify(execFile);
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const fixtures = join(root, "test/fixtures/notes");
-const okfLiteBin = join(root, "bin/okf-lite.mjs");
-const okfEngineBin = join(root, "node_modules/gkos-engine/bin/gkx.mjs");
+const gkxLiteBin = join(root, "bin/gkx-lite.mjs");
+const gkxEngineBin = join(root, "node_modules/gkos-engine/bin/gkx.mjs");
 
 const SEARCH_NOTE = `---
 gkx_version: "2.3"
@@ -52,17 +52,17 @@ function assertEquivalentStderr(actual, expected) {
   );
 }
 
-test("okf-lite validate produces identical output to gkos-engine's own CLI", async () => {
-  const lite = await run(okfLiteBin, ["validate", fixtures]);
-  const engine = await run(okfEngineBin, ["validate", fixtures]);
+test("gkx-lite validate produces identical output to gkos-engine's own CLI", async () => {
+  const lite = await run(gkxLiteBin, ["validate", fixtures]);
+  const engine = await run(gkxEngineBin, ["validate", fixtures]);
   assert.equal(lite.code, engine.code);
   assert.equal(lite.stdout, engine.stdout);
   assertEquivalentStderr(lite.stderr, engine.stderr);
 });
 
-test("okf-lite assess --json produces identical output to gkos-engine's own CLI", async () => {
-  const lite = await run(okfLiteBin, ["assess", fixtures, "--json"]);
-  const engine = await run(okfEngineBin, ["assess", fixtures, "--json"]);
+test("gkx-lite assess --json produces identical output to gkos-engine's own CLI", async () => {
+  const lite = await run(gkxLiteBin, ["assess", fixtures, "--json"]);
+  const engine = await run(gkxEngineBin, ["assess", fixtures, "--json"]);
   assert.equal(lite.code, engine.code);
   assert.equal(lite.stdout, engine.stdout);
   assertEquivalentStderr(lite.stderr, engine.stderr);
@@ -71,13 +71,13 @@ test("okf-lite assess --json produces identical output to gkos-engine's own CLI"
   assert.ok(Array.isArray(parsed) && parsed.length > 0);
 });
 
-test("okf-lite Phase-3 validate preserves exact argv, output bytes, and source bytes", async () => {
+test("gkx-lite Phase-3 validate preserves exact argv, output bytes, and source bytes", async () => {
   const kb = await mkdtemp(join(tmpdir(), "gkos-lite-ingest-validate-"));
   try {
     await writeFile(join(kb, "policy.md"), SEARCH_NOTE, "utf8");
     const argv = ["validate", "--kb-path", kb, "--format", "json"];
-    const engine = await run(okfEngineBin, argv);
-    const lite = await run(okfLiteBin, argv);
+    const engine = await run(gkxEngineBin, argv);
+    const lite = await run(gkxLiteBin, argv);
     assert.equal(lite.code, engine.code);
     assert.equal(lite.stdout, engine.stdout);
     assertEquivalentStderr(lite.stderr, engine.stderr);
@@ -88,17 +88,17 @@ test("okf-lite Phase-3 validate preserves exact argv, output bytes, and source b
   }
 });
 
-test("okf-lite Phase-3 strict index is byte-identical after an exact clean-state replay", async () => {
+test("gkx-lite Phase-3 strict index is byte-identical after an exact clean-state replay", async () => {
   const kb = await mkdtemp(join(tmpdir(), "gkos-lite-ingest-index-"));
   const stateRoot = join(kb, ".gkx");
   try {
     await writeFile(join(kb, "policy.md"), SEARCH_NOTE, "utf8");
     const argv = ["index", "--kb-path", kb, "--strict"];
-    const engine = await run(okfEngineBin, argv);
+    const engine = await run(gkxEngineBin, argv);
     assert.equal(engine.code, 0, engine.stderr);
     await rm(stateRoot, { recursive: true, force: true });
 
-    const lite = await run(okfLiteBin, argv);
+    const lite = await run(gkxLiteBin, argv);
     assert.equal(lite.code, engine.code);
     assert.equal(lite.stdout, engine.stdout);
     assertEquivalentStderr(lite.stderr, engine.stderr);
@@ -108,8 +108,8 @@ test("okf-lite Phase-3 strict index is byte-identical after an exact clean-state
     assert.equal(result.mode, "strict");
 
     const searchArgv = ["search", "canonical policy", "--kb-path", kb, "--limit", "5"];
-    const searchEngine = await run(okfEngineBin, searchArgv);
-    const searchLite = await run(okfLiteBin, searchArgv);
+    const searchEngine = await run(gkxEngineBin, searchArgv);
+    const searchLite = await run(gkxLiteBin, searchArgv);
     assert.equal(searchLite.code, searchEngine.code);
     assert.equal(searchLite.stdout, searchEngine.stdout);
     assertEquivalentStderr(searchLite.stderr, searchEngine.stderr);
@@ -120,15 +120,15 @@ test("okf-lite Phase-3 strict index is byte-identical after an exact clean-state
   }
 });
 
-test("okf-lite search returns byte-identical contract output through the Engine CLI boundary", async () => {
+test("gkx-lite search returns byte-identical contract output through the Engine CLI boundary", async () => {
   const kb = await mkdtemp(join(tmpdir(), "gkos-lite-search-"));
   const config = join(kb, "operator.toml");
   try {
     await writeFile(join(kb, "policy.md"), SEARCH_NOTE, "utf8");
     await writeFile(config, "config_version = 1\n[retrieval]\nmode = \"fts\"\n", "utf8");
     const argv = ["search", "canonical policy", "--kb-path", kb, "--config", config, "--limit", "5"];
-    const lite = await run(okfLiteBin, argv);
-    const engine = await run(okfEngineBin, argv);
+    const lite = await run(gkxLiteBin, argv);
+    const engine = await run(gkxEngineBin, argv);
     assert.equal(lite.code, engine.code);
     assert.equal(lite.stdout, engine.stdout);
     assertEquivalentStderr(lite.stderr, engine.stderr);
@@ -142,7 +142,7 @@ test("okf-lite search returns byte-identical contract output through the Engine 
   }
 });
 
-test("okf-lite search --as-of is byte-identical to the exact pinned Full CLI", async () => {
+test("gkx-lite search --as-of is byte-identical to the exact pinned Full CLI", async () => {
   const kb = await mkdtemp(join(tmpdir(), "gkos-lite-search-as-of-"));
   const config = join(kb, "operator.toml");
   const asOf = "2026-08-20T08:00:00-04:00";
@@ -161,8 +161,8 @@ test("okf-lite search --as-of is byte-identical to the exact pinned Full CLI", a
       "--limit",
       "5",
     ];
-    const lite = await run(okfLiteBin, argv);
-    const engine = await run(okfEngineBin, argv);
+    const lite = await run(gkxLiteBin, argv);
+    const engine = await run(gkxEngineBin, argv);
     assert.equal(lite.code, engine.code);
     assert.equal(lite.stdout, engine.stdout);
     assertEquivalentStderr(lite.stderr, engine.stderr);
@@ -197,16 +197,16 @@ test("stderr parity normalizes only the exact SQLite experimental-warning PID", 
   );
 });
 
-test("okf-lite --help banner reflects the Lite scope framing", async () => {
-  const { stdout, code } = await run(okfLiteBin, ["--help"]);
+test("gkx-lite --help banner reflects the Lite scope framing", async () => {
+  const { stdout, code } = await run(gkxLiteBin, ["--help"]);
   assert.equal(code, 0);
   assert.match(stdout, /GKOS-Engine-Lite/);
-  assert.match(stdout, /OKF\+ Notes \(2\.2\) \+ Agent-Ready \(flat 2\.3\)/);
+  assert.match(stdout, /GKX Notes \(2\.2\) \+ Agent-Ready \(flat 2\.3\)/);
   assert.doesNotMatch(stdout, /Machine Dialect/);
 });
 
-test("okf-lite with no args exits non-zero and still prints the Lite banner", async () => {
-  const { stdout, code } = await run(okfLiteBin, []);
+test("gkx-lite with no args exits non-zero and still prints the Lite banner", async () => {
+  const { stdout, code } = await run(gkxLiteBin, []);
   assert.equal(code, 1);
   assert.match(stdout, /GKOS-Engine-Lite/);
 });

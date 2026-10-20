@@ -70,13 +70,13 @@ export async function assistMain(argv, options = {}) {
   if (!task || !file || rest.length) {
     throw new Error([
       "Choose what you want help with and a note:",
-      "  okf-lite assist explain <note.md>",
-      "  okf-lite assist improve <note.md>",
-      "  okf-lite assist repair <note.md>",
-      "  okf-lite assist find-links <note.md>",
-      "  okf-lite assist find-claims <note.md>",
-      "  okf-lite assist check-conflicts <note.md>",
-      "  okf-lite assist check-privacy <note.md>",
+      "  gkx-lite assist explain <note.md>",
+      "  gkx-lite assist improve <note.md>",
+      "  gkx-lite assist repair <note.md>",
+      "  gkx-lite assist find-links <note.md>",
+      "  gkx-lite assist find-claims <note.md>",
+      "  gkx-lite assist check-conflicts <note.md>",
+      "  gkx-lite assist check-privacy <note.md>",
       "",
       "This is optional and never changes your note.",
     ].join("\n"));

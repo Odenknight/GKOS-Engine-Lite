@@ -19,8 +19,8 @@
     "engine_resolved_sha": "e7cc0dd478af3d0bda216c5258dec5f77932def7"
   },
   "cli": {
-    "phase2_validate_help_line": "  okf-lite validate <dir>                                  schema/identity/lineage diagnostics; non-zero exit on error\n",
-    "phase3_validate_help_lines": "  okf-lite validate <dir>                                  schema/identity/lineage diagnostics; non-zero exit on error\n  okf-lite validate --kb-path <path> [--schema <path-or-id>] [--format text|json]\n  okf-lite index --kb-path <path> [--schema <path-or-id>] [--strict]\n",
+    "phase2_validate_help_line": "  gkx-lite validate <dir>                                  schema/identity/lineage diagnostics; non-zero exit on error\n",
+    "phase3_validate_help_lines": "  gkx-lite validate <dir>                                  schema/identity/lineage diagnostics; non-zero exit on error\n  gkx-lite validate --kb-path <path> [--schema <path-or-id>] [--format text|json]\n  gkx-lite index --kb-path <path> [--schema <path-or-id>] [--strict]\n",
     "delegated_validate_argv": [
       "validate",
       "--kb-path",

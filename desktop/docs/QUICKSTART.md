@@ -1,8 +1,8 @@
-# GKOS Engine Desktop — Quickstart
+# GKOS-Engine-Lite Desktop — Quickstart
 
 ## Why use this
 
-GKOS Engine Desktop watches your notes folder and builds a live map of what's in it, including a Graphiti projection. When enabled, the current sidecar exposes that map through a bearer-token-protected, GET-only REST API bound directly to loopback. GKOS has no built-in upload, remote-bind, proxy, or tunnel feature. A client holding the token can copy or export responses, and separately configured proxy or tunnel software can relay them beyond this computer.
+GKOS-Engine-Lite Desktop watches your notes folder and builds a live map of what's in it, including a Graphiti projection. When enabled, the current sidecar exposes that map through a bearer-token-protected, GET-only REST API bound directly to loopback. GKOS has no built-in upload, remote-bind, proxy, or tunnel feature. A client holding the token can copy or export responses, and separately configured proxy or tunnel software can relay them beyond this computer.
 
 Sensitivity values classify records and fail closed when missing or invalid, but they are not access-control rules for this API. Any local app that receives the bearer token can read every indexed note and projection. Keep sharing disabled or withhold the token when that is not acceptable.
 
@@ -36,7 +36,7 @@ If you're on macOS Ventura or newer and don't see that dialog:
 
 1. Open **System Settings**.
 2. Go to **Privacy & Security**.
-3. Click **Open Anyway** next to the message about GKOS Engine Desktop.
+3. Click **Open Anyway** next to the message about GKOS-Engine-Lite Desktop.
 
 **On Windows:**
 
@@ -79,4 +79,4 @@ curl -H "Authorization: Bearer <token>" "http://127.0.0.1:4814/health"
 
 ## You're done
 
-GKOS Engine Desktop now lives quietly in your tray (menu bar on Mac, system tray on Windows). Click the icon any time to open Settings, see status, copy the health command again, or choose **Open 3D View** for a read-only 3D map of your notes and their connections. The pinned sidecar does not expose MCP; do not configure an MCP client against `/mcp`.
+GKOS-Engine-Lite Desktop now lives quietly in your tray (menu bar on Mac, system tray on Windows). Click the icon any time to open Settings, see status, copy the health command again, or choose **Open 3D View** for a read-only 3D map of your notes and their connections. The pinned sidecar does not expose MCP; do not configure an MCP client against `/mcp`.

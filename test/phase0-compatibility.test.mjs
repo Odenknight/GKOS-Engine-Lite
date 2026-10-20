@@ -7,7 +7,7 @@ import { fileURLToPath } from "node:url";
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { validateLiteCommand } from "../bin/okf-lite.mjs";
+import { validateLiteCommand } from "../bin/gkx-lite.mjs";
 import { deterministicArtifacts, runtimeSnapshot } from "./support/phase0-snapshot.mjs";
 
 const execFileAsync = promisify(execFile);
@@ -20,7 +20,7 @@ const phase3Fixture = JSON.parse(await readFile(resolve(fixtureRoot, "phase3-lit
 
 async function runCli(args) {
   try {
-    const result = await execFileAsync(process.execPath, [resolve(root, "bin/okf-lite.mjs"), ...args], {
+    const result = await execFileAsync(process.execPath, [resolve(root, "bin/gkx-lite.mjs"), ...args], {
       encoding: null,
     });
     return { code: 0, stdout: result.stdout, stderr: result.stderr };
@@ -133,7 +133,7 @@ test("Phase 1 deterministic golden comparison rejects simulated CRLF checkout by
 
 test("Phase 1 compatibility comparison rejects a deliberate interface perturbation", async () => {
   const perturbed = structuredClone(await runtimeSnapshot());
-  perturbed.lite_package.bin = { "gkx-lite": "./bin/okf-lite.mjs" };
+  perturbed.lite_package.bin = { gkx: "./bin/gkx-lite.mjs" };
   assert.throws(() => assertCompatibilitySnapshot(perturbed));
 });
 

@@ -1,6 +1,6 @@
 name: desktop-build
 
-# Builds the unsigned GKOS Engine Desktop installers (.dmg / .exe NSIS) on the
+# Builds the unsigned GKOS-Engine-Lite Desktop installers (.dmg / .exe NSIS) on the
 # CI matrix. Rust/Tauri compilation happens ONLY here — there is no local Rust
 # toolchain. Trigger manually, or on a `desktop-v*` tag to cut a Release.
 on:
@@ -145,7 +145,7 @@ jobs:
           fi
           ls -la src-tauri/binaries
 
-      - name: Acquire standalone 3D viewer (vault-kosmos.html)
+      - name: Acquire standalone 3D viewer (bundled as kosmos-oden.html)
         shell: bash
         working-directory: desktop
         env:
@@ -158,17 +158,19 @@ jobs:
           VIEWER_REPO=Odenknight/Kosmos-Oden
           VIEWER_TAG=viewer-v0.6.9-rc1
           mkdir -p public src-tauri/resources
+          # The pinned release asset keeps its published name, vault-kosmos.html;
+          # it is bundled locally as kosmos-oden.html.
           echo "Downloading vault-kosmos.html from ${VIEWER_REPO}@${VIEWER_TAG}…"
           gh release download "${VIEWER_TAG}" \
             --repo "${VIEWER_REPO}" \
             --pattern vault-kosmos.html \
-            --output src-tauri/resources/vault-kosmos.html --clobber
-          test -s src-tauri/resources/vault-kosmos.html
+            --output src-tauri/resources/kosmos-oden.html --clobber
+          test -s src-tauri/resources/kosmos-oden.html
           # Frontend copy: vite copies public/ into the build (frontendDist), so
           # the in-app window can load it over the Tauri protocol. The resources/
           # copy is read at runtime for the browser fallback.
-          cp src-tauri/resources/vault-kosmos.html public/vault-kosmos.html
-          ls -la public/vault-kosmos.html src-tauri/resources/vault-kosmos.html
+          cp src-tauri/resources/kosmos-oden.html public/kosmos-oden.html
+          ls -la public/kosmos-oden.html src-tauri/resources/kosmos-oden.html
 
       - name: Build unsigned bundle
         uses: tauri-apps/tauri-action@v0
@@ -183,7 +185,7 @@ jobs:
           # the standard unsigned disclaimer. On workflow_dispatch, artifacts
           # stay attached to the run only.
           tagName: ${{ startsWith(github.ref, 'refs/tags/desktop-v') && github.ref_name || '' }}
-          releaseName: ${{ startsWith(github.ref, 'refs/tags/desktop-v') && 'GKOS Engine Desktop __VERSION__' || '' }}
+          releaseName: ${{ startsWith(github.ref, 'refs/tags/desktop-v') && 'GKOS-Engine-Lite Desktop __VERSION__' || '' }}
           releaseBody: ${{ startsWith(github.ref, 'refs/tags/desktop-v') && 'Unsigned pre-release build. Your OS will warn you when you first open it — this is expected for an unsigned app. See the install guide (desktop/docs/QUICKSTART.md and USER-GUIDE.md) for the macOS right-click → Open / xattr fallback and the Windows SmartScreen More info → Run anyway steps. Loopback-only, read-only, no cloud access.' || '' }}
           releaseDraft: false
           prerelease: true

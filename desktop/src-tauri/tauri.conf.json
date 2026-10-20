@@ -1,6 +1,6 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "GKOS Engine Desktop",
+  "productName": "GKOS-Engine-Lite Desktop",
   "version": "0.2.0",
   "identifier": "org.gkos.engine.desktop",
   "build": {
@@ -16,7 +16,7 @@
       "id": "main",
       "iconPath": "icons/32x32.png",
       "iconAsTemplate": true,
-      "tooltip": "GKOS Engine Desktop",
+      "tooltip": "GKOS-Engine-Lite Desktop",
       "menuOnLeftClick": false
     },
     "security": {
@@ -34,10 +34,10 @@
       "icons/icon.ico"
     ],
     "externalBin": ["binaries/kosmos-agent"],
-    "resources": ["resources/vault-kosmos.html"],
+    "resources": ["resources/kosmos-oden.html"],
     "category": "Productivity",
     "shortDescription": "Deterministic local knowledge engine with optional proposal-only AI assistance.",
-    "longDescription": "GKOS Engine Desktop watches a notes folder, builds a deterministic OKF+ 2.3 and Graphiti projection, and serves a loopback-only, read-only, token-gated agent API. An optional separately configured DSPy sidecar may suggest explanations or repairs, but it cannot write notes, approve changes, lower sensitivity, or replace engine validation.",
+    "longDescription": "GKOS-Engine-Lite Desktop watches a notes folder, builds a deterministic GKX 2.3 and Graphiti projection, and serves a loopback-only, read-only, token-gated agent API. An optional separately configured DSPy sidecar may suggest explanations or repairs, but it cannot write notes, approve changes, lower sensitivity, or replace engine validation.",
     "windows": {
       "nsis": {
         "installMode": "currentUser"

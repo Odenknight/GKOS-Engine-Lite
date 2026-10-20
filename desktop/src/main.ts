@@ -1,5 +1,5 @@
 /**
- * GKOS Engine Desktop — frontend controller (plain TS + Tauri APIs, no
+ * GKOS-Engine-Lite Desktop — frontend controller (plain TS + Tauri APIs, no
  * framework). One SPA renders either the first-run wizard or the Settings
  * window, chosen by the URL hash (`#wizard` | `#settings`). All Rust bridges
  * go through `invoke`; all copy comes from strings.ts.

@@ -1,8 +1,8 @@
-# GKOS Engine Desktop — User Guide
+# GKOS-Engine-Lite Desktop — User Guide
 
 ## Why this app exists
 
-You write notes because thinking on paper (or in Obsidian, or a plain folder of markdown files) helps you think. Increasingly, you also want to talk to an AI assistant about those notes — ask it questions, have it find connections, let it help you write. The usual way to do that means uploading your notes to someone else's server. GKOS Engine Desktop is a different way.
+You write notes because thinking on paper (or in Obsidian, or a plain folder of markdown files) helps you think. Increasingly, you also want to talk to an AI assistant about those notes — ask it questions, have it find connections, let it help you write. The usual way to do that means uploading your notes to someone else's server. GKOS-Engine-Lite Desktop is a different way.
 
 This app runs quietly on your own computer. It watches a notes folder you choose and builds a live "map" of what's inside it, including a connections view called Graphiti. When enabled, a bearer-token-protected, GET-only REST API lets local programs read that map.
 
@@ -66,7 +66,7 @@ The app is not yet digitally signed — signing is coming in a future release. U
 On macOS Ventura and newer, if step 3 doesn't show a dialog:
 
 1. Open **System Settings** → **Privacy & Security**.
-2. Scroll to the security message about GKOS Engine Desktop.
+2. Scroll to the security message about GKOS-Engine-Lite Desktop.
 3. Click **Open Anyway**, then confirm.
 
 > **If the right-click trick doesn't work:** macOS sometimes needs one extra nudge. Open Terminal and run:
@@ -165,8 +165,8 @@ First check that the notes folder path in Settings points to where your notes li
 
 **macOS:** Quit the app from the tray, then drag it from Applications to the Trash.
 
-**Windows:** Quit the app from the tray, then use **Settings → Apps → Installed apps**, find GKOS Engine Desktop, and click **Uninstall**.
+**Windows:** Quit the app from the tray, then use **Settings → Apps → Installed apps**, find GKOS-Engine-Lite Desktop, and click **Uninstall**.
 
 ## For the curious
 
-GKOS Engine Desktop is built on the **Governed Knowledge Operations Standard (GKOS)** — an open standard for keeping AI-assisted knowledge trustworthy: originals preserved untouched, every claim traceable to its evidence, and every consequential action recorded. Read more in the GKOS standard repository and its Illustrated Edition.
+GKOS-Engine-Lite Desktop is built on the **Governed Knowledge Operations Standard (GKOS)** — an open standard for keeping AI-assisted knowledge trustworthy: originals preserved untouched, every claim traceable to its evidence, and every consequential action recorded. Read more in the GKOS standard repository and its Illustrated Edition.

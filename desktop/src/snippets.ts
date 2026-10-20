@@ -62,7 +62,7 @@ export function viewerQuery(info: ConnectInfo): string {
  * engine sidecar's CORS allowlist reflects.
  */
 export function viewerAppUrl(info: ConnectInfo): string {
-  return `vault-kosmos.html?${viewerQuery(info)}`;
+  return `kosmos-oden.html?${viewerQuery(info)}`;
 }
 
 /** All implemented REST examples keyed by response surface. */

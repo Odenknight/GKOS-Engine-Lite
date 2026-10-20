@@ -20,9 +20,6 @@ endorsed by, sponsored by, or maintained by Google. References to “Open
 Knowledge Format” and “OKF” identify the external specification with which
 this project provides interoperability.
 
-The compatibility identifiers `gkos.profile/okf-plus-2.2` and
-`gkos.profile/okf-plus-2.3` are retained as frozen profile names.
-
 ## Project-authored material
 
 Project-authored documentation and original graphics use CC BY 4.0.

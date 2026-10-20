@@ -1,11 +1,21 @@
-# GKX naming and compatibility migration
+# GKX naming migration
 
-GKX (Governed Knowledge Exchange) is the current name for the note exchange
-model formerly published as OKF+.
+GKX (Governed Knowledge Exchange) is the name of the note exchange model
+formerly published as OKF+.
 
-GKOS-Engine-Lite keeps its stable `okf-lite` executable and accepts existing
-OKF+ 2.2/2.3 notes. Those names are compatibility identifiers, not the current
-public model name. Historical changelog entries remain unchanged.
+This is a breaking rename with no aliases, matching GKOS-Engine 2.0.0:
 
-Any future executable, schema, or field rename must ship with aliases and a
-separately documented deprecation window.
+- The CLI command `okf-lite` is now `gkx-lite`, installed from
+  `bin/gkx-lite.mjs`. No `okf-lite` alias bin is installed; update scripts,
+  shell aliases, and integrations that invoke the old name.
+- Notes use the `gkx_version` frontmatter key. A note that still carries the
+  historical `okf_version` key is read as legacy input and reported with a
+  `GKX-SCHEMA-003` diagnostic by the pinned engine; it is not accepted as an
+  alias.
+- Runtime state, diagnostics, and profile identifiers use the GKX namespace
+  (`.gkx/`, `GKX-*`, `gkx-2.3-validating-projection`, `gkx23-default-v1`), as
+  defined by the pinned GKOS-Engine.
+
+The Desktop app's display name is now GKOS-Engine-Lite Desktop; its bundle
+identifier is unchanged. Historical changelog entries and dated evidence
+records keep the names that were current when they were written.

@@ -2,7 +2,7 @@
   "name": "gkos-engine-desktop",
   "private": true,
   "version": "0.2.0",
-  "description": "GKOS Engine Desktop — Tauri 2 tray shell for the GKOS engine sidecar (loopback-only, read-only).",
+  "description": "GKOS-Engine-Lite Desktop — Tauri 2 tray shell for the GKOS-Engine sidecar (loopback-only, read-only).",
   "type": "module",
   "scripts": {
     "dev": "vite",

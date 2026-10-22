@@ -3,7 +3,7 @@
 Copyright licenses in this repository do not grant trademark rights. The
 reserved GKOS, GKX, Kosmos-Oden, Kosmos Research Studio, and KRS names, logos,
 and certification-style badges are governed by the canonical policy in
-[GKOS-Engine](https://github.com/Odenknight/GKOS-Engine/blob/main/TRADEMARKS.md).
+[gkos-standard](https://github.com/Odenknight/gkos-standard/blob/main/TRADEMARKS.md).
 
 Truthful descriptive compatibility statements are permitted. Do not imply that
 a modified distribution is official, endorsed, certified, accredited, or

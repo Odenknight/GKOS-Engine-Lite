@@ -195,7 +195,8 @@ Windows that wraps the engine's headless sidecar (`kosmos-agent`). The CLI
 integration is bound to [Engine package 2.1.2 at exact commit
 `e7cc0dd`](https://github.com/Odenknight/GKOS-Engine/commit/e7cc0dd478af3d0bda216c5258dec5f77932def7);
 desktop sidecar artifacts remain separately qualified and are not implied by
-that source pin.
+that source pin. The bundled sidecar is still GKOS-Engine v1.1.3, which predates
+the GKX rename and reads only `okf_version`; see [GKX-MIGRATION.md](GKX-MIGRATION.md).
 Point it at a notes folder; it watches and projects (GKX 2.3 + Graphiti) and
 serves a **loopback-only, read-only, token-gated, GET-only REST API** for local
 clients. The checksum-pinned packaged sidecar is GKOS-Engine `v1.1.3`, SHA-256

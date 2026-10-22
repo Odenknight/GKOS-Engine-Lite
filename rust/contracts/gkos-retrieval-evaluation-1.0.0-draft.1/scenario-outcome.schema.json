@@ -1,0 +1,117 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gkos.example/contracts/retrieval/gkos-retrieval-evaluation-1.0.0-draft.1/scenario-outcome.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["contract_version", "scenario_id", "kind", "public_result_digest", "coverage", "confidence", "reason_code", "message", "ordered_hit_projections", "citation_applicability", "host_classification", "exit_code", "work_counters", "effects", "outcome_digest"],
+  "properties": {
+    "contract_version": { "const": "gkos-retrieval-evaluation-scenario-outcome/1.0.0-draft.1" },
+    "scenario_id": { "$ref": "common.schema.json#/$defs/evaluationId" },
+    "kind": { "enum": ["result", "insufficient", "authorized_view_conflict", "operational_exclusion"] },
+    "public_result_digest": { "oneOf": [{ "$ref": "common.schema.json#/$defs/sha256" }, { "type": "null" }] },
+    "coverage": { "enum": ["not_requested", "not_evaluated", "sufficient", "insufficient", null] },
+    "confidence": { "enum": ["high", "medium", "low", "insufficient", null] },
+    "reason_code": { "oneOf": [{ "type": "string", "pattern": "^[A-Z][A-Z0-9_]{0,127}$" }, { "type": "null" }] },
+    "message": { "oneOf": [{ "type": "string", "minLength": 1, "maxLength": 256, "pattern": "^[^\\u0000-\\u001f\\u007f]+$" }, { "type": "null" }] },
+    "ordered_hit_projections": { "type": "array", "maxItems": 100, "items": { "$ref": "common.schema.json#/$defs/temporalProjection" } },
+    "citation_applicability": { "enum": ["required", "not_applicable"] },
+    "host_classification": { "enum": ["fixture_authority_failure", "retrieval_authority_failure", null] },
+    "exit_code": { "enum": [0, 3] },
+    "work_counters": { "$ref": "#/$defs/workCounters" },
+    "effects": { "$ref": "#/$defs/effects" },
+    "outcome_digest": { "$ref": "common.schema.json#/$defs/sha256" }
+  },
+  "allOf": [
+    { "if": { "type": "object", "properties": { "kind": { "const": "result" } } }, "then": { "$ref": "#/$defs/resultRelation" } },
+    { "if": { "type": "object", "properties": { "kind": { "const": "insufficient" } } }, "then": { "$ref": "#/$defs/insufficientRelation" } },
+    { "if": { "type": "object", "properties": { "kind": { "const": "authorized_view_conflict" } } }, "then": { "$ref": "#/$defs/conflictRelation" } },
+    { "if": { "type": "object", "properties": { "kind": { "const": "operational_exclusion" } } }, "then": { "$ref": "#/$defs/operationalRelation" } }
+  ],
+  "$defs": {
+    "workCounters": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["authority_input_snapshot_count", "source_read_count", "retrieval_sql_stage_count", "vector_provider_call_count", "vector_provider_item_count", "rerank_provider_call_count", "rerank_provider_item_count", "ranking_call_count", "confidence_call_count", "citation_verification_count", "metric_computation_count"],
+      "properties": {
+        "authority_input_snapshot_count": { "$ref": "common.schema.json#/$defs/safeCount" },
+        "source_read_count": { "$ref": "common.schema.json#/$defs/safeCount" },
+        "retrieval_sql_stage_count": { "$ref": "common.schema.json#/$defs/safeCount" },
+        "vector_provider_call_count": { "$ref": "common.schema.json#/$defs/safeCount" },
+        "vector_provider_item_count": { "$ref": "common.schema.json#/$defs/safeCount" },
+        "rerank_provider_call_count": { "$ref": "common.schema.json#/$defs/safeCount" },
+        "rerank_provider_item_count": { "$ref": "common.schema.json#/$defs/safeCount" },
+        "ranking_call_count": { "$ref": "common.schema.json#/$defs/safeCount" },
+        "confidence_call_count": { "$ref": "common.schema.json#/$defs/safeCount" },
+        "citation_verification_count": { "$ref": "common.schema.json#/$defs/safeCount" },
+        "metric_computation_count": { "$ref": "common.schema.json#/$defs/safeCount" }
+      },
+      "allOf": [
+        { "if": { "type": "object", "properties": { "vector_provider_call_count": { "const": 0 } } }, "then": { "type": "object", "properties": { "vector_provider_item_count": { "const": 0 } } } },
+        { "if": { "type": "object", "properties": { "rerank_provider_call_count": { "const": 0 } } }, "then": { "type": "object", "properties": { "rerank_provider_item_count": { "const": 0 } } } }
+      ]
+    },
+    "effects": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["public_result_emitted", "output_artifact_written", "state_mutated"],
+      "properties": { "public_result_emitted": { "type": "boolean" }, "output_artifact_written": { "type": "boolean" }, "state_mutated": { "type": "boolean" } }
+    },
+    "downstreamZero": {
+      "type": "object",
+      "properties": {
+        "source_read_count": { "const": 0 }, "retrieval_sql_stage_count": { "const": 0 }, "vector_provider_call_count": { "const": 0 }, "vector_provider_item_count": { "const": 0 },
+        "rerank_provider_call_count": { "const": 0 }, "rerank_provider_item_count": { "const": 0 }, "ranking_call_count": { "const": 0 }, "confidence_call_count": { "const": 0 },
+        "citation_verification_count": { "const": 0 }, "metric_computation_count": { "const": 0 }
+      }
+    },
+    "noSideEffects": { "type": "object", "properties": { "output_artifact_written": { "const": false }, "state_mutated": { "const": false } } },
+    "sufficientTemporalProjection": {
+      "allOf": [
+        { "$ref": "common.schema.json#/$defs/temporalProjection" },
+        { "type": "object", "properties": { "temporal_state": { "enum": ["current", "historical"] }, "valid_from": { "$ref": "common.schema.json#/$defs/canonicalTime" } } }
+      ]
+    },
+    "resultRelation": {
+      "type": "object",
+      "properties": {
+        "public_result_digest": { "$ref": "common.schema.json#/$defs/sha256" }, "reason_code": { "type": "null" }, "message": { "type": "null" }, "host_classification": { "type": "null" }, "exit_code": { "const": 0 },
+        "work_counters": { "type": "object", "properties": { "authority_input_snapshot_count": { "const": 1 } } },
+        "effects": { "type": "object", "properties": { "public_result_emitted": { "const": true }, "output_artifact_written": { "const": false }, "state_mutated": { "const": false } } }
+      },
+      "oneOf": [
+        { "type": "object", "properties": { "coverage": { "const": "not_requested" }, "confidence": { "enum": ["high", "medium", "low"] }, "ordered_hit_projections": { "type": "array", "minItems": 1 }, "citation_applicability": { "const": "required" }, "work_counters": { "type": "object", "properties": { "citation_verification_count": { "type": "integer", "minimum": 1 }, "metric_computation_count": { "type": "integer", "minimum": 1 } } } } },
+        { "type": "object", "properties": { "coverage": { "const": "sufficient" }, "confidence": { "enum": ["high", "medium", "low"] }, "ordered_hit_projections": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/sufficientTemporalProjection" } }, "citation_applicability": { "const": "required" }, "work_counters": { "type": "object", "properties": { "citation_verification_count": { "type": "integer", "minimum": 1 }, "metric_computation_count": { "type": "integer", "minimum": 1 } } } } },
+        { "type": "object", "properties": { "coverage": { "const": "not_evaluated" }, "confidence": { "const": "insufficient" }, "ordered_hit_projections": { "type": "array", "maxItems": 0 }, "citation_applicability": { "const": "not_applicable" }, "work_counters": { "type": "object", "properties": { "citation_verification_count": { "const": 0 } } } } }
+      ]
+    },
+    "insufficientRelation": {
+      "type": "object",
+      "properties": {
+        "public_result_digest": { "$ref": "common.schema.json#/$defs/sha256" }, "coverage": { "const": "insufficient" }, "confidence": { "const": "insufficient" },
+        "reason_code": { "const": "TEMPORAL_COVERAGE_INSUFFICIENT" }, "message": { "type": "null" }, "ordered_hit_projections": { "type": "array", "maxItems": 0 }, "citation_applicability": { "const": "not_applicable" },
+        "host_classification": { "type": "null" }, "exit_code": { "const": 0 },
+        "work_counters": { "type": "object", "allOf": [{ "type": "object", "properties": { "authority_input_snapshot_count": { "const": 1 } } }, { "$ref": "#/$defs/downstreamZero" }] },
+        "effects": { "type": "object", "properties": { "public_result_emitted": { "const": true }, "output_artifact_written": { "const": false }, "state_mutated": { "const": false } } }
+      }
+    },
+    "conflictRelation": {
+      "type": "object",
+      "properties": {
+        "public_result_digest": { "type": "null" }, "coverage": { "type": "null" }, "confidence": { "type": "null" }, "reason_code": { "const": "RETRIEVAL_AUTHORIZED_VIEW_CONFLICT" },
+        "message": { "const": "Authorized retrieval view conflict." }, "ordered_hit_projections": { "type": "array", "maxItems": 0 }, "citation_applicability": { "const": "not_applicable" }, "host_classification": { "type": "null" }, "exit_code": { "const": 0 },
+        "work_counters": { "type": "object", "allOf": [{ "type": "object", "properties": { "authority_input_snapshot_count": { "const": 1 } } }, { "$ref": "#/$defs/downstreamZero" }] },
+        "effects": { "type": "object", "properties": { "public_result_emitted": { "const": false }, "output_artifact_written": { "const": false }, "state_mutated": { "const": false } } }
+      }
+    },
+    "operationalRelation": {
+      "type": "object",
+      "properties": {
+        "public_result_digest": { "type": "null" }, "coverage": { "type": "null" }, "confidence": { "type": "null" }, "reason_code": { "const": "GKX_RETRIEVAL_EVALUATION_OPERATIONAL_FAILURE" },
+        "message": { "const": "Retrieval evaluation failed safely." }, "ordered_hit_projections": { "type": "array", "maxItems": 0 }, "citation_applicability": { "const": "not_applicable" },
+        "host_classification": { "enum": ["fixture_authority_failure", "retrieval_authority_failure"] }, "exit_code": { "const": 3 },
+        "work_counters": { "type": "object", "allOf": [{ "type": "object", "properties": { "authority_input_snapshot_count": { "const": 0 } } }, { "$ref": "#/$defs/downstreamZero" }] },
+        "effects": { "type": "object", "properties": { "public_result_emitted": { "const": false }, "output_artifact_written": { "const": false }, "state_mutated": { "const": false } } }
+      }
+    }
+  }
+}

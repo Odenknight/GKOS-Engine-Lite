@@ -2,12 +2,14 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { prepareDelegatedCommand, validateLiteCommand } from "../bin/okf-lite.mjs";
 
-test("allows the six delegated Lite command paths", () => {
+test("allows the eight delegated Lite command paths", () => {
   for (const argv of [
     ["validate", "."],
     ["index", "--kb-path", ".", "--strict", "--schema", "gkos:frontmatter-profile/current"],
     ["assess", ".", "--json"],
     ["search", "canonical policy", "--kb-path", ".", "--limit", "5"],
+    ["retrieval", "eval", "--fixture", "golden-fixture.toml", "--json"],
+    ["retrieval", "tune", "--fixture", "golden-fixture.toml", "--output", "candidate.toml"],
     ["graph", ".", "-o", "graph.json"],
     ["export", "graphiti", ".", "--episodes", "episodes.json"],
   ]) assert.deepEqual(validateLiteCommand(argv), { allowed: true });
@@ -44,4 +46,17 @@ test("preserves the pinned search as-of flag and value byte-for-byte at the dele
     "search", "historical policy", "--kb-path", ".", "--as-of", asOf, "--limit", "5",
   ]);
   assert.equal(prepared.argv[prepared.argv.indexOf("--as-of") + 1], asOf);
+});
+
+test("preserves the pinned Full retrieval namespace and original argv object byte-for-byte", () => {
+  for (const argv of [
+    ["retrieval", "eval", "--fixture", "golden-fixture.toml", "--json"],
+    ["retrieval", "tune", "--fixture", "golden-fixture.toml", "--output", "candidate.toml"],
+    ["retrieval", "unknown"],
+    ["retrieval"],
+  ]) {
+    const prepared = prepareDelegatedCommand(argv);
+    assert.equal(prepared.allowed, true);
+    assert.strictEqual(prepared.argv, argv, "the pinned Full parser must receive the original argv object");
+  }
 });

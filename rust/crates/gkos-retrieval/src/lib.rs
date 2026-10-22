@@ -22,11 +22,20 @@
 //! ```compile_fail
 //! use gkos_retrieval_lite::ingest::verify_ingest_owner_bundle;
 //! ```
+//!
+//! Full-produced Phase-4 normalized evaluation envelopes are verified only by
+//! a crate-private pure seam. Raw golden parsing, fixture/provider execution,
+//! search, tuning, and publication remain Full-only authorities:
+//!
+//! ```compile_fail
+//! use gkos_retrieval_lite::evaluation::compute_query_metrics;
+//! ```
 
 #[cfg_attr(not(test), allow(dead_code))]
 mod authorized_view;
 #[cfg_attr(not(test), allow(dead_code))]
 mod candidate;
+// Phase-4 consumes only Full-produced normalized evaluation envelopes.
 pub mod chunker;
 pub mod confidence;
 pub mod config;
@@ -34,6 +43,8 @@ pub mod contract;
 pub mod coordinator;
 pub mod digest;
 pub mod error;
+#[cfg_attr(not(test), allow(dead_code))]
+mod evaluation;
 pub mod filters;
 pub mod fusion;
 #[cfg_attr(not(test), allow(dead_code))]

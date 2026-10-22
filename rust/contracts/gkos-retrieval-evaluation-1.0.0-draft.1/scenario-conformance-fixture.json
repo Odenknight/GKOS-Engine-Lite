@@ -1,0 +1,116 @@
+{
+  "contract_version": "gkos-retrieval-evaluation-scenario-conformance/1.0.0-draft.1",
+  "outcomes": [
+    {
+      "citation_applicability": "required",
+      "confidence": "high",
+      "contract_version": "gkos-retrieval-evaluation-scenario-outcome/1.0.0-draft.1",
+      "coverage": "not_requested",
+      "effects": { "output_artifact_written": false, "public_result_emitted": true, "state_mutated": false },
+      "exit_code": 0,
+      "host_classification": null,
+      "kind": "result",
+      "message": null,
+      "ordered_hit_projections": [{ "source_id": "018f0000-0000-7000-8000-000000000301", "superseded_by": [], "supersedes": [], "temporal_state": "unknown", "valid_from": null, "valid_to": null }],
+      "outcome_digest": "sha256:2fc11c1d3fa1ec65e0917daba53e203015e7fedaa8c2122c6e48b79d085f3482",
+      "public_result_digest": "sha256:5280a461fb678f5f21955b29541fb6d2d19e52e13d59c838f447200b5a7c935d",
+      "reason_code": null,
+      "scenario_id": "ordinary-result",
+      "work_counters": { "authority_input_snapshot_count": 1, "citation_verification_count": 1, "confidence_call_count": 1, "metric_computation_count": 1, "ranking_call_count": 1, "rerank_provider_call_count": 0, "rerank_provider_item_count": 0, "retrieval_sql_stage_count": 1, "source_read_count": 1, "vector_provider_call_count": 0, "vector_provider_item_count": 0 }
+    },
+    {
+      "citation_applicability": "not_applicable",
+      "confidence": "insufficient",
+      "contract_version": "gkos-retrieval-evaluation-scenario-outcome/1.0.0-draft.1",
+      "coverage": "not_evaluated",
+      "effects": { "output_artifact_written": false, "public_result_emitted": true, "state_mutated": false },
+      "exit_code": 0,
+      "host_classification": null,
+      "kind": "result",
+      "message": null,
+      "ordered_hit_projections": [],
+      "outcome_digest": "sha256:46a34f8eef6569eec56293dfa8251aaff613a196112acc43425a5483128ee86b",
+      "public_result_digest": "sha256:81a8796a6c1ee57cd3302e3a148c102a9b35702e6c642ce627c962469b0d7c33",
+      "reason_code": null,
+      "scenario_id": "empty-authorized",
+      "work_counters": { "authority_input_snapshot_count": 1, "citation_verification_count": 0, "confidence_call_count": 0, "metric_computation_count": 0, "ranking_call_count": 0, "rerank_provider_call_count": 0, "rerank_provider_item_count": 0, "retrieval_sql_stage_count": 0, "source_read_count": 0, "vector_provider_call_count": 0, "vector_provider_item_count": 0 }
+    },
+    {
+      "citation_applicability": "not_applicable",
+      "confidence": "insufficient",
+      "contract_version": "gkos-retrieval-evaluation-scenario-outcome/1.0.0-draft.1",
+      "coverage": "insufficient",
+      "effects": { "output_artifact_written": false, "public_result_emitted": true, "state_mutated": false },
+      "exit_code": 0,
+      "host_classification": null,
+      "kind": "insufficient",
+      "message": null,
+      "ordered_hit_projections": [],
+      "outcome_digest": "sha256:28e9ba5ecc6b035a90bb740581b162163affc4799f122bf42f283e06e662c804",
+      "public_result_digest": "sha256:3c342bfe77f845d66ee852171ee9df89b53de50e4270d0ed8ebe86707441f2c0",
+      "reason_code": "TEMPORAL_COVERAGE_INSUFFICIENT",
+      "scenario_id": "insufficient",
+      "work_counters": { "authority_input_snapshot_count": 1, "citation_verification_count": 0, "confidence_call_count": 0, "metric_computation_count": 0, "ranking_call_count": 0, "rerank_provider_call_count": 0, "rerank_provider_item_count": 0, "retrieval_sql_stage_count": 0, "source_read_count": 0, "vector_provider_call_count": 0, "vector_provider_item_count": 0 }
+    },
+    {
+      "citation_applicability": "not_applicable",
+      "confidence": null,
+      "contract_version": "gkos-retrieval-evaluation-scenario-outcome/1.0.0-draft.1",
+      "coverage": null,
+      "effects": { "output_artifact_written": false, "public_result_emitted": false, "state_mutated": false },
+      "exit_code": 0,
+      "host_classification": null,
+      "kind": "authorized_view_conflict",
+      "message": "Authorized retrieval view conflict.",
+      "ordered_hit_projections": [],
+      "outcome_digest": "sha256:bf2c141168f5aa14f457dbee6f30577b486adeb7614214df105a28192ef56c3e",
+      "public_result_digest": null,
+      "reason_code": "RETRIEVAL_AUTHORIZED_VIEW_CONFLICT",
+      "scenario_id": "authorized-conflict",
+      "work_counters": { "authority_input_snapshot_count": 1, "citation_verification_count": 0, "confidence_call_count": 0, "metric_computation_count": 0, "ranking_call_count": 0, "rerank_provider_call_count": 0, "rerank_provider_item_count": 0, "retrieval_sql_stage_count": 0, "source_read_count": 0, "vector_provider_call_count": 0, "vector_provider_item_count": 0 }
+    },
+    {
+      "citation_applicability": "not_applicable",
+      "confidence": null,
+      "contract_version": "gkos-retrieval-evaluation-scenario-outcome/1.0.0-draft.1",
+      "coverage": null,
+      "effects": { "output_artifact_written": false, "public_result_emitted": false, "state_mutated": false },
+      "exit_code": 3,
+      "host_classification": "fixture_authority_failure",
+      "kind": "operational_exclusion",
+      "message": "Retrieval evaluation failed safely.",
+      "ordered_hit_projections": [],
+      "outcome_digest": "sha256:2526940d02e8b1783e0648aeb92f6af78b974d90467b652977c4faebcfb99b76",
+      "public_result_digest": null,
+      "reason_code": "GKX_RETRIEVAL_EVALUATION_OPERATIONAL_FAILURE",
+      "scenario_id": "operational-exclusion",
+      "work_counters": { "authority_input_snapshot_count": 0, "citation_verification_count": 0, "confidence_call_count": 0, "metric_computation_count": 0, "ranking_call_count": 0, "rerank_provider_call_count": 0, "rerank_provider_item_count": 0, "retrieval_sql_stage_count": 0, "source_read_count": 0, "vector_provider_call_count": 0, "vector_provider_item_count": 0 }
+    }
+  ],
+  "expected_kind_set": ["authorized_view_conflict", "insufficient", "operational_exclusion", "result"],
+  "expected_result_branch_set": ["canonical-empty-authorized", "ordinary-nonempty"],
+  "precedence_matrix": [
+    {
+      "case_id": "known-conflict-over-unknown-coverage",
+      "known_conflict": true,
+      "unknown_coverage": true,
+      "phase2_contract_reference": "contract.json#/as_of/conflict_precedence",
+      "expected_outcome_reference": "outcomes/scenario_id=authorized-conflict",
+      "competing_outcome_reference": "outcomes/scenario_id=insufficient",
+      "expected_comparison_status": "regression",
+      "expected_comparison_reasons": ["SCENARIO_KIND_MISMATCH", "SCENARIO_OUTCOME_MISMATCH"]
+    }
+  ],
+  "semantic_negative_matrix": [
+    { "case_id": "vector-items-without-call", "base_scenario_id": "ordinary-result", "mutation": "vector_provider_item_count_one", "expected_code": "GKX_EVAL_SCENARIO_PROVIDER_COUNTER_RELATION_INVALID" },
+    { "case_id": "rerank-items-without-call", "base_scenario_id": "ordinary-result", "mutation": "rerank_provider_item_count_one", "expected_code": "GKX_EVAL_SCENARIO_PROVIDER_COUNTER_RELATION_INVALID" },
+    { "case_id": "sufficient-unknown-hit", "base_scenario_id": "ordinary-result", "mutation": "coverage_sufficient_keep_unknown_hit", "expected_code": "GKX_EVAL_SCENARIO_RESULT_RELATION_INVALID" },
+    { "case_id": "conflict-downstream-work", "base_scenario_id": "authorized-conflict", "mutation": "retrieval_sql_stage_count_one", "expected_code": "GKX_EVAL_SCENARIO_CONFLICT_RELATION_INVALID" },
+    { "case_id": "operational-after-snapshot", "base_scenario_id": "operational-exclusion", "mutation": "authority_input_snapshot_count_one", "expected_code": "GKX_EVAL_SCENARIO_OPERATIONAL_RELATION_INVALID" },
+    { "case_id": "scenario-id-overlong", "base_scenario_id": "ordinary-result", "mutation": "scenario_id_129_ascii", "expected_code": "GKX_EVAL_SCENARIO_OUTCOME_COORDINATE_INVALID" }
+  ],
+  "comparison_matrix": [
+    { "case_id": "same-outcome", "expected_scenario_id": "ordinary-result", "observed_scenario_id": "ordinary-result", "expected_status": "pass", "expected_reasons": [] },
+    { "case_id": "kind-transition", "expected_scenario_id": "ordinary-result", "observed_mutation": "authorized_conflict_same_scenario_id", "expected_status": "regression", "expected_reasons": ["SCENARIO_KIND_MISMATCH", "SCENARIO_OUTCOME_MISMATCH"] }
+  ]
+}

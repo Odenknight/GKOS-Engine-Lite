@@ -1,0 +1,35 @@
+{
+  "fixture_version": 1,
+  "phase": "phase-4-retrieval-evaluation-slice-b",
+  "historical_fixture": "phase4-slice-a-lite.json",
+  "full_reference": {
+    "repository": "Odenknight/GKOS-Engine",
+    "commit": "a57b98c00c1913f5b7ed96839b3f8effe5be9c4a",
+    "package_version": "2.1.2",
+    "evaluation_contract": "gkos-retrieval-evaluation/1.0.0-draft.1",
+    "evaluation_pack_commit": "cac029a5b570135b26f3585bc86f4c9beb00c36d",
+    "evaluation_pack_file_count": 37,
+    "evaluation_pack_bytes": 4948463,
+    "implemented_slice": "B-pinned-full-cli-delegation-and-byte-parity"
+  },
+  "runtime_migration": {
+    "expected_changed_paths": [
+      "$.lite_package.engine_dependency",
+      "$.lite_package.engine_resolved_sha"
+    ],
+    "engine_dependency": "github:Odenknight/GKOS-Engine#a57b98c00c1913f5b7ed96839b3f8effe5be9c4a",
+    "engine_resolved_sha": "a57b98c00c1913f5b7ed96839b3f8effe5be9c4a"
+  },
+  "cli": {
+    "delegated_eval_argv": ["retrieval", "eval", "--fixture", "golden-fixture.toml", "--json"],
+    "delegated_tune_argv": ["retrieval", "tune", "--fixture", "golden-fixture.toml", "--output", "candidate.toml"],
+    "phase3_retrieval_help_lines": "  okf-lite search   <query> --kb-path <dir> [--limit <n>] [--as-of <GKX timestamp>]\n                                                             public-only retrieval with exact citations\n",
+    "phase4_retrieval_help_lines": "  okf-lite search   <query> --kb-path <dir> [--limit <n>] [--as-of <GKX timestamp>]\n                                                             public-only retrieval with exact citations\n  okf-lite retrieval eval --fixture <golden-toml> [--json]    deterministic evaluation through pinned Full\n  okf-lite retrieval tune --fixture <golden-toml> --output <candidate-config>\n                                                             propose one new config; never activate it\n",
+    "conformance_fixture": "../retrieval-evaluation-cli-phase4.json",
+    "conformance_fixture_bytes": 23770,
+    "conformance_fixture_sha256": "sha256:fce5308d252d9e693244250543f6642af1cc4a7ef9404ac604313f6f37f107be"
+  },
+  "deterministic": {
+    "source_fixture_change": "none; Phase 0 note bytes, Phase 1 graph/Graphiti goldens, and Phase 2/3 contracts remain exact"
+  }
+}

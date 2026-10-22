@@ -11,6 +11,8 @@
  *   okf-lite index --kb-path <path> [--schema <path-or-id>] [--strict]
  *   okf-lite assess   <dir> [--json]
  *   okf-lite search   <query> --kb-path <dir> [--limit <n>] [--as-of <GKX timestamp>]
+ *   okf-lite retrieval eval --fixture <golden-toml> [--json]
+ *   okf-lite retrieval tune --fixture <golden-toml> --output <candidate-config>
  *   okf-lite graph    <dir> -o graph.json [--watch]
  *   okf-lite export graphiti <dir> --episodes episodes.json [--group-id <ns>]
  *
@@ -24,7 +26,8 @@
  * If/when gkos-engine grows write-capable commands (migrate, proposals,
  * decisions, mv, serve — none exist in the pinned engine; see the
  * "gkos-engine" pin in package.json for the exact version), this wrapper
- * should keep exposing only validate/index/assess/search/graph/export, not those.
+ * should keep exposing only validate/index/assess/search/retrieval eval,
+ * retrieval tune/graph/export, not those.
  */
 import { createRequire } from "node:module";
 import { readFileSync, realpathSync } from "node:fs";
@@ -62,6 +65,9 @@ Usage:
   okf-lite assess   <dir> [--json]                         per-note documentation-quality scores/labels
   okf-lite search   <query> --kb-path <dir> [--limit <n>] [--as-of <GKX timestamp>]
                                                              public-only retrieval with exact citations
+  okf-lite retrieval eval --fixture <golden-toml> [--json]    deterministic evaluation through pinned Full
+  okf-lite retrieval tune --fixture <golden-toml> --output <candidate-config>
+                                                             propose one new config; never activate it
   okf-lite graph    <dir> -o <graph.json> [--watch]        canonical Kosmos graph (stable serialization)
   okf-lite export graphiti <dir> --episodes <out.json> [--group-id <ns>]
   okf-lite assist explain <note.md>                        explain an issue in plain language
@@ -79,10 +85,15 @@ https://github.com/Odenknight/GKOS-Engine for the full engine this depends on.`;
 export function validateLiteCommand(argv) {
   const first = argv[0];
   if (["validate", "index", "assess", "search", "graph"].includes(first)) return { allowed: true };
+  // The exact pinned Full parser remains the sole authority for the nested
+  // retrieval argv grammar, including every finite invalid/help branch. A pin
+  // bump must requalify this namespace before any new upstream subcommand can
+  // become reachable through a published Lite build.
+  if (first === "retrieval") return { allowed: true };
   if (first === "export" && argv[1] === "graphiti") return { allowed: true };
   return {
     allowed: false,
-    message: "Unsupported command in GKOS-Engine-Lite. Lite exposes only: validate, index, assess, search, graph, export graphiti.",
+    message: "Unsupported command in GKOS-Engine-Lite. Lite exposes only: validate, index, assess, search, retrieval eval, retrieval tune, graph, export graphiti.",
   };
 }
 

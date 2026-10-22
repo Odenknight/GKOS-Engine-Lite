@@ -1,0 +1,301 @@
+contract_version = "gkos-retrieval-evaluation-golden/1.0.0-draft.1"
+
+[[query]]
+id = "multi-agent-writing-policy"
+text = "What decisions govern agent-created notes?"
+vault_fixture = "retrieval-basic-v1"
+expected_files = ["policy/agent-writing.md"]
+expected_source_ids = ["019b2d14-4230-7db7-87d4-7d81cfaec932"]
+expected_lineage_ids = []
+forbidden_source_ids = ["019b2d14-4230-7db7-87d4-7d81cfaec999"]
+forbidden_lineage_ids = []
+expected_top_k = 5
+expected_confidence = "high"
+
+[[query]]
+id = "historical-policy"
+text = "Which policy version was active at the cutoff?"
+vault_fixture = "retrieval-temporal-v1"
+expected_files = ["policy/historical.md"]
+expected_source_ids = ["019b2d14-4230-7db7-87d4-7d81cfaec933"]
+expected_lineage_ids = []
+forbidden_source_ids = []
+forbidden_lineage_ids = []
+expected_top_k = 5
+expected_confidence = "high"
+as_of = "2026-08-01T00:00:00Z"
+
+[[query]]
+id = "active-policy-at-cutoff"
+text = "Which policy was active at the evaluation cutoff?"
+vault_fixture = "retrieval-temporal-v1"
+expected_files = ["policy/historical.md"]
+expected_source_ids = ["019b2d14-4230-7db7-87d4-7d81cfaec933"]
+expected_lineage_ids = []
+forbidden_source_ids = []
+forbidden_lineage_ids = []
+expected_top_k = 5
+expected_confidence = "high"
+as_of = "2026-08-01T00:00:00Z"
+
+[[query]]
+id = "agent-note-authority"
+text = "Who may authorize agent-created notes?"
+vault_fixture = "retrieval-basic-v1"
+expected_files = ["policy/agent-writing.md"]
+expected_source_ids = ["019b2d14-4230-7db7-87d4-7d81cfaec932"]
+expected_lineage_ids = []
+forbidden_source_ids = ["019b2d14-4230-7db7-87d4-7d81cfaec999"]
+forbidden_lineage_ids = []
+expected_top_k = 5
+expected_confidence = "high"
+
+[[query]]
+id = "agent-note-citation-freshness"
+text = "How must citations in agent notes remain fresh?"
+vault_fixture = "retrieval-basic-v1"
+expected_files = ["policy/agent-writing.md"]
+expected_source_ids = ["019b2d14-4230-7db7-87d4-7d81cfaec932"]
+expected_lineage_ids = []
+forbidden_source_ids = ["019b2d14-4230-7db7-87d4-7d81cfaec999"]
+forbidden_lineage_ids = []
+expected_top_k = 5
+expected_confidence = "high"
+
+[[query]]
+id = "agent-note-conflict-handling"
+text = "How are conflicting agent-note declarations handled?"
+vault_fixture = "retrieval-basic-v1"
+expected_files = ["policy/agent-writing.md"]
+expected_source_ids = ["019b2d14-4230-7db7-87d4-7d81cfaec932"]
+expected_lineage_ids = []
+forbidden_source_ids = ["019b2d14-4230-7db7-87d4-7d81cfaec999"]
+forbidden_lineage_ids = []
+expected_top_k = 5
+expected_confidence = "high"
+
+[[query]]
+id = "agent-note-governance"
+text = "What governance applies to agent-created notes?"
+vault_fixture = "retrieval-basic-v1"
+expected_files = ["policy/agent-writing.md"]
+expected_source_ids = ["019b2d14-4230-7db7-87d4-7d81cfaec932"]
+expected_lineage_ids = []
+forbidden_source_ids = ["019b2d14-4230-7db7-87d4-7d81cfaec999"]
+forbidden_lineage_ids = []
+expected_top_k = 5
+expected_confidence = "high"
+
+[[query]]
+id = "agent-note-hidden-material"
+text = "May hidden material influence an agent note result?"
+vault_fixture = "retrieval-basic-v1"
+expected_files = ["policy/agent-writing.md"]
+expected_source_ids = ["019b2d14-4230-7db7-87d4-7d81cfaec932"]
+expected_lineage_ids = []
+forbidden_source_ids = ["019b2d14-4230-7db7-87d4-7d81cfaec999"]
+forbidden_lineage_ids = []
+expected_top_k = 5
+expected_confidence = "high"
+
+[[query]]
+id = "agent-note-lineage-policy"
+text = "What lineage rules govern an agent-created note?"
+vault_fixture = "retrieval-basic-v1"
+expected_files = ["policy/agent-writing.md"]
+expected_source_ids = ["019b2d14-4230-7db7-87d4-7d81cfaec932"]
+expected_lineage_ids = []
+forbidden_source_ids = ["019b2d14-4230-7db7-87d4-7d81cfaec999"]
+forbidden_lineage_ids = []
+expected_top_k = 5
+expected_confidence = "high"
+
+[[query]]
+id = "agent-note-publication-boundary"
+text = "What publication boundary applies to agent-created notes?"
+vault_fixture = "retrieval-basic-v1"
+expected_files = ["policy/agent-writing.md"]
+expected_source_ids = ["019b2d14-4230-7db7-87d4-7d81cfaec932"]
+expected_lineage_ids = []
+forbidden_source_ids = ["019b2d14-4230-7db7-87d4-7d81cfaec999"]
+forbidden_lineage_ids = []
+expected_top_k = 5
+expected_confidence = "high"
+
+[[query]]
+id = "agent-note-review-requirement"
+text = "Which review is required for an agent-created note?"
+vault_fixture = "retrieval-basic-v1"
+expected_files = ["policy/agent-writing.md"]
+expected_source_ids = ["019b2d14-4230-7db7-87d4-7d81cfaec932"]
+expected_lineage_ids = []
+forbidden_source_ids = ["019b2d14-4230-7db7-87d4-7d81cfaec999"]
+forbidden_lineage_ids = []
+expected_top_k = 5
+expected_confidence = "high"
+
+[[query]]
+id = "agent-note-source-integrity"
+text = "How is source integrity checked for agent-created notes?"
+vault_fixture = "retrieval-basic-v1"
+expected_files = ["policy/agent-writing.md"]
+expected_source_ids = ["019b2d14-4230-7db7-87d4-7d81cfaec932"]
+expected_lineage_ids = []
+forbidden_source_ids = ["019b2d14-4230-7db7-87d4-7d81cfaec999"]
+forbidden_lineage_ids = []
+expected_top_k = 5
+expected_confidence = "high"
+
+[[query]]
+id = "historical-citation-validity"
+text = "Was the historical policy citation valid at the cutoff?"
+vault_fixture = "retrieval-temporal-v1"
+expected_files = ["policy/historical.md"]
+expected_source_ids = ["019b2d14-4230-7db7-87d4-7d81cfaec933"]
+expected_lineage_ids = []
+forbidden_source_ids = []
+forbidden_lineage_ids = []
+expected_top_k = 5
+expected_confidence = "high"
+as_of = "2026-08-01T00:00:00Z"
+
+[[query]]
+id = "historical-predecessor"
+text = "Which predecessor policy applies before its successor?"
+vault_fixture = "retrieval-temporal-v1"
+expected_files = ["policy/historical.md"]
+expected_source_ids = ["019b2d14-4230-7db7-87d4-7d81cfaec933"]
+expected_lineage_ids = []
+forbidden_source_ids = []
+forbidden_lineage_ids = []
+expected_top_k = 5
+expected_confidence = "high"
+as_of = "2026-08-31T23:59:59.999Z"
+
+[[query]]
+id = "historical-successor-exclusion"
+text = "Which future successor is excluded at the historical cutoff?"
+vault_fixture = "retrieval-temporal-v1"
+expected_files = ["policy/historical.md"]
+expected_source_ids = ["019b2d14-4230-7db7-87d4-7d81cfaec933"]
+expected_lineage_ids = []
+forbidden_source_ids = []
+forbidden_lineage_ids = []
+expected_top_k = 5
+expected_confidence = "high"
+as_of = "2026-08-01T00:00:00Z"
+
+[[query]]
+id = "point-in-time-active-version"
+text = "Which version is active in the point-in-time view?"
+vault_fixture = "retrieval-temporal-v1"
+expected_files = ["policy/historical.md"]
+expected_source_ids = ["019b2d14-4230-7db7-87d4-7d81cfaec933"]
+expected_lineage_ids = []
+forbidden_source_ids = []
+forbidden_lineage_ids = []
+expected_top_k = 5
+expected_confidence = "high"
+as_of = "2026-08-01T00:00:00Z"
+
+[[query]]
+id = "point-in-time-citation"
+text = "Which citation is correct for the point-in-time result?"
+vault_fixture = "retrieval-temporal-v1"
+expected_files = ["policy/historical.md"]
+expected_source_ids = ["019b2d14-4230-7db7-87d4-7d81cfaec933"]
+expected_lineage_ids = []
+forbidden_source_ids = []
+forbidden_lineage_ids = []
+expected_top_k = 5
+expected_confidence = "high"
+as_of = "2026-08-01T00:00:00Z"
+
+[[query]]
+id = "policy-citation-requirements"
+text = "What citation requirements apply to agent writing policy?"
+vault_fixture = "retrieval-basic-v1"
+expected_files = ["policy/agent-writing.md"]
+expected_source_ids = ["019b2d14-4230-7db7-87d4-7d81cfaec932"]
+expected_lineage_ids = []
+forbidden_source_ids = ["019b2d14-4230-7db7-87d4-7d81cfaec999"]
+forbidden_lineage_ids = []
+expected_top_k = 5
+expected_confidence = "high"
+
+[[query]]
+id = "policy-source-authorization"
+text = "Which sources are authorized for agent writing policy?"
+vault_fixture = "retrieval-basic-v1"
+expected_files = ["policy/agent-writing.md"]
+expected_source_ids = ["019b2d14-4230-7db7-87d4-7d81cfaec932"]
+expected_lineage_ids = []
+forbidden_source_ids = ["019b2d14-4230-7db7-87d4-7d81cfaec999"]
+forbidden_lineage_ids = []
+expected_top_k = 5
+expected_confidence = "high"
+
+[[query]]
+id = "temporal-coverage"
+text = "Is temporal coverage sufficient at the requested cutoff?"
+vault_fixture = "retrieval-temporal-v1"
+expected_files = ["policy/historical.md"]
+expected_source_ids = ["019b2d14-4230-7db7-87d4-7d81cfaec933"]
+expected_lineage_ids = []
+forbidden_source_ids = []
+forbidden_lineage_ids = []
+expected_top_k = 5
+expected_confidence = "high"
+as_of = "2026-08-01T00:00:00Z"
+
+[[query]]
+id = "temporal-current-boundary"
+text = "Which policy is current exactly at the temporal boundary?"
+vault_fixture = "retrieval-temporal-v1"
+expected_files = ["policy/successor.markdown"]
+expected_source_ids = ["019b2d14-4230-7db7-87d4-7d81cfaec934"]
+expected_lineage_ids = []
+forbidden_source_ids = []
+forbidden_lineage_ids = []
+expected_top_k = 5
+expected_confidence = "high"
+as_of = "2026-09-01T00:00:00.001Z"
+
+[[query]]
+id = "temporal-future-exclusion"
+text = "Does the point-in-time view exclude future policy versions?"
+vault_fixture = "retrieval-temporal-v1"
+expected_files = ["policy/historical.md"]
+expected_source_ids = ["019b2d14-4230-7db7-87d4-7d81cfaec933"]
+expected_lineage_ids = []
+forbidden_source_ids = []
+forbidden_lineage_ids = []
+expected_top_k = 5
+expected_confidence = "high"
+as_of = "2026-08-01T00:00:00Z"
+
+[[query]]
+id = "temporal-half-open-endpoint"
+text = "How does the half-open validity endpoint select policy?"
+vault_fixture = "retrieval-temporal-v1"
+expected_files = ["policy/successor.markdown"]
+expected_source_ids = ["019b2d14-4230-7db7-87d4-7d81cfaec934"]
+expected_lineage_ids = []
+forbidden_source_ids = []
+forbidden_lineage_ids = []
+expected_top_k = 5
+expected_confidence = "high"
+as_of = "2026-09-01T00:00:00Z"
+
+[[query]]
+id = "temporal-unknown-exclusion"
+text = "Are unknown-validity policies excluded from the cutoff view?"
+vault_fixture = "retrieval-temporal-v1"
+expected_files = ["policy/historical.md"]
+expected_source_ids = ["019b2d14-4230-7db7-87d4-7d81cfaec933"]
+expected_lineage_ids = []
+forbidden_source_ids = []
+forbidden_lineage_ids = []
+expected_top_k = 5
+expected_confidence = "high"
+as_of = "2026-08-01T00:00:00Z"

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gkos.example/contracts/retrieval/gkos-retrieval-evaluation-1.0.0-draft.1/comparison.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["contract_version", "status", "reasons", "baseline_ndcg_at_k_micros", "current_ndcg_at_k_micros", "baseline_evaluation_digest", "current_evaluation_digest", "comparison_digest"],
+  "properties": {
+    "contract_version": { "const": "gkos-retrieval-evaluation-comparison/1.0.0-draft.1" },
+    "status": { "enum": ["pass", "regression", "needs_human"] },
+    "reasons": { "type": "array", "uniqueItems": true, "items": { "enum": ["BASELINE_ZERO_GATE_INVALID", "QUERY_COUNT_CHANGED", "COMPARABILITY_COORDINATE_CHANGED", "POLICY_LEAK", "CITATION_MISMATCH", "STALE_CITATION", "CITATION_COVERAGE", "CONFIDENCE_MISMATCH", "TEMPORAL_MISMATCH", "STALE_PROJECTION", "UNVERIFIED_PROJECTION", "NDCG_RELATIVE_REGRESSION"] } },
+    "baseline_ndcg_at_k_micros": { "$ref": "common.schema.json#/$defs/micros" },
+    "current_ndcg_at_k_micros": { "$ref": "common.schema.json#/$defs/micros" },
+    "baseline_evaluation_digest": { "$ref": "common.schema.json#/$defs/sha256" },
+    "current_evaluation_digest": { "$ref": "common.schema.json#/$defs/sha256" },
+    "comparison_digest": { "$ref": "common.schema.json#/$defs/sha256" }
+  }
+}

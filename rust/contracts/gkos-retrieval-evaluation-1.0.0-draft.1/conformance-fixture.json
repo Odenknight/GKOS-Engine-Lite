@@ -1,0 +1,4434 @@
+{
+  "contract_version": "gkos-retrieval-evaluation-conformance/1.0.0-draft.1",
+  "golden": {
+    "toml_file": "golden-fixture.toml",
+    "expected_normalized": {
+      "contract_version": "gkos-retrieval-evaluation-golden/1.0.0-draft.1",
+      "queries": [
+        {
+          "as_of": "2026-08-01T00:00:00.000Z",
+          "expected_confidence": "high",
+          "expected_files": [
+            "policy/historical.md"
+          ],
+          "expected_lineage_ids": [],
+          "expected_source_ids": [
+            "019b2d14-4230-7db7-87d4-7d81cfaec933"
+          ],
+          "expected_top_k": 5,
+          "forbidden_lineage_ids": [],
+          "forbidden_source_ids": [],
+          "id": "active-policy-at-cutoff",
+          "query_digest": "sha256:dfb1955512a21923442bb4bea2115ec7b6756badc6d12c2a9744079694d360c9",
+          "text": "Which policy was active at the evaluation cutoff?",
+          "vault_fixture": "retrieval-temporal-v1"
+        },
+        {
+          "as_of": null,
+          "expected_confidence": "high",
+          "expected_files": [
+            "policy/agent-writing.md"
+          ],
+          "expected_lineage_ids": [],
+          "expected_source_ids": [
+            "019b2d14-4230-7db7-87d4-7d81cfaec932"
+          ],
+          "expected_top_k": 5,
+          "forbidden_lineage_ids": [],
+          "forbidden_source_ids": [
+            "019b2d14-4230-7db7-87d4-7d81cfaec999"
+          ],
+          "id": "agent-note-authority",
+          "query_digest": "sha256:9ce19f737f1b0e37da980e931119cc9335cf9c1e1ce48f0ac71cbf64a42ba01b",
+          "text": "Who may authorize agent-created notes?",
+          "vault_fixture": "retrieval-basic-v1"
+        },
+        {
+          "as_of": null,
+          "expected_confidence": "high",
+          "expected_files": [
+            "policy/agent-writing.md"
+          ],
+          "expected_lineage_ids": [],
+          "expected_source_ids": [
+            "019b2d14-4230-7db7-87d4-7d81cfaec932"
+          ],
+          "expected_top_k": 5,
+          "forbidden_lineage_ids": [],
+          "forbidden_source_ids": [
+            "019b2d14-4230-7db7-87d4-7d81cfaec999"
+          ],
+          "id": "agent-note-citation-freshness",
+          "query_digest": "sha256:19805497058bf3f32f1066f90d2f4f430cb5073e41202562050570a1d23b423d",
+          "text": "How must citations in agent notes remain fresh?",
+          "vault_fixture": "retrieval-basic-v1"
+        },
+        {
+          "as_of": null,
+          "expected_confidence": "high",
+          "expected_files": [
+            "policy/agent-writing.md"
+          ],
+          "expected_lineage_ids": [],
+          "expected_source_ids": [
+            "019b2d14-4230-7db7-87d4-7d81cfaec932"
+          ],
+          "expected_top_k": 5,
+          "forbidden_lineage_ids": [],
+          "forbidden_source_ids": [
+            "019b2d14-4230-7db7-87d4-7d81cfaec999"
+          ],
+          "id": "agent-note-conflict-handling",
+          "query_digest": "sha256:14e7cc818ba53be09a132184d583b9b6cb7a1d0141ff7a52ca45b284925d1fd9",
+          "text": "How are conflicting agent-note declarations handled?",
+          "vault_fixture": "retrieval-basic-v1"
+        },
+        {
+          "as_of": null,
+          "expected_confidence": "high",
+          "expected_files": [
+            "policy/agent-writing.md"
+          ],
+          "expected_lineage_ids": [],
+          "expected_source_ids": [
+            "019b2d14-4230-7db7-87d4-7d81cfaec932"
+          ],
+          "expected_top_k": 5,
+          "forbidden_lineage_ids": [],
+          "forbidden_source_ids": [
+            "019b2d14-4230-7db7-87d4-7d81cfaec999"
+          ],
+          "id": "agent-note-governance",
+          "query_digest": "sha256:ca83dc6213e721a062c83f9f6246e444203ce83f7e28a87ba7ca1ad1447cbb87",
+          "text": "What governance applies to agent-created notes?",
+          "vault_fixture": "retrieval-basic-v1"
+        },
+        {
+          "as_of": null,
+          "expected_confidence": "high",
+          "expected_files": [
+            "policy/agent-writing.md"
+          ],
+          "expected_lineage_ids": [],
+          "expected_source_ids": [
+            "019b2d14-4230-7db7-87d4-7d81cfaec932"
+          ],
+          "expected_top_k": 5,
+          "forbidden_lineage_ids": [],
+          "forbidden_source_ids": [
+            "019b2d14-4230-7db7-87d4-7d81cfaec999"
+          ],
+          "id": "agent-note-hidden-material",
+          "query_digest": "sha256:3a0d6293967842a1c6524da0ba1ccd9d13a7c8c9911a41c929f94afbbe752899",
+          "text": "May hidden material influence an agent note result?",
+          "vault_fixture": "retrieval-basic-v1"
+        },
+        {
+          "as_of": null,
+          "expected_confidence": "high",
+          "expected_files": [
+            "policy/agent-writing.md"
+          ],
+          "expected_lineage_ids": [],
+          "expected_source_ids": [
+            "019b2d14-4230-7db7-87d4-7d81cfaec932"
+          ],
+          "expected_top_k": 5,
+          "forbidden_lineage_ids": [],
+          "forbidden_source_ids": [
+            "019b2d14-4230-7db7-87d4-7d81cfaec999"
+          ],
+          "id": "agent-note-lineage-policy",
+          "query_digest": "sha256:268cfe5390e81322d5f30494619ed88f8a909ac6d32260b0d7d542c24d961290",
+          "text": "What lineage rules govern an agent-created note?",
+          "vault_fixture": "retrieval-basic-v1"
+        },
+        {
+          "as_of": null,
+          "expected_confidence": "high",
+          "expected_files": [
+            "policy/agent-writing.md"
+          ],
+          "expected_lineage_ids": [],
+          "expected_source_ids": [
+            "019b2d14-4230-7db7-87d4-7d81cfaec932"
+          ],
+          "expected_top_k": 5,
+          "forbidden_lineage_ids": [],
+          "forbidden_source_ids": [
+            "019b2d14-4230-7db7-87d4-7d81cfaec999"
+          ],
+          "id": "agent-note-publication-boundary",
+          "query_digest": "sha256:41b5e09d62d075f4d3967b5362ea84937dcf02ae836dd844757e0eab332e420e",
+          "text": "What publication boundary applies to agent-created notes?",
+          "vault_fixture": "retrieval-basic-v1"
+        },
+        {
+          "as_of": null,
+          "expected_confidence": "high",
+          "expected_files": [
+            "policy/agent-writing.md"
+          ],
+          "expected_lineage_ids": [],
+          "expected_source_ids": [
+            "019b2d14-4230-7db7-87d4-7d81cfaec932"
+          ],
+          "expected_top_k": 5,
+          "forbidden_lineage_ids": [],
+          "forbidden_source_ids": [
+            "019b2d14-4230-7db7-87d4-7d81cfaec999"
+          ],
+          "id": "agent-note-review-requirement",
+          "query_digest": "sha256:ff8d246aec90d148bc38950c0d7642a8fa64049e2bd85e369c8d33a8b04d0733",
+          "text": "Which review is required for an agent-created note?",
+          "vault_fixture": "retrieval-basic-v1"
+        },
+        {
+          "as_of": null,
+          "expected_confidence": "high",
+          "expected_files": [
+            "policy/agent-writing.md"
+          ],
+          "expected_lineage_ids": [],
+          "expected_source_ids": [
+            "019b2d14-4230-7db7-87d4-7d81cfaec932"
+          ],
+          "expected_top_k": 5,
+          "forbidden_lineage_ids": [],
+          "forbidden_source_ids": [
+            "019b2d14-4230-7db7-87d4-7d81cfaec999"
+          ],
+          "id": "agent-note-source-integrity",
+          "query_digest": "sha256:a11340dea0d07ac23c8edd0291a547e44772c13796abce4c143131fa545ccf01",
+          "text": "How is source integrity checked for agent-created notes?",
+          "vault_fixture": "retrieval-basic-v1"
+        },
+        {
+          "as_of": "2026-08-01T00:00:00.000Z",
+          "expected_confidence": "high",
+          "expected_files": [
+            "policy/historical.md"
+          ],
+          "expected_lineage_ids": [],
+          "expected_source_ids": [
+            "019b2d14-4230-7db7-87d4-7d81cfaec933"
+          ],
+          "expected_top_k": 5,
+          "forbidden_lineage_ids": [],
+          "forbidden_source_ids": [],
+          "id": "historical-citation-validity",
+          "query_digest": "sha256:bb52865b845118ea2e3cddd65bf1a2c3fd36a6f05d41258eb25bed25419a6dba",
+          "text": "Was the historical policy citation valid at the cutoff?",
+          "vault_fixture": "retrieval-temporal-v1"
+        },
+        {
+          "as_of": "2026-08-01T00:00:00.000Z",
+          "expected_confidence": "high",
+          "expected_files": [
+            "policy/historical.md"
+          ],
+          "expected_lineage_ids": [],
+          "expected_source_ids": [
+            "019b2d14-4230-7db7-87d4-7d81cfaec933"
+          ],
+          "expected_top_k": 5,
+          "forbidden_lineage_ids": [],
+          "forbidden_source_ids": [],
+          "id": "historical-policy",
+          "query_digest": "sha256:7fb062af277d1428b7b140e4587d52d9f9e1801f66dbb89639a516a27569c332",
+          "text": "Which policy version was active at the cutoff?",
+          "vault_fixture": "retrieval-temporal-v1"
+        },
+        {
+          "as_of": "2026-08-31T23:59:59.999Z",
+          "expected_confidence": "high",
+          "expected_files": [
+            "policy/historical.md"
+          ],
+          "expected_lineage_ids": [],
+          "expected_source_ids": [
+            "019b2d14-4230-7db7-87d4-7d81cfaec933"
+          ],
+          "expected_top_k": 5,
+          "forbidden_lineage_ids": [],
+          "forbidden_source_ids": [],
+          "id": "historical-predecessor",
+          "query_digest": "sha256:d27d4d0f50fe70cb7c8c27c722bdf7ba7c62d10be69ee1496a1544728c413171",
+          "text": "Which predecessor policy applies before its successor?",
+          "vault_fixture": "retrieval-temporal-v1"
+        },
+        {
+          "as_of": "2026-08-01T00:00:00.000Z",
+          "expected_confidence": "high",
+          "expected_files": [
+            "policy/historical.md"
+          ],
+          "expected_lineage_ids": [],
+          "expected_source_ids": [
+            "019b2d14-4230-7db7-87d4-7d81cfaec933"
+          ],
+          "expected_top_k": 5,
+          "forbidden_lineage_ids": [],
+          "forbidden_source_ids": [],
+          "id": "historical-successor-exclusion",
+          "query_digest": "sha256:cdd4a562d22112702cf855aa07ef58a500d1e66d05d2afef69e149576a72053a",
+          "text": "Which future successor is excluded at the historical cutoff?",
+          "vault_fixture": "retrieval-temporal-v1"
+        },
+        {
+          "as_of": null,
+          "expected_confidence": "high",
+          "expected_files": [
+            "policy/agent-writing.md"
+          ],
+          "expected_lineage_ids": [],
+          "expected_source_ids": [
+            "019b2d14-4230-7db7-87d4-7d81cfaec932"
+          ],
+          "expected_top_k": 5,
+          "forbidden_lineage_ids": [],
+          "forbidden_source_ids": [
+            "019b2d14-4230-7db7-87d4-7d81cfaec999"
+          ],
+          "id": "multi-agent-writing-policy",
+          "query_digest": "sha256:ab0ce7c3549b9e7db2e8da2f2c41f41f322a9ba1baeaa74143baa9e01e2f6bad",
+          "text": "What decisions govern agent-created notes?",
+          "vault_fixture": "retrieval-basic-v1"
+        },
+        {
+          "as_of": "2026-08-01T00:00:00.000Z",
+          "expected_confidence": "high",
+          "expected_files": [
+            "policy/historical.md"
+          ],
+          "expected_lineage_ids": [],
+          "expected_source_ids": [
+            "019b2d14-4230-7db7-87d4-7d81cfaec933"
+          ],
+          "expected_top_k": 5,
+          "forbidden_lineage_ids": [],
+          "forbidden_source_ids": [],
+          "id": "point-in-time-active-version",
+          "query_digest": "sha256:e354c21ac0f09c08a29ef956137805cef2d743d231eccb542614638476a4c0b5",
+          "text": "Which version is active in the point-in-time view?",
+          "vault_fixture": "retrieval-temporal-v1"
+        },
+        {
+          "as_of": "2026-08-01T00:00:00.000Z",
+          "expected_confidence": "high",
+          "expected_files": [
+            "policy/historical.md"
+          ],
+          "expected_lineage_ids": [],
+          "expected_source_ids": [
+            "019b2d14-4230-7db7-87d4-7d81cfaec933"
+          ],
+          "expected_top_k": 5,
+          "forbidden_lineage_ids": [],
+          "forbidden_source_ids": [],
+          "id": "point-in-time-citation",
+          "query_digest": "sha256:b15969eb7ebc65c7581fbfed4d67c9b3ddc5b7559b0364a63f188498185855ca",
+          "text": "Which citation is correct for the point-in-time result?",
+          "vault_fixture": "retrieval-temporal-v1"
+        },
+        {
+          "as_of": null,
+          "expected_confidence": "high",
+          "expected_files": [
+            "policy/agent-writing.md"
+          ],
+          "expected_lineage_ids": [],
+          "expected_source_ids": [
+            "019b2d14-4230-7db7-87d4-7d81cfaec932"
+          ],
+          "expected_top_k": 5,
+          "forbidden_lineage_ids": [],
+          "forbidden_source_ids": [
+            "019b2d14-4230-7db7-87d4-7d81cfaec999"
+          ],
+          "id": "policy-citation-requirements",
+          "query_digest": "sha256:4784f7afa58351f4d643513b9554385cfc8730b53f0885004903447293809821",
+          "text": "What citation requirements apply to agent writing policy?",
+          "vault_fixture": "retrieval-basic-v1"
+        },
+        {
+          "as_of": null,
+          "expected_confidence": "high",
+          "expected_files": [
+            "policy/agent-writing.md"
+          ],
+          "expected_lineage_ids": [],
+          "expected_source_ids": [
+            "019b2d14-4230-7db7-87d4-7d81cfaec932"
+          ],
+          "expected_top_k": 5,
+          "forbidden_lineage_ids": [],
+          "forbidden_source_ids": [
+            "019b2d14-4230-7db7-87d4-7d81cfaec999"
+          ],
+          "id": "policy-source-authorization",
+          "query_digest": "sha256:db27668e8bd5cac1f053f75c4527734792911364b2a08b5e9e20002f026ab549",
+          "text": "Which sources are authorized for agent writing policy?",
+          "vault_fixture": "retrieval-basic-v1"
+        },
+        {
+          "as_of": "2026-08-01T00:00:00.000Z",
+          "expected_confidence": "high",
+          "expected_files": [
+            "policy/historical.md"
+          ],
+          "expected_lineage_ids": [],
+          "expected_source_ids": [
+            "019b2d14-4230-7db7-87d4-7d81cfaec933"
+          ],
+          "expected_top_k": 5,
+          "forbidden_lineage_ids": [],
+          "forbidden_source_ids": [],
+          "id": "temporal-coverage",
+          "query_digest": "sha256:1571544a4db53d4b43acd7f8d8a7c585bc072593c9f0314207b093865469598b",
+          "text": "Is temporal coverage sufficient at the requested cutoff?",
+          "vault_fixture": "retrieval-temporal-v1"
+        },
+        {
+          "as_of": "2026-09-01T00:00:00.001Z",
+          "expected_confidence": "high",
+          "expected_files": [
+            "policy/successor.markdown"
+          ],
+          "expected_lineage_ids": [],
+          "expected_source_ids": [
+            "019b2d14-4230-7db7-87d4-7d81cfaec934"
+          ],
+          "expected_top_k": 5,
+          "forbidden_lineage_ids": [],
+          "forbidden_source_ids": [],
+          "id": "temporal-current-boundary",
+          "query_digest": "sha256:f7f28c322e73681f0f365f29b6a5d781a3abce36365e6139e200d78f1948d07c",
+          "text": "Which policy is current exactly at the temporal boundary?",
+          "vault_fixture": "retrieval-temporal-v1"
+        },
+        {
+          "as_of": "2026-08-01T00:00:00.000Z",
+          "expected_confidence": "high",
+          "expected_files": [
+            "policy/historical.md"
+          ],
+          "expected_lineage_ids": [],
+          "expected_source_ids": [
+            "019b2d14-4230-7db7-87d4-7d81cfaec933"
+          ],
+          "expected_top_k": 5,
+          "forbidden_lineage_ids": [],
+          "forbidden_source_ids": [],
+          "id": "temporal-future-exclusion",
+          "query_digest": "sha256:60c9d3388b00252ad91c9aadd32d2182cee18e19dfc11d5cd438e93cc8402f44",
+          "text": "Does the point-in-time view exclude future policy versions?",
+          "vault_fixture": "retrieval-temporal-v1"
+        },
+        {
+          "as_of": "2026-09-01T00:00:00.000Z",
+          "expected_confidence": "high",
+          "expected_files": [
+            "policy/successor.markdown"
+          ],
+          "expected_lineage_ids": [],
+          "expected_source_ids": [
+            "019b2d14-4230-7db7-87d4-7d81cfaec934"
+          ],
+          "expected_top_k": 5,
+          "forbidden_lineage_ids": [],
+          "forbidden_source_ids": [],
+          "id": "temporal-half-open-endpoint",
+          "query_digest": "sha256:f1f69eb23a2c595033c0b86e6f42aaa568ba97e186d2ceef0e2354806493585f",
+          "text": "How does the half-open validity endpoint select policy?",
+          "vault_fixture": "retrieval-temporal-v1"
+        },
+        {
+          "as_of": "2026-08-01T00:00:00.000Z",
+          "expected_confidence": "high",
+          "expected_files": [
+            "policy/historical.md"
+          ],
+          "expected_lineage_ids": [],
+          "expected_source_ids": [
+            "019b2d14-4230-7db7-87d4-7d81cfaec933"
+          ],
+          "expected_top_k": 5,
+          "forbidden_lineage_ids": [],
+          "forbidden_source_ids": [],
+          "id": "temporal-unknown-exclusion",
+          "query_digest": "sha256:36a9cf2f600c1aa7c0ddc1d366aa9bc6b41f24c1e97b3c069140e034dd65f587",
+          "text": "Are unknown-validity policies excluded from the cutoff view?",
+          "vault_fixture": "retrieval-temporal-v1"
+        }
+      ],
+      "golden_digest": "sha256:f3de2536a3a6496aff6b4d6e7afca522cfd5e5b28b7b907a9b9e4d39ac1c8a9f"
+    },
+    "parser_negative_matrix": [
+      {
+        "case_id": "bom",
+        "mutation": "prepend_bom",
+        "expected_code": "GKX_EVAL_GOLDEN_TOML_BOM_INVALID"
+      },
+      {
+        "case_id": "bare-cr",
+        "mutation": "replace_first_lf_with_bare_cr",
+        "expected_code": "GKX_EVAL_GOLDEN_TOML_NEWLINE_INVALID"
+      },
+      {
+        "case_id": "unknown-key",
+        "mutation": "replace_first_query_id_key_with_unknown",
+        "expected_code": "GKX_EVAL_GOLDEN_TOML_QUERY_KEY_UNKNOWN"
+      },
+      {
+        "case_id": "duplicate-key",
+        "mutation": "duplicate_first_query_id",
+        "expected_code": "GKX_EVAL_GOLDEN_TOML_QUERY_KEY_DUPLICATE"
+      },
+      {
+        "case_id": "trailing-comma",
+        "mutation": "add_first_array_trailing_comma",
+        "expected_code": "GKX_EVAL_GOLDEN_TOML_ARRAY_TRAILING_COMMA_INVALID"
+      },
+      {
+        "case_id": "nonempty-lineage",
+        "mutation": "set_first_expected_lineage_nonempty",
+        "expected_code": "GKX_EVAL_LINEAGE_ID_UNAVAILABLE"
+      },
+      {
+        "case_id": "insufficient-ordinary",
+        "mutation": "set_first_confidence_insufficient",
+        "expected_code": "GKX_EVAL_CONFIDENCE_INVALID"
+      },
+      {
+        "case_id": "surrogate-escape",
+        "mutation": "set_first_text_lone_surrogate_escape",
+        "expected_code": "GKX_EVAL_GOLDEN_TOML_UNICODE_ESCAPE_INVALID"
+      }
+    ]
+  },
+  "ndcg": {
+    "table_file": "ndcg-discount-table.json",
+    "generator_file": "generate-ndcg-discount.py",
+    "table_digest": "sha256:4639dcbd6902da38cb5fa44918736f10d69714453bf57da05ecc5783ba0684a9",
+    "anchors": [
+      1000000000000,
+      630929753571,
+      500000000000
+    ],
+    "rank_count": 100,
+    "strictly_decreasing_positive": true
+  },
+  "valid_envelopes": {
+    "query_metrics": {
+      "contract_version": "gkos-retrieval-evaluation-query-metrics/1.0.0-draft.1",
+      "query_id": "active-policy-at-cutoff",
+      "expected_top_k": 5,
+      "relevant_source_count": 1,
+      "returned_unique_source_count": 1,
+      "relevant_returned_source_count": 1,
+      "relevant_source_ranks": [
+        1
+      ],
+      "first_relevant_rank": 1,
+      "recall_at_k_micros": 1000000,
+      "mrr_micros": 1000000,
+      "ndcg_at_k_micros": 1000000,
+      "citation": {
+        "applicability": "required",
+        "checked": 1,
+        "passed": 1,
+        "mismatch": 0,
+        "stale": 0,
+        "correctness_micros": 1000000
+      },
+      "policy": {
+        "policy_identity_field_count": 8,
+        "policy_leak_count": 0,
+        "policy_leak_rate_micros": 0
+      },
+      "confidence_mismatch_count": 0,
+      "temporal_mismatch_count": 0,
+      "stale_citation_query_count": 0,
+      "stale_projection_query_count": 0,
+      "unverified_projection_query_count": 0,
+      "query_metrics_digest": "sha256:62948ca2008bc85bd77810586c6240352584d0ab5e5e155ca13096adcbf0d610"
+    },
+    "aggregate_metrics": {
+      "aggregate_metrics_digest": "sha256:65b948f6bc1206770b99531283823d1fc638bfaff04a5148e092bad052b8a2d5",
+      "citation": {
+        "applicability": "required",
+        "checked": 24,
+        "correctness_micros": 1000000,
+        "mismatch": 0,
+        "passed": 24,
+        "stale": 0
+      },
+      "confidence_mismatch_count": 0,
+      "contract_version": "gkos-retrieval-evaluation-aggregate/1.0.0-draft.1",
+      "mrr_micros": 1000000,
+      "ndcg_at_k_micros": 1000000,
+      "policy": {
+        "policy_identity_field_count": 192,
+        "policy_leak_count": 0,
+        "policy_leak_rate_micros": 0
+      },
+      "query_count": 24,
+      "recall_at_k_micros": 1000000,
+      "stale_citation_query_count": 0,
+      "stale_citation_query_rate_micros": 0,
+      "stale_projection_query_count": 0,
+      "temporal_mismatch_count": 0,
+      "unverified_projection_query_count": 0,
+      "unverified_projection_rate_micros": 0
+    },
+    "environment_set": {
+      "contract_version": "gkos-retrieval-evaluation-environment-set/1.0.0-draft.1",
+      "normalized_golden_digest": "sha256:f3de2536a3a6496aff6b4d6e7afca522cfd5e5b28b7b907a9b9e4d39ac1c8a9f",
+      "query_count": 24,
+      "members": [
+        {
+          "environment": {
+            "contract_version": "gkos-retrieval-evaluation-environment/1.0.0-draft.1",
+            "scenario_id": "retrieval-basic-v1--sqlite-lexical-scan--vector-embedding-success--reranker-reranker-success",
+            "vault_fixture": "retrieval-basic-v1",
+            "retrieval_contract_version": "gkos-retrieval/1.0.0-draft.2",
+            "evaluation_contract_version": "gkos-retrieval-evaluation/1.0.0-draft.1",
+            "golden_contract_version": "gkos-retrieval-evaluation-golden/1.0.0-draft.1",
+            "metric_contract_version": "gkos-retrieval-evaluation-metrics/1.0.0-draft.1",
+            "engine_version": "2.1.2",
+            "gkx_standard_commit": "a2a2a6ca5c4dac32c6d9dc985ed7460f5f4350c6",
+            "gkx_projection_profile": "gkx-2.3-validating-projection",
+            "projection_schema_version": 3,
+            "chunker_version": "gkos-heading-chunker/1",
+            "tokenizer_version": "gkos-ascii-whitespace/1",
+            "lexical_backend": "sqlite_lexical_scan",
+            "normalized_golden_digest": "sha256:f3de2536a3a6496aff6b4d6e7afca522cfd5e5b28b7b907a9b9e4d39ac1c8a9f",
+            "fixture_catalog_digest": "sha256:45addb4ab8b9634ffd22f2df099bc027a007130c11f109cb03c4e04ca38b5e16",
+            "corpus_fixture_digest": "sha256:7183c8cea2658cdc00abf4cbbd4b002eb1f5b72f880db227f6a2bf379a1a039c",
+            "source_snapshot_digest": "sha256:853db759da339f401a4d8121d0d76a1492024fc336693ce6a42cce686228c6d9",
+            "runtime_policy_inputs_digest": "sha256:5de8cecd6cee2ca5cd71a15c106d045281f1acd53b18832a7032b637b4681dd4",
+            "evaluation_audit_oracle_digest": "sha256:2d2199b91f86678e411dbb4d6ea510ab14f69f7d1d98d318f2069d9a76708f68",
+            "projection_id": "retrieval:c0293ffedb06c10907a6ccca",
+            "projection_digest": "sha256:c0293ffedb06c10907a6ccca8de2be6de51eb6e7de5f29ab838273d2ec69e7c1",
+            "embedding_role": {
+              "state": "active",
+              "provider_scenario_id": "embedding-success",
+              "provider_id": "fixed-offline",
+              "model_id": "embedding-v1",
+              "dimensions": 2,
+              "fixed_provider_transcript_digest": "sha256:7c28de4be4ad24a116d4f07d9b86ea9b38ab3298700ee1563f3b861026dd5b41",
+              "provider_kind": "local_onnx"
+            },
+            "reranker_role": {
+              "state": "active",
+              "provider_scenario_id": "reranker-success",
+              "provider_id": "fixed-offline",
+              "model_id": "reranker-v1",
+              "fixed_provider_transcript_digest": "sha256:7c28de4be4ad24a116d4f07d9b86ea9b38ab3298700ee1563f3b861026dd5b41",
+              "provider_kind": "local_onnx"
+            },
+            "ndcg_discount_table_digest": "sha256:4639dcbd6902da38cb5fa44918736f10d69714453bf57da05ecc5783ba0684a9",
+            "metric_scale": 1000000,
+            "environment_digest": "sha256:5495b321c00cf564fd80fc923733e987848aa966f02a9b25bf397fad5a3a17cd"
+          },
+          "query_partition": [
+            {
+              "query_id": "agent-note-authority",
+              "query_digest": "sha256:9ce19f737f1b0e37da980e931119cc9335cf9c1e1ce48f0ac71cbf64a42ba01b"
+            },
+            {
+              "query_id": "agent-note-citation-freshness",
+              "query_digest": "sha256:19805497058bf3f32f1066f90d2f4f430cb5073e41202562050570a1d23b423d"
+            },
+            {
+              "query_id": "agent-note-conflict-handling",
+              "query_digest": "sha256:14e7cc818ba53be09a132184d583b9b6cb7a1d0141ff7a52ca45b284925d1fd9"
+            },
+            {
+              "query_id": "agent-note-governance",
+              "query_digest": "sha256:ca83dc6213e721a062c83f9f6246e444203ce83f7e28a87ba7ca1ad1447cbb87"
+            },
+            {
+              "query_id": "agent-note-hidden-material",
+              "query_digest": "sha256:3a0d6293967842a1c6524da0ba1ccd9d13a7c8c9911a41c929f94afbbe752899"
+            },
+            {
+              "query_id": "agent-note-lineage-policy",
+              "query_digest": "sha256:268cfe5390e81322d5f30494619ed88f8a909ac6d32260b0d7d542c24d961290"
+            },
+            {
+              "query_id": "agent-note-publication-boundary",
+              "query_digest": "sha256:41b5e09d62d075f4d3967b5362ea84937dcf02ae836dd844757e0eab332e420e"
+            },
+            {
+              "query_id": "agent-note-review-requirement",
+              "query_digest": "sha256:ff8d246aec90d148bc38950c0d7642a8fa64049e2bd85e369c8d33a8b04d0733"
+            },
+            {
+              "query_id": "agent-note-source-integrity",
+              "query_digest": "sha256:a11340dea0d07ac23c8edd0291a547e44772c13796abce4c143131fa545ccf01"
+            },
+            {
+              "query_id": "multi-agent-writing-policy",
+              "query_digest": "sha256:ab0ce7c3549b9e7db2e8da2f2c41f41f322a9ba1baeaa74143baa9e01e2f6bad"
+            },
+            {
+              "query_id": "policy-citation-requirements",
+              "query_digest": "sha256:4784f7afa58351f4d643513b9554385cfc8730b53f0885004903447293809821"
+            },
+            {
+              "query_id": "policy-source-authorization",
+              "query_digest": "sha256:db27668e8bd5cac1f053f75c4527734792911364b2a08b5e9e20002f026ab549"
+            }
+          ],
+          "query_count": 12,
+          "member_digest": "sha256:7b06a95527b2f7cc6a528ca327df7795c9b5fa45cb56ec289eb378ecb2190dbb"
+        },
+        {
+          "environment": {
+            "contract_version": "gkos-retrieval-evaluation-environment/1.0.0-draft.1",
+            "scenario_id": "retrieval-temporal-v1--sqlite-lexical-scan--vector-embedding-success--reranker-reranker-success",
+            "vault_fixture": "retrieval-temporal-v1",
+            "retrieval_contract_version": "gkos-retrieval/1.0.0-draft.2",
+            "evaluation_contract_version": "gkos-retrieval-evaluation/1.0.0-draft.1",
+            "golden_contract_version": "gkos-retrieval-evaluation-golden/1.0.0-draft.1",
+            "metric_contract_version": "gkos-retrieval-evaluation-metrics/1.0.0-draft.1",
+            "engine_version": "2.1.2",
+            "gkx_standard_commit": "a2a2a6ca5c4dac32c6d9dc985ed7460f5f4350c6",
+            "gkx_projection_profile": "gkx-2.3-validating-projection",
+            "projection_schema_version": 3,
+            "chunker_version": "gkos-heading-chunker/1",
+            "tokenizer_version": "gkos-ascii-whitespace/1",
+            "lexical_backend": "sqlite_lexical_scan",
+            "normalized_golden_digest": "sha256:f3de2536a3a6496aff6b4d6e7afca522cfd5e5b28b7b907a9b9e4d39ac1c8a9f",
+            "fixture_catalog_digest": "sha256:45addb4ab8b9634ffd22f2df099bc027a007130c11f109cb03c4e04ca38b5e16",
+            "corpus_fixture_digest": "sha256:b0fb7a5371896377cd51beaa239900a3d312e511a60dca63aca0beccae488cb0",
+            "source_snapshot_digest": "sha256:8c117b1ba729a67805dfc7c0a567d8fc30975a1a95645caa43ea5708c13923a8",
+            "runtime_policy_inputs_digest": "sha256:95e9fd6abf9897ce720ab878eab2fd60220d76dad57e5f2a0949862df5a94158",
+            "evaluation_audit_oracle_digest": "sha256:8dfce925050f822d30df13f57253693535c4c58d3632eaefacf3bb759806385a",
+            "projection_id": "retrieval:1a1c2b87cc86787deacd8fcb",
+            "projection_digest": "sha256:1a1c2b87cc86787deacd8fcbaad191b027fd883279f5c315391ad54e29445e93",
+            "embedding_role": {
+              "state": "active",
+              "provider_scenario_id": "embedding-success",
+              "provider_id": "fixed-offline",
+              "model_id": "embedding-v1",
+              "dimensions": 2,
+              "fixed_provider_transcript_digest": "sha256:7c28de4be4ad24a116d4f07d9b86ea9b38ab3298700ee1563f3b861026dd5b41",
+              "provider_kind": "local_onnx"
+            },
+            "reranker_role": {
+              "state": "active",
+              "provider_scenario_id": "reranker-success",
+              "provider_id": "fixed-offline",
+              "model_id": "reranker-v1",
+              "fixed_provider_transcript_digest": "sha256:7c28de4be4ad24a116d4f07d9b86ea9b38ab3298700ee1563f3b861026dd5b41",
+              "provider_kind": "local_onnx"
+            },
+            "ndcg_discount_table_digest": "sha256:4639dcbd6902da38cb5fa44918736f10d69714453bf57da05ecc5783ba0684a9",
+            "metric_scale": 1000000,
+            "environment_digest": "sha256:b965cf391983c88657eb68f8572aec6abbf3c94777b983858a7f99646d018fc9"
+          },
+          "query_partition": [
+            {
+              "query_id": "active-policy-at-cutoff",
+              "query_digest": "sha256:dfb1955512a21923442bb4bea2115ec7b6756badc6d12c2a9744079694d360c9"
+            },
+            {
+              "query_id": "historical-citation-validity",
+              "query_digest": "sha256:bb52865b845118ea2e3cddd65bf1a2c3fd36a6f05d41258eb25bed25419a6dba"
+            },
+            {
+              "query_id": "historical-policy",
+              "query_digest": "sha256:7fb062af277d1428b7b140e4587d52d9f9e1801f66dbb89639a516a27569c332"
+            },
+            {
+              "query_id": "historical-predecessor",
+              "query_digest": "sha256:d27d4d0f50fe70cb7c8c27c722bdf7ba7c62d10be69ee1496a1544728c413171"
+            },
+            {
+              "query_id": "historical-successor-exclusion",
+              "query_digest": "sha256:cdd4a562d22112702cf855aa07ef58a500d1e66d05d2afef69e149576a72053a"
+            },
+            {
+              "query_id": "point-in-time-active-version",
+              "query_digest": "sha256:e354c21ac0f09c08a29ef956137805cef2d743d231eccb542614638476a4c0b5"
+            },
+            {
+              "query_id": "point-in-time-citation",
+              "query_digest": "sha256:b15969eb7ebc65c7581fbfed4d67c9b3ddc5b7559b0364a63f188498185855ca"
+            },
+            {
+              "query_id": "temporal-coverage",
+              "query_digest": "sha256:1571544a4db53d4b43acd7f8d8a7c585bc072593c9f0314207b093865469598b"
+            },
+            {
+              "query_id": "temporal-current-boundary",
+              "query_digest": "sha256:f7f28c322e73681f0f365f29b6a5d781a3abce36365e6139e200d78f1948d07c"
+            },
+            {
+              "query_id": "temporal-future-exclusion",
+              "query_digest": "sha256:60c9d3388b00252ad91c9aadd32d2182cee18e19dfc11d5cd438e93cc8402f44"
+            },
+            {
+              "query_id": "temporal-half-open-endpoint",
+              "query_digest": "sha256:f1f69eb23a2c595033c0b86e6f42aaa568ba97e186d2ceef0e2354806493585f"
+            },
+            {
+              "query_id": "temporal-unknown-exclusion",
+              "query_digest": "sha256:36a9cf2f600c1aa7c0ddc1d366aa9bc6b41f24c1e97b3c069140e034dd65f587"
+            }
+          ],
+          "query_count": 12,
+          "member_digest": "sha256:5b65a126907ad0c368db74da904c905831d4dc7a8471b7b03a75ea0c95167d8d"
+        }
+      ],
+      "environment_set_digest": "sha256:8269ad9e34b9704eaa724de4628d5667cb9ba4483ad08117a7a7549e202800c1"
+    },
+    "metrics_set": {
+      "contract_version": "gkos-retrieval-evaluation-metrics-set/1.0.0-draft.1",
+      "environment_set_digest": "sha256:8269ad9e34b9704eaa724de4628d5667cb9ba4483ad08117a7a7549e202800c1",
+      "normalized_golden_digest": "sha256:f3de2536a3a6496aff6b4d6e7afca522cfd5e5b28b7b907a9b9e4d39ac1c8a9f",
+      "query_count": 24,
+      "query_evaluations": [
+        {
+          "environment_digest": "sha256:b965cf391983c88657eb68f8572aec6abbf3c94777b983858a7f99646d018fc9",
+          "golden_query_digest": "sha256:dfb1955512a21923442bb4bea2115ec7b6756badc6d12c2a9744079694d360c9",
+          "query_metrics": {
+            "citation": {
+              "applicability": "required",
+              "checked": 1,
+              "correctness_micros": 1000000,
+              "mismatch": 0,
+              "passed": 1,
+              "stale": 0
+            },
+            "confidence_mismatch_count": 0,
+            "contract_version": "gkos-retrieval-evaluation-query-metrics/1.0.0-draft.1",
+            "expected_top_k": 5,
+            "first_relevant_rank": 1,
+            "mrr_micros": 1000000,
+            "ndcg_at_k_micros": 1000000,
+            "policy": {
+              "policy_identity_field_count": 8,
+              "policy_leak_count": 0,
+              "policy_leak_rate_micros": 0
+            },
+            "query_id": "active-policy-at-cutoff",
+            "query_metrics_digest": "sha256:62948ca2008bc85bd77810586c6240352584d0ab5e5e155ca13096adcbf0d610",
+            "recall_at_k_micros": 1000000,
+            "relevant_returned_source_count": 1,
+            "relevant_source_count": 1,
+            "relevant_source_ranks": [
+              1
+            ],
+            "returned_unique_source_count": 1,
+            "stale_citation_query_count": 0,
+            "stale_projection_query_count": 0,
+            "temporal_mismatch_count": 0,
+            "unverified_projection_query_count": 0
+          }
+        },
+        {
+          "environment_digest": "sha256:5495b321c00cf564fd80fc923733e987848aa966f02a9b25bf397fad5a3a17cd",
+          "golden_query_digest": "sha256:9ce19f737f1b0e37da980e931119cc9335cf9c1e1ce48f0ac71cbf64a42ba01b",
+          "query_metrics": {
+            "citation": {
+              "applicability": "required",
+              "checked": 1,
+              "correctness_micros": 1000000,
+              "mismatch": 0,
+              "passed": 1,
+              "stale": 0
+            },
+            "confidence_mismatch_count": 0,
+            "contract_version": "gkos-retrieval-evaluation-query-metrics/1.0.0-draft.1",
+            "expected_top_k": 5,
+            "first_relevant_rank": 1,
+            "mrr_micros": 1000000,
+            "ndcg_at_k_micros": 1000000,
+            "policy": {
+              "policy_identity_field_count": 8,
+              "policy_leak_count": 0,
+              "policy_leak_rate_micros": 0
+            },
+            "query_id": "agent-note-authority",
+            "query_metrics_digest": "sha256:f87d27f115ea1b76be48273b92f1b44b45dff221d52bb82a92625f5e82aedd7d",
+            "recall_at_k_micros": 1000000,
+            "relevant_returned_source_count": 1,
+            "relevant_source_count": 1,
+            "relevant_source_ranks": [
+              1
+            ],
+            "returned_unique_source_count": 1,
+            "stale_citation_query_count": 0,
+            "stale_projection_query_count": 0,
+            "temporal_mismatch_count": 0,
+            "unverified_projection_query_count": 0
+          }
+        },
+        {
+          "environment_digest": "sha256:5495b321c00cf564fd80fc923733e987848aa966f02a9b25bf397fad5a3a17cd",
+          "golden_query_digest": "sha256:19805497058bf3f32f1066f90d2f4f430cb5073e41202562050570a1d23b423d",
+          "query_metrics": {
+            "citation": {
+              "applicability": "required",
+              "checked": 1,
+              "correctness_micros": 1000000,
+              "mismatch": 0,
+              "passed": 1,
+              "stale": 0
+            },
+            "confidence_mismatch_count": 0,
+            "contract_version": "gkos-retrieval-evaluation-query-metrics/1.0.0-draft.1",
+            "expected_top_k": 5,
+            "first_relevant_rank": 1,
+            "mrr_micros": 1000000,
+            "ndcg_at_k_micros": 1000000,
+            "policy": {
+              "policy_identity_field_count": 8,
+              "policy_leak_count": 0,
+              "policy_leak_rate_micros": 0
+            },
+            "query_id": "agent-note-citation-freshness",
+            "query_metrics_digest": "sha256:b84686f1d57c0a9b3fcce2ba570c5c55f4d074da43ab3eaf9b83a5d8999662cb",
+            "recall_at_k_micros": 1000000,
+            "relevant_returned_source_count": 1,
+            "relevant_source_count": 1,
+            "relevant_source_ranks": [
+              1
+            ],
+            "returned_unique_source_count": 1,
+            "stale_citation_query_count": 0,
+            "stale_projection_query_count": 0,
+            "temporal_mismatch_count": 0,
+            "unverified_projection_query_count": 0
+          }
+        },
+        {
+          "environment_digest": "sha256:5495b321c00cf564fd80fc923733e987848aa966f02a9b25bf397fad5a3a17cd",
+          "golden_query_digest": "sha256:14e7cc818ba53be09a132184d583b9b6cb7a1d0141ff7a52ca45b284925d1fd9",
+          "query_metrics": {
+            "citation": {
+              "applicability": "required",
+              "checked": 1,
+              "correctness_micros": 1000000,
+              "mismatch": 0,
+              "passed": 1,
+              "stale": 0
+            },
+            "confidence_mismatch_count": 0,
+            "contract_version": "gkos-retrieval-evaluation-query-metrics/1.0.0-draft.1",
+            "expected_top_k": 5,
+            "first_relevant_rank": 1,
+            "mrr_micros": 1000000,
+            "ndcg_at_k_micros": 1000000,
+            "policy": {
+              "policy_identity_field_count": 8,
+              "policy_leak_count": 0,
+              "policy_leak_rate_micros": 0
+            },
+            "query_id": "agent-note-conflict-handling",
+            "query_metrics_digest": "sha256:178df5dfedf5ef1b0fa1f9ee5933e8e8cb650e2288652177938652b6da58771e",
+            "recall_at_k_micros": 1000000,
+            "relevant_returned_source_count": 1,
+            "relevant_source_count": 1,
+            "relevant_source_ranks": [
+              1
+            ],
+            "returned_unique_source_count": 1,
+            "stale_citation_query_count": 0,
+            "stale_projection_query_count": 0,
+            "temporal_mismatch_count": 0,
+            "unverified_projection_query_count": 0
+          }
+        },
+        {
+          "environment_digest": "sha256:5495b321c00cf564fd80fc923733e987848aa966f02a9b25bf397fad5a3a17cd",
+          "golden_query_digest": "sha256:ca83dc6213e721a062c83f9f6246e444203ce83f7e28a87ba7ca1ad1447cbb87",
+          "query_metrics": {
+            "citation": {
+              "applicability": "required",
+              "checked": 1,
+              "correctness_micros": 1000000,
+              "mismatch": 0,
+              "passed": 1,
+              "stale": 0
+            },
+            "confidence_mismatch_count": 0,
+            "contract_version": "gkos-retrieval-evaluation-query-metrics/1.0.0-draft.1",
+            "expected_top_k": 5,
+            "first_relevant_rank": 1,
+            "mrr_micros": 1000000,
+            "ndcg_at_k_micros": 1000000,
+            "policy": {
+              "policy_identity_field_count": 8,
+              "policy_leak_count": 0,
+              "policy_leak_rate_micros": 0
+            },
+            "query_id": "agent-note-governance",
+            "query_metrics_digest": "sha256:f1ede4d63b9dcb8ae64567cf542f9b8bdbd5253c2ba8197ce54e06897e1e7a73",
+            "recall_at_k_micros": 1000000,
+            "relevant_returned_source_count": 1,
+            "relevant_source_count": 1,
+            "relevant_source_ranks": [
+              1
+            ],
+            "returned_unique_source_count": 1,
+            "stale_citation_query_count": 0,
+            "stale_projection_query_count": 0,
+            "temporal_mismatch_count": 0,
+            "unverified_projection_query_count": 0
+          }
+        },
+        {
+          "environment_digest": "sha256:5495b321c00cf564fd80fc923733e987848aa966f02a9b25bf397fad5a3a17cd",
+          "golden_query_digest": "sha256:3a0d6293967842a1c6524da0ba1ccd9d13a7c8c9911a41c929f94afbbe752899",
+          "query_metrics": {
+            "citation": {
+              "applicability": "required",
+              "checked": 1,
+              "correctness_micros": 1000000,
+              "mismatch": 0,
+              "passed": 1,
+              "stale": 0
+            },
+            "confidence_mismatch_count": 0,
+            "contract_version": "gkos-retrieval-evaluation-query-metrics/1.0.0-draft.1",
+            "expected_top_k": 5,
+            "first_relevant_rank": 1,
+            "mrr_micros": 1000000,
+            "ndcg_at_k_micros": 1000000,
+            "policy": {
+              "policy_identity_field_count": 8,
+              "policy_leak_count": 0,
+              "policy_leak_rate_micros": 0
+            },
+            "query_id": "agent-note-hidden-material",
+            "query_metrics_digest": "sha256:25b8c39048bcbe5ef68139201681ef115541bf721c309adc728870b8ceda038d",
+            "recall_at_k_micros": 1000000,
+            "relevant_returned_source_count": 1,
+            "relevant_source_count": 1,
+            "relevant_source_ranks": [
+              1
+            ],
+            "returned_unique_source_count": 1,
+            "stale_citation_query_count": 0,
+            "stale_projection_query_count": 0,
+            "temporal_mismatch_count": 0,
+            "unverified_projection_query_count": 0
+          }
+        },
+        {
+          "environment_digest": "sha256:5495b321c00cf564fd80fc923733e987848aa966f02a9b25bf397fad5a3a17cd",
+          "golden_query_digest": "sha256:268cfe5390e81322d5f30494619ed88f8a909ac6d32260b0d7d542c24d961290",
+          "query_metrics": {
+            "citation": {
+              "applicability": "required",
+              "checked": 1,
+              "correctness_micros": 1000000,
+              "mismatch": 0,
+              "passed": 1,
+              "stale": 0
+            },
+            "confidence_mismatch_count": 0,
+            "contract_version": "gkos-retrieval-evaluation-query-metrics/1.0.0-draft.1",
+            "expected_top_k": 5,
+            "first_relevant_rank": 1,
+            "mrr_micros": 1000000,
+            "ndcg_at_k_micros": 1000000,
+            "policy": {
+              "policy_identity_field_count": 8,
+              "policy_leak_count": 0,
+              "policy_leak_rate_micros": 0
+            },
+            "query_id": "agent-note-lineage-policy",
+            "query_metrics_digest": "sha256:da5ac58b141dfd9a7e1b56771bcf94f5c92da5bd11e78689b355dbd457cceda3",
+            "recall_at_k_micros": 1000000,
+            "relevant_returned_source_count": 1,
+            "relevant_source_count": 1,
+            "relevant_source_ranks": [
+              1
+            ],
+            "returned_unique_source_count": 1,
+            "stale_citation_query_count": 0,
+            "stale_projection_query_count": 0,
+            "temporal_mismatch_count": 0,
+            "unverified_projection_query_count": 0
+          }
+        },
+        {
+          "environment_digest": "sha256:5495b321c00cf564fd80fc923733e987848aa966f02a9b25bf397fad5a3a17cd",
+          "golden_query_digest": "sha256:41b5e09d62d075f4d3967b5362ea84937dcf02ae836dd844757e0eab332e420e",
+          "query_metrics": {
+            "citation": {
+              "applicability": "required",
+              "checked": 1,
+              "correctness_micros": 1000000,
+              "mismatch": 0,
+              "passed": 1,
+              "stale": 0
+            },
+            "confidence_mismatch_count": 0,
+            "contract_version": "gkos-retrieval-evaluation-query-metrics/1.0.0-draft.1",
+            "expected_top_k": 5,
+            "first_relevant_rank": 1,
+            "mrr_micros": 1000000,
+            "ndcg_at_k_micros": 1000000,
+            "policy": {
+              "policy_identity_field_count": 8,
+              "policy_leak_count": 0,
+              "policy_leak_rate_micros": 0
+            },
+            "query_id": "agent-note-publication-boundary",
+            "query_metrics_digest": "sha256:2959c948d1d48a8cf6772946317a1761d4874651d216eb770b18cc56b83f7862",
+            "recall_at_k_micros": 1000000,
+            "relevant_returned_source_count": 1,
+            "relevant_source_count": 1,
+            "relevant_source_ranks": [
+              1
+            ],
+            "returned_unique_source_count": 1,
+            "stale_citation_query_count": 0,
+            "stale_projection_query_count": 0,
+            "temporal_mismatch_count": 0,
+            "unverified_projection_query_count": 0
+          }
+        },
+        {
+          "environment_digest": "sha256:5495b321c00cf564fd80fc923733e987848aa966f02a9b25bf397fad5a3a17cd",
+          "golden_query_digest": "sha256:ff8d246aec90d148bc38950c0d7642a8fa64049e2bd85e369c8d33a8b04d0733",
+          "query_metrics": {
+            "citation": {
+              "applicability": "required",
+              "checked": 1,
+              "correctness_micros": 1000000,
+              "mismatch": 0,
+              "passed": 1,
+              "stale": 0
+            },
+            "confidence_mismatch_count": 0,
+            "contract_version": "gkos-retrieval-evaluation-query-metrics/1.0.0-draft.1",
+            "expected_top_k": 5,
+            "first_relevant_rank": 1,
+            "mrr_micros": 1000000,
+            "ndcg_at_k_micros": 1000000,
+            "policy": {
+              "policy_identity_field_count": 8,
+              "policy_leak_count": 0,
+              "policy_leak_rate_micros": 0
+            },
+            "query_id": "agent-note-review-requirement",
+            "query_metrics_digest": "sha256:8146880ca93b87e81d41ce76c390f412bcc88da928035e2b2c80b76afe25b62f",
+            "recall_at_k_micros": 1000000,
+            "relevant_returned_source_count": 1,
+            "relevant_source_count": 1,
+            "relevant_source_ranks": [
+              1
+            ],
+            "returned_unique_source_count": 1,
+            "stale_citation_query_count": 0,
+            "stale_projection_query_count": 0,
+            "temporal_mismatch_count": 0,
+            "unverified_projection_query_count": 0
+          }
+        },
+        {
+          "environment_digest": "sha256:5495b321c00cf564fd80fc923733e987848aa966f02a9b25bf397fad5a3a17cd",
+          "golden_query_digest": "sha256:a11340dea0d07ac23c8edd0291a547e44772c13796abce4c143131fa545ccf01",
+          "query_metrics": {
+            "citation": {
+              "applicability": "required",
+              "checked": 1,
+              "correctness_micros": 1000000,
+              "mismatch": 0,
+              "passed": 1,
+              "stale": 0
+            },
+            "confidence_mismatch_count": 0,
+            "contract_version": "gkos-retrieval-evaluation-query-metrics/1.0.0-draft.1",
+            "expected_top_k": 5,
+            "first_relevant_rank": 1,
+            "mrr_micros": 1000000,
+            "ndcg_at_k_micros": 1000000,
+            "policy": {
+              "policy_identity_field_count": 8,
+              "policy_leak_count": 0,
+              "policy_leak_rate_micros": 0
+            },
+            "query_id": "agent-note-source-integrity",
+            "query_metrics_digest": "sha256:bf98e92bc2beac736c4c929922c406673634a90ebb3bb765bf75d84e4c0306fb",
+            "recall_at_k_micros": 1000000,
+            "relevant_returned_source_count": 1,
+            "relevant_source_count": 1,
+            "relevant_source_ranks": [
+              1
+            ],
+            "returned_unique_source_count": 1,
+            "stale_citation_query_count": 0,
+            "stale_projection_query_count": 0,
+            "temporal_mismatch_count": 0,
+            "unverified_projection_query_count": 0
+          }
+        },
+        {
+          "environment_digest": "sha256:b965cf391983c88657eb68f8572aec6abbf3c94777b983858a7f99646d018fc9",
+          "golden_query_digest": "sha256:bb52865b845118ea2e3cddd65bf1a2c3fd36a6f05d41258eb25bed25419a6dba",
+          "query_metrics": {
+            "citation": {
+              "applicability": "required",
+              "checked": 1,
+              "correctness_micros": 1000000,
+              "mismatch": 0,
+              "passed": 1,
+              "stale": 0
+            },
+            "confidence_mismatch_count": 0,
+            "contract_version": "gkos-retrieval-evaluation-query-metrics/1.0.0-draft.1",
+            "expected_top_k": 5,
+            "first_relevant_rank": 1,
+            "mrr_micros": 1000000,
+            "ndcg_at_k_micros": 1000000,
+            "policy": {
+              "policy_identity_field_count": 8,
+              "policy_leak_count": 0,
+              "policy_leak_rate_micros": 0
+            },
+            "query_id": "historical-citation-validity",
+            "query_metrics_digest": "sha256:5062968d68e710335fe42fdc856b89ec135368b5b1c82d6dd12f58809ce43878",
+            "recall_at_k_micros": 1000000,
+            "relevant_returned_source_count": 1,
+            "relevant_source_count": 1,
+            "relevant_source_ranks": [
+              1
+            ],
+            "returned_unique_source_count": 1,
+            "stale_citation_query_count": 0,
+            "stale_projection_query_count": 0,
+            "temporal_mismatch_count": 0,
+            "unverified_projection_query_count": 0
+          }
+        },
+        {
+          "environment_digest": "sha256:b965cf391983c88657eb68f8572aec6abbf3c94777b983858a7f99646d018fc9",
+          "golden_query_digest": "sha256:7fb062af277d1428b7b140e4587d52d9f9e1801f66dbb89639a516a27569c332",
+          "query_metrics": {
+            "citation": {
+              "applicability": "required",
+              "checked": 1,
+              "correctness_micros": 1000000,
+              "mismatch": 0,
+              "passed": 1,
+              "stale": 0
+            },
+            "confidence_mismatch_count": 0,
+            "contract_version": "gkos-retrieval-evaluation-query-metrics/1.0.0-draft.1",
+            "expected_top_k": 5,
+            "first_relevant_rank": 1,
+            "mrr_micros": 1000000,
+            "ndcg_at_k_micros": 1000000,
+            "policy": {
+              "policy_identity_field_count": 8,
+              "policy_leak_count": 0,
+              "policy_leak_rate_micros": 0
+            },
+            "query_id": "historical-policy",
+            "query_metrics_digest": "sha256:2c47713b3e330d7ca03e4d4775f1574a8ce691011909dfafab67efb526864f63",
+            "recall_at_k_micros": 1000000,
+            "relevant_returned_source_count": 1,
+            "relevant_source_count": 1,
+            "relevant_source_ranks": [
+              1
+            ],
+            "returned_unique_source_count": 1,
+            "stale_citation_query_count": 0,
+            "stale_projection_query_count": 0,
+            "temporal_mismatch_count": 0,
+            "unverified_projection_query_count": 0
+          }
+        },
+        {
+          "environment_digest": "sha256:b965cf391983c88657eb68f8572aec6abbf3c94777b983858a7f99646d018fc9",
+          "golden_query_digest": "sha256:d27d4d0f50fe70cb7c8c27c722bdf7ba7c62d10be69ee1496a1544728c413171",
+          "query_metrics": {
+            "citation": {
+              "applicability": "required",
+              "checked": 1,
+              "correctness_micros": 1000000,
+              "mismatch": 0,
+              "passed": 1,
+              "stale": 0
+            },
+            "confidence_mismatch_count": 0,
+            "contract_version": "gkos-retrieval-evaluation-query-metrics/1.0.0-draft.1",
+            "expected_top_k": 5,
+            "first_relevant_rank": 1,
+            "mrr_micros": 1000000,
+            "ndcg_at_k_micros": 1000000,
+            "policy": {
+              "policy_identity_field_count": 8,
+              "policy_leak_count": 0,
+              "policy_leak_rate_micros": 0
+            },
+            "query_id": "historical-predecessor",
+            "query_metrics_digest": "sha256:497bdccc56a52bab3f92eb9fc28460783b52db8a968c5ed6d051cec02e1e5016",
+            "recall_at_k_micros": 1000000,
+            "relevant_returned_source_count": 1,
+            "relevant_source_count": 1,
+            "relevant_source_ranks": [
+              1
+            ],
+            "returned_unique_source_count": 1,
+            "stale_citation_query_count": 0,
+            "stale_projection_query_count": 0,
+            "temporal_mismatch_count": 0,
+            "unverified_projection_query_count": 0
+          }
+        },
+        {
+          "environment_digest": "sha256:b965cf391983c88657eb68f8572aec6abbf3c94777b983858a7f99646d018fc9",
+          "golden_query_digest": "sha256:cdd4a562d22112702cf855aa07ef58a500d1e66d05d2afef69e149576a72053a",
+          "query_metrics": {
+            "citation": {
+              "applicability": "required",
+              "checked": 1,
+              "correctness_micros": 1000000,
+              "mismatch": 0,
+              "passed": 1,
+              "stale": 0
+            },
+            "confidence_mismatch_count": 0,
+            "contract_version": "gkos-retrieval-evaluation-query-metrics/1.0.0-draft.1",
+            "expected_top_k": 5,
+            "first_relevant_rank": 1,
+            "mrr_micros": 1000000,
+            "ndcg_at_k_micros": 1000000,
+            "policy": {
+              "policy_identity_field_count": 8,
+              "policy_leak_count": 0,
+              "policy_leak_rate_micros": 0
+            },
+            "query_id": "historical-successor-exclusion",
+            "query_metrics_digest": "sha256:43a78ccd9ceec3fda5c303daee15cc1d6ee5c109ac1c32bbb0554a6fa06ac7cb",
+            "recall_at_k_micros": 1000000,
+            "relevant_returned_source_count": 1,
+            "relevant_source_count": 1,
+            "relevant_source_ranks": [
+              1
+            ],
+            "returned_unique_source_count": 1,
+            "stale_citation_query_count": 0,
+            "stale_projection_query_count": 0,
+            "temporal_mismatch_count": 0,
+            "unverified_projection_query_count": 0
+          }
+        },
+        {
+          "environment_digest": "sha256:5495b321c00cf564fd80fc923733e987848aa966f02a9b25bf397fad5a3a17cd",
+          "golden_query_digest": "sha256:ab0ce7c3549b9e7db2e8da2f2c41f41f322a9ba1baeaa74143baa9e01e2f6bad",
+          "query_metrics": {
+            "citation": {
+              "applicability": "required",
+              "checked": 1,
+              "correctness_micros": 1000000,
+              "mismatch": 0,
+              "passed": 1,
+              "stale": 0
+            },
+            "confidence_mismatch_count": 0,
+            "contract_version": "gkos-retrieval-evaluation-query-metrics/1.0.0-draft.1",
+            "expected_top_k": 5,
+            "first_relevant_rank": 1,
+            "mrr_micros": 1000000,
+            "ndcg_at_k_micros": 1000000,
+            "policy": {
+              "policy_identity_field_count": 8,
+              "policy_leak_count": 0,
+              "policy_leak_rate_micros": 0
+            },
+            "query_id": "multi-agent-writing-policy",
+            "query_metrics_digest": "sha256:9f356723b0a1f0083e5e44143434176d655874f9800dcc285737d05984449526",
+            "recall_at_k_micros": 1000000,
+            "relevant_returned_source_count": 1,
+            "relevant_source_count": 1,
+            "relevant_source_ranks": [
+              1
+            ],
+            "returned_unique_source_count": 1,
+            "stale_citation_query_count": 0,
+            "stale_projection_query_count": 0,
+            "temporal_mismatch_count": 0,
+            "unverified_projection_query_count": 0
+          }
+        },
+        {
+          "environment_digest": "sha256:b965cf391983c88657eb68f8572aec6abbf3c94777b983858a7f99646d018fc9",
+          "golden_query_digest": "sha256:e354c21ac0f09c08a29ef956137805cef2d743d231eccb542614638476a4c0b5",
+          "query_metrics": {
+            "citation": {
+              "applicability": "required",
+              "checked": 1,
+              "correctness_micros": 1000000,
+              "mismatch": 0,
+              "passed": 1,
+              "stale": 0
+            },
+            "confidence_mismatch_count": 0,
+            "contract_version": "gkos-retrieval-evaluation-query-metrics/1.0.0-draft.1",
+            "expected_top_k": 5,
+            "first_relevant_rank": 1,
+            "mrr_micros": 1000000,
+            "ndcg_at_k_micros": 1000000,
+            "policy": {
+              "policy_identity_field_count": 8,
+              "policy_leak_count": 0,
+              "policy_leak_rate_micros": 0
+            },
+            "query_id": "point-in-time-active-version",
+            "query_metrics_digest": "sha256:a06b31a1ff9f6b6921e45280b4b0ab6e99e4163fd7800744b77eb39dcbf1eb2e",
+            "recall_at_k_micros": 1000000,
+            "relevant_returned_source_count": 1,
+            "relevant_source_count": 1,
+            "relevant_source_ranks": [
+              1
+            ],
+            "returned_unique_source_count": 1,
+            "stale_citation_query_count": 0,
+            "stale_projection_query_count": 0,
+            "temporal_mismatch_count": 0,
+            "unverified_projection_query_count": 0
+          }
+        },
+        {
+          "environment_digest": "sha256:b965cf391983c88657eb68f8572aec6abbf3c94777b983858a7f99646d018fc9",
+          "golden_query_digest": "sha256:b15969eb7ebc65c7581fbfed4d67c9b3ddc5b7559b0364a63f188498185855ca",
+          "query_metrics": {
+            "citation": {
+              "applicability": "required",
+              "checked": 1,
+              "correctness_micros": 1000000,
+              "mismatch": 0,
+              "passed": 1,
+              "stale": 0
+            },
+            "confidence_mismatch_count": 0,
+            "contract_version": "gkos-retrieval-evaluation-query-metrics/1.0.0-draft.1",
+            "expected_top_k": 5,
+            "first_relevant_rank": 1,
+            "mrr_micros": 1000000,
+            "ndcg_at_k_micros": 1000000,
+            "policy": {
+              "policy_identity_field_count": 8,
+              "policy_leak_count": 0,
+              "policy_leak_rate_micros": 0
+            },
+            "query_id": "point-in-time-citation",
+            "query_metrics_digest": "sha256:7fc7ab6ffe5907090e151e8a17a538ba222670430692a4cef63f6145c52f7002",
+            "recall_at_k_micros": 1000000,
+            "relevant_returned_source_count": 1,
+            "relevant_source_count": 1,
+            "relevant_source_ranks": [
+              1
+            ],
+            "returned_unique_source_count": 1,
+            "stale_citation_query_count": 0,
+            "stale_projection_query_count": 0,
+            "temporal_mismatch_count": 0,
+            "unverified_projection_query_count": 0
+          }
+        },
+        {
+          "environment_digest": "sha256:5495b321c00cf564fd80fc923733e987848aa966f02a9b25bf397fad5a3a17cd",
+          "golden_query_digest": "sha256:4784f7afa58351f4d643513b9554385cfc8730b53f0885004903447293809821",
+          "query_metrics": {
+            "citation": {
+              "applicability": "required",
+              "checked": 1,
+              "correctness_micros": 1000000,
+              "mismatch": 0,
+              "passed": 1,
+              "stale": 0
+            },
+            "confidence_mismatch_count": 0,
+            "contract_version": "gkos-retrieval-evaluation-query-metrics/1.0.0-draft.1",
+            "expected_top_k": 5,
+            "first_relevant_rank": 1,
+            "mrr_micros": 1000000,
+            "ndcg_at_k_micros": 1000000,
+            "policy": {
+              "policy_identity_field_count": 8,
+              "policy_leak_count": 0,
+              "policy_leak_rate_micros": 0
+            },
+            "query_id": "policy-citation-requirements",
+            "query_metrics_digest": "sha256:a61fe84615e373d24cee28f638ecb427dce33821eeae3d0d167acca2915ac713",
+            "recall_at_k_micros": 1000000,
+            "relevant_returned_source_count": 1,
+            "relevant_source_count": 1,
+            "relevant_source_ranks": [
+              1
+            ],
+            "returned_unique_source_count": 1,
+            "stale_citation_query_count": 0,
+            "stale_projection_query_count": 0,
+            "temporal_mismatch_count": 0,
+            "unverified_projection_query_count": 0
+          }
+        },
+        {
+          "environment_digest": "sha256:5495b321c00cf564fd80fc923733e987848aa966f02a9b25bf397fad5a3a17cd",
+          "golden_query_digest": "sha256:db27668e8bd5cac1f053f75c4527734792911364b2a08b5e9e20002f026ab549",
+          "query_metrics": {
+            "citation": {
+              "applicability": "required",
+              "checked": 1,
+              "correctness_micros": 1000000,
+              "mismatch": 0,
+              "passed": 1,
+              "stale": 0
+            },
+            "confidence_mismatch_count": 0,
+            "contract_version": "gkos-retrieval-evaluation-query-metrics/1.0.0-draft.1",
+            "expected_top_k": 5,
+            "first_relevant_rank": 1,
+            "mrr_micros": 1000000,
+            "ndcg_at_k_micros": 1000000,
+            "policy": {
+              "policy_identity_field_count": 8,
+              "policy_leak_count": 0,
+              "policy_leak_rate_micros": 0
+            },
+            "query_id": "policy-source-authorization",
+            "query_metrics_digest": "sha256:fbed845c696b4bc4abaf44444ef71b22080b9a91c1dc85782ce6dffc12200463",
+            "recall_at_k_micros": 1000000,
+            "relevant_returned_source_count": 1,
+            "relevant_source_count": 1,
+            "relevant_source_ranks": [
+              1
+            ],
+            "returned_unique_source_count": 1,
+            "stale_citation_query_count": 0,
+            "stale_projection_query_count": 0,
+            "temporal_mismatch_count": 0,
+            "unverified_projection_query_count": 0
+          }
+        },
+        {
+          "environment_digest": "sha256:b965cf391983c88657eb68f8572aec6abbf3c94777b983858a7f99646d018fc9",
+          "golden_query_digest": "sha256:1571544a4db53d4b43acd7f8d8a7c585bc072593c9f0314207b093865469598b",
+          "query_metrics": {
+            "citation": {
+              "applicability": "required",
+              "checked": 1,
+              "correctness_micros": 1000000,
+              "mismatch": 0,
+              "passed": 1,
+              "stale": 0
+            },
+            "confidence_mismatch_count": 0,
+            "contract_version": "gkos-retrieval-evaluation-query-metrics/1.0.0-draft.1",
+            "expected_top_k": 5,
+            "first_relevant_rank": 1,
+            "mrr_micros": 1000000,
+            "ndcg_at_k_micros": 1000000,
+            "policy": {
+              "policy_identity_field_count": 8,
+              "policy_leak_count": 0,
+              "policy_leak_rate_micros": 0
+            },
+            "query_id": "temporal-coverage",
+            "query_metrics_digest": "sha256:63f513abcda8a83bd68c5dd2b7f0fbe70a7b34621a881762924ffdeb29f89e80",
+            "recall_at_k_micros": 1000000,
+            "relevant_returned_source_count": 1,
+            "relevant_source_count": 1,
+            "relevant_source_ranks": [
+              1
+            ],
+            "returned_unique_source_count": 1,
+            "stale_citation_query_count": 0,
+            "stale_projection_query_count": 0,
+            "temporal_mismatch_count": 0,
+            "unverified_projection_query_count": 0
+          }
+        },
+        {
+          "environment_digest": "sha256:b965cf391983c88657eb68f8572aec6abbf3c94777b983858a7f99646d018fc9",
+          "golden_query_digest": "sha256:f7f28c322e73681f0f365f29b6a5d781a3abce36365e6139e200d78f1948d07c",
+          "query_metrics": {
+            "citation": {
+              "applicability": "required",
+              "checked": 1,
+              "correctness_micros": 1000000,
+              "mismatch": 0,
+              "passed": 1,
+              "stale": 0
+            },
+            "confidence_mismatch_count": 0,
+            "contract_version": "gkos-retrieval-evaluation-query-metrics/1.0.0-draft.1",
+            "expected_top_k": 5,
+            "first_relevant_rank": 1,
+            "mrr_micros": 1000000,
+            "ndcg_at_k_micros": 1000000,
+            "policy": {
+              "policy_identity_field_count": 10,
+              "policy_leak_count": 0,
+              "policy_leak_rate_micros": 0
+            },
+            "query_id": "temporal-current-boundary",
+            "query_metrics_digest": "sha256:6cd99502ff9e0c0ad3deb32e46f0e7ecd210ae71270024f23c9bff4fb3b16a9c",
+            "recall_at_k_micros": 1000000,
+            "relevant_returned_source_count": 1,
+            "relevant_source_count": 1,
+            "relevant_source_ranks": [
+              1
+            ],
+            "returned_unique_source_count": 1,
+            "stale_citation_query_count": 0,
+            "stale_projection_query_count": 0,
+            "temporal_mismatch_count": 0,
+            "unverified_projection_query_count": 0
+          }
+        },
+        {
+          "environment_digest": "sha256:b965cf391983c88657eb68f8572aec6abbf3c94777b983858a7f99646d018fc9",
+          "golden_query_digest": "sha256:60c9d3388b00252ad91c9aadd32d2182cee18e19dfc11d5cd438e93cc8402f44",
+          "query_metrics": {
+            "citation": {
+              "applicability": "required",
+              "checked": 1,
+              "correctness_micros": 1000000,
+              "mismatch": 0,
+              "passed": 1,
+              "stale": 0
+            },
+            "confidence_mismatch_count": 0,
+            "contract_version": "gkos-retrieval-evaluation-query-metrics/1.0.0-draft.1",
+            "expected_top_k": 5,
+            "first_relevant_rank": 1,
+            "mrr_micros": 1000000,
+            "ndcg_at_k_micros": 1000000,
+            "policy": {
+              "policy_identity_field_count": 8,
+              "policy_leak_count": 0,
+              "policy_leak_rate_micros": 0
+            },
+            "query_id": "temporal-future-exclusion",
+            "query_metrics_digest": "sha256:0afc69cc15152680205788b6354c8fd34f15812af1ecca030deecd90fc69c510",
+            "recall_at_k_micros": 1000000,
+            "relevant_returned_source_count": 1,
+            "relevant_source_count": 1,
+            "relevant_source_ranks": [
+              1
+            ],
+            "returned_unique_source_count": 1,
+            "stale_citation_query_count": 0,
+            "stale_projection_query_count": 0,
+            "temporal_mismatch_count": 0,
+            "unverified_projection_query_count": 0
+          }
+        },
+        {
+          "environment_digest": "sha256:b965cf391983c88657eb68f8572aec6abbf3c94777b983858a7f99646d018fc9",
+          "golden_query_digest": "sha256:f1f69eb23a2c595033c0b86e6f42aaa568ba97e186d2ceef0e2354806493585f",
+          "query_metrics": {
+            "citation": {
+              "applicability": "required",
+              "checked": 1,
+              "correctness_micros": 1000000,
+              "mismatch": 0,
+              "passed": 1,
+              "stale": 0
+            },
+            "confidence_mismatch_count": 0,
+            "contract_version": "gkos-retrieval-evaluation-query-metrics/1.0.0-draft.1",
+            "expected_top_k": 5,
+            "first_relevant_rank": 1,
+            "mrr_micros": 1000000,
+            "ndcg_at_k_micros": 1000000,
+            "policy": {
+              "policy_identity_field_count": 10,
+              "policy_leak_count": 0,
+              "policy_leak_rate_micros": 0
+            },
+            "query_id": "temporal-half-open-endpoint",
+            "query_metrics_digest": "sha256:75c5ce3892212b4eac793331f7de3af5d90b9cd7cce8445625b2e16908ee98b4",
+            "recall_at_k_micros": 1000000,
+            "relevant_returned_source_count": 1,
+            "relevant_source_count": 1,
+            "relevant_source_ranks": [
+              1
+            ],
+            "returned_unique_source_count": 1,
+            "stale_citation_query_count": 0,
+            "stale_projection_query_count": 0,
+            "temporal_mismatch_count": 0,
+            "unverified_projection_query_count": 0
+          }
+        },
+        {
+          "environment_digest": "sha256:b965cf391983c88657eb68f8572aec6abbf3c94777b983858a7f99646d018fc9",
+          "golden_query_digest": "sha256:36a9cf2f600c1aa7c0ddc1d366aa9bc6b41f24c1e97b3c069140e034dd65f587",
+          "query_metrics": {
+            "citation": {
+              "applicability": "required",
+              "checked": 1,
+              "correctness_micros": 1000000,
+              "mismatch": 0,
+              "passed": 1,
+              "stale": 0
+            },
+            "confidence_mismatch_count": 0,
+            "contract_version": "gkos-retrieval-evaluation-query-metrics/1.0.0-draft.1",
+            "expected_top_k": 5,
+            "first_relevant_rank": 1,
+            "mrr_micros": 1000000,
+            "ndcg_at_k_micros": 1000000,
+            "policy": {
+              "policy_identity_field_count": 8,
+              "policy_leak_count": 0,
+              "policy_leak_rate_micros": 0
+            },
+            "query_id": "temporal-unknown-exclusion",
+            "query_metrics_digest": "sha256:0dbe6537a41b5a9e175a3b03ee39ea67debc715edc2726d6cfd4d6d95bab2672",
+            "recall_at_k_micros": 1000000,
+            "relevant_returned_source_count": 1,
+            "relevant_source_count": 1,
+            "relevant_source_ranks": [
+              1
+            ],
+            "returned_unique_source_count": 1,
+            "stale_citation_query_count": 0,
+            "stale_projection_query_count": 0,
+            "temporal_mismatch_count": 0,
+            "unverified_projection_query_count": 0
+          }
+        }
+      ],
+      "query_metrics_set_digest": "sha256:946a2246afa5ad66e4c09d87ec87f273ed55610ed1d628a19d2baa04ca1f684a",
+      "environment_aggregates": [
+        {
+          "environment_digest": "sha256:5495b321c00cf564fd80fc923733e987848aa966f02a9b25bf397fad5a3a17cd",
+          "query_count": 12,
+          "query_metrics_set_digest": "sha256:c74f984af6a5246bc9623a615d6e44342df8ad925dc118cadcec331e796009c8",
+          "aggregate_metrics": {
+            "aggregate_metrics_digest": "sha256:6390995717af0da0176df35b83f911b27974c27c7d1ace574972cc77567999e9",
+            "citation": {
+              "applicability": "required",
+              "checked": 12,
+              "correctness_micros": 1000000,
+              "mismatch": 0,
+              "passed": 12,
+              "stale": 0
+            },
+            "confidence_mismatch_count": 0,
+            "contract_version": "gkos-retrieval-evaluation-aggregate/1.0.0-draft.1",
+            "mrr_micros": 1000000,
+            "ndcg_at_k_micros": 1000000,
+            "policy": {
+              "policy_identity_field_count": 96,
+              "policy_leak_count": 0,
+              "policy_leak_rate_micros": 0
+            },
+            "query_count": 12,
+            "recall_at_k_micros": 1000000,
+            "stale_citation_query_count": 0,
+            "stale_citation_query_rate_micros": 0,
+            "stale_projection_query_count": 0,
+            "temporal_mismatch_count": 0,
+            "unverified_projection_query_count": 0,
+            "unverified_projection_rate_micros": 0
+          },
+          "environment_aggregate_digest": "sha256:ef0eaae1ccb00b7f6dda1118bf87ca8cb598b7cb24bc9ce7efb5257fdbbd5b6b"
+        },
+        {
+          "environment_digest": "sha256:b965cf391983c88657eb68f8572aec6abbf3c94777b983858a7f99646d018fc9",
+          "query_count": 12,
+          "query_metrics_set_digest": "sha256:03af3bb3b4eca806401ea8ef4026e24138f94284284bb01efbb7cb1b3158ed22",
+          "aggregate_metrics": {
+            "aggregate_metrics_digest": "sha256:48e1190911f2c801d35545dbd0bc10f9694389ab71ffa577b64ec591d041dec2",
+            "citation": {
+              "applicability": "required",
+              "checked": 12,
+              "correctness_micros": 1000000,
+              "mismatch": 0,
+              "passed": 12,
+              "stale": 0
+            },
+            "confidence_mismatch_count": 0,
+            "contract_version": "gkos-retrieval-evaluation-aggregate/1.0.0-draft.1",
+            "mrr_micros": 1000000,
+            "ndcg_at_k_micros": 1000000,
+            "policy": {
+              "policy_identity_field_count": 100,
+              "policy_leak_count": 0,
+              "policy_leak_rate_micros": 0
+            },
+            "query_count": 12,
+            "recall_at_k_micros": 1000000,
+            "stale_citation_query_count": 0,
+            "stale_citation_query_rate_micros": 0,
+            "stale_projection_query_count": 0,
+            "temporal_mismatch_count": 0,
+            "unverified_projection_query_count": 0,
+            "unverified_projection_rate_micros": 0
+          },
+          "environment_aggregate_digest": "sha256:b66ced8310c7c8206efe0c5a666d206ef834e58970cd19a6bd3798d87ff41357"
+        }
+      ],
+      "aggregate_metrics": {
+        "aggregate_metrics_digest": "sha256:debc54f17b45a12433d3aa1c406d08204d440a68ac7fbfe24aac022a22e572b9",
+        "citation": {
+          "applicability": "required",
+          "checked": 24,
+          "correctness_micros": 1000000,
+          "mismatch": 0,
+          "passed": 24,
+          "stale": 0
+        },
+        "confidence_mismatch_count": 0,
+        "contract_version": "gkos-retrieval-evaluation-aggregate/1.0.0-draft.1",
+        "mrr_micros": 1000000,
+        "ndcg_at_k_micros": 1000000,
+        "policy": {
+          "policy_identity_field_count": 196,
+          "policy_leak_count": 0,
+          "policy_leak_rate_micros": 0
+        },
+        "query_count": 24,
+        "recall_at_k_micros": 1000000,
+        "stale_citation_query_count": 0,
+        "stale_citation_query_rate_micros": 0,
+        "stale_projection_query_count": 0,
+        "temporal_mismatch_count": 0,
+        "unverified_projection_query_count": 0,
+        "unverified_projection_rate_micros": 0
+      },
+      "metrics_set_digest": "sha256:3ceee29d87bbdf1e6998dbd917c9d03323c33f953f0c7161ea174782a5c0cee2"
+    },
+    "baseline": {
+      "contract_version": "gkos-retrieval-evaluation-baseline/1.0.0-draft.1",
+      "environment_set": {
+        "contract_version": "gkos-retrieval-evaluation-environment-set/1.0.0-draft.1",
+        "normalized_golden_digest": "sha256:f3de2536a3a6496aff6b4d6e7afca522cfd5e5b28b7b907a9b9e4d39ac1c8a9f",
+        "query_count": 24,
+        "members": [
+          {
+            "environment": {
+              "contract_version": "gkos-retrieval-evaluation-environment/1.0.0-draft.1",
+              "scenario_id": "retrieval-basic-v1--sqlite-lexical-scan--vector-embedding-success--reranker-reranker-success",
+              "vault_fixture": "retrieval-basic-v1",
+              "retrieval_contract_version": "gkos-retrieval/1.0.0-draft.2",
+              "evaluation_contract_version": "gkos-retrieval-evaluation/1.0.0-draft.1",
+              "golden_contract_version": "gkos-retrieval-evaluation-golden/1.0.0-draft.1",
+              "metric_contract_version": "gkos-retrieval-evaluation-metrics/1.0.0-draft.1",
+              "engine_version": "2.1.2",
+              "gkx_standard_commit": "a2a2a6ca5c4dac32c6d9dc985ed7460f5f4350c6",
+              "gkx_projection_profile": "gkx-2.3-validating-projection",
+              "projection_schema_version": 3,
+              "chunker_version": "gkos-heading-chunker/1",
+              "tokenizer_version": "gkos-ascii-whitespace/1",
+              "lexical_backend": "sqlite_lexical_scan",
+              "normalized_golden_digest": "sha256:f3de2536a3a6496aff6b4d6e7afca522cfd5e5b28b7b907a9b9e4d39ac1c8a9f",
+              "fixture_catalog_digest": "sha256:45addb4ab8b9634ffd22f2df099bc027a007130c11f109cb03c4e04ca38b5e16",
+              "corpus_fixture_digest": "sha256:7183c8cea2658cdc00abf4cbbd4b002eb1f5b72f880db227f6a2bf379a1a039c",
+              "source_snapshot_digest": "sha256:853db759da339f401a4d8121d0d76a1492024fc336693ce6a42cce686228c6d9",
+              "runtime_policy_inputs_digest": "sha256:5de8cecd6cee2ca5cd71a15c106d045281f1acd53b18832a7032b637b4681dd4",
+              "evaluation_audit_oracle_digest": "sha256:2d2199b91f86678e411dbb4d6ea510ab14f69f7d1d98d318f2069d9a76708f68",
+              "projection_id": "retrieval:c0293ffedb06c10907a6ccca",
+              "projection_digest": "sha256:c0293ffedb06c10907a6ccca8de2be6de51eb6e7de5f29ab838273d2ec69e7c1",
+              "embedding_role": {
+                "state": "active",
+                "provider_scenario_id": "embedding-success",
+                "provider_id": "fixed-offline",
+                "model_id": "embedding-v1",
+                "dimensions": 2,
+                "fixed_provider_transcript_digest": "sha256:7c28de4be4ad24a116d4f07d9b86ea9b38ab3298700ee1563f3b861026dd5b41",
+                "provider_kind": "local_onnx"
+              },
+              "reranker_role": {
+                "state": "active",
+                "provider_scenario_id": "reranker-success",
+                "provider_id": "fixed-offline",
+                "model_id": "reranker-v1",
+                "fixed_provider_transcript_digest": "sha256:7c28de4be4ad24a116d4f07d9b86ea9b38ab3298700ee1563f3b861026dd5b41",
+                "provider_kind": "local_onnx"
+              },
+              "ndcg_discount_table_digest": "sha256:4639dcbd6902da38cb5fa44918736f10d69714453bf57da05ecc5783ba0684a9",
+              "metric_scale": 1000000,
+              "environment_digest": "sha256:5495b321c00cf564fd80fc923733e987848aa966f02a9b25bf397fad5a3a17cd"
+            },
+            "query_partition": [
+              {
+                "query_id": "agent-note-authority",
+                "query_digest": "sha256:9ce19f737f1b0e37da980e931119cc9335cf9c1e1ce48f0ac71cbf64a42ba01b"
+              },
+              {
+                "query_id": "agent-note-citation-freshness",
+                "query_digest": "sha256:19805497058bf3f32f1066f90d2f4f430cb5073e41202562050570a1d23b423d"
+              },
+              {
+                "query_id": "agent-note-conflict-handling",
+                "query_digest": "sha256:14e7cc818ba53be09a132184d583b9b6cb7a1d0141ff7a52ca45b284925d1fd9"
+              },
+              {
+                "query_id": "agent-note-governance",
+                "query_digest": "sha256:ca83dc6213e721a062c83f9f6246e444203ce83f7e28a87ba7ca1ad1447cbb87"
+              },
+              {
+                "query_id": "agent-note-hidden-material",
+                "query_digest": "sha256:3a0d6293967842a1c6524da0ba1ccd9d13a7c8c9911a41c929f94afbbe752899"
+              },
+              {
+                "query_id": "agent-note-lineage-policy",
+                "query_digest": "sha256:268cfe5390e81322d5f30494619ed88f8a909ac6d32260b0d7d542c24d961290"
+              },
+              {
+                "query_id": "agent-note-publication-boundary",
+                "query_digest": "sha256:41b5e09d62d075f4d3967b5362ea84937dcf02ae836dd844757e0eab332e420e"
+              },
+              {
+                "query_id": "agent-note-review-requirement",
+                "query_digest": "sha256:ff8d246aec90d148bc38950c0d7642a8fa64049e2bd85e369c8d33a8b04d0733"
+              },
+              {
+                "query_id": "agent-note-source-integrity",
+                "query_digest": "sha256:a11340dea0d07ac23c8edd0291a547e44772c13796abce4c143131fa545ccf01"
+              },
+              {
+                "query_id": "multi-agent-writing-policy",
+                "query_digest": "sha256:ab0ce7c3549b9e7db2e8da2f2c41f41f322a9ba1baeaa74143baa9e01e2f6bad"
+              },
+              {
+                "query_id": "policy-citation-requirements",
+                "query_digest": "sha256:4784f7afa58351f4d643513b9554385cfc8730b53f0885004903447293809821"
+              },
+              {
+                "query_id": "policy-source-authorization",
+                "query_digest": "sha256:db27668e8bd5cac1f053f75c4527734792911364b2a08b5e9e20002f026ab549"
+              }
+            ],
+            "query_count": 12,
+            "member_digest": "sha256:7b06a95527b2f7cc6a528ca327df7795c9b5fa45cb56ec289eb378ecb2190dbb"
+          },
+          {
+            "environment": {
+              "contract_version": "gkos-retrieval-evaluation-environment/1.0.0-draft.1",
+              "scenario_id": "retrieval-temporal-v1--sqlite-lexical-scan--vector-embedding-success--reranker-reranker-success",
+              "vault_fixture": "retrieval-temporal-v1",
+              "retrieval_contract_version": "gkos-retrieval/1.0.0-draft.2",
+              "evaluation_contract_version": "gkos-retrieval-evaluation/1.0.0-draft.1",
+              "golden_contract_version": "gkos-retrieval-evaluation-golden/1.0.0-draft.1",
+              "metric_contract_version": "gkos-retrieval-evaluation-metrics/1.0.0-draft.1",
+              "engine_version": "2.1.2",
+              "gkx_standard_commit": "a2a2a6ca5c4dac32c6d9dc985ed7460f5f4350c6",
+              "gkx_projection_profile": "gkx-2.3-validating-projection",
+              "projection_schema_version": 3,
+              "chunker_version": "gkos-heading-chunker/1",
+              "tokenizer_version": "gkos-ascii-whitespace/1",
+              "lexical_backend": "sqlite_lexical_scan",
+              "normalized_golden_digest": "sha256:f3de2536a3a6496aff6b4d6e7afca522cfd5e5b28b7b907a9b9e4d39ac1c8a9f",
+              "fixture_catalog_digest": "sha256:45addb4ab8b9634ffd22f2df099bc027a007130c11f109cb03c4e04ca38b5e16",
+              "corpus_fixture_digest": "sha256:b0fb7a5371896377cd51beaa239900a3d312e511a60dca63aca0beccae488cb0",
+              "source_snapshot_digest": "sha256:8c117b1ba729a67805dfc7c0a567d8fc30975a1a95645caa43ea5708c13923a8",
+              "runtime_policy_inputs_digest": "sha256:95e9fd6abf9897ce720ab878eab2fd60220d76dad57e5f2a0949862df5a94158",
+              "evaluation_audit_oracle_digest": "sha256:8dfce925050f822d30df13f57253693535c4c58d3632eaefacf3bb759806385a",
+              "projection_id": "retrieval:1a1c2b87cc86787deacd8fcb",
+              "projection_digest": "sha256:1a1c2b87cc86787deacd8fcbaad191b027fd883279f5c315391ad54e29445e93",
+              "embedding_role": {
+                "state": "active",
+                "provider_scenario_id": "embedding-success",
+                "provider_id": "fixed-offline",
+                "model_id": "embedding-v1",
+                "dimensions": 2,
+                "fixed_provider_transcript_digest": "sha256:7c28de4be4ad24a116d4f07d9b86ea9b38ab3298700ee1563f3b861026dd5b41",
+                "provider_kind": "local_onnx"
+              },
+              "reranker_role": {
+                "state": "active",
+                "provider_scenario_id": "reranker-success",
+                "provider_id": "fixed-offline",
+                "model_id": "reranker-v1",
+                "fixed_provider_transcript_digest": "sha256:7c28de4be4ad24a116d4f07d9b86ea9b38ab3298700ee1563f3b861026dd5b41",
+                "provider_kind": "local_onnx"
+              },
+              "ndcg_discount_table_digest": "sha256:4639dcbd6902da38cb5fa44918736f10d69714453bf57da05ecc5783ba0684a9",
+              "metric_scale": 1000000,
+              "environment_digest": "sha256:b965cf391983c88657eb68f8572aec6abbf3c94777b983858a7f99646d018fc9"
+            },
+            "query_partition": [
+              {
+                "query_id": "active-policy-at-cutoff",
+                "query_digest": "sha256:dfb1955512a21923442bb4bea2115ec7b6756badc6d12c2a9744079694d360c9"
+              },
+              {
+                "query_id": "historical-citation-validity",
+                "query_digest": "sha256:bb52865b845118ea2e3cddd65bf1a2c3fd36a6f05d41258eb25bed25419a6dba"
+              },
+              {
+                "query_id": "historical-policy",
+                "query_digest": "sha256:7fb062af277d1428b7b140e4587d52d9f9e1801f66dbb89639a516a27569c332"
+              },
+              {
+                "query_id": "historical-predecessor",
+                "query_digest": "sha256:d27d4d0f50fe70cb7c8c27c722bdf7ba7c62d10be69ee1496a1544728c413171"
+              },
+              {
+                "query_id": "historical-successor-exclusion",
+                "query_digest": "sha256:cdd4a562d22112702cf855aa07ef58a500d1e66d05d2afef69e149576a72053a"
+              },
+              {
+                "query_id": "point-in-time-active-version",
+                "query_digest": "sha256:e354c21ac0f09c08a29ef956137805cef2d743d231eccb542614638476a4c0b5"
+              },
+              {
+                "query_id": "point-in-time-citation",
+                "query_digest": "sha256:b15969eb7ebc65c7581fbfed4d67c9b3ddc5b7559b0364a63f188498185855ca"
+              },
+              {
+                "query_id": "temporal-coverage",
+                "query_digest": "sha256:1571544a4db53d4b43acd7f8d8a7c585bc072593c9f0314207b093865469598b"
+              },
+              {
+                "query_id": "temporal-current-boundary",
+                "query_digest": "sha256:f7f28c322e73681f0f365f29b6a5d781a3abce36365e6139e200d78f1948d07c"
+              },
+              {
+                "query_id": "temporal-future-exclusion",
+                "query_digest": "sha256:60c9d3388b00252ad91c9aadd32d2182cee18e19dfc11d5cd438e93cc8402f44"
+              },
+              {
+                "query_id": "temporal-half-open-endpoint",
+                "query_digest": "sha256:f1f69eb23a2c595033c0b86e6f42aaa568ba97e186d2ceef0e2354806493585f"
+              },
+              {
+                "query_id": "temporal-unknown-exclusion",
+                "query_digest": "sha256:36a9cf2f600c1aa7c0ddc1d366aa9bc6b41f24c1e97b3c069140e034dd65f587"
+              }
+            ],
+            "query_count": 12,
+            "member_digest": "sha256:5b65a126907ad0c368db74da904c905831d4dc7a8471b7b03a75ea0c95167d8d"
+          }
+        ],
+        "environment_set_digest": "sha256:8269ad9e34b9704eaa724de4628d5667cb9ba4483ad08117a7a7549e202800c1"
+      },
+      "normalized_golden": {
+        "contract_version": "gkos-retrieval-evaluation-golden/1.0.0-draft.1",
+        "queries": [
+          {
+            "as_of": "2026-08-01T00:00:00.000Z",
+            "expected_confidence": "high",
+            "expected_files": [
+              "policy/historical.md"
+            ],
+            "expected_lineage_ids": [],
+            "expected_source_ids": [
+              "019b2d14-4230-7db7-87d4-7d81cfaec933"
+            ],
+            "expected_top_k": 5,
+            "forbidden_lineage_ids": [],
+            "forbidden_source_ids": [],
+            "id": "active-policy-at-cutoff",
+            "query_digest": "sha256:dfb1955512a21923442bb4bea2115ec7b6756badc6d12c2a9744079694d360c9",
+            "text": "Which policy was active at the evaluation cutoff?",
+            "vault_fixture": "retrieval-temporal-v1"
+          },
+          {
+            "as_of": null,
+            "expected_confidence": "high",
+            "expected_files": [
+              "policy/agent-writing.md"
+            ],
+            "expected_lineage_ids": [],
+            "expected_source_ids": [
+              "019b2d14-4230-7db7-87d4-7d81cfaec932"
+            ],
+            "expected_top_k": 5,
+            "forbidden_lineage_ids": [],
+            "forbidden_source_ids": [
+              "019b2d14-4230-7db7-87d4-7d81cfaec999"
+            ],
+            "id": "agent-note-authority",
+            "query_digest": "sha256:9ce19f737f1b0e37da980e931119cc9335cf9c1e1ce48f0ac71cbf64a42ba01b",
+            "text": "Who may authorize agent-created notes?",
+            "vault_fixture": "retrieval-basic-v1"
+          },
+          {
+            "as_of": null,
+            "expected_confidence": "high",
+            "expected_files": [
+              "policy/agent-writing.md"
+            ],
+            "expected_lineage_ids": [],
+            "expected_source_ids": [
+              "019b2d14-4230-7db7-87d4-7d81cfaec932"
+            ],
+            "expected_top_k": 5,
+            "forbidden_lineage_ids": [],
+            "forbidden_source_ids": [
+              "019b2d14-4230-7db7-87d4-7d81cfaec999"
+            ],
+            "id": "agent-note-citation-freshness",
+            "query_digest": "sha256:19805497058bf3f32f1066f90d2f4f430cb5073e41202562050570a1d23b423d",
+            "text": "How must citations in agent notes remain fresh?",
+            "vault_fixture": "retrieval-basic-v1"
+          },
+          {
+            "as_of": null,
+            "expected_confidence": "high",
+            "expected_files": [
+              "policy/agent-writing.md"
+            ],
+            "expected_lineage_ids": [],
+            "expected_source_ids": [
+              "019b2d14-4230-7db7-87d4-7d81cfaec932"
+            ],
+            "expected_top_k": 5,
+            "forbidden_lineage_ids": [],
+            "forbidden_source_ids": [
+              "019b2d14-4230-7db7-87d4-7d81cfaec999"
+            ],
+            "id": "agent-note-conflict-handling",
+            "query_digest": "sha256:14e7cc818ba53be09a132184d583b9b6cb7a1d0141ff7a52ca45b284925d1fd9",
+            "text": "How are conflicting agent-note declarations handled?",
+            "vault_fixture": "retrieval-basic-v1"
+          },
+          {
+            "as_of": null,
+            "expected_confidence": "high",
+            "expected_files": [
+              "policy/agent-writing.md"
+            ],
+            "expected_lineage_ids": [],
+            "expected_source_ids": [
+              "019b2d14-4230-7db7-87d4-7d81cfaec932"
+            ],
+            "expected_top_k": 5,
+            "forbidden_lineage_ids": [],
+            "forbidden_source_ids": [
+              "019b2d14-4230-7db7-87d4-7d81cfaec999"
+            ],
+            "id": "agent-note-governance",
+            "query_digest": "sha256:ca83dc6213e721a062c83f9f6246e444203ce83f7e28a87ba7ca1ad1447cbb87",
+            "text": "What governance applies to agent-created notes?",
+            "vault_fixture": "retrieval-basic-v1"
+          },
+          {
+            "as_of": null,
+            "expected_confidence": "high",
+            "expected_files": [
+              "policy/agent-writing.md"
+            ],
+            "expected_lineage_ids": [],
+            "expected_source_ids": [
+              "019b2d14-4230-7db7-87d4-7d81cfaec932"
+            ],
+            "expected_top_k": 5,
+            "forbidden_lineage_ids": [],
+            "forbidden_source_ids": [
+              "019b2d14-4230-7db7-87d4-7d81cfaec999"
+            ],
+            "id": "agent-note-hidden-material",
+            "query_digest": "sha256:3a0d6293967842a1c6524da0ba1ccd9d13a7c8c9911a41c929f94afbbe752899",
+            "text": "May hidden material influence an agent note result?",
+            "vault_fixture": "retrieval-basic-v1"
+          },
+          {
+            "as_of": null,
+            "expected_confidence": "high",
+            "expected_files": [
+              "policy/agent-writing.md"
+            ],
+            "expected_lineage_ids": [],
+            "expected_source_ids": [
+              "019b2d14-4230-7db7-87d4-7d81cfaec932"
+            ],
+            "expected_top_k": 5,
+            "forbidden_lineage_ids": [],
+            "forbidden_source_ids": [
+              "019b2d14-4230-7db7-87d4-7d81cfaec999"
+            ],
+            "id": "agent-note-lineage-policy",
+            "query_digest": "sha256:268cfe5390e81322d5f30494619ed88f8a909ac6d32260b0d7d542c24d961290",
+            "text": "What lineage rules govern an agent-created note?",
+            "vault_fixture": "retrieval-basic-v1"
+          },
+          {
+            "as_of": null,
+            "expected_confidence": "high",
+            "expected_files": [
+              "policy/agent-writing.md"
+            ],
+            "expected_lineage_ids": [],
+            "expected_source_ids": [
+              "019b2d14-4230-7db7-87d4-7d81cfaec932"
+            ],
+            "expected_top_k": 5,
+            "forbidden_lineage_ids": [],
+            "forbidden_source_ids": [
+              "019b2d14-4230-7db7-87d4-7d81cfaec999"
+            ],
+            "id": "agent-note-publication-boundary",
+            "query_digest": "sha256:41b5e09d62d075f4d3967b5362ea84937dcf02ae836dd844757e0eab332e420e",
+            "text": "What publication boundary applies to agent-created notes?",
+            "vault_fixture": "retrieval-basic-v1"
+          },
+          {
+            "as_of": null,
+            "expected_confidence": "high",
+            "expected_files": [
+              "policy/agent-writing.md"
+            ],
+            "expected_lineage_ids": [],
+            "expected_source_ids": [
+              "019b2d14-4230-7db7-87d4-7d81cfaec932"
+            ],
+            "expected_top_k": 5,
+            "forbidden_lineage_ids": [],
+            "forbidden_source_ids": [
+              "019b2d14-4230-7db7-87d4-7d81cfaec999"
+            ],
+            "id": "agent-note-review-requirement",
+            "query_digest": "sha256:ff8d246aec90d148bc38950c0d7642a8fa64049e2bd85e369c8d33a8b04d0733",
+            "text": "Which review is required for an agent-created note?",
+            "vault_fixture": "retrieval-basic-v1"
+          },
+          {
+            "as_of": null,
+            "expected_confidence": "high",
+            "expected_files": [
+              "policy/agent-writing.md"
+            ],
+            "expected_lineage_ids": [],
+            "expected_source_ids": [
+              "019b2d14-4230-7db7-87d4-7d81cfaec932"
+            ],
+            "expected_top_k": 5,
+            "forbidden_lineage_ids": [],
+            "forbidden_source_ids": [
+              "019b2d14-4230-7db7-87d4-7d81cfaec999"
+            ],
+            "id": "agent-note-source-integrity",
+            "query_digest": "sha256:a11340dea0d07ac23c8edd0291a547e44772c13796abce4c143131fa545ccf01",
+            "text": "How is source integrity checked for agent-created notes?",
+            "vault_fixture": "retrieval-basic-v1"
+          },
+          {
+            "as_of": "2026-08-01T00:00:00.000Z",
+            "expected_confidence": "high",
+            "expected_files": [
+              "policy/historical.md"
+            ],
+            "expected_lineage_ids": [],
+            "expected_source_ids": [
+              "019b2d14-4230-7db7-87d4-7d81cfaec933"
+            ],
+            "expected_top_k": 5,
+            "forbidden_lineage_ids": [],
+            "forbidden_source_ids": [],
+            "id": "historical-citation-validity",
+            "query_digest": "sha256:bb52865b845118ea2e3cddd65bf1a2c3fd36a6f05d41258eb25bed25419a6dba",
+            "text": "Was the historical policy citation valid at the cutoff?",
+            "vault_fixture": "retrieval-temporal-v1"
+          },
+          {
+            "as_of": "2026-08-01T00:00:00.000Z",
+            "expected_confidence": "high",
+            "expected_files": [
+              "policy/historical.md"
+            ],
+            "expected_lineage_ids": [],
+            "expected_source_ids": [
+              "019b2d14-4230-7db7-87d4-7d81cfaec933"
+            ],
+            "expected_top_k": 5,
+            "forbidden_lineage_ids": [],
+            "forbidden_source_ids": [],
+            "id": "historical-policy",
+            "query_digest": "sha256:7fb062af277d1428b7b140e4587d52d9f9e1801f66dbb89639a516a27569c332",
+            "text": "Which policy version was active at the cutoff?",
+            "vault_fixture": "retrieval-temporal-v1"
+          },
+          {
+            "as_of": "2026-08-31T23:59:59.999Z",
+            "expected_confidence": "high",
+            "expected_files": [
+              "policy/historical.md"
+            ],
+            "expected_lineage_ids": [],
+            "expected_source_ids": [
+              "019b2d14-4230-7db7-87d4-7d81cfaec933"
+            ],
+            "expected_top_k": 5,
+            "forbidden_lineage_ids": [],
+            "forbidden_source_ids": [],
+            "id": "historical-predecessor",
+            "query_digest": "sha256:d27d4d0f50fe70cb7c8c27c722bdf7ba7c62d10be69ee1496a1544728c413171",
+            "text": "Which predecessor policy applies before its successor?",
+            "vault_fixture": "retrieval-temporal-v1"
+          },
+          {
+            "as_of": "2026-08-01T00:00:00.000Z",
+            "expected_confidence": "high",
+            "expected_files": [
+              "policy/historical.md"
+            ],
+            "expected_lineage_ids": [],
+            "expected_source_ids": [
+              "019b2d14-4230-7db7-87d4-7d81cfaec933"
+            ],
+            "expected_top_k": 5,
+            "forbidden_lineage_ids": [],
+            "forbidden_source_ids": [],
+            "id": "historical-successor-exclusion",
+            "query_digest": "sha256:cdd4a562d22112702cf855aa07ef58a500d1e66d05d2afef69e149576a72053a",
+            "text": "Which future successor is excluded at the historical cutoff?",
+            "vault_fixture": "retrieval-temporal-v1"
+          },
+          {
+            "as_of": null,
+            "expected_confidence": "high",
+            "expected_files": [
+              "policy/agent-writing.md"
+            ],
+            "expected_lineage_ids": [],
+            "expected_source_ids": [
+              "019b2d14-4230-7db7-87d4-7d81cfaec932"
+            ],
+            "expected_top_k": 5,
+            "forbidden_lineage_ids": [],
+            "forbidden_source_ids": [
+              "019b2d14-4230-7db7-87d4-7d81cfaec999"
+            ],
+            "id": "multi-agent-writing-policy",
+            "query_digest": "sha256:ab0ce7c3549b9e7db2e8da2f2c41f41f322a9ba1baeaa74143baa9e01e2f6bad",
+            "text": "What decisions govern agent-created notes?",
+            "vault_fixture": "retrieval-basic-v1"
+          },
+          {
+            "as_of": "2026-08-01T00:00:00.000Z",
+            "expected_confidence": "high",
+            "expected_files": [
+              "policy/historical.md"
+            ],
+            "expected_lineage_ids": [],
+            "expected_source_ids": [
+              "019b2d14-4230-7db7-87d4-7d81cfaec933"
+            ],
+            "expected_top_k": 5,
+            "forbidden_lineage_ids": [],
+            "forbidden_source_ids": [],
+            "id": "point-in-time-active-version",
+            "query_digest": "sha256:e354c21ac0f09c08a29ef956137805cef2d743d231eccb542614638476a4c0b5",
+            "text": "Which version is active in the point-in-time view?",
+            "vault_fixture": "retrieval-temporal-v1"
+          },
+          {
+            "as_of": "2026-08-01T00:00:00.000Z",
+            "expected_confidence": "high",
+            "expected_files": [
+              "policy/historical.md"
+            ],
+            "expected_lineage_ids": [],
+            "expected_source_ids": [
+              "019b2d14-4230-7db7-87d4-7d81cfaec933"
+            ],
+            "expected_top_k": 5,
+            "forbidden_lineage_ids": [],
+            "forbidden_source_ids": [],
+            "id": "point-in-time-citation",
+            "query_digest": "sha256:b15969eb7ebc65c7581fbfed4d67c9b3ddc5b7559b0364a63f188498185855ca",
+            "text": "Which citation is correct for the point-in-time result?",
+            "vault_fixture": "retrieval-temporal-v1"
+          },
+          {
+            "as_of": null,
+            "expected_confidence": "high",
+            "expected_files": [
+              "policy/agent-writing.md"
+            ],
+            "expected_lineage_ids": [],
+            "expected_source_ids": [
+              "019b2d14-4230-7db7-87d4-7d81cfaec932"
+            ],
+            "expected_top_k": 5,
+            "forbidden_lineage_ids": [],
+            "forbidden_source_ids": [
+              "019b2d14-4230-7db7-87d4-7d81cfaec999"
+            ],
+            "id": "policy-citation-requirements",
+            "query_digest": "sha256:4784f7afa58351f4d643513b9554385cfc8730b53f0885004903447293809821",
+            "text": "What citation requirements apply to agent writing policy?",
+            "vault_fixture": "retrieval-basic-v1"
+          },
+          {
+            "as_of": null,
+            "expected_confidence": "high",
+            "expected_files": [
+              "policy/agent-writing.md"
+            ],
+            "expected_lineage_ids": [],
+            "expected_source_ids": [
+              "019b2d14-4230-7db7-87d4-7d81cfaec932"
+            ],
+            "expected_top_k": 5,
+            "forbidden_lineage_ids": [],
+            "forbidden_source_ids": [
+              "019b2d14-4230-7db7-87d4-7d81cfaec999"
+            ],
+            "id": "policy-source-authorization",
+            "query_digest": "sha256:db27668e8bd5cac1f053f75c4527734792911364b2a08b5e9e20002f026ab549",
+            "text": "Which sources are authorized for agent writing policy?",
+            "vault_fixture": "retrieval-basic-v1"
+          },
+          {
+            "as_of": "2026-08-01T00:00:00.000Z",
+            "expected_confidence": "high",
+            "expected_files": [
+              "policy/historical.md"
+            ],
+            "expected_lineage_ids": [],
+            "expected_source_ids": [
+              "019b2d14-4230-7db7-87d4-7d81cfaec933"
+            ],
+            "expected_top_k": 5,
+            "forbidden_lineage_ids": [],
+            "forbidden_source_ids": [],
+            "id": "temporal-coverage",
+            "query_digest": "sha256:1571544a4db53d4b43acd7f8d8a7c585bc072593c9f0314207b093865469598b",
+            "text": "Is temporal coverage sufficient at the requested cutoff?",
+            "vault_fixture": "retrieval-temporal-v1"
+          },
+          {
+            "as_of": "2026-09-01T00:00:00.001Z",
+            "expected_confidence": "high",
+            "expected_files": [
+              "policy/successor.markdown"
+            ],
+            "expected_lineage_ids": [],
+            "expected_source_ids": [
+              "019b2d14-4230-7db7-87d4-7d81cfaec934"
+            ],
+            "expected_top_k": 5,
+            "forbidden_lineage_ids": [],
+            "forbidden_source_ids": [],
+            "id": "temporal-current-boundary",
+            "query_digest": "sha256:f7f28c322e73681f0f365f29b6a5d781a3abce36365e6139e200d78f1948d07c",
+            "text": "Which policy is current exactly at the temporal boundary?",
+            "vault_fixture": "retrieval-temporal-v1"
+          },
+          {
+            "as_of": "2026-08-01T00:00:00.000Z",
+            "expected_confidence": "high",
+            "expected_files": [
+              "policy/historical.md"
+            ],
+            "expected_lineage_ids": [],
+            "expected_source_ids": [
+              "019b2d14-4230-7db7-87d4-7d81cfaec933"
+            ],
+            "expected_top_k": 5,
+            "forbidden_lineage_ids": [],
+            "forbidden_source_ids": [],
+            "id": "temporal-future-exclusion",
+            "query_digest": "sha256:60c9d3388b00252ad91c9aadd32d2182cee18e19dfc11d5cd438e93cc8402f44",
+            "text": "Does the point-in-time view exclude future policy versions?",
+            "vault_fixture": "retrieval-temporal-v1"
+          },
+          {
+            "as_of": "2026-09-01T00:00:00.000Z",
+            "expected_confidence": "high",
+            "expected_files": [
+              "policy/successor.markdown"
+            ],
+            "expected_lineage_ids": [],
+            "expected_source_ids": [
+              "019b2d14-4230-7db7-87d4-7d81cfaec934"
+            ],
+            "expected_top_k": 5,
+            "forbidden_lineage_ids": [],
+            "forbidden_source_ids": [],
+            "id": "temporal-half-open-endpoint",
+            "query_digest": "sha256:f1f69eb23a2c595033c0b86e6f42aaa568ba97e186d2ceef0e2354806493585f",
+            "text": "How does the half-open validity endpoint select policy?",
+            "vault_fixture": "retrieval-temporal-v1"
+          },
+          {
+            "as_of": "2026-08-01T00:00:00.000Z",
+            "expected_confidence": "high",
+            "expected_files": [
+              "policy/historical.md"
+            ],
+            "expected_lineage_ids": [],
+            "expected_source_ids": [
+              "019b2d14-4230-7db7-87d4-7d81cfaec933"
+            ],
+            "expected_top_k": 5,
+            "forbidden_lineage_ids": [],
+            "forbidden_source_ids": [],
+            "id": "temporal-unknown-exclusion",
+            "query_digest": "sha256:36a9cf2f600c1aa7c0ddc1d366aa9bc6b41f24c1e97b3c069140e034dd65f587",
+            "text": "Are unknown-validity policies excluded from the cutoff view?",
+            "vault_fixture": "retrieval-temporal-v1"
+          }
+        ],
+        "golden_digest": "sha256:f3de2536a3a6496aff6b4d6e7afca522cfd5e5b28b7b907a9b9e4d39ac1c8a9f"
+      },
+      "base_configuration": {
+        "contract_version": "gkos-retrieval-evaluation-base-configuration/1.0.0-draft.1",
+        "effective_non_tunable_configuration_digest": "sha256:e591b296cfb2eef94a14cb579ec2dc264dc0a518c7bb78cff674acc5c4268758",
+        "base_configuration_digest": "sha256:49a48b236c360bdce17cae6a8cd38bf7e46039746a5f78a7049c583ebb4e06e3"
+      },
+      "tuning_grid": {
+        "contract_version": "gkos-retrieval-evaluation-tuning-grid/1.0.0-draft.1",
+        "rrf_k": [
+          5,
+          10,
+          20,
+          30,
+          60,
+          100
+        ],
+        "mmr": [
+          {
+            "enabled": false,
+            "lambda_micros": null
+          },
+          {
+            "enabled": true,
+            "lambda_micros": 0
+          },
+          {
+            "enabled": true,
+            "lambda_micros": 300000
+          },
+          {
+            "enabled": true,
+            "lambda_micros": 500000
+          },
+          {
+            "enabled": true,
+            "lambda_micros": 700000
+          },
+          {
+            "enabled": true,
+            "lambda_micros": 1000000
+          }
+        ],
+        "semantic_top_k": [
+          5,
+          10,
+          20,
+          40,
+          80
+        ],
+        "lexical_top_k": [
+          5,
+          10,
+          20,
+          40,
+          80
+        ],
+        "candidate_count": 900,
+        "tuning_grid_digest": "sha256:c5a7d2fd2ea6f39153195dadc995671c9aa2e183cdf75c712a9c908af0870fc1"
+      },
+      "selected_axes": {
+        "contract_version": "gkos-retrieval-evaluation-tuning-axes/1.0.0-draft.1",
+        "rrf_k": 60,
+        "mmr": true,
+        "mmr_lambda_micros": 700000,
+        "semantic_top_k": 5,
+        "lexical_top_k": 5,
+        "tuning_axes_digest": "sha256:9b3db48364ab3127c72f9e89c15eca4c21a56b254a69f759ce37b589be712dca"
+      },
+      "candidate_config_digest": "sha256:6d55a381e2fb74b87e0cfabe010ff168f155d7b12258c062fcc08372f1934050",
+      "metrics_set": {
+        "contract_version": "gkos-retrieval-evaluation-metrics-set/1.0.0-draft.1",
+        "environment_set_digest": "sha256:8269ad9e34b9704eaa724de4628d5667cb9ba4483ad08117a7a7549e202800c1",
+        "normalized_golden_digest": "sha256:f3de2536a3a6496aff6b4d6e7afca522cfd5e5b28b7b907a9b9e4d39ac1c8a9f",
+        "query_count": 24,
+        "query_evaluations": [
+          {
+            "environment_digest": "sha256:b965cf391983c88657eb68f8572aec6abbf3c94777b983858a7f99646d018fc9",
+            "golden_query_digest": "sha256:dfb1955512a21923442bb4bea2115ec7b6756badc6d12c2a9744079694d360c9",
+            "query_metrics": {
+              "citation": {
+                "applicability": "required",
+                "checked": 1,
+                "correctness_micros": 1000000,
+                "mismatch": 0,
+                "passed": 1,
+                "stale": 0
+              },
+              "confidence_mismatch_count": 0,
+              "contract_version": "gkos-retrieval-evaluation-query-metrics/1.0.0-draft.1",
+              "expected_top_k": 5,
+              "first_relevant_rank": 1,
+              "mrr_micros": 1000000,
+              "ndcg_at_k_micros": 1000000,
+              "policy": {
+                "policy_identity_field_count": 8,
+                "policy_leak_count": 0,
+                "policy_leak_rate_micros": 0
+              },
+              "query_id": "active-policy-at-cutoff",
+              "query_metrics_digest": "sha256:62948ca2008bc85bd77810586c6240352584d0ab5e5e155ca13096adcbf0d610",
+              "recall_at_k_micros": 1000000,
+              "relevant_returned_source_count": 1,
+              "relevant_source_count": 1,
+              "relevant_source_ranks": [
+                1
+              ],
+              "returned_unique_source_count": 1,
+              "stale_citation_query_count": 0,
+              "stale_projection_query_count": 0,
+              "temporal_mismatch_count": 0,
+              "unverified_projection_query_count": 0
+            }
+          },
+          {
+            "environment_digest": "sha256:5495b321c00cf564fd80fc923733e987848aa966f02a9b25bf397fad5a3a17cd",
+            "golden_query_digest": "sha256:9ce19f737f1b0e37da980e931119cc9335cf9c1e1ce48f0ac71cbf64a42ba01b",
+            "query_metrics": {
+              "citation": {
+                "applicability": "required",
+                "checked": 1,
+                "correctness_micros": 1000000,
+                "mismatch": 0,
+                "passed": 1,
+                "stale": 0
+              },
+              "confidence_mismatch_count": 0,
+              "contract_version": "gkos-retrieval-evaluation-query-metrics/1.0.0-draft.1",
+              "expected_top_k": 5,
+              "first_relevant_rank": 1,
+              "mrr_micros": 1000000,
+              "ndcg_at_k_micros": 1000000,
+              "policy": {
+                "policy_identity_field_count": 8,
+                "policy_leak_count": 0,
+                "policy_leak_rate_micros": 0
+              },
+              "query_id": "agent-note-authority",
+              "query_metrics_digest": "sha256:f87d27f115ea1b76be48273b92f1b44b45dff221d52bb82a92625f5e82aedd7d",
+              "recall_at_k_micros": 1000000,
+              "relevant_returned_source_count": 1,
+              "relevant_source_count": 1,
+              "relevant_source_ranks": [
+                1
+              ],
+              "returned_unique_source_count": 1,
+              "stale_citation_query_count": 0,
+              "stale_projection_query_count": 0,
+              "temporal_mismatch_count": 0,
+              "unverified_projection_query_count": 0
+            }
+          },
+          {
+            "environment_digest": "sha256:5495b321c00cf564fd80fc923733e987848aa966f02a9b25bf397fad5a3a17cd",
+            "golden_query_digest": "sha256:19805497058bf3f32f1066f90d2f4f430cb5073e41202562050570a1d23b423d",
+            "query_metrics": {
+              "citation": {
+                "applicability": "required",
+                "checked": 1,
+                "correctness_micros": 1000000,
+                "mismatch": 0,
+                "passed": 1,
+                "stale": 0
+              },
+              "confidence_mismatch_count": 0,
+              "contract_version": "gkos-retrieval-evaluation-query-metrics/1.0.0-draft.1",
+              "expected_top_k": 5,
+              "first_relevant_rank": 1,
+              "mrr_micros": 1000000,
+              "ndcg_at_k_micros": 1000000,
+              "policy": {
+                "policy_identity_field_count": 8,
+                "policy_leak_count": 0,
+                "policy_leak_rate_micros": 0
+              },
+              "query_id": "agent-note-citation-freshness",
+              "query_metrics_digest": "sha256:b84686f1d57c0a9b3fcce2ba570c5c55f4d074da43ab3eaf9b83a5d8999662cb",
+              "recall_at_k_micros": 1000000,
+              "relevant_returned_source_count": 1,
+              "relevant_source_count": 1,
+              "relevant_source_ranks": [
+                1
+              ],
+              "returned_unique_source_count": 1,
+              "stale_citation_query_count": 0,
+              "stale_projection_query_count": 0,
+              "temporal_mismatch_count": 0,
+              "unverified_projection_query_count": 0
+            }
+          },
+          {
+            "environment_digest": "sha256:5495b321c00cf564fd80fc923733e987848aa966f02a9b25bf397fad5a3a17cd",
+            "golden_query_digest": "sha256:14e7cc818ba53be09a132184d583b9b6cb7a1d0141ff7a52ca45b284925d1fd9",
+            "query_metrics": {
+              "citation": {
+                "applicability": "required",
+                "checked": 1,
+                "correctness_micros": 1000000,
+                "mismatch": 0,
+                "passed": 1,
+                "stale": 0
+              },
+              "confidence_mismatch_count": 0,
+              "contract_version": "gkos-retrieval-evaluation-query-metrics/1.0.0-draft.1",
+              "expected_top_k": 5,
+              "first_relevant_rank": 1,
+              "mrr_micros": 1000000,
+              "ndcg_at_k_micros": 1000000,
+              "policy": {
+                "policy_identity_field_count": 8,
+                "policy_leak_count": 0,
+                "policy_leak_rate_micros": 0
+              },
+              "query_id": "agent-note-conflict-handling",
+              "query_metrics_digest": "sha256:178df5dfedf5ef1b0fa1f9ee5933e8e8cb650e2288652177938652b6da58771e",
+              "recall_at_k_micros": 1000000,
+              "relevant_returned_source_count": 1,
+              "relevant_source_count": 1,
+              "relevant_source_ranks": [
+                1
+              ],
+              "returned_unique_source_count": 1,
+              "stale_citation_query_count": 0,
+              "stale_projection_query_count": 0,
+              "temporal_mismatch_count": 0,
+              "unverified_projection_query_count": 0
+            }
+          },
+          {
+            "environment_digest": "sha256:5495b321c00cf564fd80fc923733e987848aa966f02a9b25bf397fad5a3a17cd",
+            "golden_query_digest": "sha256:ca83dc6213e721a062c83f9f6246e444203ce83f7e28a87ba7ca1ad1447cbb87",
+            "query_metrics": {
+              "citation": {
+                "applicability": "required",
+                "checked": 1,
+                "correctness_micros": 1000000,
+                "mismatch": 0,
+                "passed": 1,
+                "stale": 0
+              },
+              "confidence_mismatch_count": 0,
+              "contract_version": "gkos-retrieval-evaluation-query-metrics/1.0.0-draft.1",
+              "expected_top_k": 5,
+              "first_relevant_rank": 1,
+              "mrr_micros": 1000000,
+              "ndcg_at_k_micros": 1000000,
+              "policy": {
+                "policy_identity_field_count": 8,
+                "policy_leak_count": 0,
+                "policy_leak_rate_micros": 0
+              },
+              "query_id": "agent-note-governance",
+              "query_metrics_digest": "sha256:f1ede4d63b9dcb8ae64567cf542f9b8bdbd5253c2ba8197ce54e06897e1e7a73",
+              "recall_at_k_micros": 1000000,
+              "relevant_returned_source_count": 1,
+              "relevant_source_count": 1,
+              "relevant_source_ranks": [
+                1
+              ],
+              "returned_unique_source_count": 1,
+              "stale_citation_query_count": 0,
+              "stale_projection_query_count": 0,
+              "temporal_mismatch_count": 0,
+              "unverified_projection_query_count": 0
+            }
+          },
+          {
+            "environment_digest": "sha256:5495b321c00cf564fd80fc923733e987848aa966f02a9b25bf397fad5a3a17cd",
+            "golden_query_digest": "sha256:3a0d6293967842a1c6524da0ba1ccd9d13a7c8c9911a41c929f94afbbe752899",
+            "query_metrics": {
+              "citation": {
+                "applicability": "required",
+                "checked": 1,
+                "correctness_micros": 1000000,
+                "mismatch": 0,
+                "passed": 1,
+                "stale": 0
+              },
+              "confidence_mismatch_count": 0,
+              "contract_version": "gkos-retrieval-evaluation-query-metrics/1.0.0-draft.1",
+              "expected_top_k": 5,
+              "first_relevant_rank": 1,
+              "mrr_micros": 1000000,
+              "ndcg_at_k_micros": 1000000,
+              "policy": {
+                "policy_identity_field_count": 8,
+                "policy_leak_count": 0,
+                "policy_leak_rate_micros": 0
+              },
+              "query_id": "agent-note-hidden-material",
+              "query_metrics_digest": "sha256:25b8c39048bcbe5ef68139201681ef115541bf721c309adc728870b8ceda038d",
+              "recall_at_k_micros": 1000000,
+              "relevant_returned_source_count": 1,
+              "relevant_source_count": 1,
+              "relevant_source_ranks": [
+                1
+              ],
+              "returned_unique_source_count": 1,
+              "stale_citation_query_count": 0,
+              "stale_projection_query_count": 0,
+              "temporal_mismatch_count": 0,
+              "unverified_projection_query_count": 0
+            }
+          },
+          {
+            "environment_digest": "sha256:5495b321c00cf564fd80fc923733e987848aa966f02a9b25bf397fad5a3a17cd",
+            "golden_query_digest": "sha256:268cfe5390e81322d5f30494619ed88f8a909ac6d32260b0d7d542c24d961290",
+            "query_metrics": {
+              "citation": {
+                "applicability": "required",
+                "checked": 1,
+                "correctness_micros": 1000000,
+                "mismatch": 0,
+                "passed": 1,
+                "stale": 0
+              },
+              "confidence_mismatch_count": 0,
+              "contract_version": "gkos-retrieval-evaluation-query-metrics/1.0.0-draft.1",
+              "expected_top_k": 5,
+              "first_relevant_rank": 1,
+              "mrr_micros": 1000000,
+              "ndcg_at_k_micros": 1000000,
+              "policy": {
+                "policy_identity_field_count": 8,
+                "policy_leak_count": 0,
+                "policy_leak_rate_micros": 0
+              },
+              "query_id": "agent-note-lineage-policy",
+              "query_metrics_digest": "sha256:da5ac58b141dfd9a7e1b56771bcf94f5c92da5bd11e78689b355dbd457cceda3",
+              "recall_at_k_micros": 1000000,
+              "relevant_returned_source_count": 1,
+              "relevant_source_count": 1,
+              "relevant_source_ranks": [
+                1
+              ],
+              "returned_unique_source_count": 1,
+              "stale_citation_query_count": 0,
+              "stale_projection_query_count": 0,
+              "temporal_mismatch_count": 0,
+              "unverified_projection_query_count": 0
+            }
+          },
+          {
+            "environment_digest": "sha256:5495b321c00cf564fd80fc923733e987848aa966f02a9b25bf397fad5a3a17cd",
+            "golden_query_digest": "sha256:41b5e09d62d075f4d3967b5362ea84937dcf02ae836dd844757e0eab332e420e",
+            "query_metrics": {
+              "citation": {
+                "applicability": "required",
+                "checked": 1,
+                "correctness_micros": 1000000,
+                "mismatch": 0,
+                "passed": 1,
+                "stale": 0
+              },
+              "confidence_mismatch_count": 0,
+              "contract_version": "gkos-retrieval-evaluation-query-metrics/1.0.0-draft.1",
+              "expected_top_k": 5,
+              "first_relevant_rank": 1,
+              "mrr_micros": 1000000,
+              "ndcg_at_k_micros": 1000000,
+              "policy": {
+                "policy_identity_field_count": 8,
+                "policy_leak_count": 0,
+                "policy_leak_rate_micros": 0
+              },
+              "query_id": "agent-note-publication-boundary",
+              "query_metrics_digest": "sha256:2959c948d1d48a8cf6772946317a1761d4874651d216eb770b18cc56b83f7862",
+              "recall_at_k_micros": 1000000,
+              "relevant_returned_source_count": 1,
+              "relevant_source_count": 1,
+              "relevant_source_ranks": [
+                1
+              ],
+              "returned_unique_source_count": 1,
+              "stale_citation_query_count": 0,
+              "stale_projection_query_count": 0,
+              "temporal_mismatch_count": 0,
+              "unverified_projection_query_count": 0
+            }
+          },
+          {
+            "environment_digest": "sha256:5495b321c00cf564fd80fc923733e987848aa966f02a9b25bf397fad5a3a17cd",
+            "golden_query_digest": "sha256:ff8d246aec90d148bc38950c0d7642a8fa64049e2bd85e369c8d33a8b04d0733",
+            "query_metrics": {
+              "citation": {
+                "applicability": "required",
+                "checked": 1,
+                "correctness_micros": 1000000,
+                "mismatch": 0,
+                "passed": 1,
+                "stale": 0
+              },
+              "confidence_mismatch_count": 0,
+              "contract_version": "gkos-retrieval-evaluation-query-metrics/1.0.0-draft.1",
+              "expected_top_k": 5,
+              "first_relevant_rank": 1,
+              "mrr_micros": 1000000,
+              "ndcg_at_k_micros": 1000000,
+              "policy": {
+                "policy_identity_field_count": 8,
+                "policy_leak_count": 0,
+                "policy_leak_rate_micros": 0
+              },
+              "query_id": "agent-note-review-requirement",
+              "query_metrics_digest": "sha256:8146880ca93b87e81d41ce76c390f412bcc88da928035e2b2c80b76afe25b62f",
+              "recall_at_k_micros": 1000000,
+              "relevant_returned_source_count": 1,
+              "relevant_source_count": 1,
+              "relevant_source_ranks": [
+                1
+              ],
+              "returned_unique_source_count": 1,
+              "stale_citation_query_count": 0,
+              "stale_projection_query_count": 0,
+              "temporal_mismatch_count": 0,
+              "unverified_projection_query_count": 0
+            }
+          },
+          {
+            "environment_digest": "sha256:5495b321c00cf564fd80fc923733e987848aa966f02a9b25bf397fad5a3a17cd",
+            "golden_query_digest": "sha256:a11340dea0d07ac23c8edd0291a547e44772c13796abce4c143131fa545ccf01",
+            "query_metrics": {
+              "citation": {
+                "applicability": "required",
+                "checked": 1,
+                "correctness_micros": 1000000,
+                "mismatch": 0,
+                "passed": 1,
+                "stale": 0
+              },
+              "confidence_mismatch_count": 0,
+              "contract_version": "gkos-retrieval-evaluation-query-metrics/1.0.0-draft.1",
+              "expected_top_k": 5,
+              "first_relevant_rank": 1,
+              "mrr_micros": 1000000,
+              "ndcg_at_k_micros": 1000000,
+              "policy": {
+                "policy_identity_field_count": 8,
+                "policy_leak_count": 0,
+                "policy_leak_rate_micros": 0
+              },
+              "query_id": "agent-note-source-integrity",
+              "query_metrics_digest": "sha256:bf98e92bc2beac736c4c929922c406673634a90ebb3bb765bf75d84e4c0306fb",
+              "recall_at_k_micros": 1000000,
+              "relevant_returned_source_count": 1,
+              "relevant_source_count": 1,
+              "relevant_source_ranks": [
+                1
+              ],
+              "returned_unique_source_count": 1,
+              "stale_citation_query_count": 0,
+              "stale_projection_query_count": 0,
+              "temporal_mismatch_count": 0,
+              "unverified_projection_query_count": 0
+            }
+          },
+          {
+            "environment_digest": "sha256:b965cf391983c88657eb68f8572aec6abbf3c94777b983858a7f99646d018fc9",
+            "golden_query_digest": "sha256:bb52865b845118ea2e3cddd65bf1a2c3fd36a6f05d41258eb25bed25419a6dba",
+            "query_metrics": {
+              "citation": {
+                "applicability": "required",
+                "checked": 1,
+                "correctness_micros": 1000000,
+                "mismatch": 0,
+                "passed": 1,
+                "stale": 0
+              },
+              "confidence_mismatch_count": 0,
+              "contract_version": "gkos-retrieval-evaluation-query-metrics/1.0.0-draft.1",
+              "expected_top_k": 5,
+              "first_relevant_rank": 1,
+              "mrr_micros": 1000000,
+              "ndcg_at_k_micros": 1000000,
+              "policy": {
+                "policy_identity_field_count": 8,
+                "policy_leak_count": 0,
+                "policy_leak_rate_micros": 0
+              },
+              "query_id": "historical-citation-validity",
+              "query_metrics_digest": "sha256:5062968d68e710335fe42fdc856b89ec135368b5b1c82d6dd12f58809ce43878",
+              "recall_at_k_micros": 1000000,
+              "relevant_returned_source_count": 1,
+              "relevant_source_count": 1,
+              "relevant_source_ranks": [
+                1
+              ],
+              "returned_unique_source_count": 1,
+              "stale_citation_query_count": 0,
+              "stale_projection_query_count": 0,
+              "temporal_mismatch_count": 0,
+              "unverified_projection_query_count": 0
+            }
+          },
+          {
+            "environment_digest": "sha256:b965cf391983c88657eb68f8572aec6abbf3c94777b983858a7f99646d018fc9",
+            "golden_query_digest": "sha256:7fb062af277d1428b7b140e4587d52d9f9e1801f66dbb89639a516a27569c332",
+            "query_metrics": {
+              "citation": {
+                "applicability": "required",
+                "checked": 1,
+                "correctness_micros": 1000000,
+                "mismatch": 0,
+                "passed": 1,
+                "stale": 0
+              },
+              "confidence_mismatch_count": 0,
+              "contract_version": "gkos-retrieval-evaluation-query-metrics/1.0.0-draft.1",
+              "expected_top_k": 5,
+              "first_relevant_rank": 1,
+              "mrr_micros": 1000000,
+              "ndcg_at_k_micros": 1000000,
+              "policy": {
+                "policy_identity_field_count": 8,
+                "policy_leak_count": 0,
+                "policy_leak_rate_micros": 0
+              },
+              "query_id": "historical-policy",
+              "query_metrics_digest": "sha256:2c47713b3e330d7ca03e4d4775f1574a8ce691011909dfafab67efb526864f63",
+              "recall_at_k_micros": 1000000,
+              "relevant_returned_source_count": 1,
+              "relevant_source_count": 1,
+              "relevant_source_ranks": [
+                1
+              ],
+              "returned_unique_source_count": 1,
+              "stale_citation_query_count": 0,
+              "stale_projection_query_count": 0,
+              "temporal_mismatch_count": 0,
+              "unverified_projection_query_count": 0
+            }
+          },
+          {
+            "environment_digest": "sha256:b965cf391983c88657eb68f8572aec6abbf3c94777b983858a7f99646d018fc9",
+            "golden_query_digest": "sha256:d27d4d0f50fe70cb7c8c27c722bdf7ba7c62d10be69ee1496a1544728c413171",
+            "query_metrics": {
+              "citation": {
+                "applicability": "required",
+                "checked": 1,
+                "correctness_micros": 1000000,
+                "mismatch": 0,
+                "passed": 1,
+                "stale": 0
+              },
+              "confidence_mismatch_count": 0,
+              "contract_version": "gkos-retrieval-evaluation-query-metrics/1.0.0-draft.1",
+              "expected_top_k": 5,
+              "first_relevant_rank": 1,
+              "mrr_micros": 1000000,
+              "ndcg_at_k_micros": 1000000,
+              "policy": {
+                "policy_identity_field_count": 8,
+                "policy_leak_count": 0,
+                "policy_leak_rate_micros": 0
+              },
+              "query_id": "historical-predecessor",
+              "query_metrics_digest": "sha256:497bdccc56a52bab3f92eb9fc28460783b52db8a968c5ed6d051cec02e1e5016",
+              "recall_at_k_micros": 1000000,
+              "relevant_returned_source_count": 1,
+              "relevant_source_count": 1,
+              "relevant_source_ranks": [
+                1
+              ],
+              "returned_unique_source_count": 1,
+              "stale_citation_query_count": 0,
+              "stale_projection_query_count": 0,
+              "temporal_mismatch_count": 0,
+              "unverified_projection_query_count": 0
+            }
+          },
+          {
+            "environment_digest": "sha256:b965cf391983c88657eb68f8572aec6abbf3c94777b983858a7f99646d018fc9",
+            "golden_query_digest": "sha256:cdd4a562d22112702cf855aa07ef58a500d1e66d05d2afef69e149576a72053a",
+            "query_metrics": {
+              "citation": {
+                "applicability": "required",
+                "checked": 1,
+                "correctness_micros": 1000000,
+                "mismatch": 0,
+                "passed": 1,
+                "stale": 0
+              },
+              "confidence_mismatch_count": 0,
+              "contract_version": "gkos-retrieval-evaluation-query-metrics/1.0.0-draft.1",
+              "expected_top_k": 5,
+              "first_relevant_rank": 1,
+              "mrr_micros": 1000000,
+              "ndcg_at_k_micros": 1000000,
+              "policy": {
+                "policy_identity_field_count": 8,
+                "policy_leak_count": 0,
+                "policy_leak_rate_micros": 0
+              },
+              "query_id": "historical-successor-exclusion",
+              "query_metrics_digest": "sha256:43a78ccd9ceec3fda5c303daee15cc1d6ee5c109ac1c32bbb0554a6fa06ac7cb",
+              "recall_at_k_micros": 1000000,
+              "relevant_returned_source_count": 1,
+              "relevant_source_count": 1,
+              "relevant_source_ranks": [
+                1
+              ],
+              "returned_unique_source_count": 1,
+              "stale_citation_query_count": 0,
+              "stale_projection_query_count": 0,
+              "temporal_mismatch_count": 0,
+              "unverified_projection_query_count": 0
+            }
+          },
+          {
+            "environment_digest": "sha256:5495b321c00cf564fd80fc923733e987848aa966f02a9b25bf397fad5a3a17cd",
+            "golden_query_digest": "sha256:ab0ce7c3549b9e7db2e8da2f2c41f41f322a9ba1baeaa74143baa9e01e2f6bad",
+            "query_metrics": {
+              "citation": {
+                "applicability": "required",
+                "checked": 1,
+                "correctness_micros": 1000000,
+                "mismatch": 0,
+                "passed": 1,
+                "stale": 0
+              },
+              "confidence_mismatch_count": 0,
+              "contract_version": "gkos-retrieval-evaluation-query-metrics/1.0.0-draft.1",
+              "expected_top_k": 5,
+              "first_relevant_rank": 1,
+              "mrr_micros": 1000000,
+              "ndcg_at_k_micros": 1000000,
+              "policy": {
+                "policy_identity_field_count": 8,
+                "policy_leak_count": 0,
+                "policy_leak_rate_micros": 0
+              },
+              "query_id": "multi-agent-writing-policy",
+              "query_metrics_digest": "sha256:9f356723b0a1f0083e5e44143434176d655874f9800dcc285737d05984449526",
+              "recall_at_k_micros": 1000000,
+              "relevant_returned_source_count": 1,
+              "relevant_source_count": 1,
+              "relevant_source_ranks": [
+                1
+              ],
+              "returned_unique_source_count": 1,
+              "stale_citation_query_count": 0,
+              "stale_projection_query_count": 0,
+              "temporal_mismatch_count": 0,
+              "unverified_projection_query_count": 0
+            }
+          },
+          {
+            "environment_digest": "sha256:b965cf391983c88657eb68f8572aec6abbf3c94777b983858a7f99646d018fc9",
+            "golden_query_digest": "sha256:e354c21ac0f09c08a29ef956137805cef2d743d231eccb542614638476a4c0b5",
+            "query_metrics": {
+              "citation": {
+                "applicability": "required",
+                "checked": 1,
+                "correctness_micros": 1000000,
+                "mismatch": 0,
+                "passed": 1,
+                "stale": 0
+              },
+              "confidence_mismatch_count": 0,
+              "contract_version": "gkos-retrieval-evaluation-query-metrics/1.0.0-draft.1",
+              "expected_top_k": 5,
+              "first_relevant_rank": 1,
+              "mrr_micros": 1000000,
+              "ndcg_at_k_micros": 1000000,
+              "policy": {
+                "policy_identity_field_count": 8,
+                "policy_leak_count": 0,
+                "policy_leak_rate_micros": 0
+              },
+              "query_id": "point-in-time-active-version",
+              "query_metrics_digest": "sha256:a06b31a1ff9f6b6921e45280b4b0ab6e99e4163fd7800744b77eb39dcbf1eb2e",
+              "recall_at_k_micros": 1000000,
+              "relevant_returned_source_count": 1,
+              "relevant_source_count": 1,
+              "relevant_source_ranks": [
+                1
+              ],
+              "returned_unique_source_count": 1,
+              "stale_citation_query_count": 0,
+              "stale_projection_query_count": 0,
+              "temporal_mismatch_count": 0,
+              "unverified_projection_query_count": 0
+            }
+          },
+          {
+            "environment_digest": "sha256:b965cf391983c88657eb68f8572aec6abbf3c94777b983858a7f99646d018fc9",
+            "golden_query_digest": "sha256:b15969eb7ebc65c7581fbfed4d67c9b3ddc5b7559b0364a63f188498185855ca",
+            "query_metrics": {
+              "citation": {
+                "applicability": "required",
+                "checked": 1,
+                "correctness_micros": 1000000,
+                "mismatch": 0,
+                "passed": 1,
+                "stale": 0
+              },
+              "confidence_mismatch_count": 0,
+              "contract_version": "gkos-retrieval-evaluation-query-metrics/1.0.0-draft.1",
+              "expected_top_k": 5,
+              "first_relevant_rank": 1,
+              "mrr_micros": 1000000,
+              "ndcg_at_k_micros": 1000000,
+              "policy": {
+                "policy_identity_field_count": 8,
+                "policy_leak_count": 0,
+                "policy_leak_rate_micros": 0
+              },
+              "query_id": "point-in-time-citation",
+              "query_metrics_digest": "sha256:7fc7ab6ffe5907090e151e8a17a538ba222670430692a4cef63f6145c52f7002",
+              "recall_at_k_micros": 1000000,
+              "relevant_returned_source_count": 1,
+              "relevant_source_count": 1,
+              "relevant_source_ranks": [
+                1
+              ],
+              "returned_unique_source_count": 1,
+              "stale_citation_query_count": 0,
+              "stale_projection_query_count": 0,
+              "temporal_mismatch_count": 0,
+              "unverified_projection_query_count": 0
+            }
+          },
+          {
+            "environment_digest": "sha256:5495b321c00cf564fd80fc923733e987848aa966f02a9b25bf397fad5a3a17cd",
+            "golden_query_digest": "sha256:4784f7afa58351f4d643513b9554385cfc8730b53f0885004903447293809821",
+            "query_metrics": {
+              "citation": {
+                "applicability": "required",
+                "checked": 1,
+                "correctness_micros": 1000000,
+                "mismatch": 0,
+                "passed": 1,
+                "stale": 0
+              },
+              "confidence_mismatch_count": 0,
+              "contract_version": "gkos-retrieval-evaluation-query-metrics/1.0.0-draft.1",
+              "expected_top_k": 5,
+              "first_relevant_rank": 1,
+              "mrr_micros": 1000000,
+              "ndcg_at_k_micros": 1000000,
+              "policy": {
+                "policy_identity_field_count": 8,
+                "policy_leak_count": 0,
+                "policy_leak_rate_micros": 0
+              },
+              "query_id": "policy-citation-requirements",
+              "query_metrics_digest": "sha256:a61fe84615e373d24cee28f638ecb427dce33821eeae3d0d167acca2915ac713",
+              "recall_at_k_micros": 1000000,
+              "relevant_returned_source_count": 1,
+              "relevant_source_count": 1,
+              "relevant_source_ranks": [
+                1
+              ],
+              "returned_unique_source_count": 1,
+              "stale_citation_query_count": 0,
+              "stale_projection_query_count": 0,
+              "temporal_mismatch_count": 0,
+              "unverified_projection_query_count": 0
+            }
+          },
+          {
+            "environment_digest": "sha256:5495b321c00cf564fd80fc923733e987848aa966f02a9b25bf397fad5a3a17cd",
+            "golden_query_digest": "sha256:db27668e8bd5cac1f053f75c4527734792911364b2a08b5e9e20002f026ab549",
+            "query_metrics": {
+              "citation": {
+                "applicability": "required",
+                "checked": 1,
+                "correctness_micros": 1000000,
+                "mismatch": 0,
+                "passed": 1,
+                "stale": 0
+              },
+              "confidence_mismatch_count": 0,
+              "contract_version": "gkos-retrieval-evaluation-query-metrics/1.0.0-draft.1",
+              "expected_top_k": 5,
+              "first_relevant_rank": 1,
+              "mrr_micros": 1000000,
+              "ndcg_at_k_micros": 1000000,
+              "policy": {
+                "policy_identity_field_count": 8,
+                "policy_leak_count": 0,
+                "policy_leak_rate_micros": 0
+              },
+              "query_id": "policy-source-authorization",
+              "query_metrics_digest": "sha256:fbed845c696b4bc4abaf44444ef71b22080b9a91c1dc85782ce6dffc12200463",
+              "recall_at_k_micros": 1000000,
+              "relevant_returned_source_count": 1,
+              "relevant_source_count": 1,
+              "relevant_source_ranks": [
+                1
+              ],
+              "returned_unique_source_count": 1,
+              "stale_citation_query_count": 0,
+              "stale_projection_query_count": 0,
+              "temporal_mismatch_count": 0,
+              "unverified_projection_query_count": 0
+            }
+          },
+          {
+            "environment_digest": "sha256:b965cf391983c88657eb68f8572aec6abbf3c94777b983858a7f99646d018fc9",
+            "golden_query_digest": "sha256:1571544a4db53d4b43acd7f8d8a7c585bc072593c9f0314207b093865469598b",
+            "query_metrics": {
+              "citation": {
+                "applicability": "required",
+                "checked": 1,
+                "correctness_micros": 1000000,
+                "mismatch": 0,
+                "passed": 1,
+                "stale": 0
+              },
+              "confidence_mismatch_count": 0,
+              "contract_version": "gkos-retrieval-evaluation-query-metrics/1.0.0-draft.1",
+              "expected_top_k": 5,
+              "first_relevant_rank": 1,
+              "mrr_micros": 1000000,
+              "ndcg_at_k_micros": 1000000,
+              "policy": {
+                "policy_identity_field_count": 8,
+                "policy_leak_count": 0,
+                "policy_leak_rate_micros": 0
+              },
+              "query_id": "temporal-coverage",
+              "query_metrics_digest": "sha256:63f513abcda8a83bd68c5dd2b7f0fbe70a7b34621a881762924ffdeb29f89e80",
+              "recall_at_k_micros": 1000000,
+              "relevant_returned_source_count": 1,
+              "relevant_source_count": 1,
+              "relevant_source_ranks": [
+                1
+              ],
+              "returned_unique_source_count": 1,
+              "stale_citation_query_count": 0,
+              "stale_projection_query_count": 0,
+              "temporal_mismatch_count": 0,
+              "unverified_projection_query_count": 0
+            }
+          },
+          {
+            "environment_digest": "sha256:b965cf391983c88657eb68f8572aec6abbf3c94777b983858a7f99646d018fc9",
+            "golden_query_digest": "sha256:f7f28c322e73681f0f365f29b6a5d781a3abce36365e6139e200d78f1948d07c",
+            "query_metrics": {
+              "citation": {
+                "applicability": "required",
+                "checked": 1,
+                "correctness_micros": 1000000,
+                "mismatch": 0,
+                "passed": 1,
+                "stale": 0
+              },
+              "confidence_mismatch_count": 0,
+              "contract_version": "gkos-retrieval-evaluation-query-metrics/1.0.0-draft.1",
+              "expected_top_k": 5,
+              "first_relevant_rank": 1,
+              "mrr_micros": 1000000,
+              "ndcg_at_k_micros": 1000000,
+              "policy": {
+                "policy_identity_field_count": 10,
+                "policy_leak_count": 0,
+                "policy_leak_rate_micros": 0
+              },
+              "query_id": "temporal-current-boundary",
+              "query_metrics_digest": "sha256:6cd99502ff9e0c0ad3deb32e46f0e7ecd210ae71270024f23c9bff4fb3b16a9c",
+              "recall_at_k_micros": 1000000,
+              "relevant_returned_source_count": 1,
+              "relevant_source_count": 1,
+              "relevant_source_ranks": [
+                1
+              ],
+              "returned_unique_source_count": 1,
+              "stale_citation_query_count": 0,
+              "stale_projection_query_count": 0,
+              "temporal_mismatch_count": 0,
+              "unverified_projection_query_count": 0
+            }
+          },
+          {
+            "environment_digest": "sha256:b965cf391983c88657eb68f8572aec6abbf3c94777b983858a7f99646d018fc9",
+            "golden_query_digest": "sha256:60c9d3388b00252ad91c9aadd32d2182cee18e19dfc11d5cd438e93cc8402f44",
+            "query_metrics": {
+              "citation": {
+                "applicability": "required",
+                "checked": 1,
+                "correctness_micros": 1000000,
+                "mismatch": 0,
+                "passed": 1,
+                "stale": 0
+              },
+              "confidence_mismatch_count": 0,
+              "contract_version": "gkos-retrieval-evaluation-query-metrics/1.0.0-draft.1",
+              "expected_top_k": 5,
+              "first_relevant_rank": 1,
+              "mrr_micros": 1000000,
+              "ndcg_at_k_micros": 1000000,
+              "policy": {
+                "policy_identity_field_count": 8,
+                "policy_leak_count": 0,
+                "policy_leak_rate_micros": 0
+              },
+              "query_id": "temporal-future-exclusion",
+              "query_metrics_digest": "sha256:0afc69cc15152680205788b6354c8fd34f15812af1ecca030deecd90fc69c510",
+              "recall_at_k_micros": 1000000,
+              "relevant_returned_source_count": 1,
+              "relevant_source_count": 1,
+              "relevant_source_ranks": [
+                1
+              ],
+              "returned_unique_source_count": 1,
+              "stale_citation_query_count": 0,
+              "stale_projection_query_count": 0,
+              "temporal_mismatch_count": 0,
+              "unverified_projection_query_count": 0
+            }
+          },
+          {
+            "environment_digest": "sha256:b965cf391983c88657eb68f8572aec6abbf3c94777b983858a7f99646d018fc9",
+            "golden_query_digest": "sha256:f1f69eb23a2c595033c0b86e6f42aaa568ba97e186d2ceef0e2354806493585f",
+            "query_metrics": {
+              "citation": {
+                "applicability": "required",
+                "checked": 1,
+                "correctness_micros": 1000000,
+                "mismatch": 0,
+                "passed": 1,
+                "stale": 0
+              },
+              "confidence_mismatch_count": 0,
+              "contract_version": "gkos-retrieval-evaluation-query-metrics/1.0.0-draft.1",
+              "expected_top_k": 5,
+              "first_relevant_rank": 1,
+              "mrr_micros": 1000000,
+              "ndcg_at_k_micros": 1000000,
+              "policy": {
+                "policy_identity_field_count": 10,
+                "policy_leak_count": 0,
+                "policy_leak_rate_micros": 0
+              },
+              "query_id": "temporal-half-open-endpoint",
+              "query_metrics_digest": "sha256:75c5ce3892212b4eac793331f7de3af5d90b9cd7cce8445625b2e16908ee98b4",
+              "recall_at_k_micros": 1000000,
+              "relevant_returned_source_count": 1,
+              "relevant_source_count": 1,
+              "relevant_source_ranks": [
+                1
+              ],
+              "returned_unique_source_count": 1,
+              "stale_citation_query_count": 0,
+              "stale_projection_query_count": 0,
+              "temporal_mismatch_count": 0,
+              "unverified_projection_query_count": 0
+            }
+          },
+          {
+            "environment_digest": "sha256:b965cf391983c88657eb68f8572aec6abbf3c94777b983858a7f99646d018fc9",
+            "golden_query_digest": "sha256:36a9cf2f600c1aa7c0ddc1d366aa9bc6b41f24c1e97b3c069140e034dd65f587",
+            "query_metrics": {
+              "citation": {
+                "applicability": "required",
+                "checked": 1,
+                "correctness_micros": 1000000,
+                "mismatch": 0,
+                "passed": 1,
+                "stale": 0
+              },
+              "confidence_mismatch_count": 0,
+              "contract_version": "gkos-retrieval-evaluation-query-metrics/1.0.0-draft.1",
+              "expected_top_k": 5,
+              "first_relevant_rank": 1,
+              "mrr_micros": 1000000,
+              "ndcg_at_k_micros": 1000000,
+              "policy": {
+                "policy_identity_field_count": 8,
+                "policy_leak_count": 0,
+                "policy_leak_rate_micros": 0
+              },
+              "query_id": "temporal-unknown-exclusion",
+              "query_metrics_digest": "sha256:0dbe6537a41b5a9e175a3b03ee39ea67debc715edc2726d6cfd4d6d95bab2672",
+              "recall_at_k_micros": 1000000,
+              "relevant_returned_source_count": 1,
+              "relevant_source_count": 1,
+              "relevant_source_ranks": [
+                1
+              ],
+              "returned_unique_source_count": 1,
+              "stale_citation_query_count": 0,
+              "stale_projection_query_count": 0,
+              "temporal_mismatch_count": 0,
+              "unverified_projection_query_count": 0
+            }
+          }
+        ],
+        "query_metrics_set_digest": "sha256:946a2246afa5ad66e4c09d87ec87f273ed55610ed1d628a19d2baa04ca1f684a",
+        "environment_aggregates": [
+          {
+            "environment_digest": "sha256:5495b321c00cf564fd80fc923733e987848aa966f02a9b25bf397fad5a3a17cd",
+            "query_count": 12,
+            "query_metrics_set_digest": "sha256:c74f984af6a5246bc9623a615d6e44342df8ad925dc118cadcec331e796009c8",
+            "aggregate_metrics": {
+              "aggregate_metrics_digest": "sha256:6390995717af0da0176df35b83f911b27974c27c7d1ace574972cc77567999e9",
+              "citation": {
+                "applicability": "required",
+                "checked": 12,
+                "correctness_micros": 1000000,
+                "mismatch": 0,
+                "passed": 12,
+                "stale": 0
+              },
+              "confidence_mismatch_count": 0,
+              "contract_version": "gkos-retrieval-evaluation-aggregate/1.0.0-draft.1",
+              "mrr_micros": 1000000,
+              "ndcg_at_k_micros": 1000000,
+              "policy": {
+                "policy_identity_field_count": 96,
+                "policy_leak_count": 0,
+                "policy_leak_rate_micros": 0
+              },
+              "query_count": 12,
+              "recall_at_k_micros": 1000000,
+              "stale_citation_query_count": 0,
+              "stale_citation_query_rate_micros": 0,
+              "stale_projection_query_count": 0,
+              "temporal_mismatch_count": 0,
+              "unverified_projection_query_count": 0,
+              "unverified_projection_rate_micros": 0
+            },
+            "environment_aggregate_digest": "sha256:ef0eaae1ccb00b7f6dda1118bf87ca8cb598b7cb24bc9ce7efb5257fdbbd5b6b"
+          },
+          {
+            "environment_digest": "sha256:b965cf391983c88657eb68f8572aec6abbf3c94777b983858a7f99646d018fc9",
+            "query_count": 12,
+            "query_metrics_set_digest": "sha256:03af3bb3b4eca806401ea8ef4026e24138f94284284bb01efbb7cb1b3158ed22",
+            "aggregate_metrics": {
+              "aggregate_metrics_digest": "sha256:48e1190911f2c801d35545dbd0bc10f9694389ab71ffa577b64ec591d041dec2",
+              "citation": {
+                "applicability": "required",
+                "checked": 12,
+                "correctness_micros": 1000000,
+                "mismatch": 0,
+                "passed": 12,
+                "stale": 0
+              },
+              "confidence_mismatch_count": 0,
+              "contract_version": "gkos-retrieval-evaluation-aggregate/1.0.0-draft.1",
+              "mrr_micros": 1000000,
+              "ndcg_at_k_micros": 1000000,
+              "policy": {
+                "policy_identity_field_count": 100,
+                "policy_leak_count": 0,
+                "policy_leak_rate_micros": 0
+              },
+              "query_count": 12,
+              "recall_at_k_micros": 1000000,
+              "stale_citation_query_count": 0,
+              "stale_citation_query_rate_micros": 0,
+              "stale_projection_query_count": 0,
+              "temporal_mismatch_count": 0,
+              "unverified_projection_query_count": 0,
+              "unverified_projection_rate_micros": 0
+            },
+            "environment_aggregate_digest": "sha256:b66ced8310c7c8206efe0c5a666d206ef834e58970cd19a6bd3798d87ff41357"
+          }
+        ],
+        "aggregate_metrics": {
+          "aggregate_metrics_digest": "sha256:debc54f17b45a12433d3aa1c406d08204d440a68ac7fbfe24aac022a22e572b9",
+          "citation": {
+            "applicability": "required",
+            "checked": 24,
+            "correctness_micros": 1000000,
+            "mismatch": 0,
+            "passed": 24,
+            "stale": 0
+          },
+          "confidence_mismatch_count": 0,
+          "contract_version": "gkos-retrieval-evaluation-aggregate/1.0.0-draft.1",
+          "mrr_micros": 1000000,
+          "ndcg_at_k_micros": 1000000,
+          "policy": {
+            "policy_identity_field_count": 196,
+            "policy_leak_count": 0,
+            "policy_leak_rate_micros": 0
+          },
+          "query_count": 24,
+          "recall_at_k_micros": 1000000,
+          "stale_citation_query_count": 0,
+          "stale_citation_query_rate_micros": 0,
+          "stale_projection_query_count": 0,
+          "temporal_mismatch_count": 0,
+          "unverified_projection_query_count": 0,
+          "unverified_projection_rate_micros": 0
+        },
+        "metrics_set_digest": "sha256:3ceee29d87bbdf1e6998dbd917c9d03323c33f953f0c7161ea174782a5c0cee2"
+      },
+      "relative_ndcg_budget": {
+        "numerator": 2,
+        "denominator": 100
+      },
+      "metric_contract_version": "gkos-retrieval-evaluation-metrics/1.0.0-draft.1",
+      "ndcg_discount_table_digest": "sha256:4639dcbd6902da38cb5fa44918736f10d69714453bf57da05ecc5783ba0684a9",
+      "metric_scale": 1000000,
+      "query_count": 24,
+      "maximum_expected_top_k": 5,
+      "normalized_golden_digest": "sha256:f3de2536a3a6496aff6b4d6e7afca522cfd5e5b28b7b907a9b9e4d39ac1c8a9f",
+      "environment_set_digest": "sha256:8269ad9e34b9704eaa724de4628d5667cb9ba4483ad08117a7a7549e202800c1",
+      "base_configuration_digest": "sha256:49a48b236c360bdce17cae6a8cd38bf7e46039746a5f78a7049c583ebb4e06e3",
+      "tuning_grid_digest": "sha256:c5a7d2fd2ea6f39153195dadc995671c9aa2e183cdf75c712a9c908af0870fc1",
+      "tuning_axes_digest": "sha256:9b3db48364ab3127c72f9e89c15eca4c21a56b254a69f759ce37b589be712dca",
+      "query_metrics_set_digest": "sha256:946a2246afa5ad66e4c09d87ec87f273ed55610ed1d628a19d2baa04ca1f684a",
+      "aggregate_metrics_digest": "sha256:debc54f17b45a12433d3aa1c406d08204d440a68ac7fbfe24aac022a22e572b9",
+      "metrics_set_digest": "sha256:3ceee29d87bbdf1e6998dbd917c9d03323c33f953f0c7161ea174782a5c0cee2",
+      "baseline_evaluation_digest": "sha256:0af5053fccb84ae0a9eb3b785a3760e20438300dd49d512c6ab480bfe299e433",
+      "baseline_digest": "sha256:0e46a9a83c55563ca33c41e98257455aca0c62ac46adb7b9b35c1abf6f3b9126"
+    },
+    "observation_report": {
+      "contract_version": "gkos-retrieval-evaluation-observation/1.0.0-draft.1",
+      "evaluation_digest": "sha256:0af5053fccb84ae0a9eb3b785a3760e20438300dd49d512c6ab480bfe299e433",
+      "fixed_sample_plan_digest": "sha256:669e872489c6defa9bac8ad7635c6f39d72772071b854cf403883fbec66e64cd",
+      "environment": {
+        "runtime": "node",
+        "runtime_version": "24.18.0-vendor",
+        "os": "windows",
+        "arch": "x64",
+        "sqlite_version": "sqlite-v3_50-custom",
+        "lexical_backend": "sqlite_lexical_scan",
+        "fts5_available": false,
+        "runner_class": "local"
+      },
+      "warmup_count": 1,
+      "sample_count": 3,
+      "query_latency_micros": {
+        "p50": 1000,
+        "p95": 1500,
+        "p99": 1600
+      },
+      "index_time_micros": 5000,
+      "update_time_micros": 2000,
+      "chunks_reprocessed": 1,
+      "chunks_reused": 2,
+      "observation_digest": "sha256:1c2b295c6ea41070e239828d0e1310dd70dae7c2cf4a8378710e47605cb7f5d7"
+    },
+    "projection_manifests": [
+      {
+        "contract_version": "gkos-retrieval/1.0.0-draft.2",
+        "projection_schema_version": 3,
+        "provenance_contract_version": "gkos-retrieval-provenance/1.0.0-draft.1",
+        "gkx_standard_commit": "a2a2a6ca5c4dac32c6d9dc985ed7460f5f4350c6",
+        "gkx_projection_profile": "gkx-2.3-validating-projection",
+        "engine_version": "2.1.2",
+        "vault_id": "retrieval-basic-v1",
+        "source_snapshot_digest": "sha256:853db759da339f401a4d8121d0d76a1492024fc336693ce6a42cce686228c6d9",
+        "configuration_digest": "sha256:d9aac88f8384ab1570e4f7af8734a51fcc10c801c802bb8ebb33b642eb3d870a",
+        "policy_digest": "sha256:5de8cecd6cee2ca5cd71a15c106d045281f1acd53b18832a7032b637b4681dd4",
+        "chunker_version": "gkos-heading-chunker/1",
+        "tokenizer_version": "gkos-ascii-whitespace/1",
+        "lexical_backend": "sqlite_lexical_scan",
+        "embedding_provider_id": "fixed-offline",
+        "embedding_model_id": "embedding-v1",
+        "embedding_dimensions": 2,
+        "candidate_source_count": 2,
+        "candidate_declaration_count": 0,
+        "represented_candidate_source_count": 2,
+        "candidate_chunk_count": 2,
+        "embedding_eligible_candidate_chunk_count": 1,
+        "projection_id": "retrieval:c0293ffedb06c10907a6ccca",
+        "projection_digest": "sha256:c0293ffedb06c10907a6ccca8de2be6de51eb6e7de5f29ab838273d2ec69e7c1"
+      },
+      {
+        "contract_version": "gkos-retrieval/1.0.0-draft.2",
+        "projection_schema_version": 3,
+        "provenance_contract_version": "gkos-retrieval-provenance/1.0.0-draft.1",
+        "gkx_standard_commit": "a2a2a6ca5c4dac32c6d9dc985ed7460f5f4350c6",
+        "gkx_projection_profile": "gkx-2.3-validating-projection",
+        "engine_version": "2.1.2",
+        "vault_id": "retrieval-temporal-v1",
+        "source_snapshot_digest": "sha256:8c117b1ba729a67805dfc7c0a567d8fc30975a1a95645caa43ea5708c13923a8",
+        "configuration_digest": "sha256:3d4de945e100fc4c74bfdcef5014eed86c892acc76ccb7e3952de40145a38d71",
+        "policy_digest": "sha256:95e9fd6abf9897ce720ab878eab2fd60220d76dad57e5f2a0949862df5a94158",
+        "chunker_version": "gkos-heading-chunker/1",
+        "tokenizer_version": "gkos-ascii-whitespace/1",
+        "lexical_backend": "sqlite_lexical_scan",
+        "embedding_provider_id": "fixed-offline",
+        "embedding_model_id": "embedding-v1",
+        "embedding_dimensions": 2,
+        "candidate_source_count": 2,
+        "candidate_declaration_count": 1,
+        "represented_candidate_source_count": 2,
+        "candidate_chunk_count": 2,
+        "embedding_eligible_candidate_chunk_count": 2,
+        "projection_id": "retrieval:1a1c2b87cc86787deacd8fcb",
+        "projection_digest": "sha256:1a1c2b87cc86787deacd8fcbaad191b027fd883279f5c315391ad54e29445e93"
+      }
+    ]
+  },
+  "metric_semantic_negative_matrix": [
+    {
+      "case_id": "query-id-overlong",
+      "target": "query_metrics",
+      "mutation": "query_id_129_ascii",
+      "expected_code": "GKX_EVAL_QUERY_METRICS_COORDINATE_INVALID"
+    },
+    {
+      "case_id": "top-k-zero",
+      "target": "query_metrics",
+      "mutation": "expected_top_k_zero",
+      "expected_code": "GKX_EVAL_QUERY_METRICS_TOP_K_INVALID"
+    },
+    {
+      "case_id": "returned-zero-with-citation",
+      "target": "query_metrics",
+      "mutation": "returned_unique_source_count_zero",
+      "expected_code": "GKX_EVAL_QUERY_CITATION_APPLICABILITY_RELATION_INVALID"
+    },
+    {
+      "case_id": "forged-citation-rate",
+      "target": "query_metrics",
+      "mutation": "citation_correctness_zero",
+      "expected_code": "GKX_EVAL_CITATION_CORRECTNESS_MISMATCH"
+    },
+    {
+      "case_id": "aggregate-failures-over-query-count",
+      "target": "aggregate_metrics",
+      "mutation": "temporal_mismatch_count_over_query_count",
+      "expected_code": "GKX_EVAL_AGGREGATE_QUERY_FAILURE_COUNT_INVALID"
+    },
+    {
+      "case_id": "unknown-field",
+      "target": "query_metrics",
+      "mutation": "add_unknown_field",
+      "expected_code": "GKX_EVAL_QUERY_METRICS_FIELDS_INVALID"
+    }
+  ],
+  "comparison_matrix": [
+    {
+      "case_id": "exact-two-percent-boundary",
+      "query_count": 50,
+      "baseline_perfect_query_count": 50,
+      "current_perfect_query_count": 49,
+      "expected_current_ndcg_at_k_micros": 980000,
+      "expected_status": "pass"
+    },
+    {
+      "case_id": "over-budget",
+      "query_count": 50,
+      "baseline_perfect_query_count": 50,
+      "current_perfect_query_count": 48,
+      "expected_current_ndcg_at_k_micros": 960000,
+      "expected_status": "regression"
+    },
+    {
+      "case_id": "zero-baseline",
+      "query_count": 50,
+      "baseline_perfect_query_count": 0,
+      "current_perfect_query_count": 0,
+      "expected_current_ndcg_at_k_micros": 0,
+      "expected_status": "pass"
+    },
+    {
+      "case_id": "environment-change",
+      "query_count": 50,
+      "baseline_perfect_query_count": 50,
+      "current_perfect_query_count": 49,
+      "expected_current_ndcg_at_k_micros": 980000,
+      "expected_status": "needs_human"
+    },
+    {
+      "case_id": "zero-hit-current",
+      "query_count": 50,
+      "baseline_perfect_query_count": 50,
+      "current_perfect_query_count": 49,
+      "current_zero_hit_query_count": 1,
+      "expected_current_ndcg_at_k_micros": 980000,
+      "expected_status": "pass",
+      "expected_reason": null
+    }
+  ],
+  "tune_matrix": [
+    {
+      "case_id": "shipped-24-query-grid",
+      "query_count": 24,
+      "maximum_expected_top_k": 5,
+      "expected_evaluated_candidate_count": 900,
+      "expected_excluded_candidate_count": 0,
+      "expected_query_evaluation_count": 21600,
+      "expected_conforming_candidate_count": 900,
+      "expected_candidate_evaluation_set_digest": "sha256:1f482ea54ff764d2c6c29bc8f6e2fb9b67e710706c3e1cf80db52c80b3304cd6",
+      "expected_selected_axes": {
+        "contract_version": "gkos-retrieval-evaluation-tuning-axes/1.0.0-draft.1",
+        "lexical_top_k": 5,
+        "mmr": true,
+        "mmr_lambda_micros": 700000,
+        "rrf_k": 60,
+        "semantic_top_k": 5,
+        "tuning_axes_digest": "sha256:9b3db48364ab3127c72f9e89c15eca4c21a56b254a69f759ce37b589be712dca"
+      },
+      "expected_selected_candidate_config_digest": "sha256:6d55a381e2fb74b87e0cfabe010ff168f155d7b12258c062fcc08372f1934050",
+      "expected_selected_candidate_evaluation_digest": "sha256:0af5053fccb84ae0a9eb3b785a3760e20438300dd49d512c6ab480bfe299e433",
+      "expected_tune_selection_digest": "sha256:7dc97fbdfe7c0d489622f17f1b1e0ed7b629c5d562f05a5c9b35ed6dd7a2d0e4"
+    },
+    {
+      "case_id": "max-top-k-80",
+      "query_count": 24,
+      "maximum_expected_top_k": 80,
+      "expected_evaluated_candidate_count": 36,
+      "expected_excluded_candidate_count": 864,
+      "expected_query_evaluation_count": 864
+    },
+    {
+      "case_id": "max-top-k-100",
+      "query_count": 24,
+      "maximum_expected_top_k": 100,
+      "expected_evaluated_candidate_count": 0,
+      "expected_excluded_candidate_count": 900,
+      "expected_query_evaluation_count": 0
+    }
+  ],
+  "portable_scalar_matrix": [
+    {
+      "case_id": "uppercase-valid-uid",
+      "kind": "uid",
+      "value": "019B2D14-4230-7DB7-87D4-7D81CFAEC932",
+      "schema_valid": true,
+      "runtime_valid": true
+    },
+    {
+      "case_id": "invalid-version-uid",
+      "kind": "uid",
+      "value": "019b2d14-4230-0db7-87d4-7d81cfaec932",
+      "schema_valid": false,
+      "runtime_valid": false
+    },
+    {
+      "case_id": "path-trailing-slash",
+      "kind": "source_path",
+      "value": "a/",
+      "schema_valid": false,
+      "runtime_valid": false
+    },
+    {
+      "case_id": "path-parent",
+      "kind": "source_path",
+      "value": "../x",
+      "schema_valid": false,
+      "runtime_valid": false
+    },
+    {
+      "case_id": "path-absolute",
+      "kind": "source_path",
+      "value": "/x",
+      "schema_valid": false,
+      "runtime_valid": false
+    },
+    {
+      "case_id": "path-double-slash",
+      "kind": "source_path",
+      "value": "a//b",
+      "schema_valid": false,
+      "runtime_valid": false
+    },
+    {
+      "case_id": "path-ads",
+      "kind": "source_path",
+      "value": "a:stream",
+      "schema_valid": false,
+      "runtime_valid": false
+    },
+    {
+      "case_id": "path-reserved",
+      "kind": "source_path",
+      "value": "CON",
+      "schema_valid": false,
+      "runtime_valid": false
+    },
+    {
+      "case_id": "path-trailing-dot",
+      "kind": "source_path",
+      "value": "a.",
+      "schema_valid": false,
+      "runtime_valid": false
+    },
+    {
+      "case_id": "path-trailing-space",
+      "kind": "source_path",
+      "value": "a ",
+      "schema_valid": false,
+      "runtime_valid": false
+    },
+    {
+      "case_id": "path-utf8-1024-bytes",
+      "kind": "source_path",
+      "encoding": "repeat_code_point",
+      "prefix": "a",
+      "code_point": 233,
+      "count": 510,
+      "suffix": ".md",
+      "schema_valid": true,
+      "runtime_valid": true
+    },
+    {
+      "case_id": "path-utf8-1025-bytes",
+      "kind": "source_path",
+      "encoding": "repeat_code_point",
+      "prefix": "aa",
+      "code_point": 233,
+      "count": 510,
+      "suffix": ".md",
+      "schema_valid": true,
+      "runtime_valid": false
+    }
+  ],
+  "opaque_identity_matrix": [
+    {
+      "case_id": "url-looking-unicode",
+      "encoding": "literal",
+      "value": "https://provider.invalid/路径 model",
+      "schema_valid": true,
+      "semantic_valid": true
+    },
+    {
+      "case_id": "internal-spaces",
+      "encoding": "literal",
+      "value": "  opaque identity preserved  ",
+      "schema_valid": true,
+      "semantic_valid": true
+    },
+    {
+      "case_id": "astral-512-utf16",
+      "encoding": "repeat_code_point",
+      "code_point": 128512,
+      "count": 256,
+      "schema_valid": true,
+      "semantic_valid": true
+    },
+    {
+      "case_id": "astral-514-utf16",
+      "encoding": "repeat_code_point",
+      "code_point": 128512,
+      "count": 257,
+      "schema_valid": true,
+      "semantic_valid": false
+    },
+    {
+      "case_id": "all-ecmascript-trim",
+      "encoding": "utf16_code_units",
+      "code_units": [
+        32,
+        160,
+        12288
+      ],
+      "schema_valid": false,
+      "semantic_valid": false
+    },
+    {
+      "case_id": "c0-control",
+      "encoding": "utf16_code_units",
+      "code_units": [
+        98,
+        97,
+        100,
+        0,
+        105,
+        100
+      ],
+      "schema_valid": false,
+      "semantic_valid": false
+    },
+    {
+      "case_id": "del-control",
+      "encoding": "utf16_code_units",
+      "code_units": [
+        98,
+        97,
+        100,
+        127,
+        105,
+        100
+      ],
+      "schema_valid": false,
+      "semantic_valid": false
+    },
+    {
+      "case_id": "lone-surrogate",
+      "encoding": "utf16_code_units",
+      "code_units": [
+        55296
+      ],
+      "schema_valid": true,
+      "semantic_valid": false
+    }
+  ],
+  "observation_version_matrix": [
+    {
+      "case_id": "single-ascii",
+      "encoding": "literal",
+      "value": "v",
+      "expected_valid": true
+    },
+    {
+      "case_id": "vendor-label",
+      "encoding": "literal",
+      "value": "sqlite-v3_50-custom",
+      "expected_valid": true
+    },
+    {
+      "case_id": "ascii-32",
+      "encoding": "repeat_code_point",
+      "code_point": 97,
+      "count": 32,
+      "expected_valid": true
+    },
+    {
+      "case_id": "ascii-33",
+      "encoding": "repeat_code_point",
+      "code_point": 97,
+      "count": 33,
+      "expected_valid": false
+    },
+    {
+      "case_id": "space",
+      "encoding": "literal",
+      "value": "bad version",
+      "expected_valid": false
+    },
+    {
+      "case_id": "non-ascii",
+      "encoding": "literal",
+      "value": "é",
+      "expected_valid": false
+    },
+    {
+      "case_id": "del",
+      "encoding": "utf16_code_units",
+      "code_units": [
+        98,
+        97,
+        100,
+        127
+      ],
+      "expected_valid": false
+    }
+  ],
+  "provider_semantic_matrix": [
+    {
+      "case_id": "reranker-items-0",
+      "kind": "reranker_item_boundary",
+      "item_count": 0,
+      "expected_valid": true
+    },
+    {
+      "case_id": "reranker-items-100",
+      "kind": "reranker_item_boundary",
+      "item_count": 100,
+      "expected_valid": true
+    },
+    {
+      "case_id": "reranker-items-101",
+      "kind": "reranker_item_boundary",
+      "item_count": 101,
+      "expected_valid": true
+    },
+    {
+      "case_id": "reranker-items-160",
+      "kind": "reranker_item_boundary",
+      "item_count": 160,
+      "expected_valid": true
+    },
+    {
+      "case_id": "reranker-items-161",
+      "kind": "reranker_item_boundary",
+      "item_count": 161,
+      "expected_valid": false,
+      "expected_code": "GKX_EVAL_FIXED_PROVIDER_OCCURRENCE_CELL_INVALID"
+    },
+    {
+      "case_id": "eval-query-count-30",
+      "kind": "query_count_boundary",
+      "query_count": 30,
+      "expected_valid": true,
+      "expected_tune_applicable": true
+    },
+    {
+      "case_id": "eval-query-count-31",
+      "kind": "query_count_boundary",
+      "query_count": 31,
+      "expected_valid": true,
+      "expected_tune_applicable": false
+    },
+    {
+      "case_id": "eval-query-count-256",
+      "kind": "query_count_boundary",
+      "query_count": 256,
+      "expected_valid": true,
+      "expected_tune_applicable": false
+    },
+    {
+      "case_id": "eval-query-count-257",
+      "kind": "query_count_boundary",
+      "query_count": 257,
+      "expected_valid": false,
+      "expected_code": "GKX_EVAL_FIXED_PROVIDER_SCOPE_COORDINATE_INVALID"
+    },
+    {
+      "case_id": "embedding-template-permutation",
+      "kind": "template_permutation",
+      "template_role": "embedding",
+      "query_count": 2,
+      "expected_code": "GKX_EVAL_FIXED_PROVIDER_QUERY_TEMPLATE_ORDER_INVALID"
+    },
+    {
+      "case_id": "reranker-template-permutation",
+      "kind": "template_permutation",
+      "template_role": "reranker",
+      "query_count": 2,
+      "expected_code": "GKX_EVAL_FIXED_PROVIDER_RERANK_COVERAGE_ORACLE_INVALID"
+    },
+    {
+      "case_id": "all-excluded-tune-index-replay",
+      "kind": "all_excluded_tune",
+      "query_count": 1,
+      "maximum_expected_top_k": 100,
+      "expected_query_evaluation_count": 0,
+      "expected_vector_provider_call_count": 1,
+      "expected_vector_provider_item_count": 1
+    },
+    {
+      "case_id": "fts-only-disabled-provider-roles",
+      "kind": "provider_role_conditional",
+      "lexical_backend": "sqlite_fts5",
+      "embedding_role": "disabled",
+      "reranker_role": "disabled",
+      "embedding_outcome": "success",
+      "reranker_outcome": "success",
+      "expected_valid": true,
+      "expected_eval_vector_call_count": 0,
+      "expected_eval_rerank_call_count": 0
+    },
+    {
+      "case_id": "hybrid-without-reranker",
+      "kind": "provider_role_conditional",
+      "lexical_backend": "sqlite_lexical_scan",
+      "embedding_role": "active",
+      "reranker_role": "disabled",
+      "embedding_outcome": "success",
+      "reranker_outcome": "success",
+      "expected_valid": true,
+      "expected_eval_vector_call_count": 2,
+      "expected_eval_rerank_call_count": 0
+    },
+    {
+      "case_id": "embedding-query-failure-degrades",
+      "kind": "provider_role_conditional",
+      "lexical_backend": "sqlite_lexical_scan",
+      "embedding_role": "active",
+      "reranker_role": "active",
+      "embedding_outcome": "failure",
+      "reranker_outcome": "success",
+      "expected_valid": true,
+      "expected_vector_stage": {
+        "state": "degraded",
+        "reason_codes": [
+          "VECTOR_UNAVAILABLE"
+        ]
+      }
+    },
+    {
+      "case_id": "reranker-failure-degrades",
+      "kind": "provider_role_conditional",
+      "lexical_backend": "sqlite_lexical_scan",
+      "embedding_role": "active",
+      "reranker_role": "active",
+      "embedding_outcome": "success",
+      "reranker_outcome": "failure",
+      "expected_valid": true,
+      "expected_reranker_stage": {
+        "state": "degraded",
+        "reason_codes": [
+          "RERANKER_UNAVAILABLE"
+        ]
+      }
+    },
+    {
+      "case_id": "embedding-failure-wrong-stage",
+      "kind": "provider_conditional_negative",
+      "base_case": "embedding-query-failure-degrades",
+      "mutation": "embedding_failure_stage_active",
+      "expected_code": "GKX_EVAL_FIXED_PROVIDER_STAGE_RELATION_INVALID"
+    },
+    {
+      "case_id": "embedding-failure-with-response",
+      "kind": "provider_conditional_negative",
+      "base_case": "embedding-query-failure-degrades",
+      "mutation": "embedding_failure_add_response",
+      "expected_code": "GKX_EVAL_FIXED_EMBED_OUTCOME_INVALID"
+    },
+    {
+      "case_id": "reranker-failure-wrong-error",
+      "kind": "provider_conditional_negative",
+      "base_case": "reranker-failure-degrades",
+      "mutation": "reranker_failure_clear_error",
+      "expected_code": "GKX_EVAL_FIXED_RERANK_OUTCOME_INVALID"
+    },
+    {
+      "case_id": "disabled-embedding-retains-template",
+      "kind": "provider_conditional_negative",
+      "base_case": "fts-only-disabled-provider-roles",
+      "mutation": "disabled_embedding_add_template",
+      "expected_code": "GKX_EVAL_FIXED_PROVIDER_DISABLED_EMBED_TEMPLATE_INVALID"
+    },
+    {
+      "case_id": "disabled-reranker-retains-oracle",
+      "kind": "provider_conditional_negative",
+      "base_case": "fts-only-disabled-provider-roles",
+      "mutation": "disabled_reranker_add_oracle",
+      "expected_code": "GKX_EVAL_FIXED_PROVIDER_DISABLED_RERANK_ORACLE_INVALID"
+    }
+  ],
+  "oracle_partition_matrix": [
+    {
+      "case_id": "authorized-endpoint",
+      "mutation": "none",
+      "expected_status": "metrics",
+      "expected_policy_identity_field_count": 16,
+      "expected_policy_leak_count": 0,
+      "expected_policy_leak_rate_micros": 0
+    },
+    {
+      "case_id": "forbidden-endpoint-occurrences",
+      "mutation": "classify_endpoint_forbidden",
+      "expected_status": "metrics",
+      "expected_policy_identity_field_count": 16,
+      "expected_policy_leak_count": 2,
+      "expected_policy_leak_rate_micros": 125000
+    },
+    {
+      "case_id": "cross-role-explicit-classification",
+      "mutation": "use_authorized_source_as_independently_authorized_endpoint",
+      "expected_status": "metrics",
+      "expected_policy_identity_field_count": 16,
+      "expected_policy_leak_count": 0,
+      "expected_policy_leak_rate_micros": 0
+    },
+    {
+      "case_id": "endpoint-only-in-source-class",
+      "mutation": "move_endpoint_to_authorized_source_ids",
+      "expected_status": "error",
+      "expected_code": "GKX_EVAL_ORACLE_CATALOG_PARTITION_INCOMPLETE"
+    },
+    {
+      "case_id": "source-only-in-endpoint-class",
+      "mutation": "move_source_to_authorized_endpoint_ids",
+      "expected_status": "error",
+      "expected_code": "GKX_EVAL_ORACLE_CATALOG_PARTITION_INCOMPLETE"
+    },
+    {
+      "case_id": "unknown-endpoint",
+      "mutation": "remove_endpoint_classification",
+      "expected_status": "error",
+      "expected_code": "GKX_EVAL_ORACLE_PARTITION_INCOMPLETE"
+    },
+    {
+      "case_id": "endpoint-authorization-overlap",
+      "mutation": "duplicate_endpoint_across_classes",
+      "expected_status": "error",
+      "expected_code": "GKX_EVAL_ORACLE_AUTHORIZATION_OVERLAP"
+    },
+    {
+      "case_id": "malformed-endpoint-scalar",
+      "mutation": "replace_endpoint_with_malformed_uid",
+      "expected_status": "error",
+      "expected_code": "GKX_EVAL_ORACLE_IDENTITY_INVALID"
+    },
+    {
+      "case_id": "null-lineage-and-absent-parent-zero",
+      "mutation": "none",
+      "expected_status": "metrics",
+      "expected_policy_identity_field_count": 16,
+      "expected_null_lineage_occurrences": 0,
+      "expected_absent_parent_occurrences": 0
+    }
+  ],
+  "environment_endpoint_partition_matrix": [
+    {
+      "case_id": "bundle-endpoint-source-only-omission",
+      "mutation": "omit_canonical_endpoint",
+      "expected_code": "GKX_EVAL_SOURCE_CORPUS_ENDPOINT_PARTITION_INVALID"
+    },
+    {
+      "case_id": "bundle-endpoint-extra-uid",
+      "mutation": "add_extra_authorized_endpoint",
+      "expected_code": "GKX_EVAL_SOURCE_CORPUS_ENDPOINT_PARTITION_INVALID"
+    },
+    {
+      "case_id": "bundle-endpoint-class-substitution",
+      "mutation": "move_authorized_endpoint_to_forbidden",
+      "expected_code": "GKX_EVAL_SOURCE_CORPUS_ENDPOINT_PARTITION_INVALID"
+    },
+    {
+      "case_id": "bundle-source-endpoint-only",
+      "mutation": "remove_source_class_keep_endpoint",
+      "expected_code": "GKX_EVAL_FIXTURE_CATALOG_SOURCE_PARTITION_INVALID"
+    }
+  ],
+  "reviewed_bundle_negative_matrix": [
+    {
+      "case_id": "reviewed-companion-digest-splice",
+      "target": "reviewed_bundle",
+      "mutation": "top_source_corpus_digest",
+      "stage": "executable",
+      "expected_code": "GKX_EVAL_REVIEWED_BUNDLE_RELATION_INVALID"
+    },
+    {
+      "case_id": "reviewed-origin-public-result-splice",
+      "target": "reviewed_bundle",
+      "mutation": "origin_public_result_digest",
+      "stage": "executable",
+      "expected_code": "GKX_EVAL_REVIEWED_BUNDLE_RELATION_INVALID"
+    },
+    {
+      "case_id": "reviewed-origin-provider-splice",
+      "target": "reviewed_bundle",
+      "mutation": "origin_provider_scenario_digest",
+      "stage": "executable",
+      "expected_code": "GKX_EVAL_REVIEWED_BUNDLE_RELATION_INVALID"
+    },
+    {
+      "case_id": "reviewed-origin-request-splice",
+      "target": "reviewed_bundle",
+      "mutation": "origin_reranker_request_digest",
+      "stage": "executable",
+      "expected_code": "GKX_EVAL_REVIEWED_BUNDLE_RELATION_INVALID"
+    },
+    {
+      "case_id": "reviewed-origin-counter-splice",
+      "target": "reviewed_bundle",
+      "mutation": "origin_source_read_count",
+      "stage": "executable",
+      "expected_code": "GKX_EVAL_REVIEWED_BUNDLE_RELATION_INVALID"
+    },
+    {
+      "case_id": "reviewed-origin-schedule-splice",
+      "target": "reviewed_bundle",
+      "mutation": "origin_eval_schedule_digest",
+      "stage": "executable",
+      "expected_code": "GKX_EVAL_REVIEWED_BUNDLE_RELATION_INVALID"
+    },
+    {
+      "case_id": "reviewed-origin-omission",
+      "target": "reviewed_bundle",
+      "mutation": "omit_origin",
+      "stage": "shallow",
+      "expected_code": "GKX_EVAL_REVIEWED_BUNDLE_COORDINATE_INVALID"
+    },
+    {
+      "case_id": "reviewed-origin-duplicate",
+      "target": "reviewed_bundle",
+      "mutation": "duplicate_origin",
+      "stage": "shallow",
+      "expected_code": "GKX_EVAL_REVIEWED_RESULT_ORIGIN_INVALID"
+    },
+    {
+      "case_id": "reviewed-origin-order",
+      "target": "reviewed_bundle",
+      "mutation": "reverse_origins",
+      "stage": "shallow",
+      "expected_code": "GKX_EVAL_REVIEWED_RESULT_ORIGIN_INVALID"
+    },
+    {
+      "case_id": "reviewed-baseline-axes-substitution",
+      "target": "baseline",
+      "mutation": "selected_axes_rrf_30",
+      "stage": "executable",
+      "expected_code": "GKX_EVAL_REVIEWED_SCHEDULE_BINDING_INVALID"
+    },
+    {
+      "case_id": "reviewed-baseline-grid-substitution",
+      "target": "baseline",
+      "mutation": "reverse_grid_rrf",
+      "stage": "executable",
+      "expected_code": "GKX_EVAL_TUNING_GRID_MISMATCH"
+    },
+    {
+      "case_id": "reviewed-hidden-result-splice",
+      "target": "metric_fixture",
+      "mutation": "replace_reviewed_result_with_forbidden_result",
+      "stage": "executable",
+      "expected_code": "GKX_EVAL_REVIEWED_PUBLIC_RESULT_INVALID"
+    },
+    {
+      "case_id": "reviewed-future-result-splice",
+      "target": "metric_fixture",
+      "mutation": "replace_preboundary_result_with_successor_result",
+      "stage": "executable",
+      "expected_code": "GKX_EVAL_REVIEWED_PUBLIC_RESULT_INVALID"
+    },
+    {
+      "case_id": "reviewed-absent-source-class-substitution",
+      "target": "metric_fixture",
+      "mutation": "move_absent_source_to_forbidden",
+      "stage": "executable",
+      "expected_code": "GKX_EVAL_RELEVANCE_INVALID"
+    },
+    {
+      "case_id": "reviewed-absent-endpoint-extra",
+      "target": "metric_fixture",
+      "mutation": "add_absent_endpoint",
+      "stage": "executable",
+      "expected_code": "GKX_EVAL_REVIEWED_TEMPORAL_ABSENT_RESULT_INVALID"
+    },
+    {
+      "case_id": "reviewed-absent-index-request-substitution",
+      "target": "absent_index_receipt",
+      "mutation": "replace_request_id",
+      "stage": "host_receipt",
+      "expected_code": "GKX_EVAL_SOURCE_CORPUS_PROVIDER_INDEX_BIJECTION_INVALID"
+    },
+    {
+      "case_id": "reviewed-absent-index-input-order",
+      "target": "absent_index_receipt",
+      "mutation": "reverse_present_inputs",
+      "stage": "host_receipt",
+      "expected_code": "GKX_EVAL_SOURCE_CORPUS_PROVIDER_INDEX_BIJECTION_INVALID"
+    },
+    {
+      "case_id": "reviewed-absent-index-response-omission",
+      "target": "absent_index_receipt",
+      "mutation": "omit_response",
+      "stage": "host_receipt",
+      "expected_code": "GKX_EVAL_SOURCE_CORPUS_PROVIDER_VECTOR_BINDING_INVALID"
+    },
+    {
+      "case_id": "reviewed-pair-public-view-splice",
+      "target": "reviewed_bundle",
+      "mutation": "pair_public_view_digest",
+      "stage": "executable",
+      "expected_code": "GKX_EVAL_REVIEWED_BUNDLE_RELATION_INVALID"
+    }
+  ],
+  "fixture_files": {
+    "fixed_provider": {
+      "file": "fixed-provider.json",
+      "digest": "sha256:7c28de4be4ad24a116d4f07d9b86ea9b38ab3298700ee1563f3b861026dd5b41"
+    },
+    "fixture_catalog": {
+      "file": "fixture-catalog.json",
+      "digest": "sha256:45addb4ab8b9634ffd22f2df099bc027a007130c11f109cb03c4e04ca38b5e16"
+    },
+    "source_corpus": {
+      "file": "source-corpus.json",
+      "digest": "sha256:1d99bb7d9c2522d71f7c2e2633517753098be6f2698586b248f18d99affc285d"
+    },
+    "metric_computation": {
+      "file": "metric-computation-fixture.json",
+      "digest": "sha256:6ea3a6b44d50efe60c2215a6bb30db60a5c29133474ddb0458c5ac4517c35e36"
+    },
+    "tune_priority": {
+      "file": "tune-priority-fixture.json",
+      "digest": "sha256:d3cf3fc9aee519d39c3ef04df1edf57d581001820bcdb94f4b2b5125f875ad03"
+    },
+    "reviewed_bundle": {
+      "file": "reviewed-bundle.json",
+      "digest": "sha256:2a49075651e2a4b19e813e59a3d4546cc602f0e86c56d1e048f94d917cd6df2a"
+    }
+  }
+}

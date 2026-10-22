@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gkos.example/contracts/retrieval/gkos-retrieval-evaluation-1.0.0-draft.1/tuning-axes.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["contract_version", "rrf_k", "mmr", "mmr_lambda_micros", "semantic_top_k", "lexical_top_k", "tuning_axes_digest"],
+  "properties": {
+    "contract_version": { "const": "gkos-retrieval-evaluation-tuning-axes/1.0.0-draft.1" },
+    "rrf_k": { "enum": [5, 10, 20, 30, 60, 100] },
+    "mmr": { "type": "boolean" },
+    "mmr_lambda_micros": { "enum": [null, 0, 300000, 500000, 700000, 1000000] },
+    "semantic_top_k": { "enum": [5, 10, 20, 40, 80] },
+    "lexical_top_k": { "enum": [5, 10, 20, 40, 80] },
+    "tuning_axes_digest": { "$ref": "common.schema.json#/$defs/sha256" }
+  },
+  "allOf": [
+    { "if": { "properties": { "mmr": { "const": false } } }, "then": { "properties": { "mmr_lambda_micros": { "type": "null" } } }, "else": { "properties": { "mmr_lambda_micros": { "type": "integer" } } } }
+  ]
+}

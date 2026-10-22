@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gkos.example/contracts/retrieval/gkos-retrieval-evaluation-1.0.0-draft.1/base-configuration.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["contract_version", "effective_non_tunable_configuration_digest", "base_configuration_digest"],
+  "properties": {
+    "contract_version": { "const": "gkos-retrieval-evaluation-base-configuration/1.0.0-draft.1" },
+    "effective_non_tunable_configuration_digest": { "$ref": "common.schema.json#/$defs/sha256" },
+    "base_configuration_digest": { "$ref": "common.schema.json#/$defs/sha256" }
+  }
+}

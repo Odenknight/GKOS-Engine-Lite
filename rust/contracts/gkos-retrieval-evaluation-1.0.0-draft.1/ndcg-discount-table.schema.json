@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gkos.example/contracts/retrieval/gkos-retrieval-evaluation-1.0.0-draft.1/ndcg-discount-table.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["contract_version", "ndcg_discount_scale", "rank_count", "ndcg_discount_scaled", "generator", "table_digest"],
+  "properties": {
+    "contract_version": { "const": "gkos-retrieval-evaluation-ndcg-table/1.0.0-draft.1" },
+    "ndcg_discount_scale": { "const": 1000000000000 },
+    "rank_count": { "const": 100 },
+    "ndcg_discount_scaled": { "type": "array", "minItems": 100, "maxItems": 100, "items": { "type": "integer", "minimum": 1, "maximum": 1000000000000 } },
+    "generator": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["arithmetic", "precision", "rounding", "formula"],
+      "properties": {
+        "arithmetic": { "const": "decimal" },
+        "precision": { "const": 80 },
+        "rounding": { "const": "ROUND_HALF_UP" },
+        "formula": { "const": "ndcg_discount_scale * ln(2) / ln(rank + 1)" }
+      }
+    },
+    "table_digest": { "$ref": "common.schema.json#/$defs/sha256" }
+  }
+}

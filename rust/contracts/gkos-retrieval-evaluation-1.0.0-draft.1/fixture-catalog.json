@@ -1,0 +1,152 @@
+{
+  "contract_version": "gkos-retrieval-evaluation-fixture-catalog/1.0.0-draft.1",
+  "fixture_catalog_id": "retrieval-evaluation-v1",
+  "entries": [
+    {
+      "vault_fixture": "retrieval-basic-v1",
+      "corpus_fixture_digest": "sha256:7183c8cea2658cdc00abf4cbbd4b002eb1f5b72f880db227f6a2bf379a1a039c",
+      "source_snapshot": {
+        "contract_version": "gkos-retrieval-evaluation-source-snapshot/1.0.0-draft.1",
+        "source_observations": [
+          {
+            "source_id": "019b2d14-4230-7db7-87d4-7d81cfaec932",
+            "source_path": "policy/agent-writing.md",
+            "source_digest": "sha256:de1f87b8d8e882e9fc1737c44a78015053f30d4a895a2eb9f76376c2eaebdc67"
+          },
+          {
+            "source_id": "019b2d14-4230-7db7-87d4-7d81cfaec999",
+            "source_path": "private/hidden-secret.md",
+            "source_digest": "sha256:96a22ce91143b19bee5e632181a7442bcf9aa03c918af39125b487867441e75d"
+          }
+        ],
+        "source_snapshot_digest": "sha256:853db759da339f401a4d8121d0d76a1492024fc336693ce6a42cce686228c6d9"
+      },
+      "runtime_policy_inputs": {
+        "contract_version": "gkos-retrieval-evaluation-runtime-policy-inputs/1.0.0-draft.1",
+        "source_discoverability": [
+          {
+            "source_id": "019b2d14-4230-7db7-87d4-7d81cfaec999",
+            "source_path": "private/hidden-secret.md",
+            "discoverable": false
+          },
+          {
+            "source_id": "019b2d14-4230-7db7-87d4-7d81cfaec932",
+            "source_path": "policy/agent-writing.md",
+            "discoverable": true
+          }
+        ],
+        "chunk_discoverability": [
+          {
+            "chunk_id": "sha256:528077b292e0ef8849dd29ebd2b018bef827ad3c96084b2bf1879c4286478359",
+            "source_id": "019b2d14-4230-7db7-87d4-7d81cfaec999",
+            "discoverable": false
+          },
+          {
+            "chunk_id": "sha256:64c2c69aea3bc8882faa1d2ad09683664ab38e68b199839bb8a2e803fe23a035",
+            "source_id": "019b2d14-4230-7db7-87d4-7d81cfaec932",
+            "discoverable": true
+          }
+        ],
+        "runtime_policy_inputs_digest": "sha256:5de8cecd6cee2ca5cd71a15c106d045281f1acd53b18832a7032b637b4681dd4"
+      },
+      "evaluation_audit_oracle": {
+        "contract_version": "gkos-retrieval-evaluation-audit-oracle/1.0.0-draft.1",
+        "authorized_source_ids": [
+          "019b2d14-4230-7db7-87d4-7d81cfaec932"
+        ],
+        "authorized_source_paths": [
+          "policy/agent-writing.md"
+        ],
+        "forbidden_source_ids": [
+          "019b2d14-4230-7db7-87d4-7d81cfaec999"
+        ],
+        "forbidden_source_paths": [
+          "private/hidden-secret.md"
+        ],
+        "authorized_endpoint_ids": [],
+        "forbidden_endpoint_ids": [],
+        "evaluation_audit_oracle_digest": "sha256:2d2199b91f86678e411dbb4d6ea510ab14f69f7d1d98d318f2069d9a76708f68"
+      },
+      "fixed_provider_transcript_digest": "sha256:7c28de4be4ad24a116d4f07d9b86ea9b38ab3298700ee1563f3b861026dd5b41",
+      "embedding_provider_scenario_id": "embedding-success",
+      "reranker_provider_scenario_id": "reranker-success",
+      "backend": "sqlite_lexical_scan",
+      "entry_digest": "sha256:baf36768e4520041082ecb818c605c53a72663991ef90cf6e5b4c71f1b975794",
+      "source_corpus_file": "source-corpus.json"
+    },
+    {
+      "vault_fixture": "retrieval-temporal-v1",
+      "corpus_fixture_digest": "sha256:b0fb7a5371896377cd51beaa239900a3d312e511a60dca63aca0beccae488cb0",
+      "source_snapshot": {
+        "contract_version": "gkos-retrieval-evaluation-source-snapshot/1.0.0-draft.1",
+        "source_observations": [
+          {
+            "source_id": "019b2d14-4230-7db7-87d4-7d81cfaec933",
+            "source_path": "policy/historical.md",
+            "source_digest": "sha256:aea9b2cf5ac60b337fd4fa33a0b975586338a98c654b461db01a0ac7222666bf"
+          },
+          {
+            "source_id": "019b2d14-4230-7db7-87d4-7d81cfaec934",
+            "source_path": "policy/successor.markdown",
+            "source_digest": "sha256:743b5bfe3d1618d0e41b8aeb92332ca93c132ef85810d886f376b81ad33760a0"
+          }
+        ],
+        "source_snapshot_digest": "sha256:8c117b1ba729a67805dfc7c0a567d8fc30975a1a95645caa43ea5708c13923a8"
+      },
+      "runtime_policy_inputs": {
+        "contract_version": "gkos-retrieval-evaluation-runtime-policy-inputs/1.0.0-draft.1",
+        "source_discoverability": [
+          {
+            "source_id": "019b2d14-4230-7db7-87d4-7d81cfaec933",
+            "source_path": "policy/historical.md",
+            "discoverable": true
+          },
+          {
+            "source_id": "019b2d14-4230-7db7-87d4-7d81cfaec934",
+            "source_path": "policy/successor.markdown",
+            "discoverable": true
+          }
+        ],
+        "chunk_discoverability": [
+          {
+            "chunk_id": "sha256:3755350409797f7f9851b7c8bc72c3744797fa97a8db7331f7e7373b19c7610e",
+            "source_id": "019b2d14-4230-7db7-87d4-7d81cfaec934",
+            "discoverable": true
+          },
+          {
+            "chunk_id": "sha256:ed94554726db01a34e1cc6746697a5e7fbf0f4d08a58a9ffa184acc5c57175c0",
+            "source_id": "019b2d14-4230-7db7-87d4-7d81cfaec933",
+            "discoverable": true
+          }
+        ],
+        "runtime_policy_inputs_digest": "sha256:95e9fd6abf9897ce720ab878eab2fd60220d76dad57e5f2a0949862df5a94158"
+      },
+      "evaluation_audit_oracle": {
+        "contract_version": "gkos-retrieval-evaluation-audit-oracle/1.0.0-draft.1",
+        "authorized_source_ids": [
+          "019b2d14-4230-7db7-87d4-7d81cfaec933",
+          "019b2d14-4230-7db7-87d4-7d81cfaec934"
+        ],
+        "authorized_source_paths": [
+          "policy/historical.md",
+          "policy/successor.markdown"
+        ],
+        "forbidden_source_ids": [],
+        "forbidden_source_paths": [],
+        "authorized_endpoint_ids": [
+          "019b2d14-4230-7db7-87d4-7d81cfaec933",
+          "019b2d14-4230-7db7-87d4-7d81cfaec934"
+        ],
+        "forbidden_endpoint_ids": [],
+        "evaluation_audit_oracle_digest": "sha256:8dfce925050f822d30df13f57253693535c4c58d3632eaefacf3bb759806385a"
+      },
+      "fixed_provider_transcript_digest": "sha256:7c28de4be4ad24a116d4f07d9b86ea9b38ab3298700ee1563f3b861026dd5b41",
+      "embedding_provider_scenario_id": "embedding-success",
+      "reranker_provider_scenario_id": "reranker-success",
+      "backend": "sqlite_lexical_scan",
+      "entry_digest": "sha256:707b6eff99f91ed10ab7a801f7c2d0307a3964b7fb8b6ec940134997cb41f58c",
+      "source_corpus_file": "source-corpus.json"
+    }
+  ],
+  "catalog_digest": "sha256:45addb4ab8b9634ffd22f2df099bc027a007130c11f109cb03c4e04ca38b5e16"
+}

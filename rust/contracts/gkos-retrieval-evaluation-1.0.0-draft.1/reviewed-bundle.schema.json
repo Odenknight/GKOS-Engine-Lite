@@ -1,0 +1,138 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gkos.example/contracts/retrieval/gkos-retrieval-evaluation-1.0.0-draft.1/reviewed-bundle.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract_version", "conformance_file", "golden_toml_file", "source_corpus_file", "fixture_catalog_file",
+    "fixed_provider_file", "metric_computation_file", "normalized_golden_digest", "source_corpus_digest",
+    "fixture_catalog_digest", "fixed_provider_digest", "environment_set_digest", "baseline_digest",
+    "metric_computation_fixture_digest", "projection_manifest_set_digest", "result_origins",
+    "result_origin_set_digest", "temporal_absent_corpora", "temporal_noninterference_pairs", "reviewed_bundle_digest"
+  ],
+  "properties": {
+    "contract_version": { "const": "gkos-retrieval-evaluation-reviewed-bundle/1.0.0-draft.1" },
+    "conformance_file": { "const": "conformance-fixture.json" },
+    "golden_toml_file": { "const": "golden-fixture.toml" },
+    "source_corpus_file": { "const": "source-corpus.json" },
+    "fixture_catalog_file": { "const": "fixture-catalog.json" },
+    "fixed_provider_file": { "const": "fixed-provider.json" },
+    "metric_computation_file": { "const": "metric-computation-fixture.json" },
+    "normalized_golden_digest": { "$ref": "common.schema.json#/$defs/sha256" },
+    "source_corpus_digest": { "$ref": "common.schema.json#/$defs/sha256" },
+    "fixture_catalog_digest": { "$ref": "common.schema.json#/$defs/sha256" },
+    "fixed_provider_digest": { "$ref": "common.schema.json#/$defs/sha256" },
+    "environment_set_digest": { "$ref": "common.schema.json#/$defs/sha256" },
+    "baseline_digest": { "$ref": "common.schema.json#/$defs/sha256" },
+    "metric_computation_fixture_digest": { "$ref": "common.schema.json#/$defs/sha256" },
+    "projection_manifest_set_digest": { "$ref": "common.schema.json#/$defs/sha256" },
+    "result_origins": { "type": "array", "minItems": 24, "maxItems": 24, "items": { "$ref": "#/$defs/resultOrigin" } },
+    "result_origin_set_digest": { "$ref": "common.schema.json#/$defs/sha256" },
+    "temporal_absent_corpora": { "type": "array", "minItems": 1, "maxItems": 1, "items": { "$ref": "#/$defs/absentCorpus" } },
+    "temporal_noninterference_pairs": { "type": "array", "minItems": 1, "maxItems": 1, "items": { "$ref": "#/$defs/temporalPair" } },
+    "reviewed_bundle_digest": { "$ref": "common.schema.json#/$defs/sha256" }
+  },
+  "$defs": {
+    "projectionId": { "type": "string", "pattern": "^retrieval:[0-9a-f]{24}$" },
+    "counterEnvelope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contract_version", "authority_input_snapshot_count", "source_read_count", "retrieval_sql_stage_count",
+        "vector_provider_call_count", "vector_provider_item_count", "rerank_provider_call_count",
+        "rerank_provider_item_count", "ranking_call_count", "confidence_call_count", "citation_verification_count",
+        "metric_computation_count", "counter_digest"
+      ],
+      "properties": {
+        "contract_version": { "const": "gkos-retrieval-evaluation-query-attempt-counters/1.0.0-draft.1" },
+        "authority_input_snapshot_count": { "$ref": "common.schema.json#/$defs/safeCount" },
+        "source_read_count": { "$ref": "common.schema.json#/$defs/safeCount" },
+        "retrieval_sql_stage_count": { "$ref": "common.schema.json#/$defs/safeCount" },
+        "vector_provider_call_count": { "$ref": "common.schema.json#/$defs/safeCount" },
+        "vector_provider_item_count": { "$ref": "common.schema.json#/$defs/safeCount" },
+        "rerank_provider_call_count": { "$ref": "common.schema.json#/$defs/safeCount" },
+        "rerank_provider_item_count": { "$ref": "common.schema.json#/$defs/safeCount" },
+        "ranking_call_count": { "$ref": "common.schema.json#/$defs/safeCount" },
+        "confidence_call_count": { "$ref": "common.schema.json#/$defs/safeCount" },
+        "citation_verification_count": { "$ref": "common.schema.json#/$defs/safeCount" },
+        "metric_computation_count": { "$ref": "common.schema.json#/$defs/safeCount" },
+        "counter_digest": { "$ref": "common.schema.json#/$defs/sha256" }
+      }
+    },
+    "resultOrigin": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contract_version", "query_id", "golden_query_digest", "metric_case_id", "metric_case_digest", "vault_fixture",
+        "environment_digest", "environment_member_digest", "catalog_entry_digest", "corpus_fixture_digest",
+        "manifest_projection_id", "manifest_projection_digest", "result_projection_id", "result_projection_digest",
+        "lexical_backend", "provider_scenario_digest", "eval_schedule_digest", "eval_occurrence_ordinal",
+        "embedding_query_template_digest", "reranker_query_oracle_digest", "reranker_request_digest",
+        "query_attempt_counters", "public_result_digest", "query_metrics_digest", "origin_digest"
+      ],
+      "properties": {
+        "contract_version": { "const": "gkos-retrieval-evaluation-result-origin/1.0.0-draft.1" },
+        "query_id": { "$ref": "common.schema.json#/$defs/evaluationId" },
+        "golden_query_digest": { "$ref": "common.schema.json#/$defs/sha256" },
+        "metric_case_id": { "$ref": "common.schema.json#/$defs/evaluationId" },
+        "metric_case_digest": { "$ref": "common.schema.json#/$defs/sha256" },
+        "vault_fixture": { "$ref": "common.schema.json#/$defs/evaluationId" },
+        "environment_digest": { "$ref": "common.schema.json#/$defs/sha256" },
+        "environment_member_digest": { "$ref": "common.schema.json#/$defs/sha256" },
+        "catalog_entry_digest": { "$ref": "common.schema.json#/$defs/sha256" },
+        "corpus_fixture_digest": { "$ref": "common.schema.json#/$defs/sha256" },
+        "manifest_projection_id": { "$ref": "#/$defs/projectionId" },
+        "manifest_projection_digest": { "$ref": "common.schema.json#/$defs/sha256" },
+        "result_projection_id": { "$ref": "#/$defs/projectionId" },
+        "result_projection_digest": { "$ref": "common.schema.json#/$defs/sha256" },
+        "lexical_backend": { "enum": ["sqlite_fts5", "sqlite_lexical_scan"] },
+        "provider_scenario_digest": { "$ref": "common.schema.json#/$defs/sha256" },
+        "eval_schedule_digest": { "$ref": "common.schema.json#/$defs/sha256" },
+        "eval_occurrence_ordinal": { "type": "integer", "minimum": 1, "maximum": 256 },
+        "embedding_query_template_digest": { "$ref": "common.schema.json#/$defs/sha256" },
+        "reranker_query_oracle_digest": { "$ref": "common.schema.json#/$defs/sha256" },
+        "reranker_request_digest": { "$ref": "common.schema.json#/$defs/sha256" },
+        "query_attempt_counters": { "$ref": "#/$defs/counterEnvelope" },
+        "public_result_digest": { "$ref": "common.schema.json#/$defs/sha256" },
+        "query_metrics_digest": { "$ref": "common.schema.json#/$defs/sha256" },
+        "origin_digest": { "$ref": "common.schema.json#/$defs/sha256" }
+      }
+    },
+    "absentCorpus": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["contract_version", "vault_fixture", "present_corpus_fixture_digest", "removed_source_id",
+        "removed_source_path", "removed_source_digest", "source_files", "absent_corpus_fixture_digest"],
+      "properties": {
+        "contract_version": { "const": "gkos-retrieval-evaluation-temporal-absent-corpus/1.0.0-draft.1" },
+        "vault_fixture": { "$ref": "common.schema.json#/$defs/evaluationId" },
+        "present_corpus_fixture_digest": { "$ref": "common.schema.json#/$defs/sha256" },
+        "removed_source_id": { "$ref": "common.schema.json#/$defs/uid" },
+        "removed_source_path": { "$ref": "common.schema.json#/$defs/sourcePath" },
+        "removed_source_digest": { "$ref": "common.schema.json#/$defs/sha256" },
+        "source_files": { "type": "array", "minItems": 1, "maxItems": 4096,
+          "items": { "$ref": "source-corpus.schema.json#/$defs/sourceFile" } },
+        "absent_corpus_fixture_digest": { "$ref": "common.schema.json#/$defs/sha256" }
+      }
+    },
+    "temporalPair": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["contract_version", "pair_id", "present_metric_case_id", "absent_metric_case_id", "query_id", "as_of",
+        "temporal_absent_corpus_fixture_digest", "public_view_digest", "query_metrics_digest", "query_counter_digest", "pair_digest"],
+      "properties": {
+        "contract_version": { "const": "gkos-retrieval-evaluation-temporal-noninterference-pair/1.0.0-draft.1" },
+        "pair_id": { "$ref": "common.schema.json#/$defs/evaluationId" },
+        "present_metric_case_id": { "$ref": "common.schema.json#/$defs/evaluationId" },
+        "absent_metric_case_id": { "$ref": "common.schema.json#/$defs/evaluationId" },
+        "query_id": { "$ref": "common.schema.json#/$defs/evaluationId" },
+        "as_of": { "$ref": "common.schema.json#/$defs/canonicalTime" },
+        "temporal_absent_corpus_fixture_digest": { "$ref": "common.schema.json#/$defs/sha256" },
+        "public_view_digest": { "$ref": "common.schema.json#/$defs/sha256" },
+        "query_metrics_digest": { "$ref": "common.schema.json#/$defs/sha256" },
+        "query_counter_digest": { "$ref": "common.schema.json#/$defs/sha256" },
+        "pair_digest": { "$ref": "common.schema.json#/$defs/sha256" }
+      }
+    }
+  }
+}

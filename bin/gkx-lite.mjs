@@ -1,22 +1,22 @@
 #!/usr/bin/env node
 /**
- * okf-lite — the GKOS-Engine-Lite CLI.
+ * gkx-lite — the GKOS-Engine-Lite CLI.
  *
  * A thin, faithful pass-through wrapper around the installed `gkos-engine`
  * package's own CLI (node_modules/gkos-engine/bin/gkx.mjs). Same delegated
  * commands, same behavior, same output, byte for byte:
  *
- *   okf-lite validate <dir>
- *   okf-lite validate --kb-path <path> [--schema <path-or-id>] [--format text|json]
- *   okf-lite index --kb-path <path> [--schema <path-or-id>] [--strict]
- *   okf-lite assess   <dir> [--json]
- *   okf-lite search   <query> --kb-path <dir> [--limit <n>] [--as-of <GKX timestamp>]
- *   okf-lite graph    <dir> -o graph.json [--watch]
- *   okf-lite export graphiti <dir> --episodes episodes.json [--group-id <ns>]
+ *   gkx-lite validate <dir>
+ *   gkx-lite validate --kb-path <path> [--schema <path-or-id>] [--format text|json]
+ *   gkx-lite index --kb-path <path> [--schema <path-or-id>] [--strict]
+ *   gkx-lite assess   <dir> [--json]
+ *   gkx-lite search   <query> --kb-path <dir> [--limit <n>] [--as-of <GKX timestamp>]
+ *   gkx-lite graph    <dir> -o graph.json [--watch]
+ *   gkx-lite export graphiti <dir> --episodes episodes.json [--group-id <ns>]
  *
  * GKOS-Engine-Lite does not reimplement the engine — it re-exports it. This
  * file only overrides the --help / no-args banner, so that GKOS-Engine-Lite
- * presents itself as OKF+ Notes (2.2) + Agent-Ready (flat 2.3) tooling for
+ * presents itself as GKX Notes (2.2) + Agent-Ready (flat 2.3) tooling for
  * everyday vaults, rather than describing the full engine's Machine Dialect
  * / governance-sidecar surface (which the underlying engine can still read
  * and report on honestly — GKOS-Engine-Lite just doesn't advertise it).
@@ -49,26 +49,26 @@ const LITE_VERSION = JSON.parse(
   readFileSync(new URL("../package.json", import.meta.url), "utf8"),
 ).version;
 
-const BANNER = `okf-lite (GKOS-Engine-Lite) v${LITE_VERSION}
-GKOS-Engine-Lite — OKF+ Notes (2.2) + Agent-Ready (flat 2.3) tooling
+const BANNER = `gkx-lite (GKOS-Engine-Lite) v${LITE_VERSION}
+GKOS-Engine-Lite — GKX Notes (2.2) + Agent-Ready (flat 2.3) tooling
 
 A thin command-line wrapper around gkos-engine for individuals and small,
 everyday vaults of Markdown notes — no Obsidian required.
 
 Usage:
-  okf-lite validate <dir>                                  schema/identity/lineage diagnostics; non-zero exit on error
-  okf-lite validate --kb-path <path> [--schema <path-or-id>] [--format text|json]
-  okf-lite index --kb-path <path> [--schema <path-or-id>] [--strict]
-  okf-lite assess   <dir> [--json]                         per-note documentation-quality scores/labels
-  okf-lite search   <query> --kb-path <dir> [--limit <n>] [--as-of <GKX timestamp>]
+  gkx-lite validate <dir>                                  schema/identity/lineage diagnostics; non-zero exit on error
+  gkx-lite validate --kb-path <path> [--schema <path-or-id>] [--format text|json]
+  gkx-lite index --kb-path <path> [--schema <path-or-id>] [--strict]
+  gkx-lite assess   <dir> [--json]                         per-note documentation-quality scores/labels
+  gkx-lite search   <query> --kb-path <dir> [--limit <n>] [--as-of <GKX timestamp>]
                                                              public-only retrieval with exact citations
-  okf-lite graph    <dir> -o <graph.json> [--watch]        canonical Kosmos graph (stable serialization)
-  okf-lite export graphiti <dir> --episodes <out.json> [--group-id <ns>]
-  okf-lite assist explain <note.md>                        explain an issue in plain language
-  okf-lite assist improve <note.md>                        suggest the most useful improvements
-  okf-lite assist repair <note.md>                         suggest missing or corrected details
-  okf-lite assist find-links <note.md>                     suggest related-note connections
-  okf-lite assist check-privacy <note.md>                  check whether privacy should be raised
+  gkx-lite graph    <dir> -o <graph.json> [--watch]        canonical Kosmos graph (stable serialization)
+  gkx-lite export graphiti <dir> --episodes <out.json> [--group-id <ns>]
+  gkx-lite assist explain <note.md>                        explain an issue in plain language
+  gkx-lite assist improve <note.md>                        suggest the most useful improvements
+  gkx-lite assist repair <note.md>                         suggest missing or corrected details
+  gkx-lite assist find-links <note.md>                     suggest related-note connections
+  gkx-lite assist check-privacy <note.md>                  check whether privacy should be raised
 
 AI help is optional. It must be enabled locally, every suggestion is checked
 by GKOS, and your note is never changed automatically.

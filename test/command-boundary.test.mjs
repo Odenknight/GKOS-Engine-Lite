@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { prepareDelegatedCommand, validateLiteCommand } from "../bin/okf-lite.mjs";
+import { prepareDelegatedCommand, validateLiteCommand } from "../bin/gkx-lite.mjs";
 
 test("allows the six delegated Lite command paths", () => {
   for (const argv of [

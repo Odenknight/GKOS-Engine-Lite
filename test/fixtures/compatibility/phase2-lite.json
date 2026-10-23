@@ -19,8 +19,8 @@
   },
   "cli": {
     "search_result_contract": "gkos-retrieval/1.0.0-draft.2",
-    "phase1_help_line": "  okf-lite search   <query> --kb-path <dir> [--limit <n>]  public-only lexical retrieval with exact citations\n",
-    "phase2_help_lines": "  okf-lite search   <query> --kb-path <dir> [--limit <n>] [--as-of <GKX timestamp>]\n                                                             public-only retrieval with exact citations\n",
+    "phase1_help_line": "  gkx-lite search   <query> --kb-path <dir> [--limit <n>]  public-only lexical retrieval with exact citations\n",
+    "phase2_help_lines": "  gkx-lite search   <query> --kb-path <dir> [--limit <n>] [--as-of <GKX timestamp>]\n                                                             public-only retrieval with exact citations\n",
     "delegated_as_of_argv": [
       "search",
       "historical policy",

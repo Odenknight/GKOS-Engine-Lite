@@ -27,7 +27,7 @@ async function run(bin, args) {
 // "junction" (no privileges needed) pointing at the package root. The bin is
 // then invoked via the junction path; Node resolves import.meta.url to the real
 // path while argv[1] keeps the junction path, exercising the exact mismatch.
-test("okf-lite invoked through a symlinked/junctioned package dir still runs", async () => {
+test("gkx-lite invoked through a symlinked/junctioned package dir still runs", async () => {
   const tmp = mkdtempSync(join(tmpdir(), "gkos-lite-symlink-"));
   const linkRoot = join(tmp, "linked-pkg");
   let linked = false;
@@ -51,7 +51,7 @@ test("okf-lite invoked through a symlinked/junctioned package dir still runs", a
       // Symlink/junction creation genuinely unavailable in this environment.
       // Fall back to asserting the guard logic directly by driving the module
       // with a spoofed argv[1] that differs from the real module path.
-      const bin = join(root, "bin/okf-lite.mjs");
+      const bin = join(root, "bin/gkx-lite.mjs");
       const spoofed = join(root, "some", "other", "invoked", "path.mjs");
       const { stdout } = await execFileAsync(
         process.execPath,
@@ -70,7 +70,7 @@ test("okf-lite invoked through a symlinked/junctioned package dir still runs", a
       return;
     }
 
-    const linkedBin = join(linkRoot, "bin/okf-lite.mjs");
+    const linkedBin = join(linkRoot, "bin/gkx-lite.mjs");
 
     // --help through the junctioned path: must exit 0 with the Lite banner.
     const help = await run(linkedBin, ["--help"]);
@@ -79,7 +79,7 @@ test("okf-lite invoked through a symlinked/junctioned package dir still runs", a
     assert.match(help.stdout, /GKOS-Engine-Lite/);
 
     // validate through the junctioned path must match the direct-path output.
-    const directBin = join(root, "bin/okf-lite.mjs");
+    const directBin = join(root, "bin/gkx-lite.mjs");
     const viaLink = await run(linkedBin, ["validate", fixtures]);
     const viaDirect = await run(directBin, ["validate", fixtures]);
     assert.equal(viaLink.code, viaDirect.code);

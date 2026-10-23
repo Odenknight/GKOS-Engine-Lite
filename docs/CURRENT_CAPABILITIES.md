@@ -21,13 +21,13 @@ clean-machine, publication, or Standard-profile qualification.
 
 | Capability | Surface | Standing | Authority and effects boundary |
 | --- | --- | --- | --- |
-| GKX validation | `okf-lite validate` | Implemented as an exact delegate to pinned Full | Full owns parsing, projection, profiles, and diagnostics. Lite forwards arguments and does not parse YAML or TOML. |
-| Ingest validation and indexing | `okf-lite index` | Implemented on the Phase-3 branch as an exact delegate | Full owns validation, generation publication, activation, journals, and filesystem authority. Indexing may write sealed derived state; source-note bytes are never changed. |
-| Assessment | `okf-lite assess` | Implemented as a restricted Full delegate | Documentation-quality assessment only; no approval or write authority. |
-| Retrieval | `okf-lite search`, including `--as-of` | Implemented as a restricted Full delegate | Lexical baseline, optional trusted provider configuration, temporal search, and exact verified citations through the pinned Full executable. |
-| Canonical graph | `okf-lite graph` | Implemented as a restricted Full delegate | Writes only the explicitly named derived graph output; GKX source remains canonical. |
-| Graphiti export | `okf-lite export graphiti` | Implemented as a restricted Full delegate | Deterministic projection, not a second source of truth. |
-| Proposal-only assistance | `okf-lite assist` | Optional | Loopback intelligence sidecar; engine-validated candidates are labeled non-authoritative and have no automatic note-write path. |
+| GKX validation | `gkx-lite validate` | Implemented as an exact delegate to pinned Full | Full owns parsing, projection, profiles, and diagnostics. Lite forwards arguments and does not parse YAML or TOML. |
+| Ingest validation and indexing | `gkx-lite index` | Implemented on the Phase-3 branch as an exact delegate | Full owns validation, generation publication, activation, journals, and filesystem authority. Indexing may write sealed derived state; source-note bytes are never changed. |
+| Assessment | `gkx-lite assess` | Implemented as a restricted Full delegate | Documentation-quality assessment only; no approval or write authority. |
+| Retrieval | `gkx-lite search`, including `--as-of` | Implemented as a restricted Full delegate | Lexical baseline, optional trusted provider configuration, temporal search, and exact verified citations through the pinned Full executable. |
+| Canonical graph | `gkx-lite graph` | Implemented as a restricted Full delegate | Writes only the explicitly named derived graph output; GKX source remains canonical. |
+| Graphiti export | `gkx-lite export graphiti` | Implemented as a restricted Full delegate | Deterministic projection, not a second source of truth. |
+| Proposal-only assistance | `gkx-lite assist` | Optional | Loopback intelligence sidecar; engine-validated candidates are labeled non-authoritative and have no automatic note-write path. |
 | Rust retrieval core | `rust/` library and conformance boundary | Phase 1 qualified | Pin-bound implementation of Full-owned retrieval contracts, SQLite/FTS5 generations, provider-neutral adapters, ranking, filtering, and citation verification. It is not an independent GKX parser or authority. |
 | Lineage and citation preservation | Rust contracts, fixtures, and CLI equivalence gates | Phase 2 qualified | Preserves Full-minted identity, authored/effective lineage, temporal state, sensitivity, and verified citation bindings without minting new authority. |
 | Ingest envelope validation | Private Rust ingest modules and frozen Full pack | Phase 3 qualified | Validates strict canonical JSON envelopes from Full. No public raw-ingest API and no Lite owner-plane writer, pointer publisher, or activation authority. |

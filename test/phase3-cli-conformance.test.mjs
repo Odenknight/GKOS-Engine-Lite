@@ -8,11 +8,11 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { promisify } from "node:util";
 
-import { prepareDelegatedCommand } from "../bin/okf-lite.mjs";
+import { prepareDelegatedCommand } from "../bin/gkx-lite.mjs";
 
 const execFileAsync = promisify(execFile);
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const liteBin = join(root, "bin", "okf-lite.mjs");
+const liteBin = join(root, "bin", "gkx-lite.mjs");
 const engineBin = join(root, "node_modules", "gkos-engine", "bin", "gkx.mjs");
 const { validatePhase3KbPath } = await import(pathToFileURL(engineBin).href);
 const pack = join(root, "rust", "contracts", "gkos-ingest-validation-1.0.0-draft.1");
@@ -171,7 +171,7 @@ test("frozen Phase-3 argument and local-path matrices are exact Full/Lite differ
   const liteHelpLines = helpLite.stdout.toString("utf8").split("\n");
   for (const line of cliFixture.help.required_exact_lines) {
     assert.ok(fullHelpLines.includes(line), `Full help line: ${line}`);
-    const liteLine = line.replace(/^  gkx /u, "  okf-lite ");
+    const liteLine = line.replace(/^  gkx /u, "  gkx-lite ");
     assert.ok(liteHelpLines.includes(liteLine), `Lite derived help line: ${liteLine}`);
   }
   for (const [label, output] of [["Full", helpEngine.stdout], ["Lite", helpLite.stdout]]) {

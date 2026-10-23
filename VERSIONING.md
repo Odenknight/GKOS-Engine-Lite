@@ -7,7 +7,7 @@ This file is a pointer; the standard governs.
 ## Rule for this repo (GKOS-Engine-Lite) — two independent axes
 
 **1. CLI — engine-verbatim package version, immutable Engine revision.**
-The `okf-lite` CLI is a pass-through wrapper, so it carries the exact version of
+The `gkx-lite` CLI is a pass-through wrapper, so it carries the exact version of
 the engine package it pins. Normal releases use a reviewed `vX.Y.Z` tag. During
 an integration branch, a reviewed 40-character Engine commit may be pinned
 before a matching tag exists:
@@ -24,7 +24,7 @@ Engine commit `e7cc0dd478af3d0bda216c5258dec5f77932def7`, whose package version 
 `4027bfc4499ad0a2f3e753401f1320468e283823`. The Full dependency pin is a
 different revision from the Full tag; matching package versions do not prove
 behavioral equivalence. Source tags do not establish npm or installer publication.
-`bin/okf-lite.mjs` reads the version from
+`bin/gkx-lite.mjs` reads the version from
 `package.json` at runtime — do not hardcode it. The
 `.github/workflows/pin-bump.yml` `workflow_dispatch` job automates this.
 

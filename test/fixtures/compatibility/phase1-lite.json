@@ -14,7 +14,7 @@
       "name": "gkos-engine-lite",
       "version": "2.1.2",
       "bin": {
-        "okf-lite": "./bin/okf-lite.mjs"
+        "gkx-lite": "./bin/gkx-lite.mjs"
       },
       "files": [
         "bin/"

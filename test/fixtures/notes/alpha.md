@@ -9,4 +9,4 @@ tags: [demo]
 
 # Alpha Note
 
-This is a small fixture note for testing okf-lite pass-through behavior.
+This is a small fixture note for testing gkx-lite pass-through behavior.

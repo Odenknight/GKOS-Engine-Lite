@@ -1,12 +1,12 @@
 /**
- * GKOS Engine Desktop — every user-visible string, in one place.
+ * GKOS-Engine-Lite Desktop — every user-visible string, in one place.
  *
  * Single source of truth for UI copy so the docs agent can quote it verbatim
  * and translators (future) have one file to touch. Tone mirrors the Kosmos
  * plugin: plain-language, privacy-first, no hype.
  */
 
-export const APP_NAME = "GKOS Engine Desktop";
+export const APP_NAME = "GKOS-Engine-Lite Desktop";
 
 /** The seven-level sensitivity vocabulary (GKOS §11), most-open → most-private.
  *  Order and level names are authoritative and mirror the engine
@@ -62,7 +62,7 @@ export const STRINGS = {
 
   wizard: {
     // Step 1 — Welcome
-    welcomeTitle: "Welcome to GKOS Engine Desktop",
+    welcomeTitle: "Welcome to GKOS-Engine-Lite Desktop",
     welcomeBody:
       "This app runs quietly on your own computer. It watches a notes folder you choose and builds a live map of what's inside it — including a connections view called Graphiti. The built-in server binds directly to loopback and has no upload, remote-bind, proxy, or tunnel feature. Sensitivity levels classify records but do not filter this API: an app with the bearer token can read, copy, or export every indexed note. A separately configured client, proxy, or tunnel can relay those responses beyond this computer.",
     welcomeNext: "Get started",

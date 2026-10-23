@@ -105,9 +105,9 @@ jobs:
           New-Item -ItemType Directory -Force -Path desktop/src-tauri/binaries | Out-Null
           New-Item -ItemType Directory -Force -Path desktop/src-tauri/resources | Out-Null
           gh release download v1.1.3 --repo Odenknight/GKOS-Engine --pattern kosmos-agent-x86_64-pc-windows-msvc.exe --output desktop/src-tauri/binaries/kosmos-agent-x86_64-pc-windows-msvc.exe
-          gh release download viewer-v0.6.9-rc1 --repo Odenknight/Kosmos-Oden --pattern vault-kosmos.html --output desktop/src-tauri/resources/vault-kosmos.html
+          gh release download viewer-v0.6.9-rc1 --repo Odenknight/Kosmos-Oden --pattern vault-kosmos.html --output desktop/src-tauri/resources/kosmos-oden.html
           $engineHash = (Get-FileHash -Algorithm SHA256 desktop/src-tauri/binaries/kosmos-agent-x86_64-pc-windows-msvc.exe).Hash.ToLowerInvariant()
-          $viewerHash = (Get-FileHash -Algorithm SHA256 desktop/src-tauri/resources/vault-kosmos.html).Hash.ToLowerInvariant()
+          $viewerHash = (Get-FileHash -Algorithm SHA256 desktop/src-tauri/resources/kosmos-oden.html).Hash.ToLowerInvariant()
           if ($engineHash -ne "29ab43c9ce79b8c14978594a18523a04e3f7518d87560f1e4c17744da08f12c2") {
             throw "GKOS-Engine compile asset digest mismatch"
           }

@@ -70,6 +70,6 @@ test("viewerQuery emits an empty token when none is available (viewer shows conn
 test("viewerAppUrl targets the bundled HTML at the frontend root with the query", () => {
   assert.equal(
     viewerAppUrl(info),
-    "vault-kosmos.html?api=http%3A%2F%2F127.0.0.1%3A4814&token=deadbeefcafe",
+    "kosmos-oden.html?api=http%3A%2F%2F127.0.0.1%3A4814&token=deadbeefcafe",
   );
 });

@@ -1,7 +1,7 @@
 {
   "$schema": "../gen/schemas/desktop-schema.json",
   "identifier": "default",
-  "description": "Core, shell (sidecar), dialog, and clipboard permissions for the GKOS Engine Desktop shell.",
+  "description": "Core, shell (sidecar), dialog, and clipboard permissions for the GKOS-Engine-Lite Desktop shell.",
   "windows": ["*"],
   "permissions": [
     "core:default",

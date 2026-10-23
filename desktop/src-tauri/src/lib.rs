@@ -1,4 +1,4 @@
-//! GKOS Engine Desktop — Tauri 2 tray shell.
+//! GKOS-Engine-Lite Desktop — Tauri 2 tray shell.
 //!
 //! Responsibilities (Repo B of the desktop build spec):
 //!   * persist settings (notes_dir, default_sensitivity, port, enabled,
@@ -440,7 +440,7 @@ fn show_wizard(app: &AppHandle) -> Result<(), String> {
         return Ok(());
     }
     WebviewWindowBuilder::new(app, "wizard", WebviewUrl::App("index.html#wizard".into()))
-        .title("GKOS Engine Desktop — Setup")
+        .title("GKOS-Engine-Lite Desktop — Setup")
         .inner_size(560.0, 640.0)
         .resizable(true)
         .center()
@@ -456,7 +456,7 @@ fn show_settings(app: &AppHandle) -> Result<(), String> {
         return Ok(());
     }
     WebviewWindowBuilder::new(app, "settings", WebviewUrl::App("index.html#settings".into()))
-        .title("GKOS Engine Desktop — Settings")
+        .title("GKOS-Engine-Lite Desktop — Settings")
         .inner_size(720.0, 800.0)
         .resizable(true)
         .center()
@@ -468,7 +468,7 @@ fn show_settings(app: &AppHandle) -> Result<(), String> {
 // ------------------------------ 3D view -------------------------------------
 //
 // The standalone 3D viewer (built in Odenknight/Kosmos-Oden, bundled here as
-// `vault-kosmos.html`) reads `?api=<loopback base>&token=<bearer>` from
+// `kosmos-oden.html`) reads `?api=<loopback base>&token=<bearer>` from
 // `location.search` and auto-connects to the sidecar's read-only loopback API.
 //
 // Origin / CORS: the viewer must fetch the sidecar cross-origin, so it needs an
@@ -511,7 +511,7 @@ fn viewer_query(app: &AppHandle) -> String {
 
 /// Primary "Open 3D View": in-app window over the Tauri app protocol.
 fn show_3d_view(app: &AppHandle) -> Result<(), String> {
-    let url = format!("vault-kosmos.html?{}", viewer_query(app));
+    let url = format!("kosmos-oden.html?{}", viewer_query(app));
     if let Some(win) = app.get_webview_window("kosmos-3d") {
         // Re-navigate so a freshly-read token/port take effect, then focus.
         let _ = win.eval(&format!(
@@ -523,7 +523,7 @@ fn show_3d_view(app: &AppHandle) -> Result<(), String> {
         return Ok(());
     }
     WebviewWindowBuilder::new(app, "kosmos-3d", WebviewUrl::App(url.into()))
-        .title("GKOS Engine Desktop — 3D View")
+        .title("GKOS-Engine-Lite Desktop — 3D View")
         .inner_size(1100.0, 820.0)
         .resizable(true)
         .center()
@@ -539,7 +539,7 @@ fn show_3d_view(app: &AppHandle) -> Result<(), String> {
 fn open_3d_view_in_browser(app: &AppHandle) -> Result<(), String> {
     let src = app
         .path()
-        .resolve("resources/vault-kosmos.html", tauri::path::BaseDirectory::Resource)
+        .resolve("resources/kosmos-oden.html", tauri::path::BaseDirectory::Resource)
         .map_err(|e| format!("cannot locate bundled viewer: {e}"))?;
     let bytes = fs::read(&src).map_err(|e| format!("read bundled viewer: {e}"))?;
 
@@ -639,7 +639,7 @@ fn build_tray(app: &AppHandle) -> Result<(), String> {
 
     TrayIconBuilder::with_id("main")
         .icon(app.default_window_icon().unwrap().clone())
-        .tooltip("GKOS Engine Desktop")
+        .tooltip("GKOS-Engine-Lite Desktop")
         .menu(&menu)
         .show_menu_on_left_click(false)
         .on_menu_event(|app, event| match event.id.as_ref() {
@@ -754,5 +754,5 @@ pub fn run() {
             }
         })
         .run(tauri::generate_context!())
-        .expect("error while running GKOS Engine Desktop");
+        .expect("error while running GKOS-Engine-Lite Desktop");
 }

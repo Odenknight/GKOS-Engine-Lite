@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased
+
+- **Breaking rename:** the `okf-lite` CLI is now `gkx-lite` (`bin/gkx-lite.mjs`)
+  with no `okf-lite` alias; prose, help text, tests, and current docs use
+  GKX, GKOS-Engine, GKOS-Engine-Lite, and Kosmos-Oden-Lite names, the Desktop
+  display name is GKOS-Engine-Lite Desktop (bundle identifier unchanged), and
+  the bundled 3D viewer resource is now `kosmos-oden.html`.
+
 ## 2.1.2 — functional uplift Phases 0–3
 
 - Admitted the qualified Phase 0–3 chain through PR #22 and recorded the exact

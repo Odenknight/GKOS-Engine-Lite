@@ -13,8 +13,8 @@ src-tauri/binaries/
 # CI-provisioned standalone 3D viewer (fetched from the Kosmos-Oden viewer release).
 # Placed into the frontend public dir (served over the Tauri protocol for the
 # in-app window) and into src-tauri/resources (read for the browser fallback).
-public/vault-kosmos.html
-src-tauri/resources/vault-kosmos.html
+public/kosmos-oden.html
+src-tauri/resources/kosmos-oden.html
 
 # icon set is regenerated in CI from app-icon.png via `tauri icon`;
 # the committed PNGs + icon.ico + icon.icns are the checked-in baseline

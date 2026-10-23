@@ -1266,7 +1266,6 @@ mod tests {
     use std::sync::atomic::{AtomicBool, AtomicUsize, Ordering};
     use std::sync::{Arc, Mutex};
     use std::task::{Context, Poll};
-    use std::time::{Duration, Instant};
 
     use futures_executor::block_on;
     use futures_util::task::noop_waker_ref;
@@ -1890,6 +1889,8 @@ mod tests {
     }
 
     #[test]
+    // Check cancellation and FTS publication, not filesystem speed. The
+    // provider deadline is exercised separately in providers::tests.
     fn indexing_timeout_drops_provider_work_and_publishes_fts_only() {
         let directory = tempdir().unwrap();
         let dropped = Arc::new(AtomicBool::new(false));
@@ -1904,13 +1905,11 @@ mod tests {
             },
             dropped: dropped.clone(),
         };
-        let started = Instant::now();
         let result = block_on(index_retrieval_generation(
             generation(directory.path().to_path_buf()),
             Some(&provider),
         ))
         .unwrap();
-        assert!(started.elapsed() < Duration::from_secs(2));
         assert!(dropped.load(Ordering::SeqCst));
         assert_eq!(result.vector_stage.state, RetrievalStageState::Degraded);
         assert_eq!(result.vector_stage.reason_codes, ["VECTOR_UNAVAILABLE"]);
@@ -2159,9 +2158,7 @@ mod tests {
         options.vector_provider = Some(&vector);
         options.rerank_provider = Some(&reranker);
         let coordinator = RetrievalCoordinator::from_verified_store(store, options).unwrap();
-        let started = Instant::now();
         let result = block_on(coordinator.search(&request())).unwrap();
-        assert!(started.elapsed() < Duration::from_secs(2));
         assert_eq!(result.hits.len(), 1);
         assert_eq!(result.stages.vector.state, RetrievalStageState::Degraded);
         assert_eq!(result.stages.vector.reason_codes, ["VECTOR_UNAVAILABLE"]);

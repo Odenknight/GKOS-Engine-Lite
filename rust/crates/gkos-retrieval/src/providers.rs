@@ -1433,6 +1433,32 @@ mod tests {
 
     struct StaticSecretResolver(Option<String>);
 
+    #[test]
+    fn provider_deadline_cancels_pending_work_without_filesystem_timing() {
+        use std::sync::atomic::AtomicBool;
+        use std::sync::Arc;
+
+        struct DropGuard(Arc<AtomicBool>);
+        impl Drop for DropGuard {
+            fn drop(&mut self) {
+                self.0.store(true, Ordering::SeqCst);
+            }
+        }
+
+        let dropped = Arc::new(AtomicBool::new(false));
+        let guard = DropGuard(dropped.clone());
+        let operation = Box::pin(async move {
+            let _guard = guard;
+            std::future::pending::<RetrievalResult<()>>().await
+        });
+        let result = block_on(bounded_provider_call(operation, 20, "TEST_TIMEOUT"));
+        assert!(matches!(
+            result,
+            Err(RetrievalError::ProviderResponse(code)) if code == "TEST_TIMEOUT"
+        ));
+        assert!(dropped.load(Ordering::SeqCst));
+    }
+
     impl ProviderSecretResolver for StaticSecretResolver {
         fn resolve(&self, _variable: &str) -> RetrievalResult<Option<ProviderSecret>> {
             Ok(self.0.clone().map(ProviderSecret))

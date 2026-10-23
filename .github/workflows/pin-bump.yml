@@ -52,6 +52,10 @@ jobs:
           '
           git diff --stat
 
+      - uses: ./.github/actions/engine-access
+        with:
+          deploy-key: ${{ secrets.GKOS_ENGINE_DEPLOY_KEY }}
+
       - name: Verify install and test against the new pin
         run: |
           npm install --package-lock-only

@@ -1,0 +1,27 @@
+name: GKOS-Engine dependency access
+description: >-
+  Lets npm fetch the private gkos-engine git dependency over SSH with a
+  read-only deploy key. Fails with an actionable message when the key is absent.
+  Same contract as Kosmos-Oden's action of the same name.
+inputs:
+  deploy-key:
+    description: Private half of a read-only GKOS-Engine deploy key (repository secret GKOS_ENGINE_DEPLOY_KEY).
+    required: false
+    default: ""
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      env:
+        DEPLOY_KEY: ${{ inputs.deploy-key }}
+      run: |
+        if [ -z "$DEPLOY_KEY" ]; then
+          echo "::error title=GKOS-Engine access::Secret GKOS_ENGINE_DEPLOY_KEY is not available to this run, so npm ci cannot fetch the private gkos-engine dependency. Add a read-only deploy key on Odenknight/GKOS-Engine and its private half as this repository's secret (and as a Dependabot secret for dependency PRs)."
+          exit 1
+        fi
+        install -m 700 -d "$HOME/.ssh"
+        printf '%s\n' "$DEPLOY_KEY" > "$HOME/.ssh/gkos_engine"
+        chmod 600 "$HOME/.ssh/gkos_engine"
+        # GitHub's published host key (https://api.github.com/meta), pinned rather than scanned.
+        echo "github.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl" >> "$HOME/.ssh/known_hosts"
+        git config --global core.sshCommand "ssh -i $HOME/.ssh/gkos_engine -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes"

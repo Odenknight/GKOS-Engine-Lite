@@ -95,9 +95,14 @@ jobs:
         shell: bash
         working-directory: desktop
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Read-only token for the private GKOS-Engine releases and source (repository secret).
+          GH_TOKEN: ${{ secrets.ENGINE_READ_TOKEN }}
         run: |
           set -euo pipefail
+          if [ -z "${GH_TOKEN}" ]; then
+            echo "::error title=GKOS-Engine access::Secret ENGINE_READ_TOKEN is not available to this run, so the private GKOS-Engine sidecar cannot be downloaded or built. Add a fine-grained token limited to Odenknight/GKOS-Engine with Contents: read-only as this repository's secret."
+            exit 1
+          fi
           mkdir -p src-tauri/binaries
           dest="src-tauri/binaries/kosmos-agent-${{ matrix.target }}${{ matrix.binext }}"
           echo "Trying to download ${{ matrix.asset }} from ${ENGINE_REPO}@${ENGINE_TAG}…"
@@ -108,7 +113,7 @@ jobs:
             echo "Downloaded sidecar from release assets."
           else
             echo "Release asset missing — falling back to building the SEA in-run."
-            git clone --depth 1 --branch "${ENGINE_TAG}" "https://github.com/${ENGINE_REPO}.git" ../engine-src
+            gh repo clone "${ENGINE_REPO}" ../engine-src -- --depth 1 --branch "${ENGINE_TAG}"
             pushd ../engine-src
             npm ci
             npm run build

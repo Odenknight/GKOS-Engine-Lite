@@ -25,6 +25,9 @@ jobs:
         run: node scripts/check-lockfile-sha.mjs
       - name: License and Engine pin consistency
         run: npm run check:metadata
+      - uses: ./.github/actions/engine-access
+        with:
+          deploy-key: ${{ secrets.GKOS_ENGINE_DEPLOY_KEY }}
       - run: npm ci
       - run: npm test
       - name: Package contents smoke test
@@ -43,6 +46,9 @@ jobs:
         run: node scripts/check-lockfile-sha.mjs
       - name: License and Engine pin consistency
         run: npm run check:metadata
+      - uses: ./.github/actions/engine-access
+        with:
+          deploy-key: ${{ secrets.GKOS_ENGINE_DEPLOY_KEY }}
       - run: npm ci
       - run: npm test
       - name: Package contents smoke test
@@ -101,10 +107,18 @@ jobs:
         shell: pwsh
         env:
           GH_TOKEN: ${{ github.token }}
+          # Read-only token for the private GKOS-Engine release (repository secret).
+          ENGINE_READ_TOKEN: ${{ secrets.ENGINE_READ_TOKEN }}
         run: |
+          if (-not $env:ENGINE_READ_TOKEN) {
+            Write-Output "::error title=GKOS-Engine access::Secret ENGINE_READ_TOKEN is not available to this run, so the private GKOS-Engine v1.1.3 sidecar cannot be downloaded. Add a fine-grained token limited to Odenknight/GKOS-Engine with Contents: read-only as this repository's secret."
+            exit 1
+          }
           New-Item -ItemType Directory -Force -Path desktop/src-tauri/binaries | Out-Null
           New-Item -ItemType Directory -Force -Path desktop/src-tauri/resources | Out-Null
+          $env:GH_TOKEN = $env:ENGINE_READ_TOKEN
           gh release download v1.1.3 --repo Odenknight/GKOS-Engine --pattern kosmos-agent-x86_64-pc-windows-msvc.exe --output desktop/src-tauri/binaries/kosmos-agent-x86_64-pc-windows-msvc.exe
+          $env:GH_TOKEN = "${{ github.token }}"
           gh release download viewer-v0.6.9-rc1 --repo Odenknight/Kosmos-Oden --pattern vault-kosmos.html --output desktop/src-tauri/resources/kosmos-oden.html
           $engineHash = (Get-FileHash -Algorithm SHA256 desktop/src-tauri/binaries/kosmos-agent-x86_64-pc-windows-msvc.exe).Hash.ToLowerInvariant()
           $viewerHash = (Get-FileHash -Algorithm SHA256 desktop/src-tauri/resources/kosmos-oden.html).Hash.ToLowerInvariant()
